@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>3.8</string>
+	<key>CFBundleVersion</key>
+	<string>1258</string>
+	<key>GITHash</key>
+	<string>d4a42bfa7b6fbbc2e42fac7ef687576d3082d2e9</string>
+</dict>
+</plist>

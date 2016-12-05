@@ -1,0 +1,2 @@
+ios/Anyline/Anyline.framework/Versions/A/Anyline filter=lfs diff=lfs merge=lfs -text
+ios/Anyline/AnylineResources.bundle/module_anyline_ocr/tessdata/deu.traineddata filter=lfs diff=lfs merge=lfs -text

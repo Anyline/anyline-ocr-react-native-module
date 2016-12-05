@@ -1,0 +1,145 @@
+package eon.react.prototype;
+
+/**
+ * Created by jonesBoi on 02.12.16.
+ */
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+
+class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
+
+    public static final String REACT_CLASS = "AnylineSDKPlugin";
+    public static final String EXTRA_LICENSE_KEY = "EXTRA_LICENSE_KEY";
+    public static final String EXTRA_CONFIG_JSON = "EXTRA_CONFIG_JSON";
+    public static final String EXTRA_SCAN_MODE = "EXTRA_SCAN_MODE";
+    public static final String EXTRA_ERROR_MESSAGE = "EXTRA_ERROR_MESSAGE";
+    public static final String EXTRA_OCR_CONFIG_JSON = "EXTRA_OCR_CONFIG_JSON";
+
+    public static final int RESULT_OK = 1;
+    public static final int RESULT_ERROR = 2;
+
+    private JSONObject configObject;
+    private Context reactContext;
+    private String license;
+    private String options;
+    private Callback onResultCallback;
+    private Callback onErrorCallback;
+
+    AnylineSDKPlugin(ReactApplicationContext context) {
+        super(context);
+        reactContext = context;
+    }
+
+    @Override
+    public String getName() {
+        return REACT_CLASS;
+    }
+
+    @ReactMethod
+    public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
+        onResultCallback = onResultReact;
+        onErrorCallback = onErrorReact;
+
+        switch (scanMode) {
+            case "DIGITAL_METER":
+                scan(EnergyActivity.class, config, scanMode);
+                break;
+            case "ANALOG_METER":
+                scan(EnergyActivity.class, config, scanMode);
+                break;
+            case "ANYLINE_OCR":
+                scan(AnylineOcrActivity.class, config, scanMode);
+                break;
+            case "BARCODE":
+                scan(BarcodeActivity.class, config, scanMode);
+                break;
+            case "MRZ":
+                scan(MrzActivity.class, config, scanMode);
+                break;
+            case "DOCUMENT":
+                onErrorCallback.invoke("Not implemented yet");
+                break;
+            default:
+                onErrorCallback.invoke("Wrong ScanMode");
+        }
+    }
+
+
+    private void scan(Class<?> activityToStart, String config, String scanMode) {
+
+        Intent intent = new Intent(getCurrentActivity(), activityToStart);
+        try {
+            configObject = new JSONObject(config);
+            license = configObject.get("license").toString();
+            options = configObject.get("options").toString();
+
+        } catch (JSONException e) {
+            onErrorCallback.invoke("JSON ERROR: " + e);
+        }
+
+        intent.putExtra(EXTRA_LICENSE_KEY, license);
+        intent.putExtra(EXTRA_CONFIG_JSON, options);
+
+        //Check if OCR
+        try {
+            intent.putExtra(EXTRA_OCR_CONFIG_JSON, configObject.get("license").toString());
+        } catch (JSONException e) {
+
+        }
+
+        if (scanMode != null) {
+            intent.putExtra(EXTRA_SCAN_MODE, scanMode);
+        }
+        ResultReporter.setListener(this);
+
+        reactContext.startActivity(intent);
+    }
+
+
+    @Override
+    public void onResult(Object result, boolean isFinalResult) {
+        if (result instanceof JSONObject) {
+            try {
+                //ImagePath as Base64
+                String imagePath = ((JSONObject) result).getString("imagePath");
+                Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+                byte[] b = baos.toByteArray();
+                String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                ((JSONObject) result).put("cutoutBase64", encodedImage);
+
+                //FullImagePath as Base64
+                String fullImagePath = ((JSONObject) result).getString("fullImagePath");
+                Bitmap bmFull = BitmapFactory.decodeFile(fullImagePath);
+                ByteArrayOutputStream baosFull = new ByteArrayOutputStream();
+                bmFull.compress(Bitmap.CompressFormat.JPEG, 100, baosFull); //bm is the bitmap object
+                byte[] bFull = baosFull.toByteArray();
+                String encodedImageFull = Base64.encodeToString(bFull, Base64.DEFAULT);
+                ((JSONObject) result).put("fullImageBase64", encodedImageFull);
+            } catch (JSONException e) {
+
+            }
+            onResultCallback.invoke(result.toString());
+        } else if (result instanceof JSONArray) {
+            onResultCallback.invoke(result.toString());
+        } else {
+            onResultCallback.invoke(result.toString());
+        }
+    }
+}
