@@ -1,13 +1,12 @@
 {
-  "name": "AnylineReactNative",
+  "name": "anyline-ocr-react-native-module",
   "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
   },
   "dependencies": {
-    "react": "15.2.1",
-    "react-native": "0.29.1",
-    "react-native-material-kit": "^0.3.3"
+    "react": "15.4.1",
+    "react-native": "0.39.0"
   }
 }
