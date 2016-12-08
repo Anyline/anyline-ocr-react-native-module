@@ -35,15 +35,15 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
   self.onResultCallback = onResult;
   self.onErrorCallback = onError;
-  
+
   NSData *data = [config dataUsingEncoding:NSUTF8StringEncoding];
   id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
   self.jsonConfigDictionary = dictionary;
-  
+
   self.appKey = [dictionary objectForKey:@"license"];
   self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
   self.conf = [[ALUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"] bundlePath:nil];
-  
+
   self.baseScanViewController = [self ViewControllerFromScanMode:scanMode];
   [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:self.baseScanViewController animated:YES completion:nil];
 
@@ -52,12 +52,12 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
 #pragma mark - AnylineBaseScanViewControllerDelegate
 - (void)anylineBaseScanViewController:(AnylineBaseScanViewController *)baseScanViewController didScan:(id)scanResult continueScanning:(BOOL)continueScanning {
   NSString *resultJson = @"";
-  
+
   NSError *error;
   NSData *jsonData = [NSJSONSerialization dataWithJSONObject: scanResult
                                                      options:0
                                                        error:&error];
-  
+
   if (! jsonData) {
     NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
   } else {
@@ -72,7 +72,7 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
 
 #pragma mark - Utility Funcitons
 - (AnylineBaseScanViewController *)ViewControllerFromScanMode:(NSString *)scanMode {
-  
+
   if ([[scanMode uppercaseString] isEqualToString:[@"ANALOG_METER" uppercaseString]]) {
     AnylineEnergyScanViewController *analogMeterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
     analogMeterVC.scanMode = ALAnalogMeter;

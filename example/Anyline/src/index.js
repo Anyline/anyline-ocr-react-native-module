@@ -7,14 +7,12 @@ import {
 } from 'react-native';
 import AnylineOCR from 'anyline-ocr-react-native-module';
 
+import config from '../config';
+
 class Anyline extends Component {
-  componentWillMount() {
-    console.log(AnylineOCR)
-  }
 
   openOCR = () => {
-
-    // AnylineOCR.setupScanViewWithConfigJson(this.props.config, this.props.scanMode, this.props.onResult, this.props.onError);
+    AnylineOCR.setupScanViewWithConfigJson(JSON.stringify(config), 'ANALOG_METER', () => {}, () => {});
   }
 
   render() {

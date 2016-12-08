@@ -12,17 +12,6 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		28DF74DC1DF97C9900B332CF /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
-		28DF74DD1DF97C9900B332CF /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
-		28DF74DE1DF97C9900B332CF /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
-		28DF74DF1DF97C9900B332CF /* libRCTImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302C01ABCB91800DB3ED1 /* libRCTImage.a */; };
-		28DF74E01DF97C9900B332CF /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
-		28DF74E11DF97C9900B332CF /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
-		28DF74E21DF97C9900B332CF /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
-		28DF74E31DF97C9900B332CF /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		28DF74E41DF97C9900B332CF /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
-		28DF74E51DF97C9900B332CF /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		28DF74E81DF97C9900B332CF /* libAnylineReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28DF74E61DF97C9900B332CF /* libAnylineReact.a */; };
 		28DF74E91DF97C9900B332CF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28DF74E71DF97C9900B332CF /* libReact.a */; };
 		9C45934F6C0FD489E3E2F845 /* libPods-Anyline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD3611D51D496457F65600D7 /* libPods-Anyline.a */; };
@@ -206,7 +195,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,16 +204,6 @@
 			files = (
 				28DF74E81DF97C9900B332CF /* libAnylineReact.a in Frameworks */,
 				28DF74E91DF97C9900B332CF /* libReact.a in Frameworks */,
-				28DF74DC1DF97C9900B332CF /* libRCTActionSheet.a in Frameworks */,
-				28DF74DD1DF97C9900B332CF /* libRCTAnimation.a in Frameworks */,
-				28DF74DE1DF97C9900B332CF /* libRCTGeolocation.a in Frameworks */,
-				28DF74DF1DF97C9900B332CF /* libRCTImage.a in Frameworks */,
-				28DF74E01DF97C9900B332CF /* libRCTLinking.a in Frameworks */,
-				28DF74E11DF97C9900B332CF /* libRCTNetwork.a in Frameworks */,
-				28DF74E21DF97C9900B332CF /* libRCTSettings.a in Frameworks */,
-				28DF74E31DF97C9900B332CF /* libRCTText.a in Frameworks */,
-				28DF74E41DF97C9900B332CF /* libRCTVibration.a in Frameworks */,
-				28DF74E51DF97C9900B332CF /* libRCTWebSocket.a in Frameworks */,
 				9C45934F6C0FD489E3E2F845 /* libPods-Anyline.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -473,7 +451,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = PJL7DA2X5F;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = PJL7DA2X5F;
 					};
 				};
 			};
@@ -804,6 +786,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = PJL7DA2X5F;
+				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -821,6 +805,8 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = PJL7DA2X5F;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AnylineTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -836,6 +822,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = PJL7DA2X5F;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Anyline/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -854,6 +842,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PJL7DA2X5F;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Anyline/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (

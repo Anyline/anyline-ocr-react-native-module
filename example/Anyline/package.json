@@ -4,6 +4,8 @@
 	"private": true,
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"reinstall": "rm -rf node_modules/anyline-ocr-react-native-module && npm i",
+		"reinstall-pods": "cd ios/ && rm -rf Pods Podfile.lock && pod install",
 		"test": "jest"
 	},
 	"dependencies": {

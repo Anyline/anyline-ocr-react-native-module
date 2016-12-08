@@ -10,5 +10,5 @@ target 'Anyline' do
     'RCTWebSocket',
   ], path: '../node_modules/react-native'
 
-  pod 'AnylineReact', path: '../node_modules/anyline-ocr-react-native-module'
+  pod 'AnylineReact', path: '../node_modules/anyline-ocr-react-native-module/ios'
 end
