@@ -8,9 +8,12 @@ import {
 import AnylineOCR from 'anyline-ocr-react-native-module';
 
 class Anyline extends Component {
+  componentWillMount() {
+    console.log(AnylineOCR)
+  }
 
   openOCR = () => {
-    console.log(AnylineOCR)
+
     // AnylineOCR.setupScanViewWithConfigJson(this.props.config, this.props.scanMode, this.props.onResult, this.props.onError);
   }
 

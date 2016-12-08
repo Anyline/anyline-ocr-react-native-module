@@ -1,0 +1,14 @@
+target 'Anyline' do
+  pod 'React', subspecs: [
+    'RCTActionSheet',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTNetwork',
+    'RCTSettings',
+    'RCTText',
+    'RCTVibration',
+    'RCTWebSocket',
+  ], path: '../node_modules/react-native'
+
+  pod 'AnylineReact', path: '../node_modules/anyline-ocr-react-native-module'
+end
