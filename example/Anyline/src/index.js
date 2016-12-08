@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import AnylineOCR from 'anyline-ocr-react-native-module';
 
-class AnylineExample extends Component {
+class Anyline extends Component {
 
   openOCR = () => {
     console.log(AnylineOCR)
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('AnylineExample', () => AnylineExample);
+AppRegistry.registerComponent('Anyline', () => Anyline);
