@@ -123,6 +123,11 @@ android {
             }
         }
     }
+
+    packagingOptions {
+      pickFirst 'lib/armeabi-v7a/libgnustl_shared.so'
+      pickFirst 'lib/x86/libgnustl_shared.so'
+    }
 }
 
 dependencies {
