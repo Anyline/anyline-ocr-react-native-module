@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -30,7 +31,6 @@
         <activity android:name="eon.react.prototype.MrzActivity"/>
         <activity android:name="eon.react.prototype.BarcodeActivity"/>
         <activity android:name="eon.react.prototype.AnylineOcrActivity"/>
-        <uses-permission android:name="android.permission.CAMERA"/>
     </application>
 
 </manifest>
