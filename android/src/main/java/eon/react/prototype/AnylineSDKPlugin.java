@@ -107,6 +107,8 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         }
         ResultReporter.setListener(this);
 
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         reactContext.startActivity(intent);
     }
 
