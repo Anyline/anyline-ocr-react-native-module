@@ -1,5 +1,6 @@
 rootProject.name = 'Anyline'
 include ':anyline-ocr-react-native-module'
-project(':anyline-ocr-react-native-module').projectDir = new File(rootProject.projectDir, '../node_modules/anyline-ocr-react-native-module/android/app')
+project(':anyline-ocr-react-native-module').projectDir = new File(rootProject.projectDir, '../node_modules/anyline-ocr-react-native-module/android')
+
 
 include ':app'
