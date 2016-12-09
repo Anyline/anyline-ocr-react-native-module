@@ -26,6 +26,11 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+        <activity android:name="eon.react.prototype.EnergyActivity"/>
+        <activity android:name="eon.react.prototype.MrzActivity"/>
+        <activity android:name="eon.react.prototype.BarcodeActivity"/>
+        <activity android:name="eon.react.prototype.AnylineOcrActivity"/>
+        <uses-permission android:name="android.permission.CAMERA"/>
     </application>
 
 </manifest>
