@@ -867,6 +867,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = eon.react.prototype;
 				PRODUCT_NAME = Anyline;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -887,6 +888,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = eon.react.prototype;
 				PRODUCT_NAME = Anyline;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
