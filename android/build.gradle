@@ -1,24 +1,61 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: "com.android.library"
 
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
+repositories {
+    //add the anyline maven repo
+    maven { url 'https://anylinesdk.blob.core.windows.net/maven/'}
+}
+
+
 allprojects {
     repositories {
-        mavenLocal()
         jcenter()
-        maven {
-            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url "$rootDir/../node_modules/react-native/android"
+    }
+}
+
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        ndk {
+            abiFilters "armeabi-v7a"
         }
     }
+
+    buildTypes {
+        debug {
+
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: "libs", include: ["*.jar"])
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'io.anyline:anylinesdk:3.8.0@aar'
+    compile 'com.google.android.gms:play-services-vision:10.0.1'
+    compile 'com.facebook.react:react-native:+'
+    compile 'com.android.support:design:25.0.1'
 }
