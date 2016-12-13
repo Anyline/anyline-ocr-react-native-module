@@ -47,6 +47,10 @@ local.properties
 node_modules/
 npm-debug.log
 
+#iOS
+ios/Pods
+ios/Podfile.lock
+
 # BUCK
 buck-out/
 \.buckd/

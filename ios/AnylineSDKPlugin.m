@@ -44,8 +44,10 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
   self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
   self.conf = [[ALUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"] bundlePath:nil];
 
-  self.baseScanViewController = [self ViewControllerFromScanMode:scanMode];
-  [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:self.baseScanViewController animated:YES completion:nil];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    self.baseScanViewController = [self ViewControllerFromScanMode:scanMode];
+    [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:self.baseScanViewController animated:YES completion:nil];
+  });
 
 }
 

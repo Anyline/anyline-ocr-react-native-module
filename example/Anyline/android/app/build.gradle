@@ -82,11 +82,6 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
-repositories {
-    //add the anyline maven repo
-    maven { url 'https://anylinesdk.blob.core.windows.net/maven/'}
-}
-
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
