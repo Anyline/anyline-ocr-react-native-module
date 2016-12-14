@@ -2,6 +2,19 @@
   "name": "anyline-ocr-react-native-module",
   "version": "0.0.1",
   "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Anyline/anyline-ocr-react-native-module"
+  },
+  "bugs": {
+    "url": "https://github.com/Anyline/anyline-ocr-react-native-module/issues"
+  },
+  "keywords": [
+    "reactnative",
+    "anyline",
+    "ocr"
+  ],
   "directories": {
     "example": "examples"
   },

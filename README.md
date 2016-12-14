@@ -1,66 +1,68 @@
+	 _____         _ _         
+	|  _  |___ _ _| |_|___ ___ 
+	|     |   | | | | |   | -_|
+	|__|__|_|_|_  |_|_|_|_|___|
+	          |___|            
+	          
+# Anyline React-Native Plugin
 
-### React Native SETUP ###
+[Anyline](https://www.anyline.io) is mobile OCR SDK, which can be configured by yourself to scan all kinds of numbers, characters, text and codes. 
 
-- install react native (maybe with sudo depending on your setup) (see https://facebook.github.io/react-native/docs/getting-started.html)
+The plugin lets you connect to the SDK with React-Native.
+	             
+## Quick Start Guide
+
+### 1. Get the Anyline react-native plugin
+
+Download or Clone the Repo to your node_modules.
+
+### 2. Get the native Dependencies
+
+##### Android
+Go into the native Android folder of the Anyline React-Native Plugin and sync Gradle.
+
+##### iOS
+Go into the native iOS folder of the Anyline React-Native Plugin and call "pod install".
+
+
+### 3. Import the plugin to your JavaScript file
+
 ```
-npm install -g react-native-cli
+    import Anyline from 'anyline-ocr-react-native-module';
 ```
-
-- open the android folder in android-studio
-
-- start the development server manually (specify the port if default port 8081 is not free):
+### 4. Import the config file
 ```
-react-native start --port=8088
-adb reverse tcp:8088 tcp:8088
+    import config from './config.js';
 ```
+Add and import a JSON file with the proper structure and elements. The JSON config contains: 
 
-- configure your firewall that the phone can connect to that port via tcp
+1.) The license key 
 
-- start the app via studio or
+2.) Options field with
+-	AnylineSDK config parameter
+-	“segment”: which contains the scanModes for the UI Segment (e.g. switch between Analog and Digital)
+
+If you want to get detailed information on the config JSON, go to our [`documentation`](https://documentation.anyline.io/toc/view_configuration/index.html)
+
+Check the permissions of the native parts after adding permission-needed actions (like vibrate on result).
+
+### 5. Add the Anyline component in your render function
 ```
-react-native run-android
+	<Anyline config={config} scanMode={“ANALOG_METER”} onResult={this.onResult} onError={this.onError} />
 ```
+## Props
 
-- shake the phone (press menu button if phone has one, or "adb shell input keyevent 82"), go to dev settings -> debug server host -> type in the pc ip and port (e.g. 192.168.8.102:8088)
-- shake and reload
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| config | string | \*required | config (JSON String)|
+| scanMode | string |  \*required  | Will set the scanMode/Module of the Plugin. Available settings: (“ANALOG_METER”, “DIGITAL_METER”, “DOCUMENT”, “BARCODE”, “ANYLINE_OCR”, “MRZ”)|
+| onResult | function | \*required | The function you pass will be the onResult callback. Use this callback to handle the found scan results. |
+| onError | function |  \*required  | The onError function will be called when the AnylinePlugin encounters an error. Handle the error messages in this method. |
 
 
-### Anyline Setup ###
+			
+### Example ###
 
-Disclaimer: Check out the examples ResultView.js and config.json 
+Go to the Example project in the[`example folder`](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline).
 
-In order to implement the AnylineSDKPlugin into react native you have to complete the following steps:
-
-1.) add and import a JSON file with the proper structure and elements.
-	the json config contains:
-		- The license key 
-		- Options field with
-			-  AnylineSDK config parameter (see https://documentation.anyline.io/toc/view_configuration/index.html)
-			- “segment”: which contains the scanModes for the UI Segment (e.g. switch between Analog and Digital)
-
-2.) import the config.json file in your JavaScript file.
-
-3.) Import Anyline.js
-	import Anyline from './Anyline';
-
-4.) Add the Anyline component to your JavaScript file
-	<Anyline config={config} scanMode={this.scanMode} onResult={this.onResult} onError={this.onError} />
-		@param config (JSON String)
-		 
-		@param scanMode (String)
-			Will set the scanMode/Module of the Plugin. 
-			Available settings:
-				“ANALOG_METER”
-				“DIGITAL_METER”
-				“DOCUMENT”
-				“BARCODE”
-				“ANYLINE_OCR”
-				“MRZ”
-
-		@param onResult (func)
-			The function you pass will be the onResult callback.
-			Use this callback to handle the found scan results.
-
-		@param onError (func)
-			The onError function will be called when the AnylinePlugin 			encounters an error.
-			Handle the error messages in this method.
+Check out the examples ResultView.js and config.json to see the implementation.
