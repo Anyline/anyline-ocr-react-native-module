@@ -19,15 +19,22 @@ Check out the examples ResultView.js and config.json to see the implementation.
 ## Quick Start Guide
 
 ### 1. Get a License
-Go to [our pricing page](https://www.anyline.io/pricing/) and get your license (currently we only support enterprise licenses for react-native, commercial is comming soon).
+Go to [our pricing page](https://www.anyline.io/pricing/) and get your license (currently we only support enterprise licenses for react-native, community is comming soon).
 
 ### 2. Get the Anyline react-native plugin
 
 Download or Clone the Repo to your node_modules (Npm coming soon). 
+```
+project   
+│    android.index.js
+│    ios.index.js
+└─── node_modules
+     └─── anyline-ocr-react-native-module
 
+```
 To link the project install [rnpm](https://github.com/rnpm/rnpm) and run 
  ```
-     rnpm link
+rnpm link
  ```
 in the root folder.
 
@@ -57,7 +64,7 @@ and add the package to your getPackages function
       );
     }
 ```
-##### Issues
+#### Issues
 Strict mode does not allow function declarations in a lexically nested statement.
  
  http://stackoverflow.com/a/41076153/2157717
