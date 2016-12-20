@@ -58,11 +58,11 @@ and add the package to your getPackages function
     }
 ```
 ##### Issues
-<b>Strict mode does not allow function declarations in a lexically nested statement.</b>
+Strict mode does not allow function declarations in a lexically nested statement.
  
  http://stackoverflow.com/a/41076153/2157717
 
-<b>duplicate files during packaging of APK</b>
+duplicate files during packaging of APK
 ```
 packagingOptions {
   pickFirst 'lib/armeabi-v7a/libgnustl_shared.so'
@@ -90,11 +90,11 @@ Your BundleIdentifier of your app has to match with your bundleID from your Anyl
 
 ### 4. Import the plugin to your JavaScript file
 ```
-    import Anyline from 'anyline-ocr-react-native-module';
+import Anyline from 'anyline-ocr-react-native-module';
 ```
 ### 5. Import the config file
 ```
-    import config from './config.js';
+import config from './config.js';
 ```
 Add and import a JSON file with the proper structure and elements. The JSON config contains: 
 
@@ -108,7 +108,7 @@ If you want to get detailed information on the config JSON, go to our[`documenta
 
 ### 6. Add the Anyline component in your render function
 ```
-	<Anyline config={config} scanMode={“ANALOG_METER”} onResult={this.onResult} onError={this.onError} />
+<Anyline config={config} scanMode={“ANALOG_METER”} onResult={this.onResult} onError={this.onError} />
 ```
 ## Props
 
