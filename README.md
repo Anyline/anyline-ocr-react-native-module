@@ -6,26 +6,26 @@
 	          
 # Anyline React-Native Plugin
 
-[Anyline](https://www.anyline.io)is mobile OCR SDK, which can be configured by yourself to scan all kinds of numbers, characters, text and codes. 
+[Anyline](https://www.anyline.io) is mobile OCR SDK, which can be configured by yourself to scan all kinds of numbers, characters, text and codes. 
 
 The plugin lets you connect to the SDK with React-Native.
 	  
 ## Example ##
 
-Go to the Example project in the[`example folder`](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline).
+Go to the Example project in the [example folder](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline).
 
 Check out the examples ResultView.js and config.json to see the implementation.
 	                
 ## Quick Start Guide
 
 ### 1. Get a License
-Go to [our pricing page](https://www.anyline.io/pricing/)and get your license (currently we only support enterprise licenses for react-native, commercial is comming soon).
+Go to [our pricing page](https://www.anyline.io/pricing/) and get your license (currently we only support enterprise licenses for react-native, commercial is comming soon).
 
 ### 2. Get the Anyline react-native plugin
 
 Download or Clone the Repo to your node_modules (Npm coming soon). 
 
-To link the project install[rnpm](https://github.com/rnpm/rnpm)and run 
+To link the project install [rnpm](https://github.com/rnpm/rnpm) and run 
  ```
      rnpm link
  ```
@@ -73,7 +73,7 @@ packagingOptions {
 Disable bitcode in your project
 
 ##### Podfile
-- Copy the[`Podfile`](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline/ios/Podfile) 
+- Copy the [Podfile](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline/ios/Podfile) 
 from our example Project to your native iOS root folder.
 - Change the target of the Podfile to your project name.
 - ```pod install```
@@ -120,7 +120,7 @@ If you want to get detailed information on the config JSON, go to our[`documenta
 | onError | function |  \*required  | The onError function will be called when the AnylinePlugin encounters an error. Handle the error messages in this method. |
 
 ### config
-Stringified JSON with all the configurations, detailed information[`here`](https://documentation.anyline.io/toc/view_configuration/index.html).
+Stringified JSON with all the configurations, detailed information [here](https://documentation.anyline.io/toc/view_configuration/index.html).
 
 ### scanMode
 Available settings: (“ANALOG_METER”, “DIGITAL_METER”, “DOCUMENT”, “BARCODE”, “ANYLINE_OCR”, “MRZ”)
@@ -139,7 +139,7 @@ Callback -> Stringified JSON
     fullImageBase64 : 'base64 string of full image' 
 }
 ```
-More information about the simultaneous barcode scanning[`here`](https://documentation.anyline.io/toc/modules/overview.html#anyline-modules-simultaneous-barcode-scanning).
+More information about the simultaneous barcode scanning [here](https://documentation.anyline.io/toc/modules/overview.html#anyline-modules-simultaneous-barcode-scanning).
 ### onError
 Callback -> String
 - String errorMessage
