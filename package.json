@@ -20,7 +20,7 @@
     "example": "examples"
   },
   "peerDependencies": {
-    "react": "15.4.1",
-    "react-native": "0.39.2"
+    "react": "*",
+    "react-native": "*"
   }
 }
