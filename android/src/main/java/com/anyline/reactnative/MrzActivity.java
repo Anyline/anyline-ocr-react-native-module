@@ -6,7 +6,7 @@
  *
  * Created by martin at 2015-07-21
  */
-package eon.react.prototype;
+package com.anyline.reactnative;
 
 import android.os.Bundle;
 import android.util.Log;

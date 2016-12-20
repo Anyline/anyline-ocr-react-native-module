@@ -1,4 +1,4 @@
-package eon.react.prototype;
+package com.anyline.reactnative;
 
 /**
  * Created by jonesBoi on 02.12.16.

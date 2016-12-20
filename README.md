@@ -6,31 +6,118 @@
 	          
 # Anyline React-Native Plugin
 
-[Anyline](https://www.anyline.io) is mobile OCR SDK, which can be configured by yourself to scan all kinds of numbers, characters, text and codes. 
+[Anyline](https://www.anyline.io)is mobile OCR SDK, which can be configured by yourself to scan all kinds of numbers, characters, text and codes. 
 
 The plugin lets you connect to the SDK with React-Native.
-	             
+	  
+## Example ##
+
+Go to the Example project in the[`example folder`](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline).
+
+Check out the examples ResultView.js and config.json to see the implementation.
+	                
 ## Quick Start Guide
 
-### 1. Get the Anyline react-native plugin
+### 1. Get a License
+Go to [our pricing page](https://www.anyline.io/pricing/)and get your license (currently we only support enterprise licenses for react-native, commercial is comming soon).
 
-Download or Clone the Repo to your node_modules.
+### 2. Get the Anyline react-native plugin
 
-### 2. Get the native Dependencies
+Download or Clone the Repo to your node_modules (Npm coming soon). 
 
-##### Android
-Go into the native Android folder of the Anyline React-Native Plugin and sync Gradle.
+To link the project install[rnpm](https://github.com/rnpm/rnpm)and run 
+ ```
+     rnpm link
+ ```
+in the root folder.
 
-##### iOS
-Go into the native iOS folder of the Anyline React-Native Plugin and call "pod install".
+### 3. Get the native Dependencies
 
+#### Android
 
-### 3. Import the plugin to your JavaScript file
+##### Setup Packages
 
+Package name must match with the bundleID from your Anyline License. 
+
+##### Setup Manifest
+Get all Activities you need to your App
+
+Energy:
+```
+<activity android:name="com.anyline.reactnative.EnergyActivity"/>
+```
+MRZ:
+```
+<activity android:name="com.anyline.reactnative.MrzActivity"/>
+```
+Barcode:
+```
+ <activity android:name="com.anyline.reactnative.BarcodeActivity"/>
+```
+OCR:
+```
+<activity android:name="com.anyline.reactnative.AnylineOcrActivity"/>
+```
+
+Add Camera Permissions
+```
+<uses-permission android:name="android.permission.CAMERA"/>
+```
+Add also every other permission you configure in your config.js (vibrate, sound).
+##### Add Anyline Package
+
+Go into the native Android folder of your Project to your MainApplication.
+
+Import the AnylinePackage
+```
+import com.anyline.reactnative.AnylinePackage;
+```
+and add the package to your getPackages function
+```
+@Override
+    protected List<ReactPackage> getPackages() {
+      return Arrays.<ReactPackage>asList(
+          new MainReactPackage(),
+            new AnylinePackage()
+      );
+    }
+```
+##### Issues
+<b>Strict mode does not allow function declarations in a lexically nested statement.</b>
+ 
+ http://stackoverflow.com/a/41076153/2157717
+
+<b>duplicate files during packaging of APK</b>
+```
+packagingOptions {
+  pickFirst 'lib/armeabi-v7a/libgnustl_shared.so'
+  pickFirst 'lib/x86/libgnustl_shared.so'
+}
+```
+#### iOS
+Disable bitcode in your project
+
+##### Podfile
+- Copy the[`Podfile`](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline/ios/Podfile) 
+from our example Project to your native iOS root folder.
+- Change the target of the Podfile to your project name.
+- ```pod install```
+
+##### Permissions
+Add Camera Permissions to Info.plist
+```
+Privacy - Camera Usage Description
+```
+Add also every other permission you want to configure in your config.js (vibrate, sound).
+
+##### Anyline License
+Your BundleIdentifier of your app has to match with your bundleID from your Anyline License.
+
+### 4. Import the plugin to your JavaScript file
 ```
     import Anyline from 'anyline-ocr-react-native-module';
 ```
-### 4. Import the config file
+### 5. Import the config file
 ```
     import config from './config.js';
 ```
@@ -42,11 +129,9 @@ Add and import a JSON file with the proper structure and elements. The JSON conf
 -	AnylineSDK config parameter
 -	“segment”: which contains the scanModes for the UI Segment (e.g. switch between Analog and Digital)
 
-If you want to get detailed information on the config JSON, go to our [`documentation`](https://documentation.anyline.io/toc/view_configuration/index.html)
+If you want to get detailed information on the config JSON, go to our[`documentation`](https://documentation.anyline.io/toc/view_configuration/index.html).
 
-Check the permissions of the native parts after adding permission-needed actions (like vibrate on result).
-
-### 5. Add the Anyline component in your render function
+### 6. Add the Anyline component in your render function
 ```
 	<Anyline config={config} scanMode={“ANALOG_METER”} onResult={this.onResult} onError={this.onError} />
 ```
@@ -55,14 +140,31 @@ Check the permissions of the native parts after adding permission-needed actions
 | Key | Type | Default | Description |
 | --- | --- | --- | --- |
 | config | string | \*required | config (JSON String)|
-| scanMode | string |  \*required  | Will set the scanMode/Module of the Plugin. Available settings: (“ANALOG_METER”, “DIGITAL_METER”, “DOCUMENT”, “BARCODE”, “ANYLINE_OCR”, “MRZ”)|
+| scanMode | string |  \*required  | Will set the scanMode/Module of the Plugin. |
 | onResult | function | \*required | The function you pass will be the onResult callback. Use this callback to handle the found scan results. |
 | onError | function |  \*required  | The onError function will be called when the AnylinePlugin encounters an error. Handle the error messages in this method. |
 
+### config
+Stringified JSON with all the configurations, detailed information[`here`](https://documentation.anyline.io/toc/view_configuration/index.html).
 
-			
-### Example ###
+### scanMode
+Available settings: (“ANALOG_METER”, “DIGITAL_METER”, “DOCUMENT”, “BARCODE”, “ANYLINE_OCR”, “MRZ”)
 
-Go to the Example project in the[`example folder`](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline).
-
-Check out the examples ResultView.js and config.json to see the implementation.
+### onResult Function
+Callback -> Stringified JSON
+```
+{
+    reading : 'Result of the Scan',
+    imagePath : 'path to cropped image',
+    fullImagePath : 'path to full image',
+    barcode : 'result of the simultaneous barcode scanning',
+    scanMode : 'selected scanMode',
+    meterType : 'meter type',
+    cutoutBase64 : 'base64 string of cropped image', 
+    fullImageBase64 : 'base64 string of full image' 
+}
+```
+More information about the simultaneous barcode scanning[`here`](https://documentation.anyline.io/toc/modules/overview.html#anyline-modules-simultaneous-barcode-scanning).
+### onError
+Callback -> String
+- String errorMessage

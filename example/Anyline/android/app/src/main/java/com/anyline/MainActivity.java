@@ -1,6 +1,7 @@
 package com.anyline;
 
 import com.facebook.react.ReactActivity;
+import com.anyline.reactnative.AnylinePackage;
 
 public class MainActivity extends ReactActivity {
 

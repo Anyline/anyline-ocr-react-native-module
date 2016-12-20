@@ -24,7 +24,7 @@ class Anyline extends Component {
     meterType: '',
     cutoutBase64: '',
     fullImageBase64: '',
-  }
+  };
 
   openOCR = () => {
     AnylineOCR.setupScanViewWithConfigJson(
@@ -33,13 +33,13 @@ class Anyline extends Component {
       this.onResult,
       this.onError,
     );
-  }
+  };
 
   requestCameraPermission = async () => {
     try {
       const granted = await PermissionsAndroid.requestPermission(
         PermissionsAndroid.PERMISSIONS.CAMERA
-      )
+      );;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       if (granted) {
         console.log('Camera permission allowed');
         this.openOCR();
@@ -49,7 +49,7 @@ class Anyline extends Component {
     } catch (err) {
       console.warn(err);
     }
-  }
+  };
 
   hasCameraPermission = async () => {
     try {
@@ -59,7 +59,7 @@ class Anyline extends Component {
     } catch (err) {
       console.warn(err);
     }
-  }
+  };
 
   checkCameraPermissionAndOpen = () => {
     this.hasCameraPermission().then((hasCameraPermission) => {
@@ -71,7 +71,7 @@ class Anyline extends Component {
         this.requestCameraPermission();
       }
     });
-  }
+  };
 
   onResult = (dataString) => {
     const data = JSON.parse(dataString);

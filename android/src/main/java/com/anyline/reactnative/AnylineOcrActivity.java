@@ -6,7 +6,7 @@
  *
  * Created by martin at 2016-03-07
  */
-package eon.react.prototype;
+package com.anyline.reactnative;
 
 import android.graphics.PointF;
 import android.os.Bundle;

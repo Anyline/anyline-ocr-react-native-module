@@ -6,7 +6,7 @@
  *
  * Created by martin at 2015-12-09
  */
-package eon.react.prototype;
+package com.anyline.reactnative;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -56,6 +56,7 @@ public abstract class AnylineBaseActivity extends Activity
     }
 
     protected void finishWithError(String errorMessage) {
+
         Intent data = new Intent();
         data.putExtra(AnylineSDKPlugin.EXTRA_ERROR_MESSAGE, errorMessage);
         setResult(AnylineSDKPlugin.RESULT_ERROR, data);

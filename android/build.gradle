@@ -51,11 +51,16 @@ android {
     }
 }
 
+repositories {
+    //add the anyline maven repo
+    maven { url 'https://anylinesdk.blob.core.windows.net/maven/' }
+}
+
 dependencies {
     compile fileTree(dir: "libs", include: ["*.jar"])
-    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'io.anyline:anylinesdk:3.8.0@aar'
     compile 'com.google.android.gms:play-services-vision:10.0.1'
-    compile 'com.facebook.react:react-native:+'
-    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:design:25.1.0'
+    compile "com.facebook.react:react-native:+"  // From node_modules
 }

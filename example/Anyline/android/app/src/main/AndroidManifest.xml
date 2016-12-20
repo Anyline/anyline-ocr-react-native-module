@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
 
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="18"
         android:targetSdkVersion="22" />
 
     <application
@@ -27,10 +27,10 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-        <activity android:name="eon.react.prototype.EnergyActivity"/>
-        <activity android:name="eon.react.prototype.MrzActivity"/>
-        <activity android:name="eon.react.prototype.BarcodeActivity"/>
-        <activity android:name="eon.react.prototype.AnylineOcrActivity"/>
+        <activity android:name="com.anyline.reactnative.EnergyActivity"/>
+        <activity android:name="com.anyline.reactnative.MrzActivity"/>
+        <activity android:name="com.anyline.reactnative.BarcodeActivity"/>
+        <activity android:name="com.anyline.reactnative.AnylineOcrActivity"/>
     </application>
 
 </manifest>

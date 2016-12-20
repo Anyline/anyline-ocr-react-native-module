@@ -1,4 +1,4 @@
-package eon.react.prototype;
+package com.anyline.reactnative;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;

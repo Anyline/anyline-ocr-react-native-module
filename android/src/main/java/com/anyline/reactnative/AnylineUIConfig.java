@@ -1,4 +1,4 @@
-package eon.react.prototype;
+package com.anyline.reactnative;
 
 import android.content.Context;
 import android.graphics.Color;

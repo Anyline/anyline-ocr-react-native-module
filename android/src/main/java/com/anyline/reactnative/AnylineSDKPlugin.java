@@ -1,15 +1,18 @@
-package eon.react.prototype;
+package com.anyline.reactnative;
 
 /**
  * Created by jonesBoi on 02.12.16.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 
+import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -21,7 +24,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 
-class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
+class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener, ActivityEventListener {
 
     public static final String REACT_CLASS = "AnylineSDKPlugin";
     public static final String EXTRA_LICENSE_KEY = "EXTRA_LICENSE_KEY";
@@ -30,6 +33,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     public static final String EXTRA_ERROR_MESSAGE = "EXTRA_ERROR_MESSAGE";
     public static final String EXTRA_OCR_CONFIG_JSON = "EXTRA_OCR_CONFIG_JSON";
 
+    public static final int RESULT_CANCELED = 0;
     public static final int RESULT_OK = 1;
     public static final int RESULT_ERROR = 2;
 
@@ -83,6 +87,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private void scan(Class<?> activityToStart, String config, String scanMode) {
 
         Intent intent = new Intent(getCurrentActivity(), activityToStart);
+
         try {
             configObject = new JSONObject(config);
             license = configObject.get("license").toString();
@@ -110,6 +115,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         reactContext.startActivity(intent);
+
     }
 
 
@@ -144,4 +150,17 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             onResultCallback.invoke(result.toString());
         }
     }
+
+    @Override
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        ResultReporter.setListener(null);
+        if (resultCode == RESULT_CANCELED) {
+            onErrorCallback.invoke("Canceled");
+        } else if (resultCode == RESULT_ERROR) {
+            onErrorCallback.invoke(data.getStringExtra(EXTRA_ERROR_MESSAGE));
+        }
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {}
 }

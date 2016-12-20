@@ -2,6 +2,7 @@
   "name": "anyline-ocr-react-native-module",
   "version": "0.0.1",
   "main": "index.js",
+  "description": "A Plugin for connecting Anyline with React-Native",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -18,8 +19,8 @@
   "directories": {
     "example": "examples"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "15.4.1",
-    "react-native": "0.39.0"
+    "react-native": "0.39.2"
   }
 }

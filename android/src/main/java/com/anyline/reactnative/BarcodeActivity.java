@@ -1,4 +1,4 @@
-package eon.react.prototype;
+package com.anyline.reactnative;
 
 /*
  * Anyline Cordova Plugin
