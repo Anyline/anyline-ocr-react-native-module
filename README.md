@@ -39,31 +39,6 @@ in the root folder.
 
 Package name must match with the bundleID from your Anyline License. 
 
-##### Setup Manifest
-Get all Activities you need to your App
-
-Energy:
-```
-<activity android:name="com.anyline.reactnative.EnergyActivity"/>
-```
-MRZ:
-```
-<activity android:name="com.anyline.reactnative.MrzActivity"/>
-```
-Barcode:
-```
- <activity android:name="com.anyline.reactnative.BarcodeActivity"/>
-```
-OCR:
-```
-<activity android:name="com.anyline.reactnative.AnylineOcrActivity"/>
-```
-
-Add Camera Permissions
-```
-<uses-permission android:name="android.permission.CAMERA"/>
-```
-Add also every other permission you configure in your config.js (vibrate, sound).
 ##### Add Anyline Package
 
 Go into the native Android folder of your Project to your MainApplication.
