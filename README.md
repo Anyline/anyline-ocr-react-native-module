@@ -130,8 +130,14 @@ If you want to get detailed information on the config JSON, go to our[`documenta
 Stringified JSON with all the configurations, detailed information [here](https://documentation.anyline.io/toc/view_configuration/index.html).
 
 ### scanMode
-Available settings: (“ANALOG_METER”, “DIGITAL_METER”, “DOCUMENT”, “BARCODE”, “ANYLINE_OCR”, “MRZ”)
-
+Available settings: 
+```
+“ANALOG_METER”
+“DIGITAL_METER”
+“BARCODE”
+“ANYLINE_OCR”
+“MRZ”
+```
 ### onResult Function
 Callback -> Stringified JSON
 ```
@@ -147,6 +153,6 @@ Callback -> Stringified JSON
 }
 ```
 More information about the simultaneous barcode scanning [here](https://documentation.anyline.io/toc/modules/overview.html#anyline-modules-simultaneous-barcode-scanning).
-### onError
+### onError Function
 Callback -> String
 - String errorMessage
