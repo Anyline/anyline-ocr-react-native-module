@@ -5,12 +5,11 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
   <uses-permission android:name="android.permission.CAMERA"/>
-  <uses-permission android:name="android.permission.VIBRATE"/>
 
   <application android:allowBackup="true">
-      <activity android:name="eon.react.prototype.EnergyActivity"/>
-      <activity android:name="eon.react.prototype.MrzActivity"/>
-      <activity android:name="eon.react.prototype.BarcodeActivity"/>
-      <activity android:name="eon.react.prototype.AnylineOcrActivity"/>
+      <activity android:name="com.anyline.reactnative.EnergyActivity"/>
+      <activity android:name="com.anyline.reactnative.MrzActivity"/>
+      <activity android:name="com.anyline.reactnative.BarcodeActivity"/>
+      <activity android:name="com.anyline.reactnative.AnylineOcrActivity"/>
   </application>
 </manifest>
