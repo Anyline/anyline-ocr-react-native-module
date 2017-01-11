@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"reinstall": "rm -rf node_modules/anyline-ocr-react-native-module && npm i",
+		"reinstall": "rm -rf node_modules/anyline-ocr-react-native-module && npm i && rnpm link",
 		"reinstall-pods": "cd ios/ && rm -rf Pods Podfile.lock && pod install",
 		"test": "jest"
 	},

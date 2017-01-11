@@ -52,8 +52,12 @@ android {
 }
 
 repositories {
-    //add the anyline maven repo
-    maven { url 'https://anylinesdk.blob.core.windows.net/maven/' }
+    flatDir {
+        dirs 'libs'
+    }
+    maven {
+        url 'https://anylinesdk.blob.core.windows.net/maven/'
+    }
 }
 
 dependencies {

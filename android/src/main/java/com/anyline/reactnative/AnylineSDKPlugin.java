@@ -5,14 +5,12 @@ package com.anyline.reactnative;
  */
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.Log;
 
-import com.facebook.react.bridge.ActivityEventListener;
+import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -24,7 +22,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 
-class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener, ActivityEventListener {
+class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
 
     public static final String REACT_CLASS = "AnylineSDKPlugin";
     public static final String EXTRA_LICENSE_KEY = "EXTRA_LICENSE_KEY";
@@ -37,16 +35,25 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     public static final int RESULT_OK = 1;
     public static final int RESULT_ERROR = 2;
 
+
+    public static final int DIGITAL_METER = 3;
+    public static final int ANALOG_METER = 4;
+    public static final int ANYLINE_OCR = 5;
+    public static final int BARCODE = 6;
+    public static final int ANYLINE_MRZ = 7;
+
+
     private JSONObject configObject;
-    private Context reactContext;
+    private ReactApplicationContext reactContext;
     private String license;
     private String options;
     private Callback onResultCallback;
     private Callback onErrorCallback;
+    private ReactInstanceManager mReactInstanceManager;
 
     AnylineSDKPlugin(ReactApplicationContext context) {
         super(context);
-        reactContext = context;
+        this.reactContext = context;
     }
 
     @Override
@@ -59,21 +66,22 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         onResultCallback = onResultReact;
         onErrorCallback = onErrorReact;
 
+
         switch (scanMode) {
             case "DIGITAL_METER":
-                scan(EnergyActivity.class, config, scanMode);
+                scan(EnergyActivity.class, config, scanMode, DIGITAL_METER);
                 break;
             case "ANALOG_METER":
-                scan(EnergyActivity.class, config, scanMode);
+                scan(EnergyActivity.class, config, scanMode, ANALOG_METER);
                 break;
             case "ANYLINE_OCR":
-                scan(AnylineOcrActivity.class, config, scanMode);
+                scan(AnylineOcrActivity.class, config, scanMode, ANYLINE_OCR);
                 break;
             case "BARCODE":
-                scan(BarcodeActivity.class, config, scanMode);
+                scan(BarcodeActivity.class, config, scanMode, BARCODE);
                 break;
             case "MRZ":
-                scan(MrzActivity.class, config, scanMode);
+                scan(MrzActivity.class, config, scanMode, ANYLINE_MRZ);
                 break;
             case "DOCUMENT":
                 onErrorCallback.invoke("Not implemented yet");
@@ -84,9 +92,11 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     }
 
 
-    private void scan(Class<?> activityToStart, String config, String scanMode) {
+    private void scan(Class<?> activityToStart, String config, String scanMode, int requestCode) {
 
         Intent intent = new Intent(getCurrentActivity(), activityToStart);
+        Activity currentActivity = getCurrentActivity();
+
 
         try {
             configObject = new JSONObject(config);
@@ -111,13 +121,11 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             intent.putExtra(EXTRA_SCAN_MODE, scanMode);
         }
         ResultReporter.setListener(this);
-
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        reactContext.startActivity(intent);
+        currentActivity.startActivityForResult(intent, requestCode);
 
     }
-
 
     @Override
     public void onResult(Object result, boolean isFinalResult) {
@@ -151,16 +159,9 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         }
     }
 
-    @Override
-    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-        ResultReporter.setListener(null);
-        if (resultCode == RESULT_CANCELED) {
-            onErrorCallback.invoke("Canceled");
-        } else if (resultCode == RESULT_ERROR) {
-            onErrorCallback.invoke(data.getStringExtra(EXTRA_ERROR_MESSAGE));
-        }
-    }
 
     @Override
-    public void onNewIntent(Intent intent) {}
+    public void onError(String error) {
+        onErrorCallback.invoke(error);
+    }
 }

@@ -18,8 +18,15 @@ public class ResultReporter {
         }
     }
 
+    public static void onError(String error) {
+        if (listener != null) {
+            listener.onError(error);
+        }
+    }
+
     public interface OnResultListener {
         void onResult(Object result, boolean isFinalResult);
+        void onError(String error);
     }
 }
 

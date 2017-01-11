@@ -69,7 +69,7 @@ packagingOptions {
   pickFirst 'lib/x86/libgnustl_shared.so'
 }
 ```
-#### iOS
+#### iOS 
 Disable bitcode in your project
 
 ##### Podfile
