@@ -49,6 +49,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private String options;
     private Callback onResultCallback;
     private Callback onErrorCallback;
+    private Callback onCancelCallback;
     private ReactInstanceManager mReactInstanceManager;
 
     AnylineSDKPlugin(ReactApplicationContext context) {
@@ -62,9 +63,10 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     }
 
     @ReactMethod
-    public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
+    public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact, Callback onErrorReact, Callback onCancelReact) {
         onResultCallback = onResultReact;
         onErrorCallback = onErrorReact;
+        onCancelCallback = onCancelReact;
 
 
         switch (scanMode) {
@@ -163,5 +165,10 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     @Override
     public void onError(String error) {
         onErrorCallback.invoke(error);
+    }
+
+    @Override
+    public void onCancel(){
+        onCancelCallback.invoke();
     }
 }

@@ -75,7 +75,7 @@ public abstract class AnylineBaseActivity extends Activity
 
     @Override
     public void onBackPressed() {
-        ResultReporter.onError("BackButtonPressed");
+        ResultReporter.onCancel();
         super.onBackPressed();
     }
 

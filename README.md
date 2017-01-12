@@ -115,7 +115,7 @@ If you want to get detailed information on the config JSON, go to our[`documenta
 
 ### 6. Add the Anyline component in your render function
 ```
-<Anyline config={config} scanMode={“ANALOG_METER”} onResult={this.onResult} onError={this.onError} />
+<Anyline config={config} scanMode={“ANALOG_METER”} onResult={this.onResult} onError={this.onError} onCancel={this.onCancel} />
 ```
 ## Props
 
@@ -125,6 +125,7 @@ If you want to get detailed information on the config JSON, go to our[`documenta
 | scanMode | string |  \*required  | Will set the scanMode/Module of the Plugin. |
 | onResult | function | \*required | The function you pass will be the onResult callback. Use this callback to handle the found scan results. |
 | onError | function |  \*required  | The onError function will be called when the AnylinePlugin encounters an error. Handle the error messages in this method. |
+| onCancel | function |  \*required  | The onCancel function will be called when the AnylinePlugin is canceled without any result (pressing back button) |
 
 ### config
 Stringified JSON with all the configurations, detailed information [here](https://documentation.anyline.io/toc/view_configuration/index.html).
@@ -156,3 +157,6 @@ More information about the simultaneous barcode scanning [here](https://document
 ### onError Function
 Callback -> String
 - String errorMessage
+
+### onCancel Function
+Callback

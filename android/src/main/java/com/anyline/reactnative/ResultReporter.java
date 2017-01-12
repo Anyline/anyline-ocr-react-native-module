@@ -24,9 +24,16 @@ public class ResultReporter {
         }
     }
 
+    public static void onCancel() {
+        if (listener != null) {
+            listener.onCancel();
+        }
+    }
+
     public interface OnResultListener {
         void onResult(Object result, boolean isFinalResult);
         void onError(String error);
+        void onCancel();
     }
 }
 

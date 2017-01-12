@@ -32,6 +32,7 @@ class Anyline extends Component {
             'ANALOG_METER',
             this.onResult,
             this.onError,
+            this.onCancel
         );
     };
 
@@ -89,8 +90,12 @@ class Anyline extends Component {
     };
 
     onError = (error) => {
-        console.log(error);
+        console.error(error);
         alert(error);
+    };
+
+    onCancel = () => {
+        console.log('View got canceled');
     };
 
     render() {
