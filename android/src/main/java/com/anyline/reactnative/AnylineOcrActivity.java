@@ -2,7 +2,7 @@
  * Anyline Cordova Plugin
  * AnylineOcrActivity.java
  *
- * Copyright (c) 2016 9yards GmbH
+ * Copyright (c) 2016 Anyline GmbH
  *
  * Created by martin at 2016-03-07
  */

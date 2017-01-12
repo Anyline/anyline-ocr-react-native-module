@@ -3,7 +3,7 @@
 //  Anyline
 //
 //  Created by David Dengg on 18.01.16.
-//  Copyright © 2016 9Yards GmbH. All rights reserved.
+//  Copyright © 2016 Anyline GmbH. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

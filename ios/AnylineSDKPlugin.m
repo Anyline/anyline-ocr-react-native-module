@@ -20,7 +20,6 @@
 
 @property (nonatomic, strong) RCTResponseSenderBlock onResultCallback;
 @property (nonatomic, strong) RCTResponseSenderBlock onErrorCallback;
-@property (nonatomic, strong) RCTResponseSenderBlock onCancelCallback;
 
 @end
 
@@ -33,10 +32,9 @@ RCT_EXPORT_MODULE();
   return [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
 }
 
-RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError onCancelCallback:(RCTResponseSenderBlock)onCancel) {
+RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
   self.onResultCallback = onResult;
   self.onErrorCallback = onError;
-  self.onCancelCallback = onCancel;
 
   NSData *data = [config dataUsingEncoding:NSUTF8StringEncoding];
   id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
@@ -71,7 +69,7 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
 }
 
 -(void)anylineBaseScanViewController:(AnylineBaseScanViewController *)baseScanViewController didStopScanning:(id)sender {
-  self.onCancelCallback();
+  self.onErrorCallback(@[@"Canceled"]);
 }
 
 #pragma mark - Utility Funcitons

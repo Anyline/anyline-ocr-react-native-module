@@ -2,7 +2,7 @@
  * Anyline React-Native Plugin
  * AnylineBaseActivity.java
  *
- * Copyright (c) 2017 9yards GmbH
+ * Copyright (c) 2017 Anyline GmbH
  *
  */
 package com.anyline.reactnative;

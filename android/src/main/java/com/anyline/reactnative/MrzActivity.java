@@ -2,7 +2,7 @@
  * Anyline Cordova Plugin
  * MrzActivity.java
  *
- * Copyright (c) 2015 9yards GmbH
+ * Copyright (c) 2015 Anyline GmbH
  *
  * Created by martin at 2015-07-21
  */

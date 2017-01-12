@@ -1,16 +1,19 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
-  AppRegistry,
-  PermissionsAndroid,
-  StyleSheet,
-  Text,
-  View,
+    AppRegistry,
+    PermissionsAndroid,
+    StyleSheet,
+    Text,
+    View,
+    Platform
 } from 'react-native';
+
 import AnylineOCR from 'anyline-ocr-react-native-module';
 
 import Result from './Result';
 
 import config from '../config';
+
 
 class Anyline extends Component {
 
@@ -31,12 +34,13 @@ class Anyline extends Component {
             JSON.stringify(config),
             'ANALOG_METER',
             this.onResult,
-            this.onError,
-            this.onCancel
+            this.onError
         );
     };
 
     requestCameraPermission = async() => {
+
+
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.CAMERA
@@ -94,10 +98,6 @@ class Anyline extends Component {
         alert(error);
     };
 
-    onCancel = () => {
-        console.log('View got canceled');
-    };
-
     render() {
         const {
             hasScanned,
@@ -110,6 +110,10 @@ class Anyline extends Component {
             cutoutBase64,
             fullImageBase64,
         } = this.state;
+
+        const platformText = (Platform.OS === 'android') ?
+            (<Text onPress={this.checkCameraPermissionAndOpen}>Open OCR reader!</Text>) :
+            (<Text onPress={this.openOCR}>Open OCR reader!</Text>);
 
         return (
             <View style={styles.container}>
@@ -125,12 +129,13 @@ class Anyline extends Component {
                             fullImageBase64={fullImageBase64}
                         />
                     ) : (
-                        <Text onPress={this.checkCameraPermissionAndOpen}>Open OCR reader!</Text>
+                        platformText
                     )}
             </View>
         );
     }
 }
+
 
 const styles = StyleSheet.create({
     container: {
