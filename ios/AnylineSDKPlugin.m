@@ -1,4 +1,3 @@
-
 #import "AnylineSDKPlugin.h"
 #import <Anyline/Anyline.h>
 #import "AnylineBarcodeScanViewController.h"
@@ -16,6 +15,7 @@
 @property (nonatomic, strong) NSString *callbackId;
 @property (nonatomic, strong) NSString *appKey;
 @property (nonatomic, strong) NSDictionary *jsonConfigDictionary;
+@property (nonatomic, strong) NSDictionary *ocrConfigDict;
 @property (nonatomic, strong) ALJsonUIConfiguration *jsonUIConf;
 
 @property (nonatomic, strong) RCTResponseSenderBlock onResultCallback;
@@ -43,6 +43,7 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
   self.appKey = [dictionary objectForKey:@"license"];
   self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
   self.conf = [[ALUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"] bundlePath:nil];
+  self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
   dispatch_async(dispatch_get_main_queue(), ^{
     self.baseScanViewController = [self ViewControllerFromScanMode:scanMode];
@@ -91,7 +92,7 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
     return [[AnylineBarcodeScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
   } else if ([[scanMode uppercaseString] isEqualToString:[@"ANYLINE_OCR" uppercaseString]]) {
     AnylineOCRScanViewController *ocrVC = [[AnylineOCRScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-    [ocrVC setOcrConfDict:self.jsonConfigDictionary];
+    [ocrVC setOcrConfDict:self.ocrConfigDict];
     return ocrVC;
   } else {
     self.onErrorCallback(@[@"unkown scanMode: %@", scanMode]);

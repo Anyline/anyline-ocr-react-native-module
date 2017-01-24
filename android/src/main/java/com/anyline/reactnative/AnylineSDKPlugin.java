@@ -112,7 +112,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
         //Check if OCR
         try {
-            intent.putExtra(EXTRA_OCR_CONFIG_JSON, configObject.get("license").toString());
+            intent.putExtra(EXTRA_OCR_CONFIG_JSON, configObject.get("ocr").toString());
         } catch (JSONException e) {
 
         }
