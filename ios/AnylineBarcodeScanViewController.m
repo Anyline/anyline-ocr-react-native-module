@@ -34,19 +34,18 @@
 
 - (void)anylineBarcodeModuleView:(AnylineBarcodeModuleView *)anylineBarcodeModuleView
                didFindScanResult:(NSString *)scanResult
-                   barcodeFormat:(NSString *)barcodeFormat
+               withBarcodeFormat:(ALBarcodeFormat)barcodeFormat
                          atImage:(UIImage *)image {
-
     self.scannedLabel.text = scanResult;
     [self flashResultFor:0.9];
-    
+
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:2];
-    
+
     [dictResult setObject:scanResult forKey:@"value"];
-    [dictResult setObject:barcodeFormat forKey:@"barcodeFormat"];
-    
+    [dictResult setObject:@(barcodeFormat) forKey:@"barcodeFormat"];
+
     NSString *imagePath = [self saveImageToFileSystem:image];
-    
+
     [dictResult setValue:imagePath forKey:@"imagePath"];
     [dictResult setValue:[self base64StringFromImage:image] forKey:@"cutoutBase64"];
   
