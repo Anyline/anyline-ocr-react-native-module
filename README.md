@@ -39,9 +39,9 @@ or just go
 ``` 
  
 
-To link the project install [rnpm](https://github.com/rnpm/rnpm) and run 
+Link the project. Run in root:
  ```
-rnpm link
+react-native link
  ```
 in the root folder.
 
@@ -136,6 +136,7 @@ If you want to get detailed information on the config JSON, go to our[`documenta
 ### config
 Stringified JSON with all the configurations, detailed information [here](https://documentation.anyline.io/toc/view_configuration/index.html).
 
+Keep in mind, that you have to add every permission to your project, you add in the config (vibrateOnResult -> vibration permission)
 ### scanMode
 Available settings: 
 ```
