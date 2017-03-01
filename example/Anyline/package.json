@@ -1,25 +1,28 @@
 {
-	"name": "anyline-ocr-react-native-module",
-	"version": "0.0.1",
-	"main": "index.js",
-	"scripts": {
-		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"reinstall": "rm -rf node_modules/anyline-ocr-react-native-module && npm i && rnpm link",
-		"reinstall-pods": "cd ios/ && rm -rf Pods Podfile.lock && pod install",
-		"test": "jest"
-	},
-	"dependencies": {
-		"react": "15.4.1",
-		"react-native": "0.39.2",
-		"anyline-ocr-react-native-module" : "../.."
-	},
-	"devDependencies": {
-		"babel-jest": "18.0.0",
-		"babel-preset-react-native": "1.9.1",
-		"jest": "18.0.0",
-		"react-test-renderer": "15.4.1"
-	},
-	"jest": {
-		"preset": "react-native"
-	}
+  "name": "anyline-ocr-react-native-module",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "reinstall": "rm -rf node_modules/anyline-ocr-react-native-module && npm i && react-native link",
+    "reinstall-pods": "cd ios/ && rm -rf Pods Podfile.lock && pod install",
+    "test": "jest"
+  },
+  "dependencies": {
+    "anyline-ocr-react-native-module": "../..",
+    "react": "15.4.2",
+    "react-native": "0.39.2",
+    "react-native-android-permissions": "0.0.7",
+    "react-native-permissions": "^0.2.7",
+    "react-native-vector-icons": "^4.0.0"
+  },
+  "devDependencies": {
+    "babel-jest": "19.0.0",
+    "babel-preset-react-native": "1.9.1",
+    "jest": "19.0.2",
+    "react-test-renderer": "15.4.2"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
 }

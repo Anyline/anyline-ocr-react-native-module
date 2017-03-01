@@ -130,6 +130,9 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-permissions')
+    compile project(':react-native-android-permissions')
     compile project(':anyline-ocr-react-native-module')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:25.0.1"

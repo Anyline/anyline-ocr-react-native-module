@@ -11,5 +11,6 @@
       <activity android:name="com.anyline.reactnative.MrzActivity"/>
       <activity android:name="com.anyline.reactnative.BarcodeActivity"/>
       <activity android:name="com.anyline.reactnative.AnylineOcrActivity"/>
+      <activity android:name="com.anyline.reactnative.DocumentActivity"/>
   </application>
 </manifest>

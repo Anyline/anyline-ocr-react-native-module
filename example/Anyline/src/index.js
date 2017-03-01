@@ -32,7 +32,7 @@ class Anyline extends Component {
     openOCR = () => {
         AnylineOCR.setupScanViewWithConfigJson(
             JSON.stringify(config),
-            'ANALOG_METER',
+            'DOCUMENT',
             this.onResult,
             this.onError
         );
@@ -42,8 +42,13 @@ class Anyline extends Component {
 
 
         try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.CAMERA
+            const granted = await PermissionsAndroid.requestPermission(
+                PermissionsAndroid.PERMISSIONS.CAMERA,
+                {
+                    'title': 'Cool Photo App Camera Permission',
+                    'message': 'Cool Photo App needs access to your camera ' +
+                    'so you can take awesome pictures.'
+                }
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log('Camera permission allowed');
@@ -58,11 +63,9 @@ class Anyline extends Component {
 
     hasCameraPermission = async() => {
         try {
-            const result = await PermissionsAndroid.check(
-                PermissionsAndroid.PERMISSIONS.CAMERA);
-            return result;
+            return await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
         } catch (err) {
-            console.warn(err);
+            console.warn(err, 'PERMISSION CHECK');
         }
     };
 
@@ -79,6 +82,7 @@ class Anyline extends Component {
     };
 
     onResult = (dataString) => {
+        console.log(dataString);
         const data = JSON.parse(dataString);
 
         this.setState({
@@ -111,9 +115,9 @@ class Anyline extends Component {
             fullImageBase64,
         } = this.state;
 
-        const platformText = (Platform.OS === 'android') ?
-            (<Text onPress={this.checkCameraPermissionAndOpen}>Open OCR reader!</Text>) :
-            (<Text onPress={this.openOCR}>Open OCR reader!</Text>);
+        // const platformText = (Platform.OS === 'android') ?
+            {/*(<Text onPress={this.checkCameraPermissionAndOpen}>Open OCR reader!</Text>) :*/}
+            {/*(<Text onPress={this.openOCR}>Open OCR reader!</Text>);*/}
 
         return (
             <View style={styles.container}>
@@ -128,9 +132,7 @@ class Anyline extends Component {
                             cutoutBase64={cutoutBase64}
                             fullImageBase64={fullImageBase64}
                         />
-                    ) : (
-                        platformText
-                    )}
+                    ) : <Text onPress={this.openOCR}>Open OCR reader!</Text>}
             </View>
         );
     }
