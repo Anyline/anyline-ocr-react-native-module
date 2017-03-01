@@ -41,6 +41,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     public static final int ANYLINE_OCR = 5;
     public static final int BARCODE = 6;
     public static final int ANYLINE_MRZ = 7;
+    public static final int ANYLINE_DOCUMENT = 8;
 
 
     private JSONObject configObject;
@@ -84,7 +85,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
                 scan(MrzActivity.class, config, scanMode, ANYLINE_MRZ);
                 break;
             case "DOCUMENT":
-                onErrorCallback.invoke("Not implemented yet");
+                scan(DocumentActivity.class, config, scanMode, ANYLINE_DOCUMENT);
                 break;
             default:
                 onErrorCallback.invoke("Wrong ScanMode");

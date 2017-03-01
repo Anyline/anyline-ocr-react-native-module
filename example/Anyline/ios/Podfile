@@ -1,3 +1,5 @@
+project 'Anyline.xcodeproj'
+
 target 'Anyline' do
   pod 'React', subspecs: [
     'RCTActionSheet',
