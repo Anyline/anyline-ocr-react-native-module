@@ -19,6 +19,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.vision.barcode.Barcode;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,10 +29,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import at.nineyards.anyline.AnylineDebugListener;
 import at.nineyards.anyline.camera.AnylineViewConfig;
 import at.nineyards.anyline.camera.CameraController;
-import at.nineyards.anyline.models.AnylineImage;
+import at.nineyards.anyline.core.RunFailure;
 import at.nineyards.anyline.modules.barcode.NativeBarcodeResultListener;
+import at.nineyards.anyline.modules.energy.EnergyResult;
 import at.nineyards.anyline.modules.energy.EnergyResultListener;
 import at.nineyards.anyline.modules.energy.EnergyScanView;
 import at.nineyards.anyline.util.TempFileUtil;
@@ -70,7 +74,7 @@ public class EnergyActivity extends AnylineBaseActivity {
 
         energyScanView.enableBarcodeDetection(true, new NativeBarcodeResultListener() {
             @Override
-            public void onBarcodesReceived(SparseArray<com.google.android.gms.vision.barcode.Barcode> sparseArray) {
+            public void onBarcodesReceived(SparseArray<Barcode> sparseArray) {
 
                 if (sparseArray.size() > 0) {
                     lastDetectedBarcodeValue = sparseArray.valueAt(0).displayValue;
@@ -101,12 +105,11 @@ public class EnergyActivity extends AnylineBaseActivity {
             radioGroup = new RadioGroup(this);
             radioGroup.setOrientation(RadioGroup.VERTICAL);
 
-            int currentApiVersion = android.os.Build.VERSION.SDK_INT;
             for (int i = 0; i < titles.size(); i++) {
                 radioButtons[i] = new RadioButton(this);
                 radioButtons[i].setText(titles.get(i));
 
-                if (currentApiVersion >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     radioButtons[i].setButtonTintList(ColorStateList.valueOf(anylineUIConfig.getTintColor()));
                 }
 
@@ -181,11 +184,11 @@ public class EnergyActivity extends AnylineBaseActivity {
         energyScanView.initAnyline(licenseKey, new EnergyResultListener() {
 
             @Override
-            public void onResult(EnergyScanView.ScanMode scanMode, String result,
-                                 AnylineImage resultImage, AnylineImage fullImage) {
+            public void onResult(EnergyResult energyResult) {
 
 
                 JSONObject jsonResult = new JSONObject();
+                EnergyScanView.ScanMode scanMode = energyResult.getScanMode();
 
                 try {
                     switch (scanMode) {
@@ -213,18 +216,21 @@ public class EnergyActivity extends AnylineBaseActivity {
                     }
 
                     jsonResult.put("scanMode", scanMode.toString());
-                    jsonResult.put("reading", result);
+                    jsonResult.put("reading", energyResult.getResult());
                     jsonResult.put("barcodeResult", lastDetectedBarcodeValue);
+                    jsonResult.put("outline", jsonForOutline(energyResult.getOutline()));
+                    jsonResult.put("confidence", energyResult.getConfidence());
+
                     File imageFile = TempFileUtil.createTempFileCheckCache(EnergyActivity.this,
                             UUID.randomUUID().toString(), ".jpg");
 
-                    resultImage.save(imageFile, 90);
+                    energyResult.getCutoutImage().save(imageFile, 90);
                     jsonResult.put("imagePath", imageFile.getAbsolutePath());
 
-                    if (fullImage != null) {
+                    if (energyResult.getFullImage() != null) {
                         imageFile = TempFileUtil.createTempFileCheckCache(EnergyActivity.this,
                                 UUID.randomUUID().toString(), ".jpg");
-                        fullImage.save(imageFile, 90);
+                        energyResult.getFullImage().save(imageFile, 90);
                         jsonResult.put("fullImagePath", imageFile.getAbsolutePath());
                     }
 

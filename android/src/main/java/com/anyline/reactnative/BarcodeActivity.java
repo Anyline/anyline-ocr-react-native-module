@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import at.nineyards.anyline.camera.AnylineViewConfig;
 import at.nineyards.anyline.models.AnylineImage;
+import at.nineyards.anyline.modules.barcode.BarcodeResult;
 import at.nineyards.anyline.modules.barcode.BarcodeResultListener;
 import at.nineyards.anyline.modules.barcode.BarcodeScanView;
 import at.nineyards.anyline.util.TempFileUtil;
@@ -66,19 +67,29 @@ public class BarcodeActivity extends AnylineBaseActivity {
 
         barcodeScanView.initAnyline(licenseKey, new BarcodeResultListener() {
             @Override
-            public void onResult(String result, BarcodeScanView.BarcodeFormat format, AnylineImage resultImage) {
+            public void onResult(BarcodeResult result) {
+
 
                 JSONObject jsonResult = new JSONObject();
                 try {
 
-                    jsonResult.put("value", result);
-                    jsonResult.put("format", format.toString());
+                    jsonResult.put("value", result.getResult());
+                    jsonResult.put("format", result.getBarcodeFormat());
+                    jsonResult.put("outline", jsonForOutline(result.getOutline()));
+                    jsonResult.put("confidence", result.getConfidence());
+
 
                     File imageFile = TempFileUtil.createTempFileCheckCache(BarcodeActivity.this,
                             UUID.randomUUID().toString(), ".jpg");
 
-                    resultImage.save(imageFile, 90);
+                    result.getCutoutImage().save(imageFile, 90);
                     jsonResult.put("imagePath", imageFile.getAbsolutePath());
+
+                    imageFile = TempFileUtil.createTempFileCheckCache(BarcodeActivity.this,
+                            UUID.randomUUID().toString(), ".jpg");
+                    result.getFullImage().save(imageFile, 90);
+                    jsonResult.put("fullImagePath", imageFile.getAbsolutePath());
+
 
                 } catch (IOException e) {
                     Log.e(TAG, "Image file could not be saved.", e);

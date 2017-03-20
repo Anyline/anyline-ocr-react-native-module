@@ -7,5 +7,6 @@
 @property (nonatomic) ALScanMode scanMode;
 
 @property (nonatomic) NSString* barcodeResult;
+@property (nonatomic, assign) BOOL nativeBarcodeEnabled;
 
 @end

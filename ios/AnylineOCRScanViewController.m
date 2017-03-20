@@ -59,13 +59,15 @@
 
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
     
-    [dictResult setObject:result.text forKey:@"text"];
+    [dictResult setObject:result.result forKey:@"text"];
     
     NSString *imagePath = [self saveImageToFileSystem:result.image];
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
-    [dictResult setValue:[self base64StringFromImage:result.image] forKey:@"cutoutBase64"];
-  
+    
+    [dictResult setValue:@(result.confidence) forKey:@"confidence"];
+    [dictResult setValue:[self stringForOutline:result.outline] forKey:@"outline"];
+    
     [self.delegate anylineBaseScanViewController:self didScan:dictResult continueScanning:!self.moduleView.cancelOnResult];
     
     if (self.moduleView.cancelOnResult) {

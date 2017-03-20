@@ -33,24 +33,35 @@
 
 
 - (void)anylineBarcodeModuleView:(AnylineBarcodeModuleView *)anylineBarcodeModuleView
-               didFindScanResult:(NSString *)scanResult
-               withBarcodeFormat:(ALBarcodeFormat)barcodeFormat
-                         atImage:(UIImage *)image {
-    self.scannedLabel.text = scanResult;
+                   didFindResult:(ALBarcodeResult *)scanResult {
+    
+    self.scannedLabel.text = (NSString *)scanResult.result;
     [self flashResultFor:0.9];
-
+    
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:2];
-
-    [dictResult setObject:scanResult forKey:@"value"];
-
-    NSString *barcodeString = [self stringFromBarcodeFormat:barcodeFormat];
-    [dictResult setObject:barcodeString forKey:@"barcodeFormat"];
-
-    NSString *imagePath = [self saveImageToFileSystem:image];
-
+    
+    [dictResult setObject:(NSString *)scanResult.result forKey:@"value"];
+    if (!scanResult.barcodeFormat) {
+        [dictResult setObject:@"Unknown" forKey:@"barcodeFormat"];
+    } else {
+        [dictResult setObject:[self stringFromBarcodeFormat:scanResult.barcodeFormat] forKey:@"barcodeFormat"];
+    }
+    
+    
+    NSString *imagePath = [self saveImageToFileSystem:scanResult.image];
+    
     [dictResult setValue:imagePath forKey:@"imagePath"];
-    [dictResult setValue:[self base64StringFromImage:image] forKey:@"cutoutBase64"];
+    
+    
+    NSString *fullImagePath = [self saveImageToFileSystem:scanResult.fullImage];
+    
+    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+    
 
+    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
+    [dictResult setValue:[self stringForOutline:scanResult.outline] forKey:@"outline"];
+
+    
     [self.delegate anylineBaseScanViewController:self
                                          didScan:dictResult
                                 continueScanning:!self.moduleView.cancelOnResult];

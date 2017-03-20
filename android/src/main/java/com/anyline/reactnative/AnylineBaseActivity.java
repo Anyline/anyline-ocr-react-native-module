@@ -9,9 +9,15 @@ package com.anyline.reactnative;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.camera.CameraOpenListener;
@@ -79,5 +85,39 @@ public abstract class AnylineBaseActivity extends Activity
         super.onBackPressed();
     }
 
+    protected String jsonForOutline(List<PointF> pointList) {
+
+        JSONObject upLeft = new JSONObject();
+        JSONObject upRight = new JSONObject();
+        JSONObject downRight = new JSONObject();
+        JSONObject downLeft = new JSONObject();
+        JSONObject outline = new JSONObject();
+
+        try {
+            upLeft.put("x", pointList.get(0).x);
+            upLeft.put("y", pointList.get(0).y);
+
+            upRight.put("x", pointList.get(1).x);
+            upRight.put("y", pointList.get(1).y);
+
+            downRight.put("x", pointList.get(2).x);
+            downRight.put("y", pointList.get(2).y);
+
+            downLeft.put("x", pointList.get(3).x);
+            downLeft.put("y", pointList.get(3).y);
+
+            outline.put("upLeft", upLeft);
+            outline.put("upRight", upRight);
+            outline.put("downRight", downRight);
+            outline.put("downLeft", downLeft);
+
+
+        } catch (JSONException e) {
+            Log.d(TAG, e.toString());
+            e.printStackTrace();
+        }
+
+        return outline.toString();
+    }
 
 }

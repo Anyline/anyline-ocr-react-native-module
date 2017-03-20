@@ -19,10 +19,10 @@
 -(instancetype)initWithKey:(NSString*)key configuration:(ALUIConfiguration *)conf jsonConfiguration:(ALJsonUIConfiguration*)jsonConf delegate:(id<AnylineBaseScanViewControllerDelegate>)delegate;
 
 - (NSString *)saveImageToFileSystem:(UIImage *)image;
-- (NSString *)base64StringFromImage:(UIImage *)image;
 
 - (void)flashResultFor:(NSTimeInterval) duration;
 
+- (NSString *)stringForOutline:(ALSquare *)square;
 
 @end
 

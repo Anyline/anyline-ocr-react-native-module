@@ -83,12 +83,13 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 25
+        applicationId "com.anyline-ocr-react-native-module"
+        minSdkVersion 16
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         ndk {
@@ -122,11 +123,6 @@ android {
             }
         }
     }
-
-    packagingOptions {
-      pickFirst 'lib/armeabi-v7a/libgnustl_shared.so'
-      pickFirst 'lib/x86/libgnustl_shared.so'
-    }
 }
 
 dependencies {
@@ -135,7 +131,7 @@ dependencies {
     compile project(':react-native-android-permissions')
     compile project(':anyline-ocr-react-native-module')
     compile fileTree(dir: "libs", include: ["*.jar"])
-    compile "com.android.support:appcompat-v7:25.0.1"
+    compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
 }
 

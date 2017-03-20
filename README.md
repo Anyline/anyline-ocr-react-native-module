@@ -143,7 +143,6 @@ Available settings:
 “ANALOG_METER”
 “DIGITAL_METER”
 “BARCODE”
-“ANYLINE_OCR”
 “MRZ”
 ```
 ### onResult Function

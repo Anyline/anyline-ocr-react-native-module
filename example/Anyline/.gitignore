@@ -4,6 +4,7 @@
 
 # Xcode
 #
+build/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -13,10 +14,13 @@
 *.perspectivev3
 !default.perspectivev3
 xcuserdata
+*.xccheckout
 *.moved-aside
 DerivedData
 *.hmap
 *.ipa
+*.xcuserstate
+project.xcworkspace
 
 # Android/IntelliJ
 #
@@ -35,7 +39,6 @@ yarn-error.log
 # BUCK
 buck-out/
 \.buckd/
-android/app/libs
 *.keystore
 
 # fastlane

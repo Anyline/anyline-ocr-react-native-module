@@ -61,12 +61,15 @@
                         fullImage:(UIImage *)fullFrame {
     
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
+
     
     NSString *imagePath = [self saveImageToFileSystem:transformedImage];
+    NSString *fullImagePath = [self saveImageToFileSystem:fullFrame];
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
-    [dictResult setValue:[self base64StringFromImage:transformedImage] forKey:@"cutoutBase64"];
-  
+    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+
+    
     [self.delegate anylineBaseScanViewController:self didScan:dictResult continueScanning:!self.moduleView.cancelOnResult];
     
     if (self.moduleView.cancelOnResult) {

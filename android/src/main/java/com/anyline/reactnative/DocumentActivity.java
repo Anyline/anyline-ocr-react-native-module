@@ -29,6 +29,7 @@ import at.nineyards.anyline.camera.AnylineViewConfig;
 import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.camera.CameraOpenListener;
 import at.nineyards.anyline.models.AnylineImage;
+import at.nineyards.anyline.modules.document.DocumentResult;
 import at.nineyards.anyline.modules.document.DocumentResultListener;
 import at.nineyards.anyline.modules.document.DocumentScanView;
 
@@ -109,12 +110,15 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
         // initialize Anyline with the license key and a Listener that is called if a result is found
         documentScanView.initAnyline(licenseKey, new DocumentResultListener() {
             @Override
-            public void onResult(AnylineImage transformedImage, AnylineImage fullFrame, List<PointF> documentOutline) {
+            public void onResult(DocumentResult documentResult) {
 
                 // handle the result document images here
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
+
+                AnylineImage transformedImage = documentResult.getResult();
+                AnylineImage fullFrame = documentResult.getFullImage();
 
                 imageViewResult.setImageBitmap(Bitmap.createScaledBitmap(transformedImage.getBitmap(), 100, 160, false));
 
@@ -152,6 +156,9 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 JSONObject jsonResult = new JSONObject();
                 try {
                     jsonResult.put("imagePath", outFile.getAbsolutePath());
+                    jsonResult.put("outline", jsonForOutline(documentResult.getOutline()));
+                    jsonResult.put("confidence", documentResult.getConfidence());
+
                 } catch (Exception jsonException) {
                     //should not be possible
                     Log.e(TAG, "Error while putting image path to json.", jsonException);

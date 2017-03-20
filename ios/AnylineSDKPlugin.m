@@ -43,6 +43,7 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
   self.appKey = [dictionary objectForKey:@"license"];
   self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
   self.conf = [[ALUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"] bundlePath:nil];
+    self.conf.cancelOnResult = true;
   self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
   dispatch_async(dispatch_get_main_queue(), ^{

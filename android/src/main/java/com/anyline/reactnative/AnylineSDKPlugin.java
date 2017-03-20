@@ -47,7 +47,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private JSONObject configObject;
     private ReactApplicationContext reactContext;
     private String license;
-    private String options;
+    private JSONObject options;
     private Callback onResultCallback;
     private Callback onErrorCallback;
     private ReactInstanceManager mReactInstanceManager;
@@ -101,15 +101,19 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
         try {
             configObject = new JSONObject(config);
+
+            //Hacky -> force cancelOnResult = true
+            options =  configObject.getJSONObject("options");
+            options.put("cancelOnResult", true);
+
             license = configObject.get("license").toString();
-            options = configObject.get("options").toString();
 
         } catch (JSONException e) {
             onErrorCallback.invoke("JSON ERROR: " + e);
         }
 
         intent.putExtra(EXTRA_LICENSE_KEY, license);
-        intent.putExtra(EXTRA_CONFIG_JSON, options);
+        intent.putExtra(EXTRA_CONFIG_JSON, options.toString());
 
         //Check if OCR
         try {
@@ -131,27 +135,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     @Override
     public void onResult(Object result, boolean isFinalResult) {
         if (result instanceof JSONObject) {
-            try {
-                //ImagePath as Base64
-                String imagePath = ((JSONObject) result).getString("imagePath");
-                Bitmap bm = BitmapFactory.decodeFile(imagePath);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-                byte[] b = baos.toByteArray();
-                String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                ((JSONObject) result).put("cutoutBase64", encodedImage);
-
-                //FullImagePath as Base64
-                String fullImagePath = ((JSONObject) result).getString("fullImagePath");
-                Bitmap bmFull = BitmapFactory.decodeFile(fullImagePath);
-                ByteArrayOutputStream baosFull = new ByteArrayOutputStream();
-                bmFull.compress(Bitmap.CompressFormat.JPEG, 100, baosFull); //bm is the bitmap object
-                byte[] bFull = baosFull.toByteArray();
-                String encodedImageFull = Base64.encodeToString(bFull, Base64.DEFAULT);
-                ((JSONObject) result).put("fullImageBase64", encodedImageFull);
-            } catch (JSONException e) {
-
-            }
             onResultCallback.invoke(result.toString());
         } else if (result instanceof JSONArray) {
             onResultCallback.invoke(result.toString());
@@ -167,7 +150,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     }
 
     @Override
-    public void onCancel(){
+    public void onCancel() {
         onErrorCallback.invoke("Canceled");
     }
 }

@@ -32,33 +32,39 @@
 #pragma mark - AnylineMRZModuleDelegate method
 
 
--(void)anylineMRZModuleView:(AnylineMRZModuleView *)anylineMRZModuleView
-          didFindScanResult:(ALIdentification *)scanResult
-        allCheckDigitsValid:(BOOL)allCheckDigitsValid
-                    atImage:(UIImage *)image {
-
-    NSMutableDictionary *scanResultDict = [[scanResult dictionaryWithValuesForKeys:@[@"documentType",
-                                                                                     @"nationalityCountryCode",
-                                                                                     @"issuingCountryCode",
-                                                                                     @"surNames",
-                                                                                     @"givenNames",
-                                                                                     @"documentNumber",
-                                                                                     @"checkdigitNumber",
-                                                                                     @"dayOfBirth",
-                                                                                     @"checkdigitDayOfBirth",
-                                                                                     @"sex",
-                                                                                     @"expirationDate",
-                                                                                     @"checkdigitExpirationDate",
-                                                                                     @"personalNumber",
-                                                                                     @"checkDigitPersonalNumber",
-                                                                                     @"checkdigitFinal"]] mutableCopy];
+-(void)anylineMRZModuleView:(AnylineMRZModuleView *)anylineMRZModuleView didFindResult:(ALMRZResult *)scanResult {
+    
+    
+    NSMutableDictionary *scanResultDict = [[scanResult.result dictionaryWithValuesForKeys:@[@"documentType",
+                                                                                            @"nationalityCountryCode",
+                                                                                            @"issuingCountryCode",
+                                                                                            @"surNames",
+                                                                                            @"givenNames",
+                                                                                            @"documentNumber",
+                                                                                            @"checkdigitNumber",
+                                                                                            @"dayOfBirth",
+                                                                                            @"checkdigitDayOfBirth",
+                                                                                            @"sex",
+                                                                                            @"expirationDate",
+                                                                                            @"checkdigitExpirationDate",
+                                                                                            @"personalNumber",
+                                                                                            @"checkDigitPersonalNumber",
+                                                                                            @"checkdigitFinal"]] mutableCopy];
     self.scannedLabel.text = scanResultDict.description;
     
-    NSString *imagePath = [self saveImageToFileSystem:image];
-    
+    NSString *imagePath = [self saveImageToFileSystem:scanResult.image];
+    NSString *fullImagePath = [self saveImageToFileSystem:scanResult.fullImage];
+
     [scanResultDict setValue:imagePath forKey:@"imagePath"];
-    [scanResultDict setValue:[self base64StringFromImage:image] forKey:@"cutoutBase64"];
-    [scanResultDict setValue:@(allCheckDigitsValid) forKey:@"allCheckDigitsValid"];
+    [scanResultDict setValue:fullImagePath forKey:@"fullImagePath"];
+
+    [scanResultDict setValue:@(scanResult.allCheckDigitsValid) forKey:@"allCheckDigitsValid"];
+    
+    
+
+    
+    [scanResultDict setValue:@(scanResult.confidence) forKey:@"confidence"];
+    [scanResultDict setValue:[self stringForOutline:scanResult.outline] forKey:@"outline"];
     
     [self.delegate anylineBaseScanViewController:self didScan:scanResultDict continueScanning:!self.moduleView.cancelOnResult];
     

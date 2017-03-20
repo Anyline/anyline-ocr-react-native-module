@@ -1,38 +1,53 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import {ScrollView, View, Text, Image, StyleSheet, Button} from 'react-native';
 
 export default function Result({
-  fullImageBase64,
-  cutoutBase64,
-  result,
-  barcode,
-  scanMode,
-  meterType,
+    result,
+    imagePath,
+    fullImagePath,
+    emptyResult
 }) {
-  return (
-    <View>
-      <Text>Full Image:</Text>
-      <Image
-        style={styles.image}
-        source={{ uri: `data:image/jpg;base64,${fullImageBase64}` }}
-      />
+    return (
+        <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollContainer} >
+                <Text style={styles.text}>Full Image:</Text>
+                <Image
+                    style={styles.image}
+                    source={{ uri: `file://${fullImagePath}` }}
+                />
 
-      <Text>Cutout:</Text>
-      <Image
-        style={styles.image}
-        source={{ uri: `data:image/jpg;base64,${cutoutBase64}` }}
-      />
-
-      <Text>{`Result: ${result}`}</Text>
-      <Text>{`Scan Mode: ${scanMode}`}</Text>
-      <Text>{`Meter Type: ${meterType}`}</Text>
-    </View>
-  );
+                <Text style={styles.text}>Cutout:</Text>
+                <Image
+                    style={styles.image}
+                    source={{ uri: `file://${imagePath}` }}
+                />
+                {Object.keys(result).map((value, key) => {
+                    return (<Text style={styles.text} key={`Result_Text_${key}`}>
+                        {`${value}: ${result[value]}`}
+                    </Text>);
+                })}
+                <Button title={'Back'} onPress={emptyResult}/>
+            </ScrollView>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  image: {
-    width: 200,
-    height: 100,
-  },
+    image: {
+        height: 100,
+        width: 200
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        backgroundColor: '#303030',
+        marginBottom : 50
+    },
+    text: {
+        color: "white"
+    },
+    scrollContainer : {
+        alignItems: 'center',
+    }
 });
