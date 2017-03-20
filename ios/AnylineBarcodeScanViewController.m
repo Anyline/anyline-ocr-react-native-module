@@ -28,6 +28,12 @@
         [self.view sendSubviewToBack:self.moduleView];
     });
 }
+    
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+        
+    self.moduleView.videoView.barcodeDelegate = nil;
+}
 
 #pragma mark - AnylineBarcodeModuleDelegate method
 
