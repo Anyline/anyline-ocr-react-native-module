@@ -29,10 +29,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import at.nineyards.anyline.AnylineDebugListener;
 import at.nineyards.anyline.camera.AnylineViewConfig;
 import at.nineyards.anyline.camera.CameraController;
-import at.nineyards.anyline.core.RunFailure;
 import at.nineyards.anyline.modules.barcode.NativeBarcodeResultListener;
 import at.nineyards.anyline.modules.energy.EnergyResult;
 import at.nineyards.anyline.modules.energy.EnergyResultListener;
@@ -52,6 +50,7 @@ public class EnergyActivity extends AnylineBaseActivity {
         super.onCreate(savedInstanceState);
 
         String scanModeString = getIntent().getStringExtra(AnylineSDKPlugin.EXTRA_SCAN_MODE);
+        Boolean enableBarcodeScanning = getIntent().getBooleanExtra(AnylineSDKPlugin.EXTRA_ENABLE_BARCODE_SCANNING, false);
 
         energyScanView = new EnergyScanView(this, null);
 
@@ -72,15 +71,19 @@ public class EnergyActivity extends AnylineBaseActivity {
 
         anylineUIConfig = new AnylineUIConfig(this, jsonObject);
 
-        energyScanView.enableBarcodeDetection(true, new NativeBarcodeResultListener() {
-            @Override
-            public void onBarcodesReceived(SparseArray<Barcode> sparseArray) {
+        Log.d(TAG, enableBarcodeScanning.toString());
+        if (enableBarcodeScanning) {
+            energyScanView.enableBarcodeDetection(true, new NativeBarcodeResultListener() {
+                @Override
+                public void onBarcodesReceived(SparseArray<Barcode> sparseArray) {
 
-                if (sparseArray.size() > 0) {
-                    lastDetectedBarcodeValue = sparseArray.valueAt(0).displayValue;
+                    if (sparseArray.size() > 0) {
+                        lastDetectedBarcodeValue = sparseArray.valueAt(0).displayValue;
+                    }
                 }
-            }
-        });
+            });
+        }
+
         // Creating a new RelativeLayout
         final RelativeLayout relativeLayout = new RelativeLayout(this);
 
@@ -117,19 +120,20 @@ public class EnergyActivity extends AnylineBaseActivity {
             }
 
             Integer modeIndex = modes.indexOf(scanModeString);
-            RadioButton button = radioButtons[modeIndex];
-            button.setChecked(true);
+            if (modeIndex >= 0) {
+                RadioButton button = radioButtons[modeIndex];
+                button.setChecked(true);
 
-            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    View button = group.findViewById(checkedId);
-                    String mode = modes.get(group.indexOfChild(button));
-                    energyScanView.setScanMode(EnergyScanView.ScanMode.valueOf(mode));
-                    energyScanView.startScanning();
-                }
-            });
-
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        View button = group.findViewById(checkedId);
+                        String mode = modes.get(group.indexOfChild(button));
+                        energyScanView.setScanMode(EnergyScanView.ScanMode.valueOf(mode));
+                        energyScanView.startScanning();
+                    }
+                });
+            }
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);

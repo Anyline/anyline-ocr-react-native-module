@@ -29,22 +29,6 @@ export default {
             strokeColor: 'F21C0A',
             fillColor: '22F21C0A',
             cornerRadius: 2,
-        },
-        segment: {
-            titles: [
-                'Analog',
-                'Digital'
-            ],
-            modes: [
-                'ANALOG_METER',
-                'DIGITAL_METER'
-            ],
-            tintColor: 'F21C0A',
-            offset: {
-                x: 0,
-                y: 600
-            }
         }
-    },
-    nativeBarcodeEnabled: true
+    }
 }

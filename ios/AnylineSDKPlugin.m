@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) NSString *callbackId;
 @property (nonatomic, strong) NSString *appKey;
+@property (nonatomic, assign) BOOL nativeBarcodeScanning;
 @property (nonatomic, strong) NSDictionary *jsonConfigDictionary;
 @property (nonatomic, strong) NSDictionary *ocrConfigDict;
 @property (nonatomic, strong) ALJsonUIConfiguration *jsonUIConf;
@@ -41,6 +42,10 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
   self.jsonConfigDictionary = dictionary;
 
   self.appKey = [dictionary objectForKey:@"license"];
+
+  BOOL nativeBarcodeScanning = [[dictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
+  self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
+
   self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
   self.conf = [[ALUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"] bundlePath:nil];
     self.conf.cancelOnResult = true;
@@ -80,11 +85,18 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
   if ([[scanMode uppercaseString] isEqualToString:[@"ANALOG_METER" uppercaseString]]) {
     AnylineEnergyScanViewController *analogMeterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
     analogMeterVC.scanMode = ALAnalogMeter;
+      analogMeterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
     return analogMeterVC;
-  }if ([[scanMode uppercaseString] isEqualToString:[@"DIGITAL_METER" uppercaseString]]) {
+  } else if ([[scanMode uppercaseString] isEqualToString:[@"DIGITAL_METER" uppercaseString]]) {
     AnylineEnergyScanViewController *digitalMeterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
     digitalMeterVC.scanMode = ALDigitalMeter;
+      digitalMeterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
     return digitalMeterVC;
+  } else if ([[scanMode uppercaseString] isEqualToString:[@"AUTO_ANALOG_DIGITAL_METER" uppercaseString]]) {
+      AnylineEnergyScanViewController *autoMeterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+      autoMeterVC.scanMode = ALAutoAnalogDigitalMeter;
+      autoMeterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
+      return autoMeterVC;
   } else if ([[scanMode uppercaseString] isEqualToString:[@"DOCUMENT" uppercaseString]]) {
     return [[AnylineDocumentScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
   } else if ([[scanMode uppercaseString] isEqualToString:[@"MRZ" uppercaseString]]) {

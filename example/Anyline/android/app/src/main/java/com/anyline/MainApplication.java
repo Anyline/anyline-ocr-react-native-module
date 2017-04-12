@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.facebook.react.ReactApplication;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.joshblour.reactnativepermissions.ReactNativePermissionsPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.burnweb.rnpermissions.RNPermissionsPackage;
 import com.anyline.reactnative.AnylinePackage;
 import com.facebook.react.ReactInstanceManager;
@@ -30,7 +30,6 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new VectorIconsPackage(),
-            new ReactNativePermissionsPackage(),
             new RNPermissionsPackage(),
             new AnylinePackage()
       );

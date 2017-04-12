@@ -15,6 +15,9 @@ export default function Overview({
 
     return (
         <View style={styles.container}>
+            <Button style={styles.buttons} title={'Open Energy Auto Analog/Digital Meter Scanner'} color="#0099FF"
+                    onPress={()=> {platformPermissionCheck('AUTO_ANALOG_DIGITAL_METER')}}/>
+
             <Button style={styles.buttons} title={'Open Energy Analog Meter Scanner'} color="#0099FF"
                     onPress={()=> {platformPermissionCheck('ANALOG_METER')}}/>
 

@@ -1,0 +1,33 @@
+<resources>
+    <string name="error_unkown_scan_mode">Unkown scan mode: </string>
+    <string name="error_invalid_json_data">Config json is invalid.</string>
+    <string name="error_invalid_segment_config">Semgent config not valid. Must have equal amount of titles and modes.</string>
+    <string name="error_accessing_camera">Error while accessing camera.</string>
+    <string name="error_licence_invalid">Error: Anyline license invalid.</string>
+    <string name="error_occured">An error occured.</string>
+
+    <string name="document_advanced_outline_detection">Advanced Outline Detection</string>
+    <string name="document_fast_outline_detection">Fast Outline Detection</string>
+    <string name="document_error_not_sharp">Document is not sharp. Please hold the camera steadily and ensure the document is in focus</string>
+    <string name="document_error_skew_too_high">Document is skewed. Place the camera directly above the document</string>
+    <string name="document_error_outline_not_found">Could not detect document outline</string>
+
+    <string name="document_error_glare_detected">Please remove the glare</string>
+    <string name="document_error_too_dark">The image is too dark. Please ensure there is enough light</string>
+    <string name="document_error_unknown">Unknown Failure</string>
+    <string name="document_picture_error">Error scanning full document:\n</string>
+    <string name="document_preview_success">Scanning full document. Please hold still</string>
+    <string name="document_picture_success">Document scanned successfully</string>
+    <string name="document_using_fast_mode">Switched to fast detection mode</string>
+    <string name="document_using_advanced_mode">Switched to advanced detection mode</string>
+    <string name="document_processing_picture_header">Processing</string>
+    <string name="document_processing_picture">Processing the Picture. Please wait</string>
+    <string name="document_error_shake">Shake detected</string>
+    <string name="document_error_closer">Come closer</string>
+    <string name="document_error_format">Unrecognised format</string>
+    <string name="document_image_saved_to">Image saved to</string>
+
+    <string name="document_processing">Processing</string>
+    <string name="document_processing_picture_please_wait">Processing the picture. Please wait.</string>
+
+</resources>

@@ -43,27 +43,26 @@
         self.segment.tintColor = self.jsonConfig.segmentTintColor;
         self.segment.hidden = YES;
         
-        NSInteger index = [self.jsonConfig.segmentModes indexOfObject:[self stringFromScanMode:self.scanMode]];
-        [self.segment setSelectedSegmentIndex:index];
-        
-        [self.segment addTarget:self action:@selector(segmentChange:) forControlEvents:UIControlEventValueChanged];
-        
-        [self.view addSubview:self.segment];
-        
+            NSInteger index = [self.jsonConfig.segmentModes indexOfObject:[self stringFromScanMode:self.scanMode]];
+            [self.segment setSelectedSegmentIndex:index];
+            [self.segment addTarget:self action:@selector(segmentChange:) forControlEvents:UIControlEventValueChanged];
+            [self.view addSubview:self.segment];
+
+
         self.detectedBarcode = @"";
-        
+
     });
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     self.segment.frame = CGRectMake(self.moduleView.cutoutRect.origin.x + self.jsonConfig.segmentXPositionOffset/2,
                                     self.moduleView.cutoutRect.origin.y + self.jsonConfig.segmentYPositionOffset/2,
                                     self.view.frame.size.width - 2*(self.moduleView.cutoutRect.origin.x + self.jsonConfig.segmentXPositionOffset/2),
                                     self.segment.frame.size.height);
     self.segment.hidden = NO;
-    
+
 }
 
 #pragma mark - AnylineEnergyModuleDelegate method
@@ -73,11 +72,11 @@
      To present the scanned result to the user we use a custom view controller.
      */
     self.scannedLabel.text = (NSString *)scanResult.result;
-    
-    
-    
+
+
+
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
-    
+
     switch (scanResult.scanMode) {
         case ALGasMeter:
             [dictResult setObject:@"Gas Meter" forKey:@"meterType"];
@@ -101,26 +100,26 @@
             [dictResult setObject:@"Electric Meter" forKey:@"meterType"];
             break;
     }
-    
-    [dictResult setObject:[self stringFromScanMode:scanResult.scanMode] forKey:@"scanMode"];
-    
+    if(scanResult.scanMode){
+        [dictResult setObject:[self stringFromScanMode:scanResult.scanMode] forKey:@"scanMode"];
+    }
     [dictResult setObject:scanResult.result forKey:@"reading"];
-    
+
     NSString *imagePath = [self saveImageToFileSystem:scanResult.image];
-    
+
     [dictResult setValue:imagePath forKey:@"imagePath"];
-    
+
     NSString *fullImagePath = [self saveImageToFileSystem:scanResult.fullImage];
-    
+
     [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
-    
+
     [dictResult setObject:self.detectedBarcode forKey:@"barcodeResult"];
-    
+
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
     [dictResult setValue:[self stringForOutline:scanResult.outline] forKey:@"outline"];
-    
+
     [self.delegate anylineBaseScanViewController:self didScan:dictResult continueScanning:!self.moduleView.cancelOnResult];
-    
+
     if (self.moduleView.cancelOnResult) {
         [self dismissViewControllerAnimated:YES completion:NULL];
     }
@@ -132,7 +131,7 @@
 - (void)anylineVideoView:(AnylineVideoView *)videoView
     didFindBarcodeResult:(NSString *)scanResult
                     type:(NSString *)barcodeType  {
-    
+
     self.detectedBarcode = scanResult;
 }
 
@@ -142,16 +141,16 @@
     NSString *modeString = self.jsonConfig.segmentModes[((UISegmentedControl *)sender).selectedSegmentIndex];
     ALScanMode scanMode = [self scanModeFromString:modeString];
     ((AnylineEnergyModuleView *)self.moduleView).scanMode = scanMode;
-    
+
     self.moduleView.currentConfiguration = self.conf;
 }
 
 #pragma mark - Private Methods
 
 - (NSString *)barcodeFormatForNativeString:(NSString *)barcodeType {
-    
+
     static NSDictionary<NSString *, NSString *> * barcodeFormats = nil;
-    
+
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
 #pragma clang diagnostic push
@@ -173,28 +172,29 @@
                            };
 #pragma clang diagnostic pop
     });
-    
+
     return barcodeFormats[barcodeType];
 }
 
 - (ALScanMode)scanModeFromString:(NSString *)scanMode {
     NSDictionary<NSString *, NSNumber *> *scanModes = [self scanModesDict];
-    
+
     return [scanModes[scanMode] integerValue];
 }
 
 - (NSString *)stringFromScanMode:(ALScanMode)scanMode {
     NSDictionary<NSString *, NSNumber *> *scanModes = [self scanModesDict];
-    
+
     return [scanModes allKeysForObject:@(scanMode)][0];
 }
 
 - (NSDictionary<NSString *, NSNumber *> *)scanModesDict {
     static NSDictionary<NSString *, NSNumber *> * scanModes = nil;
-    
+
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         scanModes = @{
+                      @"AUTO_ANALOG_DIGITAL_METER" : @(ALAutoAnalogDigitalMeter),
                       @"ELECTRIC_METER" : @(ALElectricMeter),
                       @"ELECTRIC_METER_5_1" : @(ALElectricMeter5_1),
                       @"ELECTRIC_METER_6_1" : @(ALElectricMeter6_1),

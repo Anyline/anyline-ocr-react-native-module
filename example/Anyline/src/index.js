@@ -5,8 +5,7 @@ import {
     StyleSheet,
     Text,
     View,
-    Platform,
-    Button,
+    BackAndroid,
     LayoutAnimation
 } from 'react-native';
 
@@ -19,6 +18,7 @@ import BarcodeConfig from '../config/BarcodeConfig';
 import DocumentConfig from '../config/DocumentConfig';
 import EnergyConfig from '../config/EnergyConfig';
 import MRZConfig from '../config/MRZConfig';
+import AutoEnergyConfig from '../config/AutoEnergyConfig';
 
 
 class Anyline extends Component {
@@ -39,9 +39,8 @@ class Anyline extends Component {
         let config;
 
         switch (type) {
-            case 'ANALOG_METER':
-            case 'DIGITAL_METER':
-                config = EnergyConfig;
+            case 'AUTO_ANALOG_DIGITAL_METER':
+                config = AutoEnergyConfig;
                 break;
             case 'BARCODE':
                 config = BarcodeConfig;
@@ -52,8 +51,11 @@ class Anyline extends Component {
             case 'DOCUMENT':
                 config = DocumentConfig;
                 break;
+            case 'ANALOG_METER':
+            case 'DIGITAL_METER':
             default:
                 config = EnergyConfig;
+                break;
         }
 
         AnylineOCR.setupScanViewWithConfigJson(
@@ -64,9 +66,10 @@ class Anyline extends Component {
         );
     };
 
-    requestCameraPermission = async(type) => {
+    requestCameraPermission = async (type) => {
 
-        try {            const granted = await PermissionsAndroid.request(
+        try {
+            const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.CAMERA,
                 {
                     'title': 'Cool Photo App Camera Permission',
@@ -85,7 +88,7 @@ class Anyline extends Component {
         }
     };
 
-    hasCameraPermission = async() => {
+    hasCameraPermission = async () => {
         try {
             return await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
         } catch (err) {
@@ -140,6 +143,7 @@ class Anyline extends Component {
         });
     };
 
+
     render() {
 
         const {
@@ -149,20 +153,30 @@ class Anyline extends Component {
             fullImagePath
         } = this.state;
 
+
+        BackAndroid.addEventListener('hardwareBackPress', () => {
+            if (hasScanned) {
+                this.emptyResult();
+                return true;
+            } else {
+                BackAndroid.exitApp();
+            }
+        });
+
         return (
             <View style={styles.container}>
                 <Text style={styles.headline}>Anyline React-Native Demo</Text>
                 {hasScanned ? (
-                        <Result
-                            key="ResultView"
-                            result={result}
-                            imagePath={imagePath}
-                            fullImagePath={fullImagePath}
-                            data={result}
-                            emptyResult={this.emptyResult}
-                        />
-                    ) : <Overview key="OverView" openAnyline={this.openAnyline}
-                                  checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}/>}
+                    <Result
+                        key="ResultView"
+                        result={result}
+                        imagePath={imagePath}
+                        fullImagePath={fullImagePath}
+                        data={result}
+                        emptyResult={this.emptyResult}
+                    />
+                ) : <Overview key="OverView" openAnyline={this.openAnyline}
+                              checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}/>}
             </View>
         );
     }
@@ -174,7 +188,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-around',
         alignItems: 'center',
-        width : "100%",
+        width: "100%",
         backgroundColor: '#303030'
     },
     headline: {
