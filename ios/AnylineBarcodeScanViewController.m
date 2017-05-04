@@ -10,23 +10,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        AnylineBarcodeModuleView *barcodeModuleView = [[AnylineBarcodeModuleView alloc] initWithFrame:self.view.bounds];
-        barcodeModuleView.currentConfiguration = self.conf;
-        
-        NSError *error = nil;
-        [barcodeModuleView setupWithLicenseKey:self.key delegate:self error:&error];
+
+    AnylineBarcodeModuleView *barcodeModuleView = [[AnylineBarcodeModuleView alloc] initWithFrame:self.view.bounds];
+    barcodeModuleView.currentConfiguration = self.conf;
+
+    NSError *error = nil;
+    [barcodeModuleView setupWithLicenseKey:self.key delegate:self error:&error];
 //        if(!success) {
 //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 //            [alert show];
 //        }
-        
-        self.moduleView = barcodeModuleView;
-        
-        [self.view addSubview:self.moduleView];
-        
-        [self.view sendSubviewToBack:self.moduleView];
-    });
+
+    self.moduleView = barcodeModuleView;
+
+    [self.view addSubview:self.moduleView];
+
+    [self.view sendSubviewToBack:self.moduleView];
+
 }
     
 - (void)viewDidAppear:(BOOL)animated {

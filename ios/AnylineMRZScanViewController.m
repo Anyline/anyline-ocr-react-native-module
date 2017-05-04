@@ -10,23 +10,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        AnylineMRZModuleView *mrzModuleView = [[AnylineMRZModuleView alloc] initWithFrame:self.view.bounds];
-        mrzModuleView.currentConfiguration = self.conf;
-        
-        NSError *error = nil;
-        [mrzModuleView setupWithLicenseKey:self.key delegate:self error:&error];
+
+    AnylineMRZModuleView *mrzModuleView = [[AnylineMRZModuleView alloc] initWithFrame:self.view.bounds];
+    mrzModuleView.currentConfiguration = self.conf;
+
+    NSError *error = nil;
+    [mrzModuleView setupWithLicenseKey:self.key delegate:self error:&error];
 //        if(!success) {
 //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 //            [alert show];
 //        }
-        
-        self.moduleView = mrzModuleView;
-        
-        [self.view addSubview:self.moduleView];
-        
-        [self.view sendSubviewToBack:self.moduleView];
-    });
+
+    self.moduleView = mrzModuleView;
+
+    [self.view addSubview:self.moduleView];
+
+    [self.view sendSubviewToBack:self.moduleView];
+
 }
 
 #pragma mark - AnylineMRZModuleDelegate method

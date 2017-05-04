@@ -19,37 +19,37 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        AnylineOCRModuleView *ocrModuleView = [[AnylineOCRModuleView alloc] initWithFrame:self.view.bounds];
-        ocrModuleView.currentConfiguration = self.conf;
-        
-        ALOCRConfig *ocrConf = [[ALOCRConfig alloc] initWithJsonDictionary:self.ocrConfDict];
-        
-        self.drawTextOutline = [[self.ocrConfDict objectForKey:@"drawTextOutline"] boolValue];
-        
-        NSArray *tesseractArray = [self.ocrConfDict objectForKey:@"traineddataFiles"];
-        
-        NSMutableArray<NSString *> *languages = [NSMutableArray arrayWithCapacity:tesseractArray.count];
-        for (NSString *tesseractLang in tesseractArray) {
-            NSString *ressourcePath = [[NSBundle mainBundle] pathForResource:[[tesseractLang lastPathComponent] stringByDeletingPathExtension] ofType:[[tesseractLang lastPathComponent] pathExtension] inDirectory:[NSString stringWithFormat:@"www/%@",[tesseractLang stringByDeletingLastPathComponent]]];
-            NSError *copyError = nil;
-            [ocrModuleView copyTrainedData:ressourcePath fileHash:nil error:&copyError];
-            [languages addObject:[[tesseractLang lastPathComponent] stringByDeletingPathExtension]];
-        }
-        ocrConf.tesseractLanguages = languages;
-        NSError *error = nil;
-        [ocrModuleView setupWithLicenseKey:self.key delegate:self ocrConfig:ocrConf error:&error];
-        //        if(!success) {
-        //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        //            [alert show];
-        //        }
-        
-        self.moduleView = ocrModuleView;
-        
-        [self.view addSubview:self.moduleView];
-        
-        [self.view sendSubviewToBack:self.moduleView];
-    });
+
+    AnylineOCRModuleView *ocrModuleView = [[AnylineOCRModuleView alloc] initWithFrame:self.view.bounds];
+    ocrModuleView.currentConfiguration = self.conf;
+
+    ALOCRConfig *ocrConf = [[ALOCRConfig alloc] initWithJsonDictionary:self.ocrConfDict];
+
+    self.drawTextOutline = [[self.ocrConfDict objectForKey:@"drawTextOutline"] boolValue];
+
+    NSArray *tesseractArray = [self.ocrConfDict objectForKey:@"traineddataFiles"];
+
+    NSMutableArray<NSString *> *languages = [NSMutableArray arrayWithCapacity:tesseractArray.count];
+    for (NSString *tesseractLang in tesseractArray) {
+        NSString *ressourcePath = [[NSBundle mainBundle] pathForResource:[[tesseractLang lastPathComponent] stringByDeletingPathExtension] ofType:[[tesseractLang lastPathComponent] pathExtension] inDirectory:[NSString stringWithFormat:@"www/%@",[tesseractLang stringByDeletingLastPathComponent]]];
+        NSError *copyError = nil;
+        [ocrModuleView copyTrainedData:ressourcePath fileHash:nil error:&copyError];
+        [languages addObject:[[tesseractLang lastPathComponent] stringByDeletingPathExtension]];
+    }
+    ocrConf.tesseractLanguages = languages;
+    NSError *error = nil;
+    [ocrModuleView setupWithLicenseKey:self.key delegate:self ocrConfig:ocrConf error:&error];
+    //        if(!success) {
+    //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    //            [alert show];
+    //        }
+
+    self.moduleView = ocrModuleView;
+
+    [self.view addSubview:self.moduleView];
+
+    [self.view sendSubviewToBack:self.moduleView];
+
 }
 
 #pragma mark - AnylineEnergyModuleDelegate method

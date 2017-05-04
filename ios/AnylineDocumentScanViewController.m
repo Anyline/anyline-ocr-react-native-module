@@ -22,28 +22,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        AnylineDocumentModuleView *docModuleView = [[AnylineDocumentModuleView alloc] initWithFrame:self.view.bounds];
-        docModuleView.currentConfiguration = self.conf;
-        
-        
-        NSError *error = nil;
-        BOOL success = [docModuleView setupWithLicenseKey:self.key delegate:self error:&error];
-        
-        
-        self.moduleView = docModuleView;
-        
-        [self.view addSubview:self.moduleView];
-        
-        [self.view sendSubviewToBack:self.moduleView];
-        
-        // This view notifies the user of any problems that occur while he is scanning
-        self.roundedView = [[ALRoundedView alloc] initWithFrame:CGRectMake(20, 115, self.view.bounds.size.width - 40, 30)];
-        self.roundedView.fillColor = [UIColor colorWithRed:98.0/255.0 green:39.0/255.0 blue:232.0/255.0 alpha:0.6];
-        self.roundedView.textLabel.text = @"";
-        self.roundedView.alpha = 0;
-        [self.view addSubview:self.roundedView];
-    });
+
+    AnylineDocumentModuleView *docModuleView = [[AnylineDocumentModuleView alloc] initWithFrame:self.view.bounds];
+    docModuleView.currentConfiguration = self.conf;
+
+
+    NSError *error = nil;
+    BOOL success = [docModuleView setupWithLicenseKey:self.key delegate:self error:&error];
+
+
+    self.moduleView = docModuleView;
+
+    [self.view addSubview:self.moduleView];
+
+    [self.view sendSubviewToBack:self.moduleView];
+
+    // This view notifies the user of any problems that occur while he is scanning
+    self.roundedView = [[ALRoundedView alloc] initWithFrame:CGRectMake(20, 115, self.view.bounds.size.width - 40, 30)];
+    self.roundedView.fillColor = [UIColor colorWithRed:98.0/255.0 green:39.0/255.0 blue:232.0/255.0 alpha:0.6];
+    self.roundedView.textLabel.text = @"";
+    self.roundedView.alpha = 0;
+    [self.view addSubview:self.roundedView];
+
 }
 
 //- (void)viewDidLayoutSubviews {

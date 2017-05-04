@@ -14,44 +14,43 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        AnylineEnergyModuleView *energyModuleView = [[AnylineEnergyModuleView alloc] initWithFrame:self.view.bounds];
-        
-        NSError *error = nil;
-        [energyModuleView setupWithLicenseKey:self.key delegate:self error:&error];
-        //        if(!success) {
-        //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        //            [alert show];
-        //        }
-        
-        energyModuleView.currentConfiguration = self.conf;
-        
-        [energyModuleView setScanMode:self.scanMode error:nil];
-        [energyModuleView.videoView setBarcodeDelegate:self];
-        
-        if (self.nativeBarcodeEnabled) {
-            energyModuleView.videoView.barcodeDelegate = self;
-        }
-        
-        self.moduleView = energyModuleView;
-        [self.view addSubview:self.moduleView];
-        
-        [self.view sendSubviewToBack:self.moduleView];
-        
-        self.segment = [[UISegmentedControl alloc] initWithItems:self.jsonConfig.segmentTitles];
-        
-        self.segment.tintColor = self.jsonConfig.segmentTintColor;
-        self.segment.hidden = YES;
-        
-            NSInteger index = [self.jsonConfig.segmentModes indexOfObject:[self stringFromScanMode:self.scanMode]];
-            [self.segment setSelectedSegmentIndex:index];
-            [self.segment addTarget:self action:@selector(segmentChange:) forControlEvents:UIControlEventValueChanged];
-            [self.view addSubview:self.segment];
+
+    AnylineEnergyModuleView *energyModuleView = [[AnylineEnergyModuleView alloc] initWithFrame:self.view.bounds];
+
+    NSError *error = nil;
+    [energyModuleView setupWithLicenseKey:self.key delegate:self error:&error];
+    //        if(!success) {
+    //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    //            [alert show];
+    //        }
+
+    energyModuleView.currentConfiguration = self.conf;
+
+    [energyModuleView setScanMode:self.scanMode error:nil];
+    [energyModuleView.videoView setBarcodeDelegate:self];
+
+    if (self.nativeBarcodeEnabled) {
+        energyModuleView.videoView.barcodeDelegate = self;
+    }
+
+    self.moduleView = energyModuleView;
+    [self.view addSubview:self.moduleView];
+
+    [self.view sendSubviewToBack:self.moduleView];
+
+    self.segment = [[UISegmentedControl alloc] initWithItems:self.jsonConfig.segmentTitles];
+
+    self.segment.tintColor = self.jsonConfig.segmentTintColor;
+    self.segment.hidden = YES;
+
+        NSInteger index = [self.jsonConfig.segmentModes indexOfObject:[self stringFromScanMode:self.scanMode]];
+        [self.segment setSelectedSegmentIndex:index];
+        [self.segment addTarget:self action:@selector(segmentChange:) forControlEvents:UIControlEventValueChanged];
+        [self.view addSubview:self.segment];
 
 
-        self.detectedBarcode = @"";
+    self.detectedBarcode = @"";
 
-    });
 }
 
 - (void)viewDidAppear:(BOOL)animated {

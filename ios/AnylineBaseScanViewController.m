@@ -23,29 +23,26 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.doneButton setTitle:self.jsonConfig.buttonDoneTitle
-                         forState:UIControlStateNormal];
 
-        [self.doneButton addTarget:self action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:self.doneButton];
-        
-        [self updateButtonPosition:self.doneButton withConfiguration:self.jsonConfig];
-        
-        self.scannedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-        self.scannedLabel.center = CGPointMake(self.view.center.x, self.view.center.y+166);
-        
-        self.scannedLabel.alpha = 0.0;
-        self.scannedLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:33];
-        self.scannedLabel.textColor = [UIColor whiteColor];
-        self.scannedLabel.textAlignment = NSTextAlignmentCenter;
-        
-        [self.view addSubview:self.scannedLabel];
-        
-    });
-    
+    self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.doneButton setTitle:self.jsonConfig.buttonDoneTitle
+                     forState:UIControlStateNormal];
+
+    [self.doneButton addTarget:self action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.doneButton];
+
+    [self updateButtonPosition:self.doneButton withConfiguration:self.jsonConfig];
+
+    self.scannedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.scannedLabel.center = CGPointMake(self.view.center.x, self.view.center.y+166);
+
+    self.scannedLabel.alpha = 0.0;
+    self.scannedLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:33];
+    self.scannedLabel.textColor = [UIColor whiteColor];
+    self.scannedLabel.textAlignment = NSTextAlignmentCenter;
+
+    [self.view addSubview:self.scannedLabel];
+
 }
 
 -(void) updateButtonPosition:(UIButton*)button withConfiguration:(ALJsonUIConfiguration*)conf {
