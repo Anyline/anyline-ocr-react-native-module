@@ -112,11 +112,14 @@ import config from './config.js';
 ```
 Add and import a JSON file with the proper structure and elements. The JSON config contains: 
 
-1.) The license key 
+1. The license key 
 
-2.) Options field with
+2. Options field with
 -	AnylineSDK config parameter
--	“segment”: which contains the scanModes for the UI Segment (e.g. switch between Analog and Digital)
+-	“segment”: which contains the scanModes for the UI Segment (e.g. switch between Analog and Digital) - optional
+3. OCR field with (Only if you want to use the OCR module)
+-   your custom training data
+-   RegEx Validation
 
 If you want to get detailed information on the config JSON, go to our[`documentation`](https://documentation.anyline.io/toc/view_configuration/index.html).
 
@@ -124,6 +127,30 @@ If you want to get detailed information on the config JSON, go to our[`documenta
 ```
 <Anyline config={config} scanMode={“ANALOG_METER”} onResult={this.onResult} onError={this.onError} />
 ```
+
+### 7. Add custom TrainData to the OCR Module
+If you want to add you custom traindata, you have to copy it into the native project folder.
+
+####iOS
+```
+ios   
+└─── trainedData
+     └─── myTrainedData.traineddata
+```
+
+####Android
+```
+android   
+└─── app
+      └─── src
+            └─── main
+                   └─── assets
+                          └─── traindData
+                                  └─── myTrainedData.traineddata
+```
+Also the OCR Config has to reflect the path.
+
+
 ## Props
 
 | Key | Type | Default | Description |
@@ -144,6 +171,8 @@ Available settings:
 “DIGITAL_METER”
 “BARCODE”
 “MRZ”
+“ANYLINE_OCR”
+“DOCUMENT”
 ```
 ### onResult Function
 Callback -> Stringified JSON
@@ -154,9 +183,7 @@ Callback -> Stringified JSON
     fullImagePath : 'path to full image',
     barcode : 'result of the simultaneous barcode scanning',
     scanMode : 'selected scanMode',
-    meterType : 'meter type',
-    cutoutBase64 : 'base64 string of cropped image', 
-    fullImageBase64 : 'base64 string of full image' 
+    meterType : 'meter type'
 }
 ```
 More information about the simultaneous barcode scanning [here](https://documentation.anyline.io/toc/modules/overview.html#anyline-modules-simultaneous-barcode-scanning).

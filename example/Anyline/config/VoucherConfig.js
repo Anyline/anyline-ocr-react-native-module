@@ -27,19 +27,16 @@ export default {
                    "blinkAnimationOnResult": true,
                    "cancelOnResult": true,
                    "visualFeedback": {
-                     "style": "RECT",
+                     "style": "CONTOUR_RECT",
                    }
                  },
 
   ocr: {
-               "scanMode": "LINE",
-               "minCharHeight": -1,
-                "maxCharHeight": -1,
-                "traineddataFiles": ["deu.traineddata"],
-                "tesseractLanguages": ["deu"],
-               "charWhitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-               "validationRegex": ".*",
-               "minConfidence": 85,
+               "scanMode": "AUTO",
+                 "tesseractLanguages" : ["anyline_capitals"],
+                 "traineddataFiles": ["trainedData/anyline_capitals.traineddata"],
+                 "charWhitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+                 "validationRegex": "[A-Z0-9]{8}$",
                "isBrightTextOnDark": true
            }
 }

@@ -46,7 +46,7 @@ export default function Overview({
         <View style={styles.buttons}>
           <Button style={styles.buttons} title={'  Voucher Code Scanner'} color="#0099FF"
                   onPress={() => {
-                    platformPermissionCheck('Voucher')
+                    platformPermissionCheck('VOUCHER')
                   }}/>
 
         </View>

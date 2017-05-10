@@ -11,6 +11,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1E934CF71EC2048A00347430 /* trainedData in Resources */ = {isa = PBXBuildFile; fileRef = 1E934CF61EC2048A00347430 /* trainedData */; };
 		1EC2368B1E7B478400D204E7 /* EventEmitter in Resources */ = {isa = PBXBuildFile; fileRef = 1EC2368A1E7B478400D204E7 /* EventEmitter */; };
 		2818E1101DFABDF1006BABE2 /* libPods-Anyline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD3611D51D496457F65600D7 /* libPods-Anyline.a */; };
 		2818E1121DFABE3F006BABE2 /* libAnylineReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818E1111DFABE3F006BABE2 /* libAnylineReact.a */; };
@@ -232,6 +233,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Anyline/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		177620B6168B0FCAD53F4665 /* Pods-Anyline.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anyline.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anyline/Pods-Anyline.release.xcconfig"; sourceTree = "<group>"; };
+		1E934CF61EC2048A00347430 /* trainedData */ = {isa = PBXFileReference; lastKnownFileType = folder; path = trainedData; sourceTree = "<group>"; };
 		1EC2368A1E7B478400D204E7 /* EventEmitter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = EventEmitter; path = "../node_modules/react-native/Libraries/EventEmitter"; sourceTree = "<group>"; };
 		2818E1111DFABE3F006BABE2 /* libAnylineReact.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAnylineReact.a; path = "../../../../../../Library/Developer/Xcode/DerivedData/Anyline-bpdhgqpfcebckocfnrqfmvpnalip/Build/Products/Debug-iphoneos/AnylineReact/libAnylineReact.a"; sourceTree = "<group>"; };
 		2818E1131DFABE47006BABE2 /* libReact.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libReact.a; path = "../../../../../../Library/Developer/Xcode/DerivedData/Anyline-bpdhgqpfcebckocfnrqfmvpnalip/Build/Products/Debug-iphoneos/React/libReact.a"; sourceTree = "<group>"; };
@@ -349,6 +351,7 @@
 		13B07FAE1A68108700A75B9A /* Anyline */ = {
 			isa = PBXGroup;
 			children = (
+				1E934CF61EC2048A00347430 /* trainedData */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -751,6 +754,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E934CF71EC2048A00347430 /* trainedData in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				1EC2368B1E7B478400D204E7 /* EventEmitter in Resources */,

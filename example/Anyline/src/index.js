@@ -29,7 +29,8 @@ class Anyline extends Component {
     hasScanned: false,
     result: '',
     imagePath: '',
-    fullImagePath: ''
+    fullImagePath: '',
+    currentScanMode: '',
   };
 
   componentWillUpdate() {
@@ -40,6 +41,9 @@ class Anyline extends Component {
 
     let config;
 
+    this.setState({
+      currentScanMode : type
+    });
     switch (type) {
       case 'AUTO_ANALOG_DIGITAL_METER':
         config = AutoEnergyConfig;
@@ -51,7 +55,7 @@ class Anyline extends Component {
         type = 'ANYLINE_OCR';
         config = IBANConfig;
         break;
-      case 'Voucher':
+      case 'VOUCHER':
         type = 'ANYLINE_OCR';
         config = VoucherConfig;
         break;
@@ -122,6 +126,7 @@ class Anyline extends Component {
   };
 
   onResult = (dataString) => {
+    console.log(dataString);
     const data = JSON.parse(dataString);
     LayoutAnimation.easeInEaseOut();
     const fullImagePath = data.fullImagePath;
@@ -163,7 +168,8 @@ class Anyline extends Component {
       hasScanned,
       result,
       imagePath,
-      fullImagePath
+      fullImagePath,
+      currentScanMode
     } = this.state;
 
 
@@ -182,6 +188,7 @@ class Anyline extends Component {
           {hasScanned ? (
               <Result
                   key="ResultView"
+                  currentScanMode={currentScanMode}
                   result={result}
                   imagePath={imagePath}
                   fullImagePath={fullImagePath}
