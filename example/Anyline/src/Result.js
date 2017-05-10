@@ -13,12 +13,14 @@ export default function Result({
                 <Text style={styles.text}>Full Image:</Text>
                 <Image
                     style={styles.image}
+                    resizeMode={'contain'}
                     source={{uri: `file://${fullImagePath}`}}
                 />
 
                 <Text style={styles.text}>Cutout:</Text>
                 <Image
                     style={styles.image}
+                    resizeMode={'contain'}
                     source={{uri: `file://${imagePath}`}}
                 />
                 {Object.keys(result).map((value, key) => {
@@ -26,7 +28,9 @@ export default function Result({
                         {`${value}: ${result[value]}`}
                     </Text>);
                 })}
+                <View style={styles.backButton}>
                 <Button title={'Back'} onPress={emptyResult}/>
+                </View>
             </ScrollView>
         </View>
     );
@@ -34,20 +38,29 @@ export default function Result({
 
 const styles = StyleSheet.create({
     image: {
-        height: 100,
-        width: 200
+        flex : 1,
+        height: 200,
+        width: '100%'
     },
     container: {
         flex: 1,
         justifyContent: 'space-around',
         alignItems: 'center',
         backgroundColor: '#303030',
-        marginBottom: 50
+        marginBottom: 50,
+        marginTop: 50
     },
     text: {
-        color: "white"
+        color: "white",
+        justifyContent: 'space-around',
+        marginTop: 5
     },
     scrollContainer: {
         alignItems: 'center',
+    },
+
+    backButton: {
+        marginTop: 25,
+        width: '100%'
     }
 });

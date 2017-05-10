@@ -51,10 +51,11 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
             }
 
             json = new JSONObject(ocrConfigString);
+
             AnylineOcrConfig ocrConfig = new AnylineOcrConfig(json);
             if (ocrConfig.getCustomCmdFile() != null) {
                 //custom cmd file in cordova is relative to www, so add www
-                ocrConfig.setCustomCmdFile("www/" + ocrConfig.getCustomCmdFile());
+                ocrConfig.setCustomCmdFile(ocrConfig.getCustomCmdFile());
             }
 
             JSONArray tesseractArray = json.optJSONArray("traineddataFiles");
@@ -74,10 +75,12 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
                         //maybe it should just fail here, case propably not useful
                         languages[i] = traineddataFilePath.substring(lastFileSeparatorIndex + 1);
                     }
-                    AssetUtil.copyAssetFileWithoutPath(this, "www/" + traineddataFilePath, dirToCopyTo, false);
+                    AssetUtil.copyAssetFileWithoutPath(this, traineddataFilePath, dirToCopyTo, false);
                     Log.v(TAG, "Copy traineddata duration: " + (System.currentTimeMillis() - start));
                 }
                 ocrConfig.setTesseractLanguages(languages);
+            } else {
+                Log.d(TAG, "No Training Data");
             }
 
             drawTextOutline = json.optBoolean("drawTextOutline", true);
