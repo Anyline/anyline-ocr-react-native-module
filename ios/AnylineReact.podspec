@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/Anyline/anyline-ocr-react-native-module"
 
   s.license      = "MIT"
-  s.platform     = :ios, "8.2"
+  s.platform     = :ios, "8"
 
   s.source       = { :git => "https://github.com/Anyline/anyline-ocr-react-native-module.git", :tag => "#{s.version}" }
 
