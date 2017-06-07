@@ -1,0 +1,37 @@
+PODS:
+  - Anyline (3.11.0)
+  - AnylineReact (3.12.0):
+    - Anyline
+    - React
+  - React (0.42.3):
+    - React/Core (= 0.42.3)
+  - React/Core (0.42.3):
+    - React/cxxreact
+    - Yoga (= 0.42.3.React)
+  - React/cxxreact (0.42.3):
+    - React/jschelpers
+  - React/jschelpers (0.42.3)
+  - Yoga (0.42.3.React)
+
+DEPENDENCIES:
+  - AnylineReact (from `../node_modules/anyline-ocr-react-native-module/ios`)
+  - React (from `../node_modules/react-native`)
+  - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+
+EXTERNAL SOURCES:
+  AnylineReact:
+    :path: ../node_modules/anyline-ocr-react-native-module/ios
+  React:
+    :path: ../node_modules/react-native
+  Yoga:
+    :path: ../node_modules/react-native/ReactCommon/yoga
+
+SPEC CHECKSUMS:
+  Anyline: 53f5f57972c6423162399d4509b682647256c670
+  AnylineReact: cb45980cca09a3569c7b96a043c50ed34c6c4e8d
+  React: 35e039680feacd0563677d49ba410112d2748559
+  Yoga: 86ce777665c8259b94ef8dbea76b84634237f4ea
+
+PODFILE CHECKSUM: 6822f4345c968c4b67919470057215fbc730a4b3
+
+COCOAPODS: 1.2.0
