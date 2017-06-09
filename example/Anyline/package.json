@@ -1,6 +1,6 @@
 {
   "name": "anyline",
-  "version": "3.12.0",
+  "version": "3.13.0",
   "main": "index.js",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
