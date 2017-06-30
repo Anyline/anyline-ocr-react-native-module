@@ -12,7 +12,15 @@ export default {
             "cornerRadius": 4,
             "strokeColor": "FFFFFF",
             "outerColor": "000000",
-            "outerAlpha": 0.3
+            "outerAlpha": 0.3,
+            "cropPadding": {
+                "x": -30,
+                "y": -90
+            },
+            "cropOffset": {
+                "x": 0,
+                "y": 90
+            }
         },
         "flash": {
             "mode": "manual",
