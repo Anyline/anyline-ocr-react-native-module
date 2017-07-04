@@ -196,13 +196,6 @@ public class EnergyActivity extends AnylineBaseActivity {
 
                 try {
                     switch (scanMode) {
-                        case GAS_METER:
-                            jsonResult.put("meterType", "Gas Meter");
-                            break;
-                        case WATER_METER_WHITE:
-                        case WATER_METER_BLACK:
-                            jsonResult.put("meterType", "Water Meter");
-                            break;
                         case DIGITAL_METER:
                             jsonResult.put("meterType", "Digital Meter");
                             break;
