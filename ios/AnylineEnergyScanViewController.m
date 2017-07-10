@@ -77,13 +77,6 @@
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
 
     switch (scanResult.scanMode) {
-        case ALGasMeter:
-            [dictResult setObject:@"Gas Meter" forKey:@"meterType"];
-            break;
-        case ALWaterMeterBlackBackground:
-        case ALWaterMeterWhiteBackground:
-            [dictResult setObject:@"Water Meter" forKey:@"meterType"];
-            break;
         case ALDigitalMeter:
             [dictResult setObject:@"Digital Meter" forKey:@"meterType"];
             break;
@@ -194,19 +187,9 @@
     dispatch_once(&onceToken, ^{
         scanModes = @{
                       @"AUTO_ANALOG_DIGITAL_METER" : @(ALAutoAnalogDigitalMeter),
-                      @"ELECTRIC_METER" : @(ALElectricMeter),
-                      @"ELECTRIC_METER_5_1" : @(ALElectricMeter5_1),
-                      @"ELECTRIC_METER_6_1" : @(ALElectricMeter6_1),
-                      @"ANALOG_METER_WHITE" : @(ALAnalogMeterWhite),
-                      @"ANALOG_METER_4" : @(ALAnalogMeter4),
-                      @"ANALOG_METER_7" : @(ALAnalogMeter7),
-                      @"GAS_METER" : @(ALGasMeter),
-                      @"GAS_METER_6" : @(ALGasMeter6),
                       @"ANALOG_METER" : @(ALAnalogMeter),
                       @"BARCODE" : @(ALBarcode),
                       @"SERIAL_NUMBER" : @(ALSerialNumber),
-                      @"WATER_METER_BLACK" : @(ALWaterMeterBlackBackground),
-                      @"WATER_METER_WHITE" : @(ALWaterMeterWhiteBackground),
                       @"DIGITAL_METER" : @(ALDigitalMeter),
                       @"HEAT_METER_4" : @(ALHeatMeter4),
                       @"HEAT_METER_5" : @(ALHeatMeter5),

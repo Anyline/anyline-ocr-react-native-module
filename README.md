@@ -168,6 +168,7 @@ Keep in mind, that you have to add every permission to your project, you add in 
 Available settings: 
 ```
 “ANALOG_METER”
+"AUTO_ANALOG_DIGITAL_METER"
 “DIGITAL_METER”
 “BARCODE”
 “MRZ”

@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "reinstall": "rm -rf node_modules/anyline-ocr-react-native-module && npm i && react-native link",
-    "reinstall-pods": "cd ios/ && rm -rf Pods Podfile.lock && pod install && cd .. && react-native link",
+    "reinstall-pods": "cd ios/ && rm -rf Pods Podfile.lock && pod install --verbose && cd .. && react-native link",
     "test": "jest"
   },
   "dependencies": {

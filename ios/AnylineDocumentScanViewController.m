@@ -58,16 +58,20 @@
 
 - (void)anylineDocumentModuleView:(AnylineDocumentModuleView *)anylineDocumentModuleView
                         hasResult:(UIImage *)transformedImage
-                        fullImage:(UIImage *)fullFrame {
+                        fullImage:(UIImage *)fullFrame
+                  documentCorners:(ALSquare *)corners {
     
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
 
     
     NSString *imagePath = [self saveImageToFileSystem:transformedImage];
     NSString *fullImagePath = [self saveImageToFileSystem:fullFrame];
+    NSString *outline = [self stringForOutline:corners];
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
     [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+    [dictResult setValue:outline forKey:@"outline"];
+
 
     
     [self.delegate anylineBaseScanViewController:self didScan:dictResult continueScanning:!self.moduleView.cancelOnResult];
