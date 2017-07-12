@@ -8,8 +8,12 @@
  */
 package com.anyline.reactnative;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +23,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import at.nineyards.anyline.camera.AnylineViewConfig;
+import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.modules.mrz.MrzResult;
 import at.nineyards.anyline.modules.mrz.MrzResultListener;
 import at.nineyards.anyline.modules.mrz.MrzScanView;
@@ -28,21 +33,33 @@ public class MrzActivity extends AnylineBaseActivity {
     private static final String TAG = MrzActivity.class.getSimpleName();
 
     private MrzScanView mrzScanView;
+    private TextView labelView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mrzScanView = new MrzScanView(this, null);
+        JSONObject json;
         try {
-            JSONObject json = new JSONObject(configJson);
+            json = new JSONObject(configJson);
             mrzScanView.setConfig(new AnylineViewConfig(this, json));
         } catch (Exception e) {
             //JSONException or IllegalArgumentException is possible, return it to javascript
             finishWithError("error_invalid_json_data \n" + e.getLocalizedMessage());
             return;
         }
-        setContentView(mrzScanView);
+
+        RelativeLayout relativeLayout = new RelativeLayout(this);
+        relativeLayout.addView(mrzScanView, getTextLayoutParams());
+
+        //add custom Label
+        if(json.has("label")){
+            this.labelView = getLabelView(getApplicationContext());
+            RelativeLayout.LayoutParams lp = getWrapContentLayoutParams();
+            relativeLayout.addView(this.labelView, lp);
+        }
+        setContentView(relativeLayout, getWrapContentLayoutParams());
 
         initAnyline();
     }
@@ -103,6 +120,31 @@ public class MrzActivity extends AnylineBaseActivity {
             }
         });
         mrzScanView.getAnylineController().setWorkerThreadUncaughtExceptionHandler(this);
+    }
+
+    @Override
+    public void onCameraOpened(CameraController cameraController, int width, int height) {
+        super.onCameraOpened(cameraController, width, height);
+        mrzScanView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (labelView != null) {
+                    try {
+                        Rect rect = mrzScanView.getCutoutRect();
+                        JSONObject offsetJson = new JSONObject(configJson).getJSONObject("label").getJSONObject("offset");
+
+
+                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+                        lp.setMargins(rect.left + Integer.parseInt(offsetJson.getString("x")), rect.top + Integer.parseInt(offsetJson.getString("y")), 0, 0);
+                        labelView.setLayoutParams(lp);
+
+                        labelView.setVisibility(View.VISIBLE);
+                    } catch (JSONException e) {
+                        finishWithError(e.toString());
+                    }
+                }
+            }
+        });
     }
 
 }

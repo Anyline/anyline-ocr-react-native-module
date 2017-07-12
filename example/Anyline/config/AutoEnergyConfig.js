@@ -26,6 +26,6 @@ export default {
     "reportingEnabled": true,
     "visualFeedback": {
       "style": "contour_rect"
-    },
+    }
   }
 }

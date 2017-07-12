@@ -8,11 +8,15 @@
 package com.anyline.reactnative;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -118,6 +122,41 @@ public abstract class AnylineBaseActivity extends Activity
         }
 
         return outline.toString();
+    }
+
+
+    protected TextView getLabelView(Context context) {
+
+        TextView labelView = new TextView(context);
+
+        try {
+            JSONObject jsonObject = new JSONObject(configJson);
+            JSONObject labelObject = jsonObject.getJSONObject("label");
+            labelView.setText(labelObject.getString("text"));
+            labelView.setTextColor(Color.parseColor("#" + labelObject.getString("color")));
+            labelView.setTextSize(Float.parseFloat(labelObject.getString("size")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return labelView;
+    }
+
+
+    protected RelativeLayout.LayoutParams getTextLayoutParams (){
+        // Defining the RelativeLayout layout parameters.
+        // In this case I want to fill its parent
+        return new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+    }
+
+    protected RelativeLayout.LayoutParams getWrapContentLayoutParams (){
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        return lp;
     }
 
 }

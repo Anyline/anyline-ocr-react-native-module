@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.vision.barcode.Barcode;
 
@@ -44,6 +45,8 @@ public class EnergyActivity extends AnylineBaseActivity {
     private RadioGroup radioGroup;
     private AnylineUIConfig anylineUIConfig;
     private String lastDetectedBarcodeValue;
+    private TextView labelView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +147,14 @@ public class EnergyActivity extends AnylineBaseActivity {
             relativeLayout.addView(radioGroup, lp);
         }
 
+
+        //add custom Label
+        if(jsonObject.has("label")){
+            this.labelView = getLabelView(getApplicationContext());
+            RelativeLayout.LayoutParams lp = getWrapContentLayoutParams();
+            relativeLayout.addView(this.labelView, lp);
+        }
+
         setContentView(relativeLayout, matchParentParams);
 
         initAnyline();
@@ -177,6 +188,22 @@ public class EnergyActivity extends AnylineBaseActivity {
                     radioGroup.setLayoutParams(lp);
 
                     radioGroup.setVisibility(View.VISIBLE);
+                }
+
+                if (labelView != null) {
+                    try {
+                        Rect rect = energyScanView.getCutoutRect();
+                        JSONObject offsetJson = new JSONObject(configJson).getJSONObject("label").getJSONObject("offset");
+
+
+                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+                        lp.setMargins(rect.left + Integer.parseInt(offsetJson.getString("x")), rect.top + Integer.parseInt(offsetJson.getString("y")), 0, 0);
+                        labelView.setLayoutParams(lp);
+
+                        labelView.setVisibility(View.VISIBLE);
+                    } catch (JSONException e) {
+                        finishWithError(e.toString());
+                    }
                 }
             }
         });

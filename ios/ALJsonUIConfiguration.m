@@ -29,6 +29,15 @@ NSString * const OFFSET = @"offset";
 NSString * const OFFSET_X = @"offset.x";
 NSString * const OFFSET_Y = @"offset.y";
 
+NSString * const LABEL = @"label";
+NSString * const LABEL_TEXT = @"text";
+NSString * const LABEL_COLOR = @"color";
+NSString * const LABEL_SIZE = @"size";
+
+NSString * const LABEL_OFFSET = @"labelOffset";
+NSString * const LABEL_OFFSET_X = @"offset.x";
+NSString * const LABEL_OFFSET_Y = @"offset.y";
+
 @implementation ALJsonUIConfiguration
 
 -(instancetype)initWithDictionary:(NSDictionary *)dictionary {
@@ -110,6 +119,26 @@ NSString * const OFFSET_Y = @"offset.y";
             if([segDict valueForKeyPath:OFFSET_Y])
                 _segmentYPositionOffset = [[segDict valueForKeyPath:OFFSET_Y] floatValue];
         }
+        
+        if ([dictionary valueForKey:LABEL]) {
+            NSDictionary *labDict = [dictionary valueForKey:LABEL];
+            
+            if([labDict valueForKey:LABEL_TEXT])
+            _labelText = [labDict valueForKey:LABEL_TEXT];
+            
+            if([labDict valueForKey:LABEL_SIZE])
+            _labelSize = [[labDict valueForKeyPath:LABEL_SIZE] floatValue];
+            
+            if([labDict valueForKey:LABEL_COLOR])
+            _labelColor = [ALJsonUIConfiguration colorFromHexString:[labDict valueForKey:LABEL_COLOR]];
+            
+            if([labDict valueForKeyPath:LABEL_OFFSET_X])
+            _labelXPositionOffset = [[labDict valueForKeyPath:LABEL_OFFSET_X] floatValue];
+            
+            if([labDict valueForKeyPath:LABEL_OFFSET_Y])
+            _labelYPositionOffset = [[labDict valueForKeyPath:LABEL_OFFSET_Y] floatValue];
+        }
+
     }
     return self;
 }

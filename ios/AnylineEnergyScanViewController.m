@@ -6,6 +6,8 @@
 
 @property (nonatomic, strong) UISegmentedControl *segment;
 
+    @property (nonatomic, strong) UILabel *label;
+    
 @property (nonatomic, strong) NSString *detectedBarcode;
 
 @end
@@ -38,6 +40,8 @@
 
     [self.view sendSubviewToBack:self.moduleView];
 
+    
+    //Add Segment
     self.segment = [[UISegmentedControl alloc] initWithItems:self.jsonConfig.segmentTitles];
 
     self.segment.tintColor = self.jsonConfig.segmentTintColor;
@@ -48,7 +52,18 @@
         [self.segment addTarget:self action:@selector(segmentChange:) forControlEvents:UIControlEventValueChanged];
         [self.view addSubview:self.segment];
 
+    //Add Label
+    self.label = [[UILabel alloc] init];
+    self.label.hidden = YES;
+    
+    [self.label setText:self.jsonConfig.labelText];
+    [self.label setTextColor:self.jsonConfig.labelColor];
+    self.label.font = [self.label.font fontWithSize:self.jsonConfig.labelSize];
+    [self.label sizeToFit];
+    [self.view addSubview:self.label];
 
+    
+    
     self.detectedBarcode = @"";
 
 }
@@ -56,11 +71,19 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
+    
+    //Segment
     self.segment.frame = CGRectMake(self.moduleView.cutoutRect.origin.x + self.jsonConfig.segmentXPositionOffset/2,
                                     self.moduleView.cutoutRect.origin.y + self.jsonConfig.segmentYPositionOffset/2,
                                     self.view.frame.size.width - 2*(self.moduleView.cutoutRect.origin.x + self.jsonConfig.segmentXPositionOffset/2),
                                     self.segment.frame.size.height);
     self.segment.hidden = NO;
+    
+    
+    //Label
+    self.label.center = CGPointMake(self.moduleView.cutoutRect.origin.x+ self.jsonConfig.labelXPositionOffset/2.5,
+                                    self.moduleView.cutoutRect.origin.y + self.jsonConfig.labelYPositionOffset/4);
+    self.label.hidden = NO;
 
 }
 

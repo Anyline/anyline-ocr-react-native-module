@@ -29,6 +29,6 @@ export default {
         "beepOnResult": true,
         "vibrateOnResult": true,
         "blinkAnimationOnResult": true,
-        "cancelOnResult": true
+        "cancelOnResult": true,
     }
 }

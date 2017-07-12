@@ -8,9 +8,13 @@
  */
 package com.anyline.reactnative;
 
-import android.graphics.PointF;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.graphics.Rect;
+import android.view.View;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,10 +22,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 import at.nineyards.anyline.modules.ocr.AnylineOcrResultListener;
+import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.camera.AnylineViewConfig;
 import at.nineyards.anyline.modules.ocr.AnylineOcrConfig;
 import at.nineyards.anyline.modules.ocr.AnylineOcrResult;
@@ -33,7 +37,8 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
     private static final String TAG = AnylineOcrActivity.class.getSimpleName();
 
     private AnylineOcrScanView anylineOcrScanView;
-    private boolean drawTextOutline;
+    private TextView labelView;
+    private JSONObject viewConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +47,18 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
         String ocrConfigString = getIntent().getExtras().getString(AnylineSDKPlugin.EXTRA_OCR_CONFIG_JSON, "");
 
         anylineOcrScanView = new AnylineOcrScanView(this, null);
-        try {
-            JSONObject json = new JSONObject(configJson);
-            anylineOcrScanView.setConfig(new AnylineViewConfig(this, json));
+        RelativeLayout relativeLayout = new RelativeLayout(this);
 
-            if (json.has("reportingEnabled")) {
-                anylineOcrScanView.setReportingEnabled(json.optBoolean("reportingEnabled", true));
+
+        try {
+            this.viewConfig = new JSONObject(configJson);
+            anylineOcrScanView.setConfig(new AnylineViewConfig(this, this.viewConfig));
+
+            if (this.viewConfig.has("reportingEnabled")) {
+                anylineOcrScanView.setReportingEnabled(this.viewConfig.optBoolean("reportingEnabled", true));
             }
 
-            json = new JSONObject(ocrConfigString);
+            JSONObject json = new JSONObject(ocrConfigString);
 
             AnylineOcrConfig ocrConfig = new AnylineOcrConfig(json);
             if (ocrConfig.getCustomCmdFile() != null) {
@@ -83,7 +91,8 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
                 Log.d(TAG, "No Training Data");
             }
 
-            drawTextOutline = json.optBoolean("drawTextOutline", true);
+//            boolean drawTextOutline = json.optBoolean("drawTextOutline", true);
+
 
             anylineOcrScanView.setAnylineOcrConfig(ocrConfig);
 
@@ -94,7 +103,15 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
             return;
         }
 
-        setContentView(anylineOcrScanView);
+        relativeLayout.addView(anylineOcrScanView, getTextLayoutParams());
+
+        //add custom Label
+        if(this.viewConfig.has("label")){
+            this.labelView = getLabelView(getApplicationContext());
+            RelativeLayout.LayoutParams lp = getWrapContentLayoutParams();
+            relativeLayout.addView(this.labelView, lp);
+        }
+        setContentView(relativeLayout, getWrapContentLayoutParams());
 
         initAnyline();
     }
@@ -111,6 +128,31 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
 
         anylineOcrScanView.cancelScanning();
         anylineOcrScanView.releaseCameraInBackground();
+    }
+
+    @Override
+    public void onCameraOpened(CameraController cameraController, int width, int height) {
+        super.onCameraOpened(cameraController, width, height);
+        anylineOcrScanView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (labelView != null) {
+                    try {
+                        Rect rect = anylineOcrScanView.getCutoutRect();
+                        JSONObject offsetJson = new JSONObject(configJson).getJSONObject("label").getJSONObject("offset");
+
+
+                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+                        lp.setMargins(rect.left + Integer.parseInt(offsetJson.getString("x")), rect.top + Integer.parseInt(offsetJson.getString("y")), 0, 0);
+                        labelView.setLayoutParams(lp);
+
+                        labelView.setVisibility(View.VISIBLE);
+                    } catch (JSONException e) {
+                        finishWithError(e.toString());
+                    }
+                }
+            }
+        });
     }
 
     private void initAnyline() {

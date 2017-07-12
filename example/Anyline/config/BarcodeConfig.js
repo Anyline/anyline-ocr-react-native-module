@@ -41,6 +41,6 @@ export default {
                 "x": 0, // postive -> right
                 "y": -88, // postive -> down
             }
-        }
+        },
     }
 }
