@@ -90,7 +90,7 @@ Disable bitcode in your project
 - Copy the [Podfile](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline/ios/Podfile) 
 from our example Project to your native iOS root folder.
 - Change the target of the Podfile to your project name.
-- ```pod install```
+- ```pod update```
 
 ##### Permissions
 Add Camera Permissions to Info.plist
