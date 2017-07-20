@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
   AppRegistry,
-  BackAndroid,
+  BackHandler,
   LayoutAnimation,
   PermissionsAndroid,
   ScrollView,
@@ -46,6 +46,9 @@ class Anyline extends Component {
     });
     switch (type) {
       case 'AUTO_ANALOG_DIGITAL_METER':
+        config = AutoEnergyConfig;
+        break;
+      case 'DIAL_METER':
         config = AutoEnergyConfig;
         break;
       case 'BARCODE':
@@ -173,12 +176,12 @@ class Anyline extends Component {
     } = this.state;
 
 
-    BackAndroid.addEventListener('hardwareBackPress', () => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
       if (hasScanned) {
         this.emptyResult();
         return true;
       } else {
-        BackAndroid.exitApp();
+        BackHandler.exitApp();
       }
     });
 

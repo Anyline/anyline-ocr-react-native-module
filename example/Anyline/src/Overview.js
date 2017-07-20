@@ -35,6 +35,12 @@ export default function Overview({
                     platformPermissionCheck('DIGITAL_METER')
                   }}/>
         </View>
+        <View style={styles.buttons}>
+          <Button style={styles.buttons} title={'  Dial Meter Scanner ALPHA'} color="#0099FF"
+                  onPress={() => {
+                    platformPermissionCheck('DIAL_METER')
+                  }}/>
+        </View>
         <Text style={styles.text}>OCR</Text>
 
         <View style={styles.buttons}>
