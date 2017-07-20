@@ -40,6 +40,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     public static final int BARCODE = 7;
     public static final int ANYLINE_MRZ = 8;
     public static final int ANYLINE_DOCUMENT = 9;
+    public static final int DIAL_METER = 10;
 
 
     private JSONObject configObject;
@@ -72,6 +73,9 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
                 break;
             case "DIGITAL_METER":
                 scan(EnergyActivity.class, config, scanMode, DIGITAL_METER);
+                break;
+            case "DIAL_METER":
+                scan(EnergyActivity.class, config, scanMode, DIAL_METER);
                 break;
             case "ANALOG_METER":
                 scan(EnergyActivity.class, config, scanMode, ANALOG_METER);

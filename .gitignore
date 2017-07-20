@@ -35,7 +35,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-
+example/Anyline/ios/ip.txt
 # Android/IJ
 #
 *.iml

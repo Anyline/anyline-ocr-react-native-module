@@ -211,6 +211,7 @@
         scanModes = @{
                       @"AUTO_ANALOG_DIGITAL_METER" : @(ALAutoAnalogDigitalMeter),
                       @"ANALOG_METER" : @(ALAnalogMeter),
+                      @"DIAL_METER" : @(ALDialMeter),
                       @"BARCODE" : @(ALBarcode),
                       @"SERIAL_NUMBER" : @(ALSerialNumber),
                       @"DIGITAL_METER" : @(ALDigitalMeter),

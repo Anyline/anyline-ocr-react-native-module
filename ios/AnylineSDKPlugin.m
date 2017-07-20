@@ -97,6 +97,11 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
       autoMeterVC.scanMode = ALAutoAnalogDigitalMeter;
       autoMeterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
       return autoMeterVC;
+  } else if ([[scanMode uppercaseString] isEqualToString:[@"DIAL_METER" uppercaseString]]) {
+      AnylineEnergyScanViewController *autoMeterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+      autoMeterVC.scanMode = ALDialMeter;
+      autoMeterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
+      return autoMeterVC;
   } else if ([[scanMode uppercaseString] isEqualToString:[@"DOCUMENT" uppercaseString]]) {
     return [[AnylineDocumentScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
   } else if ([[scanMode uppercaseString] isEqualToString:[@"MRZ" uppercaseString]]) {

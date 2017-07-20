@@ -18,9 +18,5 @@
   ],
   "directories": {
     "example": "examples"
-  },
-  "peerDependencies": {
-    "react": "*",
-    "react-native": "*"
   }
 }

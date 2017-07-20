@@ -22,6 +22,7 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 ios/Pods
+ios/ip.txt
 # Android/IntelliJ
 #
 build/
@@ -51,3 +52,6 @@ buck-out/
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
+
+# yarn
+yarn.lock

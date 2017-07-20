@@ -3,15 +3,11 @@ PODS:
   - AnylineReact (3.14.0):
     - Anyline
     - React
-  - React (0.42.3):
-    - React/Core (= 0.42.3)
-  - React/Core (0.42.3):
-    - React/cxxreact
-    - Yoga (= 0.42.3.React)
-  - React/cxxreact (0.42.3):
-    - React/jschelpers
-  - React/jschelpers (0.42.3)
-  - Yoga (0.42.3.React)
+  - React (0.46.4):
+    - React/Core (= 0.46.4)
+  - React/Core (0.46.4):
+    - Yoga (= 0.46.4.React)
+  - Yoga (0.46.4.React)
 
 DEPENDENCIES:
   - AnylineReact (from `../node_modules/anyline-ocr-react-native-module/ios`)
@@ -29,8 +25,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Anyline: 0044bcb67128ab53132a1c0dbc9fd5218deaa37a
   AnylineReact: 74648ffa2666aaeed69b549831aca4c2860be388
-  React: 35e039680feacd0563677d49ba410112d2748559
-  Yoga: 86ce777665c8259b94ef8dbea76b84634237f4ea
+  React: 596d8774642d10fea20b1f24cc591fcf633f73ad
+  Yoga: 98e24da91afe33bb43fedaf27dafede269c04fe8
 
 PODFILE CHECKSUM: 6822f4345c968c4b67919470057215fbc730a4b3
 
