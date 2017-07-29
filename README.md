@@ -10,7 +10,7 @@
 
 The plugin lets you connect to the SDK with React-Native.
 	  
-## Example ##
+## Example
 
 Go to the Example project in the [example folder](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline).
 
@@ -131,14 +131,14 @@ If you want to get detailed information on the config JSON, go to our[`documenta
 ### 7. Add custom TrainData to the OCR Module
 If you want to add you custom traindata, you have to copy it into the native project folder.
 
-####iOS
+#### iOS
 ```
 ios   
 └─── trainedData
      └─── myTrainedData.traineddata
 ```
 
-####Android
+#### Android
 ```
 android   
 └─── app
