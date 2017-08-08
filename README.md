@@ -19,7 +19,7 @@ Check out the examples ResultView.js and config.json to see the implementation.
 ## Quick Start Guide
 
 ### 1. Get a License
-Go to [our pricing page](https://www.anyline.io/pricing/) and get your license.
+Go to [our pricing page](https://www.anyline.io/pricing/) and get your license or sign up for your expiring test license.
 
 ### 2. Get the Anyline react-native plugin
 
