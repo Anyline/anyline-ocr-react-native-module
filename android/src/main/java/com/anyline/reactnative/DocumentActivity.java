@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -102,7 +104,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
         documentScanView.setConfig(new AnylineViewConfig(this, jsonObject));
 
         // Optional: Set a ratio you want the documents to be restricted to. default is set to DIN_AX
-        documentScanView.setDocumentRatios(DocumentScanView.DocumentRatio.DIN_AX_PORTRAIT.getRatio());
+        documentScanView.setDocumentRatios(DocumentScanView.DocumentRatio.DIN_AX_PORTRAIT.getRatio(), DocumentScanView.DocumentRatio.DIN_AX_LANDSCAPE.getRatio());
 
         // Optional: Set a maximum deviation for the ratio. 0.15 is the default
         documentScanView.setMaxDocumentRatioDeviation(0.15);
@@ -120,7 +122,26 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 AnylineImage transformedImage = documentResult.getResult();
                 AnylineImage fullFrame = documentResult.getFullImage();
 
-                imageViewResult.setImageBitmap(Bitmap.createScaledBitmap(transformedImage.getBitmap(), 100, 160, false));
+                // resize display view based on larger side of document, and display document
+                int widthDP, heightDP;
+                Bitmap bmpTransformedImage = transformedImage.getBitmap();
+
+                if (bmpTransformedImage.getHeight() > bmpTransformedImage.getWidth()) {
+                    widthDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+                    heightDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 160, getResources().getDisplayMetrics());
+                    //Add a comment to this line
+
+                    imageViewResult.getLayoutParams().width = widthDP;
+                    imageViewResult.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                } else {
+                    widthDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 160, getResources().getDisplayMetrics());
+                    heightDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+
+                    imageViewResult.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    imageViewResult.getLayoutParams().height = heightDP;
+                }
+
+                imageViewResult.setImageBitmap(Bitmap.createScaledBitmap(transformedImage.getBitmap(), widthDP, heightDP, false));
 
                 /**
                  * IMPORTANT: cache provided frames here, and release them at the end of this onResult. Because
@@ -170,7 +191,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 try {
                     jsonObject = new JSONObject(configJson);
                     cancelOnResult = jsonObject.getBoolean("cancelOnResult");
-                }catch(Exception e){
+                } catch (Exception e) {
 
                 }
 
@@ -181,7 +202,6 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 } else {
                     ResultReporter.onResult(jsonResult, false);
                 }
-
 
 
             }
@@ -264,7 +284,6 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             }
 
         });
-
 
 
         // optionally stop the scan once a valid result was returned
