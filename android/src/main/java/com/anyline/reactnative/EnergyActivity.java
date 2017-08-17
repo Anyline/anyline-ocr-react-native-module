@@ -245,7 +245,9 @@ public class EnergyActivity extends AnylineBaseActivity {
                     jsonResult.put("scanMode", scanMode.toString());
                     jsonResult.put("reading", energyResult.getResult());
                     jsonResult.put("barcodeResult", lastDetectedBarcodeValue);
-                    jsonResult.put("outline", jsonForOutline(energyResult.getOutline()));
+                    if(!scanModeConfig.equals("DIAL_METER")) {
+                        jsonResult.put("outline", jsonForOutline(energyResult.getOutline()));
+                    }
                     jsonResult.put("confidence", energyResult.getConfidence());
 
                     File imageFile = TempFileUtil.createTempFileCheckCache(EnergyActivity.this,
