@@ -245,6 +245,9 @@ public class EnergyActivity extends AnylineBaseActivity {
                     jsonResult.put("scanMode", scanMode.toString());
                     jsonResult.put("reading", energyResult.getResult());
                     jsonResult.put("barcodeResult", lastDetectedBarcodeValue);
+
+                    //Quickfix for Dial Meter Alpha ScanMode Bug
+                    String scanModeConfig = getIntent().getStringExtra(AnylineSDKPlugin.EXTRA_SCAN_MODE);
                     if(!scanModeConfig.equals("DIAL_METER")) {
                         jsonResult.put("outline", jsonForOutline(energyResult.getOutline()));
                     }
