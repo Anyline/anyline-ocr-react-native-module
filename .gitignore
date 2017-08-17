@@ -9,12 +9,13 @@ android/app/build/
 android/app/libs/
 android/build/
 android/gen/
+android/.settings
 ios/build/
 node_modules/
 # OSX
 #
 .DS_Store
-
+.settings
 # Xcode
 #
 build/
