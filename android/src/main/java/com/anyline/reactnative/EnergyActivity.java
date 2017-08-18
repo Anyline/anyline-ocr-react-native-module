@@ -229,6 +229,12 @@ public class EnergyActivity extends AnylineBaseActivity {
                         case DIAL_METER:
                             jsonResult.put("meterType", "Dial Meter");
                             break;
+                        case ANALOG_METER:
+                            jsonResult.put("meterType", "Analog Meter");
+                            break;
+                        case AUTO_ANALOG_DIGITAL_METER:
+                            jsonResult.put("meterType", "Auto Analog Digital Meter");
+                            break;
                         case HEAT_METER_4:
                         case HEAT_METER_5:
                         case HEAT_METER_6:
