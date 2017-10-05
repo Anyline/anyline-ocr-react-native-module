@@ -31,6 +31,7 @@ class Anyline extends Component {
     imagePath: '',
     fullImagePath: '',
     currentScanMode: '',
+    buttonsDisabled: false,
   };
 
   componentWillUpdate() {
@@ -39,6 +40,7 @@ class Anyline extends Component {
 
   openAnyline = (type) => {
 
+    this.setState({buttonsDisabled: true});
     let config;
 
     this.setState({
@@ -130,6 +132,8 @@ class Anyline extends Component {
 
   onResult = (dataString) => {
     console.log(dataString);
+    this.setState({buttonsDisabled: false});
+
     const data = JSON.parse(dataString);
     LayoutAnimation.easeInEaseOut();
     const fullImagePath = data.fullImagePath;
@@ -149,6 +153,7 @@ class Anyline extends Component {
   };
 
   onError = (error) => {
+    this.setState({buttonsDisabled: false});
     if (error !== 'Canceled') {
       console.error(error);
       alert(error);
@@ -172,9 +177,11 @@ class Anyline extends Component {
       result,
       imagePath,
       fullImagePath,
-      currentScanMode
+      currentScanMode,
+      buttonsDisabled
     } = this.state;
 
+    console.log(this.state.buttonsDisabled);
 
     BackHandler.addEventListener('hardwareBackPress', () => {
       if (hasScanned) {
@@ -199,7 +206,7 @@ class Anyline extends Component {
                   emptyResult={this.emptyResult}
               />
           ) : <Overview key="OverView" openAnyline={this.openAnyline}
-                        checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}/>}
+                        checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen} disabled={buttonsDisabled} />}
         </ScrollView>
     );
   }

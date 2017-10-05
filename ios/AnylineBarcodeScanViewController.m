@@ -14,7 +14,6 @@
     [super viewDidLoad];
 
     AnylineBarcodeModuleView *barcodeModuleView = [[AnylineBarcodeModuleView alloc] initWithFrame:self.view.bounds];
-    barcodeModuleView.currentConfiguration = self.conf;
 
     NSError *error = nil;
     [barcodeModuleView setupWithLicenseKey:self.key delegate:self error:&error];
@@ -22,6 +21,9 @@
 //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 //            [alert show];
 //        }
+
+
+    barcodeModuleView.currentConfiguration = self.conf;
 
     self.moduleView = barcodeModuleView;
 

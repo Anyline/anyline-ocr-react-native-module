@@ -23,7 +23,6 @@
     [super viewDidLoad];
 
     AnylineOCRModuleView *ocrModuleView = [[AnylineOCRModuleView alloc] initWithFrame:self.view.bounds];
-    ocrModuleView.currentConfiguration = self.conf;
 
     ALOCRConfig *ocrConf = [[ALOCRConfig alloc] initWithJsonDictionary:self.ocrConfDict];
 
@@ -45,6 +44,9 @@
     //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     //            [alert show];
     //        }
+
+
+    ocrModuleView.currentConfiguration = self.conf;
 
     self.moduleView = ocrModuleView;
 
