@@ -12,5 +12,6 @@
       <activity android:name="com.anyline.reactnative.BarcodeActivity" android:screenOrientation="portrait"/>
       <activity android:name="com.anyline.reactnative.AnylineOcrActivity" android:screenOrientation="portrait"/>
       <activity android:name="com.anyline.reactnative.DocumentActivity" android:screenOrientation="portrait"/>
+      <activity android:name="com.anyline.reactnative.LicensePlateActivity" android:screenOrientation="portrait"/>
   </application>
 </manifest>

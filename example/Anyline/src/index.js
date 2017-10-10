@@ -21,6 +21,7 @@ import MRZConfig from '../config/MRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
 import IBANConfig from '../config/IbanConfig';
 import VoucherConfig from '../config/VoucherConfig';
+import LicensePlateConfig from '../config/LicensePlateConfig';
 
 
 class Anyline extends Component {
@@ -53,6 +54,9 @@ class Anyline extends Component {
       case 'DIAL_METER':
         config = AutoEnergyConfig;
         break;
+        case 'SERIAL_NUMBER':
+        config = AutoEnergyConfig;
+        break;
       case 'BARCODE':
         config = BarcodeConfig;
         break;
@@ -66,6 +70,9 @@ class Anyline extends Component {
         break;
       case 'MRZ':
         config = MRZConfig;
+        break;
+      case 'LICENSE_PLATE':
+        config = LicensePlateConfig;
         break;
       case 'DOCUMENT':
         config = DocumentConfig;

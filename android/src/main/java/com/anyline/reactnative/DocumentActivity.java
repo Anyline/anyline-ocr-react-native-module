@@ -276,12 +276,31 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 }
             }
 
-            @Override
-            public void onTakePictureError(Throwable throwable) {
-                // This is called if the image could not be captured from the camera (most probably because of an
-                // OutOfMemoryError)
-                throw new RuntimeException(throwable);
-            }
+           @Override
+           public void onTakePictureError(Throwable throwable) {
+               // This is called if the image could not be captured from the camera (most probably because of an
+               // OutOfMemoryError)
+               throw new RuntimeException(throwable);
+           }
+
+           @Override
+           public void onPictureCornersDetected(AnylineImage anylineImage, List<PointF> list) {
+               // this is called after manual corner detection was requested
+               // Note: not implemented in this example
+           }
+
+           @Override
+           public void onPictureTransformed(AnylineImage anylineImage) {
+               // this is called after a full frame image and 4 corners were passed to the SDK for
+               // transformation (e.g. when a user manually selected the corners in an image)
+               // Note: not implemented in this example
+           }
+
+           @Override
+           public void onPictureTransformError(DocumentScanView.DocumentError documentError) {
+               // this is called on any error while transforming the document image from the 4 corners
+               // Note: not implemented in this example
+           }
 
         });
 

@@ -35,10 +35,26 @@ export default function Overview({openAnyline, checkCameraPermissionAndOpen, dis
                   }}/>
         </View>
         <View style={styles.buttons}>
+          <Button style={styles.buttons} title={'  Serial Number'} color="#0099FF"
+                  disabled={disabled}
+                  onPress={() => {
+                    platformPermissionCheck('SERIAL_NUMBER')
+                  }}/>
+        </View>
+        <View style={styles.buttons}>
           <Button style={styles.buttons} title={'  Dial Meter Scanner ALPHA'} color="#0099FF"
                   disabled={disabled}
                   onPress={() => {
                     platformPermissionCheck('DIAL_METER')
+                  }}/>
+        </View>
+        <Text style={styles.text}>VEHICLE</Text>
+
+        <View style={styles.buttons}>
+          <Button style={styles.buttons} title={'  License Plate Scanner'} color="#0099FF"
+                  disabled={disabled}
+                  onPress={() => {
+                    platformPermissionCheck('LICENSE_PLATE')
                   }}/>
         </View>
         <Text style={styles.text}>OCR</Text>

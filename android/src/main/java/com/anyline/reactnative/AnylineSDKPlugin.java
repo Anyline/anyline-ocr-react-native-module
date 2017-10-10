@@ -41,6 +41,8 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     public static final int ANYLINE_MRZ = 8;
     public static final int ANYLINE_DOCUMENT = 9;
     public static final int DIAL_METER = 10;
+    public static final int LICENSE_PLATE = 11;
+    public static final int SERIAL_NUMBER = 12;
 
 
     private JSONObject configObject;
@@ -74,6 +76,9 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             case "DIGITAL_METER":
                 scan(EnergyActivity.class, config, scanMode, DIGITAL_METER);
                 break;
+            case "SERIAL_NUMBER":
+                scan(EnergyActivity.class, config, scanMode, SERIAL_NUMBER);
+                break;
             case "DIAL_METER":
                 scan(EnergyActivity.class, config, scanMode, DIAL_METER);
                 break;
@@ -91,6 +96,9 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
                 break;
             case "DOCUMENT":
                 scan(DocumentActivity.class, config, scanMode, ANYLINE_DOCUMENT);
+                break;
+            case "LICENSE_PLATE":
+                scan(LicensePlateActivity.class, config, scanMode, LICENSE_PLATE);
                 break;
             default:
                 onErrorCallback.invoke("Wrong ScanMode");

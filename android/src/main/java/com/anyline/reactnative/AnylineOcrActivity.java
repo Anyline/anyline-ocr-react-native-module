@@ -1,5 +1,5 @@
 /*
- * Anyline Cordova Plugin
+ * Anyline React-Native Plugin
  * AnylineOcrActivity.java
  *
  * Copyright (c) 2016 Anyline GmbH

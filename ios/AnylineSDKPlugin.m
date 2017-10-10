@@ -5,6 +5,7 @@
 #import "AnylineMRZScanViewController.h"
 #import "AnylineOCRScanViewController.h"
 #import "AnylineDocumentScanViewController.h"
+#import "AnylineLicensePlateViewController.h"
 #import "ALJsonUIConfiguration.h"
 
 @interface AnylineSDKPlugin()<AnylineBaseScanViewControllerDelegate>
@@ -97,6 +98,11 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
       autoMeterVC.scanMode = ALAutoAnalogDigitalMeter;
       autoMeterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
       return autoMeterVC;
+  } else if ([[scanMode uppercaseString] isEqualToString:[@"SERIAL_NUMBER" uppercaseString]]) {
+      AnylineEnergyScanViewController *serialNumberVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+      serialNumberVC.scanMode = ALSerialNumber;
+      serialNumberVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
+      return serialNumberVC;
   } else if ([[scanMode uppercaseString] isEqualToString:[@"DIAL_METER" uppercaseString]]) {
       AnylineEnergyScanViewController *autoMeterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
       autoMeterVC.scanMode = ALDialMeter;
@@ -107,7 +113,9 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
   } else if ([[scanMode uppercaseString] isEqualToString:[@"MRZ" uppercaseString]]) {
     return [[AnylineMRZScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
   } else if ([[scanMode uppercaseString] isEqualToString:[@"BARCODE" uppercaseString]]) {
-    return [[AnylineBarcodeScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+      return [[AnylineBarcodeScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+  } else if ([[scanMode uppercaseString] isEqualToString:[@"LICENSE_PLATE" uppercaseString]]) {
+      return [[AnylineLicensePlateViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
   } else if ([[scanMode uppercaseString] isEqualToString:[@"ANYLINE_OCR" uppercaseString]]) {
     AnylineOCRScanViewController *ocrVC = [[AnylineOCRScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
     [ocrVC setOcrConfDict:self.ocrConfigDict];
