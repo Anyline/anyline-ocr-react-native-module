@@ -201,7 +201,7 @@ class Anyline extends Component {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.ContainerContent}>
-          <Text style={styles.headline}>Anyline React-Native Demo</Text>
+          <Text style={styles.headline}>Anyline React-Native Example</Text>
           {hasScanned ? (
               <Result
                   key="ResultView"

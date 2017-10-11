@@ -1026,7 +1026,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anyline;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.example.reactnative;
 				PRODUCT_NAME = Anyline;
 				REACT_HEADERS_PATH = "$(BUILT_PRODUCTS_DIR)/../Release-$(PLATFORM_NAME)/include";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1062,7 +1062,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anyline;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.example.reactnative;
 				PRODUCT_NAME = Anyline;
 				REACT_HEADERS_PATH = "$(BUILT_PRODUCTS_DIR)/../Release-$(PLATFORM_NAME)/include";
 				VERSIONING_SYSTEM = "apple-generic";

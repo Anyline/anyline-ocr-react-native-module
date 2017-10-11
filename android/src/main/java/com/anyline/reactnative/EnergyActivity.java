@@ -243,9 +243,6 @@ public class EnergyActivity extends AnylineBaseActivity {
                         case HEAT_METER_6:
                             jsonResult.put("meterType", "Heat Meter");
                             break;
-                        case SERIAL_NUMBER:
-                            jsonResult.put("meterType", "Serial Number");
-                            break;
                         default:
                             jsonResult.put("meterType", "Electric Meter");
                             break;

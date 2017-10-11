@@ -28,102 +28,123 @@
 
 @implementation AnylineSDKPlugin
 
+
+
 RCT_EXPORT_MODULE();
 - (UIView *)view
 {
-  return [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
 }
 
 RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
-  self.onResultCallback = onResult;
-  self.onErrorCallback = onError;
+    self.onResultCallback = onResult;
+    self.onErrorCallback = onError;
 
-  NSData *data = [config dataUsingEncoding:NSUTF8StringEncoding];
-  id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-  self.jsonConfigDictionary = dictionary;
+    NSData *data = [config dataUsingEncoding:NSUTF8StringEncoding];
+    id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    self.jsonConfigDictionary = dictionary;
 
-  self.appKey = [dictionary objectForKey:@"license"];
+    self.appKey = [dictionary objectForKey:@"license"];
 
-  BOOL nativeBarcodeScanning = [[dictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
-  self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
+    BOOL nativeBarcodeScanning = [[dictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
+    self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
 
-  self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
-  self.conf = [[ALUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"] bundlePath:nil];
+    self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
+    self.conf = [[ALUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"] bundlePath:nil];
     self.conf.cancelOnResult = true;
-  self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
+    self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
-  dispatch_async(dispatch_get_main_queue(), ^{
-    self.baseScanViewController = [self ViewControllerFromScanMode:scanMode];
-    [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:self.baseScanViewController animated:YES completion:nil];
-  });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AnylineBaseScanViewController* baseViewController = [self ViewControllerFromScanMode:scanMode];  //returns nil if ScanMode is not valid
+        if(baseViewController != nil){
+            self.baseScanViewController = baseViewController;
+            [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:self.baseScanViewController animated:YES completion:nil];
+        } else {
+            self.onErrorCallback(@[[scanMode stringByAppendingString:@" - Unknown ScanMode"]]);
+        }
+    });
 
 }
 
 #pragma mark - AnylineBaseScanViewControllerDelegate
 - (void)anylineBaseScanViewController:(AnylineBaseScanViewController *)baseScanViewController didScan:(id)scanResult continueScanning:(BOOL)continueScanning {
-  NSString *resultJson = @"";
+    NSString *resultJson = @"";
 
-  NSError *error;
-  NSData *jsonData = [NSJSONSerialization dataWithJSONObject: scanResult
-                                                     options:0
-                                                       error:&error];
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject: scanResult
+                                                       options:0
+                                                         error:&error];
 
-  if (! jsonData) {
-    NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
-  } else {
-    resultJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-  }
-  self.onResultCallback(@[resultJson]);
+    if (! jsonData) {
+        NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
+    } else {
+        resultJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    self.onResultCallback(@[resultJson]);
 }
 
 -(void)anylineBaseScanViewController:(AnylineBaseScanViewController *)baseScanViewController didStopScanning:(id)sender {
-  self.onErrorCallback(@[@"Canceled"]);
+    self.onErrorCallback(@[@"Canceled"]);
 }
 
 #pragma mark - Utility Funcitons
 - (AnylineBaseScanViewController *)ViewControllerFromScanMode:(NSString *)scanMode {
 
-  if ([[scanMode uppercaseString] isEqualToString:[@"ANALOG_METER" uppercaseString]]) {
-    AnylineEnergyScanViewController *analogMeterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-    analogMeterVC.scanMode = ALAnalogMeter;
-      analogMeterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
-    return analogMeterVC;
-  } else if ([[scanMode uppercaseString] isEqualToString:[@"DIGITAL_METER" uppercaseString]]) {
-    AnylineEnergyScanViewController *digitalMeterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-    digitalMeterVC.scanMode = ALDigitalMeter;
-      digitalMeterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
-    return digitalMeterVC;
-  } else if ([[scanMode uppercaseString] isEqualToString:[@"AUTO_ANALOG_DIGITAL_METER" uppercaseString]]) {
-      AnylineEnergyScanViewController *autoMeterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-      autoMeterVC.scanMode = ALAutoAnalogDigitalMeter;
-      autoMeterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
-      return autoMeterVC;
-  } else if ([[scanMode uppercaseString] isEqualToString:[@"SERIAL_NUMBER" uppercaseString]]) {
-      AnylineEnergyScanViewController *serialNumberVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-      serialNumberVC.scanMode = ALSerialNumber;
-      serialNumberVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
-      return serialNumberVC;
-  } else if ([[scanMode uppercaseString] isEqualToString:[@"DIAL_METER" uppercaseString]]) {
-      AnylineEnergyScanViewController *autoMeterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-      autoMeterVC.scanMode = ALDialMeter;
-      autoMeterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
-      return autoMeterVC;
-  } else if ([[scanMode uppercaseString] isEqualToString:[@"DOCUMENT" uppercaseString]]) {
-    return [[AnylineDocumentScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-  } else if ([[scanMode uppercaseString] isEqualToString:[@"MRZ" uppercaseString]]) {
-    return [[AnylineMRZScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-  } else if ([[scanMode uppercaseString] isEqualToString:[@"BARCODE" uppercaseString]]) {
-      return [[AnylineBarcodeScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-  } else if ([[scanMode uppercaseString] isEqualToString:[@"LICENSE_PLATE" uppercaseString]]) {
-      return [[AnylineLicensePlateViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-  } else if ([[scanMode uppercaseString] isEqualToString:[@"ANYLINE_OCR" uppercaseString]]) {
-    AnylineOCRScanViewController *ocrVC = [[AnylineOCRScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-    [ocrVC setOcrConfDict:self.ocrConfigDict];
-    return ocrVC;
-  } else {
-    self.onErrorCallback(@[@"unkown scanMode: %@", scanMode]);
-    return nil;
-  }
+    if([self scanModeIndex:scanMode]){
+        if ([[scanMode uppercaseString] isEqualToString:[@"DOCUMENT" uppercaseString]]) {
+            return [[AnylineDocumentScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+        } else if ([[scanMode uppercaseString] isEqualToString:[@"MRZ" uppercaseString]]) {
+            return [[AnylineMRZScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+        } else if ([[scanMode uppercaseString] isEqualToString:[@"BARCODE" uppercaseString]]) {
+            return [[AnylineBarcodeScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+        } else if ([[scanMode uppercaseString] isEqualToString:[@"LICENSE_PLATE" uppercaseString]]) {
+            return [[AnylineLicensePlateViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+        } else if ([[scanMode uppercaseString] isEqualToString:[@"ANYLINE_OCR" uppercaseString]]) {
+            AnylineOCRScanViewController *ocrVC = [[AnylineOCRScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+            [ocrVC setOcrConfDict:self.ocrConfigDict];
+            return ocrVC;
+        } else {
+            AnylineEnergyScanViewController *meterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+            meterVC.scanMode = [self energyScanModeFromString:scanMode];
+            meterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
+            return meterVC;
+        }
+    } else {
+        return nil;
+    }
+}
+
+- (ALScanMode)energyScanModeFromString:(NSString *)scanMode{
+
+    if ([[scanMode uppercaseString] isEqualToString:@"ANALOG_METER"]) {
+        return ALAnalogMeter;
+    } else if ([[scanMode uppercaseString] isEqualToString:@"DIGITAL_METER"]){
+        return ALDigitalMeter;
+    } else if ([[scanMode uppercaseString] isEqualToString:@"AUTO_ANALOG_DIGITAL_METER"]){
+        return ALAutoAnalogDigitalMeter;
+    } else if ([[scanMode uppercaseString] isEqualToString:@"DIAL_METER"]){
+        return ALDialMeter;
+    } else if ([[scanMode uppercaseString] isEqualToString:@"SERIAL_NUMBER"]){
+        return ALSerialNumber;
+    } else if ([[scanMode uppercaseString] isEqualToString:@"HEAT_METER_4"]){
+        return ALHeatMeter4;
+    } else if ([[scanMode uppercaseString] isEqualToString:@"HEAT_METER_5"]){
+        return ALHeatMeter5;
+    } else if ([[scanMode uppercaseString] isEqualToString:@"HEAT_METER_6"]){
+        return ALHeatMeter6;
+    } else {
+        return ALAutoAnalogDigitalMeter;
+    }
+
+}
+
+- (BOOL)scanModeIndex:(NSString *)scanMode{
+
+    NSArray *possibleScanModes = @[@"DOCUMENT", @"MRZ", @"BARCODE", @"LICENSE_PLATE", @"ANYLINE_OCR", @"ANALOG_METER", @"DIGITAL_METER", @"AUTO_ANALOG_DIGITAL_METER",
+                                   @"DIAL_METER", @"SERIAL_NUMBER", @"HEAT_METER_4", @"HEAT_METER_5", @"HEAT_METER_6"];
+
+    return [possibleScanModes containsObject: [scanMode uppercaseString]];
+
 }
 
 @end

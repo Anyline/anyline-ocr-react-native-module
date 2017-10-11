@@ -87,7 +87,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.anyline"
+        applicationId "com.anyline.example.reactnative"
         minSdkVersion 17
         targetSdkVersion 23
         versionCode 1

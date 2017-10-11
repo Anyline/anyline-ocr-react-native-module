@@ -60,3 +60,6 @@ android/keystores/debug.keystore
 
 .vscode/
 tsconfig.json
+
+#Pods
+example/Anyline/ios/Podfile.lock
