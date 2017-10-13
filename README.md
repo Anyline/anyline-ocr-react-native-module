@@ -171,15 +171,28 @@ Stringified JSON with all the configurations, detailed information [here](https:
 Keep in mind, that you have to add every permission to your project, you add in the config (vibrateOnResult -> vibration permission)
 ### scanMode
 Available settings: 
+
+##### Energy Meter
 ```
-“ANALOG_METER”
 "AUTO_ANALOG_DIGITAL_METER"
-“DIGITAL_METER”
-“BARCODE”
-“MRZ”
-“ANYLINE_OCR”
-“DOCUMENT”
+"ANALOG_METER"
+"DIGITAL_METER"
+"DIAL_METER"
+"HEAT_METER_4"
+"HEAT_METER_5"
+"HEAT_METER_6"
+"SERIAL_NUMBER"
 ```
+##### Other ScanModes
+```
+"BARCODE"
+"MRZ"
+"ANYLINE_OCR"
+"DOCUMENT"
+"LICENSE_PLATE"
+```
+Get more information in our [Docu](https://documentation.anyline.io/toc/platforms/react-native/getting_started.html#react-native-set-scan-mode).
+
 ### onResult Function
 Callback -> Stringified JSON
 ```
