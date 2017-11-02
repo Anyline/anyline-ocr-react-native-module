@@ -1,5 +1,5 @@
 /**
- * Created by jonesBoi on 14.03.17.
+ * Created by jonas on 14.03.17.
  */
 import React from 'react';
 import {Button, Platform, StyleSheet, Text, View} from 'react-native';

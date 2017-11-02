@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -50,6 +51,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
     private FrameLayout errorMessageLayout;
     private TextView errorMessage;
     private long lastErrorRecieved = 0;
+    private int compressionRatio = 100;
 
     private android.os.Handler handler = new android.os.Handler();
 
@@ -101,6 +103,17 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             return;
         }
 
+        //get the destination resolution
+        if (jsonObject.has("document")) {
+            try {
+                this.compressionRatio = jsonObject.getJSONObject("document").getInt("compressionRatio");
+            } catch (JSONException e) {
+                finishWithError(e.getMessage());
+                return;
+            }
+        }
+
+
         documentScanView.setConfig(new AnylineViewConfig(this, jsonObject));
 
         // Optional: Set a ratio you want the documents to be restricted to. default is set to DIN_AX
@@ -122,26 +135,26 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 AnylineImage transformedImage = documentResult.getResult();
                 AnylineImage fullFrame = documentResult.getFullImage();
 
-                // resize display view based on larger side of document, and display document
-                int widthDP, heightDP;
-                Bitmap bmpTransformedImage = transformedImage.getBitmap();
-
-                if (bmpTransformedImage.getHeight() > bmpTransformedImage.getWidth()) {
-                    widthDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-                    heightDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 160, getResources().getDisplayMetrics());
-                    //Add a comment to this line
-
-                    imageViewResult.getLayoutParams().width = widthDP;
-                    imageViewResult.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                } else {
-                    widthDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 160, getResources().getDisplayMetrics());
-                    heightDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-
-                    imageViewResult.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    imageViewResult.getLayoutParams().height = heightDP;
-                }
-
-                imageViewResult.setImageBitmap(Bitmap.createScaledBitmap(transformedImage.getBitmap(), widthDP, heightDP, false));
+//                // resize display view based on larger side of document, and display document
+//                int widthDP, heightDP;
+//                Bitmap bmpTransformedImage = transformedImage.getBitmap();
+//
+//                if (bmpTransformedImage.getHeight() > bmpTransformedImage.getWidth()) {
+//                    widthDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+//                    heightDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 160, getResources().getDisplayMetrics());
+//                    //Add a comment to this line
+//
+//                    imageViewResult.getLayoutParams().width = widthDP;
+//                    imageViewResult.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                } else {
+//                    widthDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 160, getResources().getDisplayMetrics());
+//                    heightDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+//
+//                    imageViewResult.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                    imageViewResult.getLayoutParams().height = heightDP;
+//                }
+//
+//                imageViewResult.setImageBitmap(Bitmap.createScaledBitmap(transformedImage.getBitmap(), widthDP, heightDP, false));
 
                 /**
                  * IMPORTANT: cache provided frames here, and release them at the end of this onResult. Because
@@ -163,7 +176,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                     // get the transformed image as bitmap
                     // Bitmap bmp = transformedImage.getBitmap();
                     // save the image with quality 100 (only used for jpeg, ignored for png)
-                    transformedImage.save(outFile, 100);
+                    transformedImage.save(outFile, compressionRatio);
                     showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + outFile.getAbsolutePath());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -276,31 +289,31 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 }
             }
 
-           @Override
-           public void onTakePictureError(Throwable throwable) {
-               // This is called if the image could not be captured from the camera (most probably because of an
-               // OutOfMemoryError)
-               throw new RuntimeException(throwable);
-           }
+            @Override
+            public void onTakePictureError(Throwable throwable) {
+                // This is called if the image could not be captured from the camera (most probably because of an
+                // OutOfMemoryError)
+                throw new RuntimeException(throwable);
+            }
 
-           @Override
-           public void onPictureCornersDetected(AnylineImage anylineImage, List<PointF> list) {
-               // this is called after manual corner detection was requested
-               // Note: not implemented in this example
-           }
+            @Override
+            public void onPictureCornersDetected(AnylineImage anylineImage, List<PointF> list) {
+                // this is called after manual corner detection was requested
+                // Note: not implemented in this example
+            }
 
-           @Override
-           public void onPictureTransformed(AnylineImage anylineImage) {
-               // this is called after a full frame image and 4 corners were passed to the SDK for
-               // transformation (e.g. when a user manually selected the corners in an image)
-               // Note: not implemented in this example
-           }
+            @Override
+            public void onPictureTransformed(AnylineImage anylineImage) {
+                // this is called after a full frame image and 4 corners were passed to the SDK for
+                // transformation (e.g. when a user manually selected the corners in an image)
+                // Note: not implemented in this example
+            }
 
-           @Override
-           public void onPictureTransformError(DocumentScanView.DocumentError documentError) {
-               // this is called on any error while transforming the document image from the 4 corners
-               // Note: not implemented in this example
-           }
+            @Override
+            public void onPictureTransformError(DocumentScanView.DocumentError documentError) {
+                // this is called on any error while transforming the document image from the 4 corners
+                // Note: not implemented in this example
+            }
 
         });
 

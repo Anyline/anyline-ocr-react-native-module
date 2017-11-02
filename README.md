@@ -124,6 +124,9 @@ Add and import a JSON file with the proper structure and elements. The JSON conf
 If you want to get detailed information on the config JSON, go to our[`documentation`](https://documentation.anyline.io/toc/view_configuration/index.html).
 
 ### 6. Call the Anyline component 
+
+#### Callbacks
+
 ```
 AnylineOCR.setupScanViewWithConfigJson(
         JSON.stringify(config),
@@ -132,6 +135,22 @@ AnylineOCR.setupScanViewWithConfigJson(
         this.onError
     );
 ```
+
+#### Promise
+```
+openAnyline = async () => {
+    ...
+    
+    try {
+        const result = await AnylineOCR.setupScanViewWithConfigJson(JSON.stringify(config), “ANALOG_METER”);
+    } catch(error) {
+        console.error(error);
+    }
+    
+    ...
+}
+```
+
 
 ### 7. Add custom TrainData to the OCR Module
 If you want to add you custom traindata, you have to copy it into the native project folder.

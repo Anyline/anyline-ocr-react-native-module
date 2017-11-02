@@ -39,13 +39,13 @@ class Anyline extends Component {
     LayoutAnimation.easeInEaseOut();
   }
 
-  openAnyline = (type) => {
+  openAnyline = async (type) => {
 
     this.setState({buttonsDisabled: true});
     let config;
 
     this.setState({
-      currentScanMode : type
+      currentScanMode: type
     });
     switch (type) {
       case 'AUTO_ANALOG_DIGITAL_METER':
@@ -54,7 +54,7 @@ class Anyline extends Component {
       case 'DIAL_METER':
         config = AutoEnergyConfig;
         break;
-        case 'SERIAL_NUMBER':
+      case 'SERIAL_NUMBER':
         config = AutoEnergyConfig;
         break;
       case 'BARCODE':
@@ -87,12 +87,33 @@ class Anyline extends Component {
         break;
     }
 
-    AnylineOCR.setupScanViewWithConfigJson(
-        JSON.stringify(config),
-        type,
-        this.onResult,
-        this.onError
-    );
+
+    try {
+      const result = await AnylineOCR.setupScanViewWithConfigJson(JSON.stringify(config), type);
+
+      console.log(result);
+      this.setState({buttonsDisabled: false});
+
+      const data = JSON.parse(result);
+      LayoutAnimation.easeInEaseOut();
+      const fullImagePath = data.fullImagePath;
+      const imagePath = data.imagePath;
+
+      delete data.fullImagePath;
+      delete data.imagePath;
+
+      this.setState({
+        hasScanned: true,
+        result: data,
+        imagePath: imagePath,
+        fullImagePath: fullImagePath,
+      });
+    } catch (error) {
+      if (error !== 'Canceled') {
+        console.error(error);
+      }
+    }
+    this.setState({buttonsDisabled: false});
   };
 
   requestCameraPermission = async (type) => {
@@ -135,36 +156,6 @@ class Anyline extends Component {
         this.requestCameraPermission(type);
       }
     });
-  };
-
-  onResult = (dataString) => {
-    console.log(dataString);
-    this.setState({buttonsDisabled: false});
-
-    const data = JSON.parse(dataString);
-    LayoutAnimation.easeInEaseOut();
-    const fullImagePath = data.fullImagePath;
-    const imagePath = data.imagePath;
-    // data.outline = JSON.stringify(data.outline);
-
-    delete data.fullImagePath;
-    delete data.imagePath;
-
-    this.setState({
-      hasScanned: true,
-      result: data,
-      imagePath: imagePath,
-      fullImagePath: fullImagePath,
-
-    });
-  };
-
-  onError = (error) => {
-    this.setState({buttonsDisabled: false});
-    if (error !== 'Canceled') {
-      console.error(error);
-      alert(error);
-    }
   };
 
   emptyResult = () => {
@@ -213,7 +204,8 @@ class Anyline extends Component {
                   emptyResult={this.emptyResult}
               />
           ) : <Overview key="OverView" openAnyline={this.openAnyline}
-                        checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen} disabled={buttonsDisabled} />}
+                        checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}
+                        disabled={buttonsDisabled}/>}
         </ScrollView>
     );
   }
@@ -232,7 +224,7 @@ const styles = StyleSheet.create({
   },
   headline: {
     fontSize: 20,
-    fontWeight : 'bold',
+    fontWeight: 'bold',
     color: "white",
     marginTop: 50
   }

@@ -23,10 +23,16 @@
 @property (nonatomic, strong) RCTResponseSenderBlock onResultCallback;
 @property (nonatomic, strong) RCTResponseSenderBlock onErrorCallback;
 
+@property (nonatomic, strong) NSString *config;
+@property (nonatomic, strong) NSString *returnMethod;
+
 @end
 
 
-@implementation AnylineSDKPlugin
+@implementation AnylineSDKPlugin {
+    RCTPromiseResolveBlock _resolveBlock;
+    RCTPromiseRejectBlock _rejectBlock;
+}
 
 
 
@@ -39,8 +45,25 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
     self.onResultCallback = onResult;
     self.onErrorCallback = onError;
+    self.returnMethod = @"callback";
+    self.config = config;
+    [self initView:scanMode];
 
-    NSData *data = [config dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    _resolveBlock = resolve;
+    _rejectBlock = reject;
+    self.returnMethod = @"promise";
+    self.config = config;
+    [self initView:scanMode];
+
+
+}
+
+
+-(void)initView:(NSString *)scanMode {
+    NSData *data = [self.config dataUsingEncoding:NSUTF8StringEncoding];
     id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     self.jsonConfigDictionary = dictionary;
 
@@ -60,11 +83,12 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
             self.baseScanViewController = baseViewController;
             [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:self.baseScanViewController animated:YES completion:nil];
         } else {
-            self.onErrorCallback(@[[scanMode stringByAppendingString:@" - Unknown ScanMode"]]);
+            [self returnError:[scanMode stringByAppendingString:@" - Unknown ScanMode"]];
         }
     });
 
 }
+
 
 #pragma mark - AnylineBaseScanViewControllerDelegate
 - (void)anylineBaseScanViewController:(AnylineBaseScanViewController *)baseScanViewController didScan:(id)scanResult continueScanning:(BOOL)continueScanning {
@@ -80,11 +104,11 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
     } else {
         resultJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     }
-    self.onResultCallback(@[resultJson]);
+    [self returnSuccess:resultJson];
 }
 
 -(void)anylineBaseScanViewController:(AnylineBaseScanViewController *)baseScanViewController didStopScanning:(id)sender {
-    self.onErrorCallback(@[@"Canceled"]);
+    [self returnError:(@"Canceled")];
 }
 
 #pragma mark - Utility Funcitons
@@ -146,5 +170,23 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
     return [possibleScanModes containsObject: [scanMode uppercaseString]];
 
 }
+
+- (void)returnSuccess:(NSString *)result{
+    if([self.returnMethod isEqualToString:@"callback"]) {
+        self.onResultCallback(@[result]);
+    } else if([self.returnMethod isEqualToString:@"promise"]) {
+        _resolveBlock(result);
+    }
+}
+
+- (void)returnError:(NSString *)error{
+    if([self.returnMethod isEqualToString:@"callback"]) {
+        self.onErrorCallback(@[error]);
+    } else if([self.returnMethod isEqualToString:@"promise"]) {
+        _rejectBlock(@"ANYLINE_ERROR", error, nil);
+    }
+}
+
+
 
 @end

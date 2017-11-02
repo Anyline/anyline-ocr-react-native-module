@@ -26,7 +26,6 @@
     AnylineDocumentModuleView *docModuleView = [[AnylineDocumentModuleView alloc] initWithFrame:self.view.bounds];
     docModuleView.currentConfiguration = self.conf;
 
-
     NSError *error = nil;
     BOOL success = [docModuleView setupWithLicenseKey:self.key delegate:self error:&error];
 
@@ -60,11 +59,11 @@
                         hasResult:(UIImage *)transformedImage
                         fullImage:(UIImage *)fullFrame
                   documentCorners:(ALSquare *)corners {
-    
+
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
 
-    
-    NSString *imagePath = [self saveImageToFileSystem:transformedImage];
+    CGFloat dividedCompRate = (CGFloat) self.compressionRate/100;
+    NSString *imagePath = [self saveImageToFileSystem:transformedImage compressionQuality:dividedCompRate];
     NSString *fullImagePath = [self saveImageToFileSystem:fullFrame];
     NSString *outline = [self stringForOutline:corners];
     

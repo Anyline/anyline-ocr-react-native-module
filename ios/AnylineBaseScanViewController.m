@@ -182,11 +182,15 @@
 }
 
 - (NSString *)saveImageToFileSystem:(UIImage *)image {
+    return [self saveImageToFileSystem:image compressionQuality:0.9];
+}
+
+- (NSString *)saveImageToFileSystem:(UIImage *)image compressionQuality:(CGFloat)compressionQuality {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-  
-  
-    NSData *binaryImageData = UIImageJPEGRepresentation(image, 0.9);
+
+
+    NSData *binaryImageData = UIImageJPEGRepresentation(image, 0.2);
     NSString *uuid = [NSUUID UUID].UUIDString;
     NSString *imagePath = [NSString stringWithFormat:@"%@.jpg",uuid];
     

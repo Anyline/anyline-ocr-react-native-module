@@ -50,6 +50,9 @@ export default {
     "beepOnResult": false,
     "vibrateOnResult": false,
     "blinkAnimationOnResult": true,
-    "cancelOnResult": true
+    "cancelOnResult": true,
+    "document": {
+      "compressionRatio" : 10,
+    }
   }
 }

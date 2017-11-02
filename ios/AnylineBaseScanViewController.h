@@ -20,6 +20,8 @@
 
 - (NSString *)saveImageToFileSystem:(UIImage *)image;
 
+- (NSString *)saveImageToFileSystem:(UIImage *)image compressionQuality:(CGFloat)compressionQuality;
+
 - (void)flashResultFor:(NSTimeInterval) duration;
 
 - (NSString *)stringForOutline:(ALSquare *)square;
