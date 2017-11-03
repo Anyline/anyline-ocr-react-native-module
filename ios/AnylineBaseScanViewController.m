@@ -190,7 +190,7 @@
     NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
 
 
-    NSData *binaryImageData = UIImageJPEGRepresentation(image, 0.2);
+    NSData *binaryImageData = UIImageJPEGRepresentation(image, compressionQuality);
     NSString *uuid = [NSUUID UUID].UUIDString;
     NSString *imagePath = [NSString stringWithFormat:@"%@.jpg",uuid];
     

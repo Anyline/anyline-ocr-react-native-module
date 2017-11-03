@@ -116,7 +116,15 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
 
     if([self scanModeIndex:scanMode]){
         if ([[scanMode uppercaseString] isEqualToString:[@"DOCUMENT" uppercaseString]]) {
-            return [[AnylineDocumentScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+            AnylineDocumentScanViewController *docVC = [[AnylineDocumentScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+            NSDictionary *options = [self.jsonConfigDictionary valueForKey:@"options"];
+            if ([options valueForKey:@"document"]) {
+                NSDictionary *docConfig = [options valueForKey:@"document"];
+                docVC.compressionRate = [[docConfig valueForKey:@"compressionRatio"] integerValue];
+            } else {
+                docVC.compressionRate = 100;
+            }
+            return docVC;
         } else if ([[scanMode uppercaseString] isEqualToString:[@"MRZ" uppercaseString]]) {
             return [[AnylineMRZScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
         } else if ([[scanMode uppercaseString] isEqualToString:[@"BARCODE" uppercaseString]]) {
