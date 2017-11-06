@@ -10,7 +10,7 @@ export default function Result({
                                }) {
   let fullImage = (<View />);
   let fullImageText = (<View />);
-  if (currentScanMode === 'AUTO_ANALOG_DIGITAL_METER' || currentScanMode === 'ANALOG_METER' || currentScanMode === 'DIGITAL_METER' || currentScanMode === 'MRZ') {
+  if (currentScanMode === 'AUTO_ANALOG_DIGITAL_METER' || currentScanMode === 'ANALOG_METER' || currentScanMode === 'DIGITAL_METER' || currentScanMode === 'MRZ' || currentScanMode === 'DOCUMENT') {
     fullImage = (
         <Image
             style={styles.image}
@@ -22,7 +22,8 @@ export default function Result({
     );
   }
 
-
+  console.log(imagePath);
+  console.log(fullImagePath);
   return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>

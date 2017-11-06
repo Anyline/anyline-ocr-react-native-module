@@ -169,7 +169,8 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 File outDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "ok");
                 outDir.mkdir();
                 // change the file ending to png if you want a png
-                File outFile = new File(outDir, "" + System.currentTimeMillis() + ".jpg");
+                File outFile = new File(outDir, "transformed_" + System.currentTimeMillis() + ".jpg");
+                File outFileFull = new File(outDir, "full_" + System.currentTimeMillis() + ".jpg");
                 try {
                     // convert the transformed image into a gray scaled image internally
                     // transformedImage.getGrayCvMat(false);
@@ -177,6 +178,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                     // Bitmap bmp = transformedImage.getBitmap();
                     // save the image with quality 100 (only used for jpeg, ignored for png)
                     transformedImage.save(outFile, compressionRatio);
+                    fullFrame.save(outFileFull, compressionRatio);
                     showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + outFile.getAbsolutePath());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -190,6 +192,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 JSONObject jsonResult = new JSONObject();
                 try {
                     jsonResult.put("imagePath", outFile.getAbsolutePath());
+                    jsonResult.put("fullImagePath", outFileFull.getAbsolutePath());
                     jsonResult.put("outline", jsonForOutline(documentResult.getOutline()));
                     jsonResult.put("confidence", documentResult.getConfidence());
 
