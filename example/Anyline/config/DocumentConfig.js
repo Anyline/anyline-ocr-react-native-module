@@ -52,7 +52,7 @@ export default {
     "blinkAnimationOnResult": true,
     "cancelOnResult": true,
     "document": {
-      "compressionRatio" : 10,
+      "compressionRatio" : 90,
     }
   }
 }
