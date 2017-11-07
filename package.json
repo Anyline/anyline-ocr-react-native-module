@@ -3,7 +3,7 @@
   "version": "3.18.0",
   "main": "index.js",
   "description": "A Plugin for connecting Anyline with React-Native",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
     "url": "https://github.com/Anyline/anyline-ocr-react-native-module"

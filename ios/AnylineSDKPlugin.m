@@ -120,9 +120,9 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
             NSDictionary *options = [self.jsonConfigDictionary valueForKey:@"options"];
             if ([options valueForKey:@"document"]) {
                 NSDictionary *docConfig = [options valueForKey:@"document"];
-                docVC.compressionRate = [[docConfig valueForKey:@"compressionRatio"] integerValue];
+                docVC.quality = [[docConfig valueForKey:@"quality"] integerValue];
             } else {
-                docVC.compressionRate = 100;
+                docVC.quality = 100;
             }
             return docVC;
         } else if ([[scanMode uppercaseString] isEqualToString:[@"MRZ" uppercaseString]]) {

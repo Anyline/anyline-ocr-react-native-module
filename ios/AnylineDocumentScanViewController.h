@@ -10,6 +10,6 @@
 
 @interface AnylineDocumentScanViewController : AnylineBaseScanViewController
 
-@property (nonatomic, assign) NSUInteger compressionRate;
+@property (nonatomic, assign) NSUInteger quality;
 
 @end

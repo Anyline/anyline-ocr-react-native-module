@@ -62,7 +62,7 @@
 
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
 
-    CGFloat dividedCompRate = (CGFloat) self.compressionRate/100;
+    CGFloat dividedCompRate = (CGFloat) self.quality/100;
     NSString *imagePath = [self saveImageToFileSystem:transformedImage compressionQuality:dividedCompRate];
     NSString *fullImagePath = [self saveImageToFileSystem:fullFrame compressionQuality:dividedCompRate];
     NSString *outline = [self stringForOutline:corners];

@@ -29,10 +29,10 @@
     energyModuleView.currentConfiguration = self.conf;
 
     [energyModuleView setScanMode:self.scanMode error:nil];
-    [energyModuleView.videoView setBarcodeDelegate:self];
+    [energyModuleView.captureDeviceManager setBarcodeDelegate:self];
 
     if (self.nativeBarcodeEnabled) {
-        energyModuleView.videoView.barcodeDelegate = self;
+        energyModuleView.captureDeviceManager.barcodeDelegate = self;
     }
 
     self.moduleView = energyModuleView;
@@ -143,7 +143,7 @@
 
 
 #pragma mark - AnylineNativeBarcodeDelegate
-- (void)anylineVideoView:(AnylineVideoView *)videoView
+- (void)anylineVideoView:(AnylineVideoView *)captureDeviceManager
     didFindBarcodeResult:(NSString *)scanResult
                     type:(NSString *)barcodeType  {
 

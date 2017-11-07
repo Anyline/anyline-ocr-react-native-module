@@ -17,7 +17,7 @@ export default {
   options: {
     "captureResolution": '1080p',
     "cutout": {
-      "style": 'rect',
+      "style": 'CONTOUR_RECT',
       "alignment": 'top',
       "offset": {
         'x': 0,

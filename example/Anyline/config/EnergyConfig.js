@@ -16,7 +16,7 @@ export default {
   'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=', options: {
     captureResolution: '1080',
     cutout: {
-      style: 'rect',
+      style: 'CONTOUR_RECT',
       alignment: 'top',
       offset: {
         'x': 0,

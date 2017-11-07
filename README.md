@@ -225,6 +225,17 @@ Callback -> Stringified JSON
 }
 ```
 More information about the simultaneous barcode scanning [here](https://documentation.anyline.io/toc/modules/overview.html#anyline-modules-simultaneous-barcode-scanning).
+
 ### onError Function
 Callback -> String
 - String errorMessage
+
+## Images
+
+Keep in mind, all the images are saved in the cache directory of the app. For performance reasons, we only provide the 
+path as string, so we don't have to transfer the whole image through the bridge. Please be aware,  that you should not 
+use the images in the cache directory for persistent storage, but store the images in a location of your choice for persistence. 
+
+## License
+
+See LICENSE file.

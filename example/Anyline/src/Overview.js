@@ -13,7 +13,7 @@ export default function Overview({openAnyline, checkCameraPermissionAndOpen, dis
 
         <Text style={styles.text}>ENERGY</Text>
         <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Energy Auto Analog/Digital Meter Scanner'}
+          <Button style={styles.buttons} title={'  Auto Analog/Digital Meter Scanner'}
                   color="#0099FF"
                   disabled={disabled}
                   onPress={() => {
@@ -21,14 +21,14 @@ export default function Overview({openAnyline, checkCameraPermissionAndOpen, dis
                   }}/>
         </View>
         <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Energy Analog Meter Scanner'} color="#0099FF"
+          <Button style={styles.buttons} title={'  Analog Meter Scanner'} color="#0099FF"
                   disabled={disabled}
                   onPress={() => {
                     platformPermissionCheck('ANALOG_METER')
                   }}/>
         </View>
         <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Energy Digital Meter Scanner'} color="#0099FF"
+          <Button style={styles.buttons} title={'  Digital Meter Scanner'} color="#0099FF"
                   disabled={disabled}
                   onPress={() => {
                     platformPermissionCheck('DIGITAL_METER')
