@@ -17,15 +17,11 @@ export default {
   options: {
     "captureResolution": '1080p',
     "cutout": {
-      "style": 'CONTOUR_RECT',
-      "alignment": 'top',
-      "offset": {
-        'x': 0,
-        'y': 120,
-      },
+      "style": 'rect',
+      "alignment": 'top_half',
       "strokeWidth": 2,
       "cornerRadius": 4,
-      "strokeColor": 'F21C0A',
+      "strokeColor": 'FFFFFF',
       "outerColor": '000000',
       "outerAlpha": 0.3,
     },
@@ -39,7 +35,7 @@ export default {
     "cancelOnResult": true,
     "reportingEnabled": true,
     "visualFeedback": {
-      "style": "contour_rect"
+      "style": "CONTOUR_RECT"
     }
   }
 }

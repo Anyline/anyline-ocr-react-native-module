@@ -128,6 +128,12 @@ android.packagingOptions {
     pickFirst('lib/*/libgnustl_shared.so')
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile project(':react-native-vector-icons')
     compile project(':react-native-android-permissions')

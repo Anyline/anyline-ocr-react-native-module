@@ -6,8 +6,8 @@
 
 @property (nonatomic, strong) UISegmentedControl *segment;
 
-    @property (nonatomic, strong) UILabel *label;
-    
+@property (nonatomic, strong) UILabel *label;
+
 @property (nonatomic, strong) NSString *detectedBarcode;
 
 @end
@@ -40,30 +40,32 @@
 
     [self.view sendSubviewToBack:self.moduleView];
 
-    
-    //Add Segment
-    self.segment = [[UISegmentedControl alloc] initWithItems:self.jsonConfig.segmentTitles];
 
-    self.segment.tintColor = self.jsonConfig.segmentTintColor;
-    self.segment.hidden = YES;
+    //Add Segment
+    if(self.jsonConfig.segmentModes){
+        self.segment = [[UISegmentedControl alloc] initWithItems:self.jsonConfig.segmentTitles];
+
+        self.segment.tintColor = self.jsonConfig.segmentTintColor;
+        self.segment.hidden = YES;
 
         NSInteger index = [self.jsonConfig.segmentModes indexOfObject:[self stringFromScanMode:self.scanMode]];
         [self.segment setSelectedSegmentIndex:index];
         [self.segment addTarget:self action:@selector(segmentChange:) forControlEvents:UIControlEventValueChanged];
         [self.view addSubview:self.segment];
+    }
 
     //Add Label
     self.label = [[UILabel alloc] init];
     self.label.hidden = YES;
-    
+
     [self.label setText:self.jsonConfig.labelText];
     [self.label setTextColor:self.jsonConfig.labelColor];
     self.label.font = [self.label.font fontWithSize:self.jsonConfig.labelSize];
     [self.label sizeToFit];
     [self.view addSubview:self.label];
 
-    
-    
+
+
     self.detectedBarcode = @"";
 
 }
@@ -71,15 +73,15 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    
-    //Segment
-    self.segment.frame = CGRectMake(self.moduleView.cutoutRect.origin.x + self.jsonConfig.segmentXPositionOffset/2,
-                                    self.moduleView.cutoutRect.origin.y + self.jsonConfig.segmentYPositionOffset/2,
-                                    self.view.frame.size.width - 2*(self.moduleView.cutoutRect.origin.x + self.jsonConfig.segmentXPositionOffset/2),
-                                    self.segment.frame.size.height);
-    self.segment.hidden = NO;
-    
-    
+    if(self.jsonConfig.segmentModes){
+        //Segment
+        self.segment.frame = CGRectMake(self.moduleView.cutoutRect.origin.x + self.jsonConfig.segmentXPositionOffset/2,
+                                        self.moduleView.cutoutRect.origin.y + self.jsonConfig.segmentYPositionOffset/2,
+                                        self.view.frame.size.width - 2*(self.moduleView.cutoutRect.origin.x + self.jsonConfig.segmentXPositionOffset/2),
+                                        self.segment.frame.size.height);
+        self.segment.hidden = NO;
+    }
+
     //Label
     self.label.center = CGPointMake(self.moduleView.cutoutRect.origin.x+ self.jsonConfig.labelXPositionOffset/2.5,
                                     self.moduleView.cutoutRect.origin.y + self.jsonConfig.labelYPositionOffset/4);
@@ -142,11 +144,10 @@
 }
 
 
-#pragma mark - AnylineNativeBarcodeDelegate
-- (void)anylineVideoView:(AnylineVideoView *)captureDeviceManager
-    didFindBarcodeResult:(NSString *)scanResult
-                    type:(NSString *)barcodeType  {
-
+#pragma mark - AnylineCaptureDeviceManager
+- (void)anylineCaptureDeviceManager:(ALCaptureDeviceManager *)captureDeviceManager
+               didFindBarcodeResult:(NSString *)scanResult
+                               type:(NSString *)barcodeType {
     self.detectedBarcode = scanResult;
 }
 
@@ -155,7 +156,7 @@
 - (IBAction)segmentChange:(id)sender {
     NSString *modeString = self.jsonConfig.segmentModes[((UISegmentedControl *)sender).selectedSegmentIndex];
     ALScanMode scanMode = [self scanModeFromString:modeString];
-    ((AnylineEnergyModuleView *)self.moduleView).scanMode = scanMode;
+    [((AnylineEnergyModuleView *)self.moduleView) setScanMode:scanMode error:nil];
 
     self.moduleView.currentConfiguration = self.conf;
 }

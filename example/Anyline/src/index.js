@@ -79,7 +79,6 @@ class Anyline extends Component {
         break;
       case 'ANALOG_METER':
         config = EnergyConfig;
-        config.options.visualFeedback.style = 'rect';
         break;
       case 'DIGITAL_METER':
       default:
@@ -230,4 +229,4 @@ const styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('Anyline', () => Anyline);
+AppRegistry.registerComponent('anyline', () => Anyline);

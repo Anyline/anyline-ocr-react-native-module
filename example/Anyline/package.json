@@ -6,7 +6,9 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "reinstall": "rm -rf node_modules/anyline-ocr-react-native-module && npm i && react-native link",
     "reinstall-pods": "cd ios/ && rm -rf Pods Podfile.lock && pod install --verbose && cd .. && react-native link",
-    "test": "jest"
+    "test": "jest",
+    "bundleAndroid": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
+    "bundleiOS": "react-native bundle --entry-file index.ios.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios"
   },
   "dependencies": {
     "anyline-ocr-react-native-module": "../..",

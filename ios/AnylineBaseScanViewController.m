@@ -175,6 +175,16 @@
 }
 
 - (void)doneButtonPressed:(id)sender {
+    Class captureDeviceClass = NSClassFromString(@"AVCaptureDevice");
+    if (captureDeviceClass != nil) {
+        AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        if ([device hasTorch] && [device hasFlash]){
+            [device lockForConfiguration:nil];
+            [device setTorchMode:AVCaptureTorchModeOff];
+            [device setFlashMode:AVCaptureFlashModeOff];
+        }
+    };
+
     [self.moduleView cancelScanningAndReturnError:nil];
     [self dismissViewControllerAnimated:YES completion:^{
         [self.delegate anylineBaseScanViewController:self didStopScanning:sender];

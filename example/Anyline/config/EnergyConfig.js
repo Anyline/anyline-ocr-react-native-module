@@ -16,15 +16,11 @@ export default {
   'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=', options: {
     captureResolution: '1080',
     cutout: {
-      style: 'CONTOUR_RECT',
-      alignment: 'top',
-      offset: {
-        'x': 0,
-        'y': 120,
-      },
+      style: 'rect',
+      alignment: 'top_half',
       strokeWidth: 2,
       cornerRadius: 4,
-      strokeColor: 'F21C0A',
+      strokeColor: 'FFFFFF',
       outerColor: '000000',
       outerAlpha: 0.3,
     },
@@ -38,7 +34,7 @@ export default {
     cancelOnResult: true,
     reportingEnabled: true,
     visualFeedback: {
-      style: "contour_rect"
+      style: "CONTOUR_RECT"
     },
     segment: {
       titles: [
@@ -52,7 +48,7 @@ export default {
       tintColor: 'F21C0A',
       offset: {
         x: 0,
-        y: 600
+        y: 500
       }
     }
   },

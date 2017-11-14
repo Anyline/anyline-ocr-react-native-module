@@ -8,9 +8,9 @@ export default function Result({
                                  emptyResult,
                                  currentScanMode,
                                }) {
-  let fullImage = (<View />);
-  let fullImageText = (<View />);
-  if (currentScanMode === 'AUTO_ANALOG_DIGITAL_METER' || currentScanMode === 'ANALOG_METER' || currentScanMode === 'DIGITAL_METER' || currentScanMode === 'MRZ' || currentScanMode === 'DOCUMENT') {
+  let fullImage = (<View/>);
+  let fullImageText = (<View/>);
+  if (fullImagePath && fullImagePath != '') {
     fullImage = (
         <Image
             style={styles.image}
@@ -22,11 +22,9 @@ export default function Result({
     );
   }
 
-  console.log(imagePath);
-  console.log(fullImagePath);
   return (
       <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContainer} >
 
           {fullImageText}
           {fullImage}
@@ -39,7 +37,10 @@ export default function Result({
           />
           {Object.keys(result).map((value, key) => {
             return (<Text style={styles.text} key={`Result_Text_${key}`}>
-              {`${value}: ${result[value]}`}
+              {(value !== 'confidence' || result[value] > 0) &&
+               `${value}: ${result[value]}`
+              }
+
             </Text>);
           })}
           <View style={styles.backButton}>
