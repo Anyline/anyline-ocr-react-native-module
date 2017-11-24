@@ -51,7 +51,7 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
 
 }
 
-RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(setupScanViewWithConfigJsonPromise:(NSString *)config scanMode:(NSString *)scanMode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     _resolveBlock = resolve;
     _rejectBlock = reject;
     self.returnMethod = @"promise";

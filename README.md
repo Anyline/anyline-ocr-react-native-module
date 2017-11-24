@@ -142,7 +142,7 @@ openAnyline = async () => {
     ...
     
     try {
-        const result = await AnylineOCR.setupScanViewWithConfigJson(JSON.stringify(config), “ANALOG_METER”);
+        const result = await AnylineOCR.setupScanViewWithConfigJsonPromise(JSON.stringify(config), “ANALOG_METER”);
     } catch(error) {
         console.error(error);
     }
@@ -150,7 +150,6 @@ openAnyline = async () => {
     ...
 }
 ```
-
 
 ### 7. Add custom TrainData to the OCR Module
 If you want to add you custom traindata, you have to copy it into the native project folder.

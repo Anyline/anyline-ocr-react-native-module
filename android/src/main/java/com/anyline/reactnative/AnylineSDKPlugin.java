@@ -79,7 +79,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     }
 
     @ReactMethod
-    public void setupScanViewWithConfigJson(String config, String scanMode, final Promise promise) {
+    public void setupScanViewWithConfigJsonPromise(String config, String scanMode, final Promise promise) {
         this.promise = promise;
         this.returnMethod = "promise";
         this.config = config;

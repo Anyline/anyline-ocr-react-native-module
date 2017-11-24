@@ -4,10 +4,10 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.anyline.reactnative.AnylinePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.burnweb.rnpermissions.RNPermissionsPackage;
-import com.anyline.reactnative.AnylinePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -29,9 +29,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AnylinePackage(),
             new VectorIconsPackage(),
-            new RNPermissionsPackage(),
-            new AnylinePackage()
+            new RNPermissionsPackage()
       );
     }
   };

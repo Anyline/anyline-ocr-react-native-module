@@ -12,8 +12,7 @@ import java.util.List;
 
 public class AnylinePackage implements ReactPackage {
 
-
-    public List<Class<? extends JavaScriptModule>> createJSModules() {
+    public List<Class<? extends JavaScriptModule>> createJSModules(){
         return Collections.emptyList();
     }
 
