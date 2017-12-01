@@ -25,6 +25,11 @@
 
     AnylineDocumentModuleView *docModuleView = [[AnylineDocumentModuleView alloc] initWithFrame:self.view.bounds];
     docModuleView.currentConfiguration = self.conf;
+    
+    // Set max Output Resolution
+    if(!CGSizeEqualToSize(CGSizeZero, self.maxOutputResolution)){
+        docModuleView.maxOutputResolution = self.maxOutputResolution
+    }
 
     NSError *error = nil;
     BOOL success = [docModuleView setupWithLicenseKey:self.key delegate:self error:&error];

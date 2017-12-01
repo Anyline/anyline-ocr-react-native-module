@@ -50,6 +50,9 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
     private long lastErrorRecieved = 0;
     private int quality = 100;
 
+    private Double maxDocumentOutputResolutionWidth = null;
+    private Double maxDocumentOutputResolutionHeight = null;
+
     private android.os.Handler handler = new android.os.Handler();
 
     // takes care of fading the error message out after some time with no error reported from the SDK
@@ -104,6 +107,8 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
         if (jsonObject.has("document")) {
             try {
                 this.quality = jsonObject.getJSONObject("document").getInt("quality");
+                this.maxDocumentOutputResolutionWidth = jsonObject.getJSONObject("document").getJSONObject("maxOutputResolution").getDouble("width");
+                this.maxDocumentOutputResolutionHeight = jsonObject.getJSONObject("document").getJSONObject("maxOutputResolution").getDouble("height");
             } catch (JSONException e) {
                 finishWithError(e.getMessage());
                 return;
@@ -118,6 +123,11 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
 
         // Optional: Set a maximum deviation for the ratio. 0.15 is the default
         documentScanView.setMaxDocumentRatioDeviation(0.15);
+
+        // Set maximum output resolution
+        if (maxDocumentOutputResolutionWidth != null && maxDocumentOutputResolutionHeight != null) {
+            documentScanView.setMaxDocumentOutputResolution(maxDocumentOutputResolutionWidth, maxDocumentOutputResolutionHeight);
+        }
 
         // initialize Anyline with the license key and a Listener that is called if a result is found
         documentScanView.initAnyline(licenseKey, new DocumentResultListener() {

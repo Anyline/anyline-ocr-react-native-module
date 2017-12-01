@@ -53,6 +53,10 @@ export default {
     "cancelOnResult": true,
     "document": {
       "quality" : 90,
+      "maxOutputResoultion" : {
+        "width" : 1920,
+        "height" : 1080
+      }
     }
   }
 }

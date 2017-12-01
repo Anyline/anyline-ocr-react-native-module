@@ -120,9 +120,21 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJsonPromise:(NSString *)config scanMode
             NSDictionary *options = [self.jsonConfigDictionary valueForKey:@"options"];
             if ([options valueForKey:@"document"]) {
                 NSDictionary *docConfig = [options valueForKey:@"document"];
-                docVC.quality = [[docConfig valueForKey:@"quality"] integerValue];
-            } else {
-                docVC.quality = 100;
+                
+                // Check for Document quality Config and set it
+                if([docConfig valueForKey:@"quality"]){
+                    docVC.quality = [[docConfig valueForKey:@"quality"] integerValue];
+                } else {
+                    docVC.quality = 100;
+                }
+                
+                // Check for Document Max Output Config and set it
+                if([docConfig valueForKey:@"maxOutputResoultion"]){
+                    NSDictionary *maxOutputResoultionConfig = [options valueForKey:@"maxOutputResoultion"];
+                    if([maxOutputResoultionConfig valueForKey:@"width"] && [docConfig valueForKey:@"height"]){
+                        docVC.maxOutputResolution = CGSizeMake([[maxOutputResoultionConfig valueForKey:@"width"] doubleValue], [[maxOutputResoultionConfig valueForKey:@"height"] doubleValue]);
+                    }
+                }
             }
             return docVC;
         } else if ([[scanMode uppercaseString] isEqualToString:[@"MRZ" uppercaseString]]) {
