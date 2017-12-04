@@ -88,7 +88,7 @@ class Anyline extends Component {
 
 
     try {
-      const result = await AnylineOCR.setupScanViewWithConfigJsonPromise(JSON.stringify(config), type);
+      const result = await AnylineOCR.setupPromise(JSON.stringify(config), type);
 
       console.log(result);
       this.setState({buttonsDisabled: false});

@@ -56,6 +56,10 @@ export default {
       "maxOutputResoultion" : {
         "width" : 1920,
         "height" : 1080
+      },
+      "ratio" : {
+        "rations" : ["0.707"],
+        "deviation" : "0.15"
       }
     }
   }

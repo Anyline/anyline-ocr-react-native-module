@@ -42,23 +42,29 @@ RCT_EXPORT_MODULE();
     return [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
 }
 
+// Deprecated
 RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
     self.onResultCallback = onResult;
     self.onErrorCallback = onError;
     self.returnMethod = @"callback";
     self.config = config;
     [self initView:scanMode];
-
 }
 
-RCT_EXPORT_METHOD(setupScanViewWithConfigJsonPromise:(NSString *)config scanMode:(NSString *)scanMode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(setup:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
+    self.onResultCallback = onResult;
+    self.onErrorCallback = onError;
+    self.returnMethod = @"callback";
+    self.config = config;
+    [self initView:scanMode];
+}
+
+RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     _resolveBlock = resolve;
     _rejectBlock = reject;
     self.returnMethod = @"promise";
     self.config = config;
     [self initView:scanMode];
-
-
 }
 
 

@@ -128,7 +128,7 @@ If you want to get detailed information on the config JSON, go to our[`documenta
 #### Callbacks
 
 ```
-AnylineOCR.setupScanViewWithConfigJson(
+AnylineOCR.setup(
         JSON.stringify(config),
         “ANALOG_METER”,
         this.onResult,
@@ -142,7 +142,7 @@ openAnyline = async () => {
     ...
     
     try {
-        const result = await AnylineOCR.setupScanViewWithConfigJsonPromise(JSON.stringify(config), “ANALOG_METER”);
+        const result = await AnylineOCR.setupPromise(JSON.stringify(config), “ANALOG_METER”);
     } catch(error) {
         console.error(error);
     }
@@ -150,6 +150,18 @@ openAnyline = async () => {
     ...
 }
 ```
+
+##### Deprecated
+```
+AnylineOCR.setupScanViewWithConfigJson(
+        JSON.stringify(config),
+        “ANALOG_METER”,
+        this.onResult,
+        this.onError
+    );
+```
+
+
 
 ### 7. Add custom TrainData to the OCR Module
 If you want to add you custom traindata, you have to copy it into the native project folder.

@@ -68,6 +68,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         return REACT_CLASS;
     }
 
+    // Deprecated
     @ReactMethod
     public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
         onResultCallback = onResultReact;
@@ -79,7 +80,17 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     }
 
     @ReactMethod
-    public void setupScanViewWithConfigJsonPromise(String config, String scanMode, final Promise promise) {
+    public void setup(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
+        onResultCallback = onResultReact;
+        onErrorCallback = onErrorReact;
+        this.returnMethod = "callback";
+        this.config = config;
+
+        routeScanMode(scanMode);
+    }
+
+    @ReactMethod
+    public void setupPromise(String config, String scanMode, final Promise promise) {
         this.promise = promise;
         this.returnMethod = "promise";
         this.config = config;

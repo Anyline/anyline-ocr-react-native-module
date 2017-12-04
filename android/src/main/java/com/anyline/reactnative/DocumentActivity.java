@@ -53,6 +53,9 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
     private Double maxDocumentOutputResolutionWidth = null;
     private Double maxDocumentOutputResolutionHeight = null;
 
+    private ArrayList<Double> ratios = null;
+    private Double ratioDeviation = null;
+
     private android.os.Handler handler = new android.os.Handler();
 
     // takes care of fading the error message out after some time with no error reported from the SDK
@@ -103,26 +106,36 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             return;
         }
 
-        //get the destination resolution
+        // get Document specific Configs
         if (jsonObject.has("document")) {
             try {
-                this.quality = jsonObject.getJSONObject("document").getInt("quality");
-                this.maxDocumentOutputResolutionWidth = jsonObject.getJSONObject("document").getJSONObject("maxOutputResolution").getDouble("width");
-                this.maxDocumentOutputResolutionHeight = jsonObject.getJSONObject("document").getJSONObject("maxOutputResolution").getDouble("height");
+                JSONObject documentConfig = jsonObject.getJSONObject("document");
+                this.quality = documentConfig.getInt("quality");
+                this.maxDocumentOutputResolutionWidth = documentConfig.getJSONObject("maxOutputResolution").getDouble("width");
+                this.maxDocumentOutputResolutionHeight = documentConfig.getJSONObject("maxOutputResolution").getDouble("height");
+                this.ratios = getArrayListFromJsonArray(documentConfig.getJSONObject("ratio").getJSONArray("ratios"));
+                this.ratioDeviation = documentConfig.getJSONObject("ratio").getDouble("deviation");
             } catch (JSONException e) {
-                finishWithError(e.getMessage());
-                return;
+                Log.e(TAG, e.getMessage());
             }
         }
 
 
+        // Set a ratio you want the documents to be restricted to.
+        if(this.ratios != null){
+            documentScanView.setDocumentRatios(this.ratios.toArray(new Double[0]));
+        } else {
+            documentScanView.setDocumentRatios(DocumentScanView.DocumentRatio.DIN_AX_PORTRAIT.getRatio(), DocumentScanView.DocumentRatio.DIN_AX_LANDSCAPE.getRatio());
+        }
+
+        // Set a maximum deviation for the ratio. 0.15 is the default
+        if(this.ratios != null){
+            documentScanView.setMaxDocumentRatioDeviation(this.ratioDeviation);
+        } else {
+            documentScanView.setMaxDocumentRatioDeviation(0.15);
+        }
+
         documentScanView.setConfig(new AnylineViewConfig(this, jsonObject));
-
-        // Optional: Set a ratio you want the documents to be restricted to. default is set to DIN_AX
-        documentScanView.setDocumentRatios(DocumentScanView.DocumentRatio.DIN_AX_PORTRAIT.getRatio(), DocumentScanView.DocumentRatio.DIN_AX_LANDSCAPE.getRatio());
-
-        // Optional: Set a maximum deviation for the ratio. 0.15 is the default
-        documentScanView.setMaxDocumentRatioDeviation(0.15);
 
         // Set maximum output resolution
         if (maxDocumentOutputResolutionWidth != null && maxDocumentOutputResolutionHeight != null) {

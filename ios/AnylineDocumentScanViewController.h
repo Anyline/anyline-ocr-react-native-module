@@ -1,8 +1,8 @@
 //
 //  AnylineDocumentScanViewController.h
-//  Anyline Cordova Example
+//  Anyline React-Native Example
 //
-//  Created by Daniel Albertini on 23/06/16.
+//  Created by Jonas Laux
 //
 //
 
@@ -25,6 +25,15 @@
   *
   * @since 3.19
   */
+@property (nonatomic, assign) CGSize maxOutputResolution;
+
+
+/**
+ * Maximum resolution of the output image
+ * @warning Parameter can only be changed when the scanning is not running.
+ *
+ * @since 3.19
+ */
 @property (nonatomic, assign) CGSize maxOutputResolution;
 
 

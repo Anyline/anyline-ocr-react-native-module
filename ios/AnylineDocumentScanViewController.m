@@ -25,15 +25,16 @@
 
     AnylineDocumentModuleView *docModuleView = [[AnylineDocumentModuleView alloc] initWithFrame:self.view.bounds];
     docModuleView.currentConfiguration = self.conf;
-    
-    // Set max Output Resolution
-    if(!CGSizeEqualToSize(CGSizeZero, self.maxOutputResolution)){
-        docModuleView.maxOutputResolution = self.maxOutputResolution
-    }
 
     NSError *error = nil;
     BOOL success = [docModuleView setupWithLicenseKey:self.key delegate:self error:&error];
 
+    [docModuleView setDocumentRatios:@[ALDocumentRatioLetterPortrait]];
+    
+    // Set max Output Resolution
+    if(!CGSizeEqualToSize(CGSizeZero, self.maxOutputResolution)){
+        docModuleView = self.maxOutputResolution
+    }
 
     self.moduleView = docModuleView;
 
@@ -50,13 +51,6 @@
 
 }
 
-//- (void)viewDidLayoutSubviews {
-//    [self updateWarningPosition:
-//     self.moduleView.cutoutRect.origin.y +
-//     self.moduleView.cutoutRect.size.height +
-//     self.moduleView.frame.origin.y +
-//     90];
-//}
 
 #pragma mark - AnylineDocumentModuleDelegate method
 
@@ -153,8 +147,5 @@
     }];
 }
 
-//- (void)updateWarningPosition:(CGFloat)newPosition {
-//    self.warningView.center = CGPointMake(self.warningView.center.x, newPosition);
-//}
 
 @end
