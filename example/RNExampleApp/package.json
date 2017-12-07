@@ -1,0 +1,27 @@
+{
+  "name": "RNExampleApp",
+  "version": "3.19.0",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "reinstall": "yarn remove anyline-ocr-react-native-module && yarn add ../../plugin && react-native link",
+    "reinstall-pods": "cd ios/ && rm -rf Pods Podfile.lock && pod install --verbose && cd .. && react-native link",
+    "test": "jest",
+    "bundleAndroid": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
+    "bundleiOS": "react-native bundle --entry-file index.ios.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios"
+  },
+  "dependencies": {
+    "anyline-ocr-react-native-module": "../../plugin",
+    "react": "16.0.0",
+    "react-native": "0.51.0"
+  },
+  "devDependencies": {
+    "babel-jest": "21.2.0",
+    "babel-preset-react-native": "4.0.0",
+    "jest": "21.2.1",
+    "react-test-renderer": "16.0.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "anyline-ocr-react-native-module",
+  "version": "3.19.0",
+  "main": "index.js",
+  "description": "A Plugin for connecting Anyline with React-Native",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Anyline/anyline-ocr-react-native-module"
+  },
+  "bugs": {
+    "url": "https://github.com/Anyline/anyline-ocr-react-native-module/issues"
+  },
+  "keywords": [
+    "reactnative",
+    "anyline",
+    "ocr"
+  ],
+  "directories": {
+    "example": "examples"
+  }
+}

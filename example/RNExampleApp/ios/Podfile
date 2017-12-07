@@ -1,0 +1,7 @@
+project 'RNExampleApp.xcodeproj'
+
+target 'RNExampleApp' do
+  pod 'React', :path => '../node_modules/react-native'
+  pod 'AnylineReact', path: '../node_modules/anyline-ocr-react-native-module/ios'
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/Yoga'
+end
