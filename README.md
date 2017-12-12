@@ -163,8 +163,10 @@ AnylineOCR.setupScanViewWithConfigJson(
 
 
 
-### 7. Add custom TrainData to the OCR Module
-If you want to add you custom traindata, you have to copy it into the native project folder.
+### 7. Add TrainData to the OCR Module
+If you are using the ANYLINE_OCR module, you'll have to add some traineddata. There are some predefined traineddata which
+you can find in the example app. Also the OCR Config has to reflect the path. Check the VoucherConfig.js in the 
+example/RNExampleApp/config folder.
 
 #### iOS
 ```
@@ -183,7 +185,6 @@ android
                           └─── traindData
                                   └─── myTrainedData.traineddata
 ```
-Also the OCR Config has to reflect the path.
 
 
 ## Props
