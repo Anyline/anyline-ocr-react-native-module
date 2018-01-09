@@ -14,7 +14,6 @@
     [super viewDidLoad];
 
     AnylineMRZModuleView *mrzModuleView = [[AnylineMRZModuleView alloc] initWithFrame:self.view.bounds];
-    mrzModuleView.currentConfiguration = self.conf;
 
     NSError *error = nil;
     [mrzModuleView setupWithLicenseKey:self.key delegate:self error:&error];
@@ -22,6 +21,8 @@
 //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 //            [alert show];
 //        }
+
+    mrzModuleView.currentConfiguration = self.conf;
 
     self.moduleView = mrzModuleView;
 

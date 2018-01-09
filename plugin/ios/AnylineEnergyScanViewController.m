@@ -26,7 +26,7 @@
     //            [alert show];
     //        }
 
-    energyModuleView.currentConfiguration = self.conf;
+
 
     [energyModuleView setScanMode:self.scanMode error:nil];
     [energyModuleView.captureDeviceManager setBarcodeDelegate:self];
@@ -34,6 +34,8 @@
     if (self.nativeBarcodeEnabled) {
         energyModuleView.captureDeviceManager.barcodeDelegate = self;
     }
+
+    energyModuleView.currentConfiguration = self.conf;
 
     self.moduleView = energyModuleView;
     [self.view addSubview:self.moduleView];

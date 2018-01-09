@@ -112,7 +112,7 @@ class Anyline extends Component {
       });
     } catch (error) {
       if (error !== 'Canceled') {
-        console.error(error);
+        console.log(error);
       }
     }
     this.setState({buttonsDisabled: false});
