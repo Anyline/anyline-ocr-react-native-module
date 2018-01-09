@@ -66,32 +66,14 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
                 ocrConfig.setCustomCmdFile(ocrConfig.getCustomCmdFile());
             }
 
-            JSONArray tesseractArray = json.optJSONArray("traineddataFiles");
-            if (tesseractArray != null) {
-                String[] languages = new String[tesseractArray.length()];
+            JSONArray languageArray = json.optJSONArray("traineddataFiles");
+            if (languageArray != null) {
+                String[] languages = new String[languageArray.length()];
                 for (int i = 0; i < languages.length; i++) {
-                    long start = System.currentTimeMillis();
-                    File dirToCopyTo = new File(this.getFilesDir(), "anyline/module_anyline_ocr/tessdata/");
-                    String traineddataFilePath = tesseractArray.getString(i);
-
-                    int lastFileSeparatorIndex = traineddataFilePath.lastIndexOf(File.separator);
-                    int lastDotIndex = traineddataFilePath.lastIndexOf(".");
-                    if (lastDotIndex > lastFileSeparatorIndex) {
-                        //start after the "/" or with 0 if no fileseperator was found
-                        languages[i] = traineddataFilePath.substring(lastFileSeparatorIndex + 1, lastDotIndex);
-                    } else {
-                        //maybe it should just fail here, case propably not useful
-                        languages[i] = traineddataFilePath.substring(lastFileSeparatorIndex + 1);
-                    }
-                    AssetUtil.copyAssetFileWithoutPath(this, traineddataFilePath, dirToCopyTo, false);
-                    Log.v(TAG, "Copy traineddata duration: " + (System.currentTimeMillis() - start));
+                    languages[i] = languageArray.getString(i);
                 }
-                ocrConfig.setTesseractLanguages(languages);
-            } else {
-                Log.d(TAG, "No Training Data");
+                ocrConfig.setLanguages(languages);
             }
-
-//            boolean drawTextOutline = json.optBoolean("drawTextOutline", true);
 
 
             anylineOcrScanView.setAnylineOcrConfig(ocrConfig);
