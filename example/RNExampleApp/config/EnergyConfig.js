@@ -48,7 +48,7 @@ export default {
       tintColor: 'F21C0A',
       offset: {
         x: 0,
-        y: 500
+        y: 400
       }
     }
   },

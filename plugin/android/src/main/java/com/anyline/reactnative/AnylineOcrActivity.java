@@ -71,6 +71,7 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
                 String[] languages = new String[languageArray.length()];
                 for (int i = 0; i < languages.length; i++) {
                     languages[i] = languageArray.getString(i);
+                    Log.d("languages", languages[i]);
                 }
                 ocrConfig.setLanguages(languages);
             }
