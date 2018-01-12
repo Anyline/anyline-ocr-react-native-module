@@ -21,12 +21,17 @@ export default {
       "style": "rect",
       "maxWidthPercent": "90%",
       "maxHeightPercent": "90%",
-      "alignment": "top_half",
+      "alignment": "center",
+      "ratioFromSize" : {
+        "width": 125,
+        "height": 85
+      },
       "strokeWidth": 2,
       "cornerRadius": 4,
       "strokeColor": "FFFFFF",
       "outerColor": "000000",
       "outerAlpha": 0.3,
+      "feedbackStrokeColor": "000000",
       "cropPadding": {
         "x": -30,
         "y": -90
@@ -34,6 +39,12 @@ export default {
       "cropOffset": {
         "x": 0,
         "y": 90
+      },
+      "feedbackStrokeColor": "0099FF"
+      ,
+      "offset": {
+        "x": 0,
+        "y": 30
       }
     },
     "flash": {
