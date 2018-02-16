@@ -21,10 +21,6 @@
 
     NSError *error = nil;
     [energyModuleView setupWithLicenseKey:self.key delegate:self error:&error];
-    //        if(!success) {
-    //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    //            [alert show];
-    //        }
 
 
 
@@ -35,6 +31,19 @@
         energyModuleView.captureDeviceManager.barcodeDelegate = self;
     }
 
+    // Set Serial Number specific configurations
+    // Set Validation Regex
+    if (self.serialValRegex) {
+        NSLog(@"ValidationRegex %@", self.serialValRegex);
+        energyModuleView.serialNumberValidationRegex = self.serialValRegex;
+    }
+    // Set Whitelist
+    if (self.serialWhitelist) {
+        NSLog(@"Whitelist %@", self.serialWhitelist);
+        energyModuleView.serialNumberCharWhitelist = self.serialWhitelist;
+    }
+
+
     energyModuleView.currentConfiguration = self.conf;
 
     self.moduleView = energyModuleView;
@@ -43,7 +52,7 @@
     [self.view sendSubviewToBack:self.moduleView];
 
 
-    //Add Segment
+    // Add Segment
     if(self.jsonConfig.segmentModes){
         self.segment = [[UISegmentedControl alloc] initWithItems:self.jsonConfig.segmentTitles];
 
@@ -56,7 +65,7 @@
         [self.view addSubview:self.segment];
     }
 
-    //Add Label
+    // Add Label
     self.label = [[UILabel alloc] init];
     self.label.hidden = YES;
 

@@ -26,6 +26,13 @@
 
     ALOCRConfig *ocrConf = [[ALOCRConfig alloc] initWithJsonDictionary:self.ocrConfDict];
 
+    if ([self.ocrConfDict objectForKey:@"aleFile"]) {
+        NSString *aleDirectoryPath = [[self.ocrConfDict objectForKey:@"aleFile"] stringByDeletingLastPathComponent];
+        NSString *pathResource = [[[self.ocrConfDict objectForKey:@"aleFile"] lastPathComponent] stringByDeletingPathExtension];
+        ocrConf.customCmdFilePath = [[NSBundle mainBundle] pathForResource:[[[self.ocrConfDict objectForKey:@"aleFile"] lastPathComponent] stringByDeletingPathExtension] ofType:@"ale" inDirectory:aleDirectoryPath];
+    }
+
+
     self.drawTextOutline = [[self.ocrConfDict objectForKey:@"drawTextOutline"] boolValue];
 
     NSArray *tesseractArray = [self.ocrConfDict objectForKey:@"traineddataFiles"];

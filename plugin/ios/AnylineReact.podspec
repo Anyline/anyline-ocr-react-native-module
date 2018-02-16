@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.version      = package["version"]
   s.summary      = "anyline-ocr-react-native-module"
   s.authors      = {
-    'Anyline' => 'anyline@anyline.com',
+    'Jonas Laux' => 'jonas@anyline.com',
     'Mike Chudziak' => 'mike.chudziak@callstack.io',
   }
 

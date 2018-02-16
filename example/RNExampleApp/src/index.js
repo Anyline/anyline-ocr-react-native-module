@@ -6,7 +6,8 @@ import {
   PermissionsAndroid,
   ScrollView,
   StyleSheet,
-  Text
+  Text,
+  Platform
 } from 'react-native';
 
 import AnylineOCR from 'anyline-ocr-react-native-module';
@@ -21,7 +22,9 @@ import MRZConfig from '../config/MRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
 import IBANConfig from '../config/IbanConfig';
 import VoucherConfig from '../config/VoucherConfig';
+import DrivingLicenseConfig from '../config/DrivingLicenseConfig';
 import LicensePlateConfig from '../config/LicensePlateConfig';
+import SerialNumberConfig from '../config/SerialNumber';
 
 
 class Anyline extends Component {
@@ -55,7 +58,7 @@ class Anyline extends Component {
         config = AutoEnergyConfig;
         break;
       case 'SERIAL_NUMBER':
-        config = AutoEnergyConfig;
+        config = SerialNumberConfig;
         break;
       case 'DOT_MATRIX_METER':
         config = AutoEnergyConfig;
@@ -70,6 +73,10 @@ class Anyline extends Component {
       case 'VOUCHER':
         type = 'ANYLINE_OCR';
         config = VoucherConfig;
+        break;
+      case 'DRIVING_LICENSE':
+        type = 'ANYLINE_OCR';
+        config = DrivingLicenseConfig;
         break;
       case 'MRZ':
         config = MRZConfig;
@@ -87,6 +94,11 @@ class Anyline extends Component {
       default:
         config = EnergyConfig;
         break;
+    }
+
+    // Force set captureResolution to 1080 on iOS @TODO remove, if fixed
+    if(Platform.OS === 'ios') {
+      config.options.captureResolution = '1080p';
     }
 
 

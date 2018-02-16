@@ -72,7 +72,7 @@ public abstract class AnylineBaseActivity extends Activity
         Intent data = new Intent();
         data.putExtra(AnylineSDKPlugin.EXTRA_ERROR_MESSAGE, errorMessage);
         setResult(AnylineSDKPlugin.RESULT_ERROR, data);
-	ResultReporter.onError(errorMessage);
+	    ResultReporter.onError(errorMessage);
         finish();
     }
 

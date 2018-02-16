@@ -166,6 +166,23 @@ RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode 
             return ocrVC;
         } else {
             AnylineEnergyScanViewController *meterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+
+            // Set SerialNumber Configuration
+            NSDictionary *options = [self.jsonConfigDictionary valueForKey:@"options"];
+            if ([options valueForKey:@"serialNumber"]) {
+                NSDictionary *serNumConf = [options valueForKey:@"serialNumber"];
+
+                // Check for Serial Number Whitelist and set it
+                if([serNumConf valueForKey:@"numberCharWhitelist"]){
+                    meterVC.serialWhitelist = [serNumConf valueForKey:@"numberCharWhitelist"];
+                }
+
+                // Check for Serial Number ValidationRegex and set it
+                if([serNumConf valueForKey:@"validationRegex"]){
+                    meterVC.serialValRegex = [serNumConf valueForKey:@"validationRegex"];
+                }
+            }
+
             meterVC.scanMode = [self energyScanModeFromString:scanMode];
             meterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
             return meterVC;
