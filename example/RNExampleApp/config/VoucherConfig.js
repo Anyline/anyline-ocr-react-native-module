@@ -49,7 +49,7 @@ export default {
  ocr: {
     "scanMode": "AUTO",
     "tesseractLanguages": ["anyline_capitals"],
-    "traineddataFiles": ["tessdata/anyline_capitals.traineddata"],
+    "traineddataFiles": ["anyline_capitals.traineddata"],
     "charWhitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
     "validationRegex": "[A-Z0-9]{8}$",
     "minConfidence": 85

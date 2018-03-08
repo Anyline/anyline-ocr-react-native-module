@@ -51,7 +51,7 @@ export default {
   ocr: {
     "scanMode": "AUTO",
     "tesseractLanguages": ["eng_no_dict", "deu"],
-    "traineddataFiles": ["tessdata/eng_no_dict.traineddata", "tessdata/deu.traineddata"],
+    "traineddataFiles": ["eng_no_dict.traineddata", "deu.traineddata"],
     "charWhitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
     "validationRegex": "^[A-Z]{2}([0-9A-Z]\\s*){13,32}$",
     "minConfidence": 65,

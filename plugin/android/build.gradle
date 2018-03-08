@@ -58,7 +58,7 @@ dependencies {
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'io.anyline:anylinesdk:3.21.0@aar'
-    compile 'com.google.android.gms:play-services-vision:10.0.1'
+  	compile 'com.google.android.gms:play-services-vision:11.8.0'
     compile 'com.android.support:design:25.1.0'
     compile "com.facebook.react:react-native:+"  // From node_modules
 }

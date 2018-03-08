@@ -1,5 +1,5 @@
 export default {
-  license:'eyAiYW5kcm9pZElkZW50aWZpZXIiOiBbICJjb20uYW55bGluZS5leGFtcGxlLnJl\n' +
+  license: 'eyAiYW5kcm9pZElkZW50aWZpZXIiOiBbICJjb20uYW55bGluZS5leGFtcGxlLnJl\n' +
   'YWN0bmF0aXZlIiBdLCAiZGVidWdSZXBvcnRpbmciOiAib24iLCAiaW9zSWRlbnRp\n' +
   'ZmllciI6IFsgImNvbS5hbnlsaW5lLmV4YW1wbGUucmVhY3RuYXRpdmUiIF0sICJs\n' +
   'aWNlbnNlS2V5VmVyc2lvbiI6IDIsICJtYWpvclZlcnNpb24iOiAiMyIsICJwaW5n\n' +
@@ -15,43 +15,42 @@ export default {
   'NE9tUzVraWdNUVZLaW8vaWlJS2tIVEVUdUxjYWJEWWtacExZdVR2YnU1S1hIc0R6\n' +
   'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
   options: {
-    "captureResolution":"720p",
+    "captureResolution": "1080p",
     "cutout": {
       "style": "rect",
-      "maxWidthPercent": "100%",
-      "maxHeightPercent": "100%",
-      "alignment": "center",
-      "ratioFromSize" : {
-        "width": 125,
-        "height": 85
+      "width": 500,
+      "alignment": "top",
+      "ratioFromSize": {
+        "width": 62,
+        "height": 9
       },
-      "strokeWidth": 2,
-      "cornerRadius": 4,
-      "strokeColor": "FFFFFF",
+      "offset": {
+        "x": 0,
+        "y": 395
+      },
       "outerColor": "000000",
       "outerAlpha": 0.3,
-      "feedbackStrokeColor": "0099FF"
+      "cornerRadius": 3
     },
     "flash": {
       "mode": "manual",
-      "alignment": "bottom_right",
-      "imageOn": "flash_on",
-      "imageOff": "flash_off"
+      "alignment": "bottom_left",
+      "imageOn": "ic_flash_on",
+      "imageOff": "ic_flash_off"
     },
-    "beepOnResult": true,
-    "vibrateOnResult": true,
-    "blinkAnimationOnResult": true,
-    "cancelOnResult": true,
     "visualFeedback": {
-      "style": "CONTOUR_POINT",
-      "strokeColor": "0099FF",
-      "strokeWidth": 2
+      "animation": "traverse_multi",
+      "animationDuration": 250,
+      "style": "contour_rect",
+      "strokeWidth": 2,
+      "strokeColor": "0099FF"
     }
+
   },
   ocr: {
     "scanMode": "AUTO",
-    "aleFile": "anyline_austrian_driving_license.ale",
-    "tesseractLanguages": ["eng_no_dict", "deu"],
-    "traineddataFiles": ["eng_no_dict.traineddata", "deu.traineddata"],
-  }
+    "aleFile": "vin.ale",
+    "traineddataFiles": ["CNN_vin_det_class_prot2_36_whitelist.any"],
+    "minConfidence": 0
+  },
 }

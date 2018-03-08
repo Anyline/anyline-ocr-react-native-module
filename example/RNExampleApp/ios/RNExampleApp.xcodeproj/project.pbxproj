@@ -20,10 +20,14 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		1ED0E5D62036F84D0030B0EF /* ale in Resources */ = {isa = PBXBuildFile; fileRef = 1ED0E5D52036F84D0030B0EF /* ale */; };
-		1ED294162035FCEA00CD1B8B /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 1ED294152035FCE900CD1B8B /* tessdata */; };
 		2461A0FE4220A12E83C78AAA /* libPods-RNExampleApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA0049A81087564E18C8F99C /* libPods-RNExampleApp.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
+		7C42F21D20516865002BB8E4 /* vin.ale in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21620516864002BB8E4 /* vin.ale */; };
+		7C42F21E20516865002BB8E4 /* anyline_austrian_driving_license.ale in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21720516864002BB8E4 /* anyline_austrian_driving_license.ale */; };
+		7C42F21F20516865002BB8E4 /* CNN_vin_det_class_prot2_36_whitelist.any in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21920516865002BB8E4 /* CNN_vin_det_class_prot2_36_whitelist.any */; };
+		7C42F22020516865002BB8E4 /* anyline_capitals.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21A20516865002BB8E4 /* anyline_capitals.traineddata */; };
+		7C42F22120516865002BB8E4 /* deu.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21B20516865002BB8E4 /* deu.traineddata */; };
+		7C42F22220516865002BB8E4 /* eng_no_dict.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21C20516865002BB8E4 /* eng_no_dict.traineddata */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 /* End PBXBuildFile section */
@@ -302,10 +306,14 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RNExampleApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RNExampleApp/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		1ED0E5D52036F84D0030B0EF /* ale */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ale; sourceTree = "<group>"; };
-		1ED294152035FCE900CD1B8B /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
+		7C42F21620516864002BB8E4 /* vin.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vin.ale; sourceTree = "<group>"; };
+		7C42F21720516864002BB8E4 /* anyline_austrian_driving_license.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = anyline_austrian_driving_license.ale; sourceTree = "<group>"; };
+		7C42F21920516865002BB8E4 /* CNN_vin_det_class_prot2_36_whitelist.any */ = {isa = PBXFileReference; lastKnownFileType = file; path = CNN_vin_det_class_prot2_36_whitelist.any; sourceTree = "<group>"; };
+		7C42F21A20516865002BB8E4 /* anyline_capitals.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = anyline_capitals.traineddata; sourceTree = "<group>"; };
+		7C42F21B20516865002BB8E4 /* deu.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = deu.traineddata; sourceTree = "<group>"; };
+		7C42F21C20516865002BB8E4 /* eng_no_dict.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = eng_no_dict.traineddata; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		9A41F1852761173E71490E7B /* Pods-RNExampleApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNExampleApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp.debug.xcconfig"; sourceTree = "<group>"; };
 		AA0049A81087564E18C8F99C /* libPods-RNExampleApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNExampleApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -468,6 +476,26 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		7C42F21520516864002BB8E4 /* ale */ = {
+			isa = PBXGroup;
+			children = (
+				7C42F21620516864002BB8E4 /* vin.ale */,
+				7C42F21720516864002BB8E4 /* anyline_austrian_driving_license.ale */,
+			);
+			path = ale;
+			sourceTree = "<group>";
+		};
+		7C42F21820516865002BB8E4 /* traineddata */ = {
+			isa = PBXGroup;
+			children = (
+				7C42F21920516865002BB8E4 /* CNN_vin_det_class_prot2_36_whitelist.any */,
+				7C42F21A20516865002BB8E4 /* anyline_capitals.traineddata */,
+				7C42F21B20516865002BB8E4 /* deu.traineddata */,
+				7C42F21C20516865002BB8E4 /* eng_no_dict.traineddata */,
+			);
+			path = traineddata;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -499,8 +527,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				1ED0E5D52036F84D0030B0EF /* ale */,
-				1ED294152035FCE900CD1B8B /* tessdata */,
+				7C42F21520516864002BB8E4 /* ale */,
+				7C42F21820516865002BB8E4 /* traineddata */,
 				13B07FAE1A68108700A75B9A /* RNExampleApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RNExampleAppTests */,
@@ -907,10 +935,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C42F22120516865002BB8E4 /* deu.traineddata in Resources */,
+				7C42F21D20516865002BB8E4 /* vin.ale in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				1ED0E5D62036F84D0030B0EF /* ale in Resources */,
+				7C42F21F20516865002BB8E4 /* CNN_vin_det_class_prot2_36_whitelist.any in Resources */,
+				7C42F21E20516865002BB8E4 /* anyline_austrian_driving_license.ale in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				1ED294162035FCEA00CD1B8B /* tessdata in Resources */,
+				7C42F22020516865002BB8E4 /* anyline_capitals.traineddata in Resources */,
+				7C42F22220516865002BB8E4 /* eng_no_dict.traineddata in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -960,7 +992,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AnylineResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

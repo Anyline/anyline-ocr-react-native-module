@@ -168,22 +168,22 @@ If you are using the ANYLINE_OCR module, you'll have to add some traineddata. Th
 you can find in the example app. Also the OCR Config has to reflect the path. Check the VoucherConfig.js in the 
 example/RNExampleApp/config folder.
 
+IMPORTANT: The trainedFiles have to be directly in the Asset folder in Android.
+
 #### iOS
 ```
 ios   
-└─── trainedData
-     └─── myTrainedData.traineddata
+ └─── myTrainedData.traineddata
 ```
 
 #### Android
 ```
 android   
-└─── app
-      └─── src
-            └─── main
-                   └─── assets
-                          └─── traindData
-                                  └─── myTrainedData.traineddata
+   └─── app
+         └─── src
+               └─── main
+                      └─── assets
+                             └─── myTrainedData.traineddata || myTrainedData.any
 ```
 
 
