@@ -25,10 +25,10 @@
 
 
     [energyModuleView setScanMode:self.scanMode error:nil];
-    [energyModuleView.captureDeviceManager setBarcodeDelegate:self];
+    [energyModuleView.captureDeviceManager addBarcodeDelegate:self];
 
     if (self.nativeBarcodeEnabled) {
-        energyModuleView.captureDeviceManager.barcodeDelegate = self;
+        [energyModuleView.captureDeviceManager addBarcodeDelegate:self];
     }
 
     // Set Serial Number specific configurations

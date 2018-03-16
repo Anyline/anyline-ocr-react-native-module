@@ -53,7 +53,7 @@
     self.label.hidden = NO;
 
     
-    self.moduleView.captureDeviceManager.barcodeDelegate = nil;
+    [self.moduleView.captureDeviceManager removeBarcodeDelegate:self];
 }
 
 #pragma mark - AnylineBarcodeModuleDelegate method

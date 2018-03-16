@@ -15,22 +15,20 @@ export default {
   'NE9tUzVraWdNUVZLaW8vaWlJS2tIVEVUdUxjYWJEWWtacExZdVR2YnU1S1hIc0R6\n' +
   'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
   options: {
-    "captureResolution": "1080p",
     "cutout": {
-      "style": "rect",
-      "width": 500,
-      "alignment": "top",
-      "ratioFromSize": {
-        "width": 62,
-        "height": 9
-      },
-      "offset": {
-        "x": 0,
-        "y": 395
-      },
-      "outerColor": "000000",
-      "outerAlpha": 0.3,
-      "cornerRadius": 3
+        "style": "rect",
+        "maxWidthPercent": "70%",
+        "alignment": "top_half",
+        "ratioFromSize": {
+            "width": 62,
+            "height": 9
+        },
+        "outerColor": "000000",
+        "outerAlpha": 0.3,
+        "strokeWidth": 1,
+        "strokeColor": "FFFFFF",
+        "cornerRadius": 2,
+        "feedbackStrokeColor": "0099FF",
     },
     "flash": {
       "mode": "manual",
@@ -39,18 +37,22 @@ export default {
       "imageOff": "ic_flash_off"
     },
     "visualFeedback": {
-      "animation": "traverse_multi",
-      "animationDuration": 250,
-      "style": "contour_rect",
-      "strokeWidth": 2,
-      "strokeColor": "0099FF"
-    }
-
+        "animation": "traverse_multi",
+        "animationDuration" : 250,
+        "style": "contour_rect",
+        "strokeWidth": 2,
+        "strokeColor": "0099FF"
+    },
+    "beepOnResult": false,
+    "vibrateOnResult": true,
+    "blinkAnimationOnResult": true,
+    "cancelOnResult": true,
+    "reportingEnabled": true
   },
   ocr: {
     "scanMode": "AUTO",
     "aleFile": "vin.ale",
-    "traineddataFiles": ["CNN_vin_det_class_prot2_36_whitelist.any"],
+    "traineddataFiles": ["vin.any"],
     "minConfidence": 0
   },
 }
