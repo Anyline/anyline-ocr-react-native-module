@@ -1,10 +1,10 @@
 package com.anyline.reactnative;
 
 /*
- * Anyline Cordova Plugin
+ * Anyline React-Native Plugin
  * BarcodeActivity.java
  *
- * Copyright (c) 2015 Anyline GmbH
+ * Copyright (c) 2018 Anyline GmbH
  *
  * Created by martin at 2015-07-21
  */

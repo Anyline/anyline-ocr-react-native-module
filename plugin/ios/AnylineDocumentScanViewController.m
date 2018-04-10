@@ -1,6 +1,6 @@
 //
 //  AnylineDocumentScanViewController.m
-//  Anyline Cordova Example
+//  Anyline React-Native Example
 //
 //  Created by Daniel Albertini on 23/06/16.
 //

@@ -155,7 +155,21 @@ RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode 
             }
             return docVC;
         } else if ([[scanMode uppercaseString] isEqualToString:[@"MRZ" uppercaseString]]) {
-            return [[AnylineMRZScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+
+            AnylineMRZScanViewController *mrzVC = [[AnylineMRZScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
+            NSDictionary *options = [self.jsonConfigDictionary valueForKey:@"options"];
+
+            if ([options valueForKey:@"mrz"]) {
+                NSDictionary *mrzConfig = [options valueForKey:@"mrz"];
+
+                // Check for Document quality Config and set it
+                if([mrzConfig valueForKey:@"strictMode"]){
+                    mrzVC.strictMode = [[mrzConfig valueForKey:@"strictMode"] boolValue];
+                } else {
+                    mrzVC.strictMode = false;
+                }
+            }
+            return mrzVC;
         } else if ([[scanMode uppercaseString] isEqualToString:[@"BARCODE" uppercaseString]]) {
             return [[AnylineBarcodeScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
         } else if ([[scanMode uppercaseString] isEqualToString:[@"LICENSE_PLATE" uppercaseString]]) {

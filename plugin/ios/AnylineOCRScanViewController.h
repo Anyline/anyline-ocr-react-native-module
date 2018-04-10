@@ -1,6 +1,5 @@
 //
 //  AnylineOCRScanViewController.h
-//  HelloCordova
 //
 //  Created by Daniel Albertini on 30/03/16.
 //

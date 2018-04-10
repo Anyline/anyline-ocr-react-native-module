@@ -1,5 +1,5 @@
 //
-//  ALCordovaUIConfiguration.h
+//  ALJsonUIConfiguration.h
 //  FoodNotifyBussines
 //
 //  Created by Matthias Gasser on 12/11/15.

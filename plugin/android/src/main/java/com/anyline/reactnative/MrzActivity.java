@@ -43,6 +43,19 @@ public class MrzActivity extends AnylineBaseActivity {
         JSONObject json;
         try {
             json = new JSONObject(configJson);
+
+            // get MRZ config
+            if (json.has("mrz")) {
+                // set MRZ strict mode
+                JSONObject mrzConf = json.getJSONObject("mrz");
+                if(mrzConf.has("strictMode")){
+                    mrzScanView.setStrictMode(mrzConf.getBoolean("strictMode"));
+                } else {
+                    mrzScanView.setStrictMode(false);
+                }
+            }
+
+            // set Config to View
             mrzScanView.setConfig(new AnylineViewConfig(this, json));
         } catch (Exception e) {
             //JSONException or IllegalArgumentException is possible, return it to javascript
@@ -54,7 +67,7 @@ public class MrzActivity extends AnylineBaseActivity {
         relativeLayout.addView(mrzScanView, getTextLayoutParams());
 
         //add custom Label
-        if(json.has("label")){
+        if (json.has("label")) {
             this.labelView = getLabelView(getApplicationContext());
             RelativeLayout.LayoutParams lp = getWrapContentLayoutParams();
             relativeLayout.addView(this.labelView, lp);

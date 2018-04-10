@@ -15,20 +15,20 @@
 
     AnylineMRZModuleView *mrzModuleView = [[AnylineMRZModuleView alloc] initWithFrame:self.view.bounds];
 
+    // Set strictMode to MRZView
+    [mrzModuleView setStrictMode:self.strictMode];
+
     NSError *error = nil;
     [mrzModuleView setupWithLicenseKey:self.key delegate:self error:&error];
-//        if(!success) {
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Setup failed:" message:error.debugDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-//            [alert show];
-//        }
+
 
     mrzModuleView.currentConfiguration = self.conf;
 
     self.moduleView = mrzModuleView;
 
     [self.view addSubview:self.moduleView];
-    
-    //Add Label
+
+    // Add Label
     self.label = [[UILabel alloc] init];
     self.label.hidden = YES;
     

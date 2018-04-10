@@ -16,13 +16,12 @@ export default {
   'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
   options: {
     "captureResolution": "1080p",
-
     "cutout": {
       "style": "rect",
       "maxWidthPercent": "90%",
       "maxHeightPercent": "90%",
       "alignment": "center",
-      "ratioFromSize" : {
+      "ratioFromSize": {
         "width": 125,
         "height": 85
       },
@@ -31,7 +30,6 @@ export default {
       "strokeColor": "FFFFFF",
       "outerColor": "000000",
       "outerAlpha": 0.3,
-      "feedbackStrokeColor": "000000",
       "cropPadding": {
         "x": -30,
         "y": -90
@@ -40,8 +38,7 @@ export default {
         "x": 0,
         "y": 90
       },
-      "feedbackStrokeColor": "0099FF"
-      ,
+      "feedbackStrokeColor": "0099FF",
       "offset": {
         "x": 0,
         "y": 30
@@ -59,6 +56,9 @@ export default {
       "style": "rect",
       "strokeColor": "0099FF",
       "strokeWidth": 2
+    },
+    "mrz": {
+      "strictMode" : true
     }
   }
 }
