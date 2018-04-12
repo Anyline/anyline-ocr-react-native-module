@@ -79,7 +79,7 @@ RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode 
     self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
 
     self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
-    self.conf = [[ALUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"] bundlePath:nil];
+    self.conf = [[ALUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
     self.conf.cancelOnResult = true;
     self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 

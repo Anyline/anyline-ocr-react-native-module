@@ -1,6 +1,6 @@
 {
   "name": "anyline-ocr-react-native-module",
-  "version": "3.23.0",
+  "version": "3.22.0",
   "main": "index.js",
   "description": "A Plugin for connecting Anyline with React-Native",
   "license": "SEE LICENSE IN LICENSE",
