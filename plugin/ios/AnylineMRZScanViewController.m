@@ -15,12 +15,11 @@
 
     AnylineMRZModuleView *mrzModuleView = [[AnylineMRZModuleView alloc] initWithFrame:self.view.bounds];
 
-    // Set strictMode to MRZView
-    [mrzModuleView setStrictMode:self.strictMode];
-
     NSError *error = nil;
     [mrzModuleView setupWithLicenseKey:self.key delegate:self error:&error];
 
+    // Set strictMode to MRZView
+    [mrzModuleView setStrictMode:self.strictMode];
 
     mrzModuleView.currentConfiguration = self.conf;
 

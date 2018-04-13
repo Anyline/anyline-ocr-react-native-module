@@ -65,6 +65,15 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
                 ocrConfig.setCustomCmdFile(ocrConfig.getCustomCmdFile());
             }
 
+            //get custom Ale File
+            if (json.has("aleFile")) {
+                String customCmdFile = json.getString("aleFile");
+                ocrConfig.setCustomCmdFile(customCmdFile);
+                if (ocrConfig.getCustomCmdFile() != null) {
+                    ocrConfig.setCustomCmdFile(ocrConfig.getCustomCmdFile());
+                }
+            }
+
             JSONArray languageArray = json.optJSONArray("traineddataFiles");
             if (languageArray != null) {
                 String[] languages = new String[languageArray.length()];

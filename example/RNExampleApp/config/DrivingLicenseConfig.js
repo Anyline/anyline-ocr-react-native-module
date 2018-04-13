@@ -15,7 +15,7 @@ export default {
   'NE9tUzVraWdNUVZLaW8vaWlJS2tIVEVUdUxjYWJEWWtacExZdVR2YnU1S1hIc0R6\n' +
   'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
   options: {
-    "captureResolution":"720p",
+    "captureResolution":"720",
     "cutout": {
       "style": "rect",
       "maxWidthPercent": "100%",
