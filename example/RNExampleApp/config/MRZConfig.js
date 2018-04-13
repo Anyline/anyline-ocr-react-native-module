@@ -56,9 +56,6 @@ export default {
       "style": "rect",
       "strokeColor": "0099FF",
       "strokeWidth": 2
-    },
-    "mrz": {
-      "strictMode" : true
     }
   }
 }
