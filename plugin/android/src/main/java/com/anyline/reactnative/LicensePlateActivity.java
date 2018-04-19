@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import at.nineyards.anyline.AnylineDebugListener;
 import at.nineyards.anyline.camera.AnylineViewConfig;
+import at.nineyards.anyline.camera.CameraConfig;
 import at.nineyards.anyline.core.RunFailure;
 import at.nineyards.anyline.core.Vector_Contour;
 import at.nineyards.anyline.modules.licenseplate.LicensePlateResult;
@@ -47,6 +48,10 @@ public class LicensePlateActivity extends AnylineBaseActivity {
 
             // Configure the view (cutout, the camera resolution, etc.) via json
             anylineLicensePlateScanView.setConfig(new AnylineViewConfig(this, json));
+
+            // set individual camera settings for this example by getting the current preferred settings and adapting them
+            CameraConfig camConfig = anylineLicensePlateScanView.getPreferredCameraConfig();
+            setFocusConfig(json, camConfig);
 
             //disable or enable reporting by config
             if (json.has("reportingEnabled")) {

@@ -26,7 +26,9 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import at.nineyards.anyline.camera.CameraConfig;
 import at.nineyards.anyline.camera.CameraController;
+import at.nineyards.anyline.camera.CameraFeatures;
 import at.nineyards.anyline.camera.CameraOpenListener;
 
 public abstract class AnylineBaseActivity extends Activity
@@ -174,6 +176,59 @@ public abstract class AnylineBaseActivity extends Activity
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         return lp;
+    }
+
+
+    protected void setFocusConfig (JSONObject json, CameraConfig camConfig) throws JSONException {
+
+        if (json.has("focus")) {
+            JSONObject focusConfig = json.getJSONObject("focus");
+
+            // change default focus mode to auto (works better if cutout is not in the center)
+            switch (focusConfig.getString("mode")) {
+                case ("AUTO"):
+                default:
+                    camConfig.setFocusMode(CameraFeatures.FocusMode.AUTO);
+                    break;
+                case ("MACRO"):
+                    camConfig.setFocusMode(CameraFeatures.FocusMode.MACRO);
+                    break;
+                case ("CONTINUOUS_PICTURE"):
+                    camConfig.setFocusMode(CameraFeatures.FocusMode.CONTINUOUS_PICTURE);
+                    break;
+                case ("CONTINUOUS_VIDEO"):
+                    camConfig.setFocusMode(CameraFeatures.FocusMode.CONTINUOUS_VIDEO);
+                    break;
+                case ("EDOF"):
+                    camConfig.setFocusMode(CameraFeatures.FocusMode.EDOF);
+                    break;
+                case ("FIXED"):
+                    camConfig.setFocusMode(CameraFeatures.FocusMode.FIXED);
+                    break;
+                case ("INFINITY"):
+                    camConfig.setFocusMode(CameraFeatures.FocusMode.INFINITY);
+                    break;
+                case ("OFF"):
+                    camConfig.setFocusMode(CameraFeatures.FocusMode.OFF);
+                    break;
+            }
+            // autofocus is called in this interval (8000 is default)
+            if(focusConfig.has("interval")){
+                camConfig.setAutoFocusInterval(focusConfig.getInt("interval"));
+            }
+            // call autofocus if view is touched (true is default)
+            if(focusConfig.has("touchEnabled")){
+                camConfig.setFocusOnTouchEnabled(focusConfig.getBoolean("touchEnabled"));
+            }
+            // focus where the cutout is (true is default)
+            if(focusConfig.has("regionEnabled")){
+                camConfig.setFocusRegionEnabled(focusConfig.getBoolean("regionEnabled"));
+            }
+            // automatic exposure calculation based on where the cutout is (true is default)
+            if(focusConfig.has("autoExposureRegionEnabled")){
+                camConfig.setAutoExposureRegionEnabled(focusConfig.getBoolean("autoExposureRegionEnabled"));
+            }
+        }
     }
 
 }

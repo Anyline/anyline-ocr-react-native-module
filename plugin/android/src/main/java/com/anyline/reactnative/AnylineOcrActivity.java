@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import at.nineyards.anyline.camera.CameraConfig;
+import at.nineyards.anyline.camera.CameraFeatures;
 import at.nineyards.anyline.modules.ocr.AnylineOcrResultListener;
 import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.camera.AnylineViewConfig;
@@ -65,7 +67,7 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
                 ocrConfig.setCustomCmdFile(ocrConfig.getCustomCmdFile());
             }
 
-            //get custom Ale File
+            // set custom Ale File
             if (json.has("aleFile")) {
                 String customCmdFile = json.getString("aleFile");
                 ocrConfig.setCustomCmdFile(customCmdFile);
@@ -74,6 +76,7 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
                 }
             }
 
+            // set traineddata
             JSONArray languageArray = json.optJSONArray("traineddataFiles");
             if (languageArray != null) {
                 String[] languages = new String[languageArray.length()];
@@ -84,6 +87,9 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
                 ocrConfig.setLanguages(languages);
             }
 
+            // set individual camera settings for this example by getting the current preferred settings and adapting them
+            CameraConfig camConfig = anylineOcrScanView.getPreferredCameraConfig();
+            setFocusConfig(this.viewConfig, camConfig);
 
             anylineOcrScanView.setAnylineOcrConfig(ocrConfig);
 
@@ -97,7 +103,7 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
         relativeLayout.addView(anylineOcrScanView, getTextLayoutParams());
 
         //add custom Label
-        if(this.viewConfig.has("label")){
+        if (this.viewConfig.has("label")) {
             this.labelView = getLabelView(getApplicationContext());
             RelativeLayout.LayoutParams lp = getWrapContentLayoutParams();
             relativeLayout.addView(this.labelView, lp);

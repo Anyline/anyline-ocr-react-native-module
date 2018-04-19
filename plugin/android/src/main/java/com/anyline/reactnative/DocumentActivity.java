@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.UUID;
 
 import at.nineyards.anyline.camera.AnylineViewConfig;
+import at.nineyards.anyline.camera.CameraConfig;
 import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.camera.CameraOpenListener;
 import at.nineyards.anyline.models.AnylineImage;
@@ -102,6 +103,9 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(configJson);
+            // set individual camera settings for this example by getting the current preferred settings and adapting them
+            CameraConfig camConfig = documentScanView.getPreferredCameraConfig();
+            setFocusConfig(jsonObject, camConfig);
         } catch (Exception e) {
             //JSONException or IllegalArgumentException is possible, return it to javascript
             finishWithError("error_invalid_json_data");
