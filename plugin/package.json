@@ -18,5 +18,8 @@
   ],
   "directories": {
     "example": "examples"
+  },
+  "dependencies": {
+    "buffer": "^5.1.0"
   }
 }

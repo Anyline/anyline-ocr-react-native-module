@@ -103,7 +103,7 @@ Your BundleIdentifier of your app has to match with your bundleID from your Anyl
 
 ### 4. Import the plugin to your JavaScript file
 ```
-import Anyline from 'anyline-ocr-react-native-module';
+import AnylineOCR from 'anyline-ocr-react-native-module';
 ```
 ### 5. Import the config file
 ```
@@ -240,6 +240,20 @@ More information about the simultaneous barcode scanning [here](https://document
 ### onError Function
 Callback -> String
 - String errorMessage
+
+## Additional Functions
+
+#### getLicenseExpiryDate
+Check till when the provided License is or was valid. Returns a string.
+```
+import AnylineOCR, { getLicenseExpiryDate } from 'anyline-ocr-react-native-module';
+
+...
+
+console.log(getLicenseExpiryDate(myLicenseString)); // 'YYYY-MM-DD'
+...
+```
+
 
 ## Images
 
