@@ -52,6 +52,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
     private TextView errorMessage;
     private long lastErrorRecieved = 0;
     private int quality = 100;
+    private boolean postProcessing = false;
 
     private Double maxDocumentOutputResolutionWidth = null;
     private Double maxDocumentOutputResolutionHeight = null;
@@ -121,6 +122,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 this.maxDocumentOutputResolutionHeight = documentConfig.getJSONObject("maxOutputResolution").getDouble("height");
                 this.ratios = getArrayListFromJsonArray(documentConfig.getJSONObject("ratio").getJSONArray("ratios"));
                 this.ratioDeviation = documentConfig.getJSONObject("ratio").getDouble("deviation");
+                this.postProcessing = documentConfig.getBoolean("postProcessing");
             } catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -146,6 +148,9 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
         if (maxDocumentOutputResolutionWidth != null && maxDocumentOutputResolutionHeight != null) {
             documentScanView.setMaxDocumentOutputResolution(maxDocumentOutputResolutionWidth, maxDocumentOutputResolutionHeight);
         }
+
+        // Set PostProcessing
+        documentScanView.setPostProcessingEnabled(this.postProcessing);
 
         // initialize Anyline with the license key and a Listener that is called if a result is found
         documentScanView.initAnyline(licenseKey, new DocumentResultListener() {

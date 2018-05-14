@@ -134,6 +134,13 @@ RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode 
                     docVC.quality = 100;
                 }
                 
+                // Check for Document PostProcessing and set it
+                if([docConfig valueForKey:@"postProcessing"]){
+                    docVC.postProcessing = [[docConfig valueForKey:@"postProcessing"] boolValue];
+                } else {
+                    docVC.postProcessing = false;
+                }
+
                 // Check for Document Max Output Config and set it
                 if([docConfig valueForKey:@"maxOutputResoultion"]){
                     NSDictionary *maxOutputResoultionConfig = [docConfig valueForKey:@"maxOutputResoultion"];

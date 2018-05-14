@@ -37,4 +37,12 @@
 @property (nonatomic, strong) NSArray *ratios;
 @property (nonatomic, assign) CGFloat ratioDeviation;
 
+/**
+ * Document PostProcessing
+ * @warning Parameter can only be changed when the scanning is not running.
+ *
+ * @since 3.24
+ */
+@property (nonatomic, strong) Boolean postProcessing;
+
 @end

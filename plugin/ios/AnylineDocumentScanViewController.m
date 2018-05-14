@@ -30,6 +30,9 @@
     [docModuleView setDocumentRatios:self.ratios];
     docModuleView.maxDocumentRatioDeviation = [NSNumber numberWithDouble:self.ratioDeviation];
     
+    // Set PostProcessing of the
+    [docModuleView setPostProcessingEnabled:self.postProcessing];
+
     // Set max Output Resolution
     if(!CGSizeEqualToSize(CGSizeZero, self.maxOutputResolution)){
         docModuleView.maxOutputResolution = self.maxOutputResolution;
