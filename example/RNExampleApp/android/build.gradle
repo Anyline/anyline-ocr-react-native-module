@@ -25,7 +25,7 @@ allprojects {
             url "$rootDir/../node_modules/react-native/android"
         }
         maven {
-            url 'https://anylinesdk.blob.core.windows.net/testing/'
+            url 'https://anylinesdk.blob.core.windows.net/maven/'
         }
         maven {
             url 'https://maven.google.com/'

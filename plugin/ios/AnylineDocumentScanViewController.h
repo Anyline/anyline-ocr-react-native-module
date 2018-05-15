@@ -43,6 +43,6 @@
  *
  * @since 3.24
  */
-@property (nonatomic, strong) Boolean postProcessing;
+@property (nonatomic) Boolean postProcessing;
 
 @end
