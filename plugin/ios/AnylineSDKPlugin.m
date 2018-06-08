@@ -138,7 +138,7 @@ RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode 
                 if([docConfig valueForKey:@"postProcessing"]){
                     docVC.postProcessing = [[docConfig valueForKey:@"postProcessing"] boolValue];
                 } else {
-                    docVC.postProcessing = false;
+                    docVC.postProcessing = true;
                 }
 
                 // Check for Document Max Output Config and set it
