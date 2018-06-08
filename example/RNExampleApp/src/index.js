@@ -25,6 +25,7 @@ import DrivingLicenseConfig from '../config/DrivingLicenseConfig';
 import LicensePlateConfig from '../config/LicensePlateConfig';
 import SerialNumberConfig from '../config/SerialNumber';
 import VinConfig from '../config/VINConfig';
+import USNRConfig from "../config/USNRConfig";
 
 
 class Anyline extends Component {
@@ -81,6 +82,10 @@ class Anyline extends Component {
       case 'VIN':
         type = 'ANYLINE_OCR';
         config = VinConfig;
+        break;
+      case 'USNR':
+        type = 'ANYLINE_OCR';
+        config = USNRConfig;
         break;
       case 'MRZ':
         config = MRZConfig;

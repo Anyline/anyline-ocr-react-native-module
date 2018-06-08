@@ -28,6 +28,7 @@
 		7C42F22020516865002BB8E4 /* anyline_capitals.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21A20516865002BB8E4 /* anyline_capitals.traineddata */; };
 		7C42F22120516865002BB8E4 /* deu.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21B20516865002BB8E4 /* deu.traineddata */; };
 		7C42F22220516865002BB8E4 /* eng_no_dict.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21C20516865002BB8E4 /* eng_no_dict.traineddata */; };
+		7C79532D20C9923400F2EAFA /* USNr.any in Resources */ = {isa = PBXBuildFile; fileRef = 7C79532C20C9923300F2EAFA /* USNr.any */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 /* End PBXBuildFile section */
@@ -314,6 +315,7 @@
 		7C42F21A20516865002BB8E4 /* anyline_capitals.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = anyline_capitals.traineddata; sourceTree = "<group>"; };
 		7C42F21B20516865002BB8E4 /* deu.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = deu.traineddata; sourceTree = "<group>"; };
 		7C42F21C20516865002BB8E4 /* eng_no_dict.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = eng_no_dict.traineddata; sourceTree = "<group>"; };
+		7C79532C20C9923300F2EAFA /* USNr.any */ = {isa = PBXFileReference; lastKnownFileType = file; path = USNr.any; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		9A41F1852761173E71490E7B /* Pods-RNExampleApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNExampleApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp.debug.xcconfig"; sourceTree = "<group>"; };
 		AA0049A81087564E18C8F99C /* libPods-RNExampleApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNExampleApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -489,6 +491,7 @@
 			isa = PBXGroup;
 			children = (
 				17A3F24C205AA3CA00EAB23A /* vin.any */,
+				7C79532C20C9923300F2EAFA /* USNr.any */,
 				7C42F21A20516865002BB8E4 /* anyline_capitals.traineddata */,
 				7C42F21B20516865002BB8E4 /* deu.traineddata */,
 				7C42F21C20516865002BB8E4 /* eng_no_dict.traineddata */,
@@ -940,6 +943,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				7C42F21E20516865002BB8E4 /* anyline_austrian_driving_license.ale in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				7C79532D20C9923400F2EAFA /* USNr.any in Resources */,
 				7C42F22020516865002BB8E4 /* anyline_capitals.traineddata in Resources */,
 				7C42F22220516865002BB8E4 /* eng_no_dict.traineddata in Resources */,
 			);
