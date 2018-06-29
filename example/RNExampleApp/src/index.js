@@ -37,7 +37,12 @@ class Anyline extends Component {
     fullImagePath: '',
     currentScanMode: '',
     buttonsDisabled: false,
+    SDKVersion: '',
   };
+  componentDidMount = async () => {
+    const SDKVersion = await AnylineOCR.getSDKVersion();
+    this.setState({SDKVersion: SDKVersion});
+  }
 
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
@@ -193,10 +198,9 @@ class Anyline extends Component {
       imagePath,
       fullImagePath,
       currentScanMode,
-      buttonsDisabled
+      buttonsDisabled,
+      SDKVersion
     } = this.state;
-
-    console.log(this.state.buttonsDisabled);
 
     BackHandler.addEventListener('hardwareBackPress', () => {
       if (hasScanned) {
@@ -223,6 +227,8 @@ class Anyline extends Component {
         ) : <Overview key="OverView" openAnyline={this.openAnyline}
                       checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}
                       disabled={buttonsDisabled}/>}
+        <Text style={styles.versions}>SDK Version: {SDKVersion}</Text>
+        <Text style={styles.versions}>RN-Build Number: 1</Text>
       </ScrollView>
     );
   }
@@ -230,6 +236,9 @@ class Anyline extends Component {
 
 
 const styles = StyleSheet.create({
+  versions: {
+    color: "white"
+  },
   container: {
     flex: 1,
     width: "100%",

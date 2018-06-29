@@ -48,6 +48,9 @@ local.properties
 #
 npm-debug.log
 
+#plugin
+plugin/node_modules
+
 #iOS
 ios/Pods
 ios/Podfile.lock
@@ -63,3 +66,5 @@ tsconfig.json
 
 #Pods
 example/RNExampleApp/ios/Podfile.lock
+
+yarn-error.log

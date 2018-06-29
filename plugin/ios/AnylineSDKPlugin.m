@@ -67,6 +67,10 @@ RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode 
     [self initView:scanMode];
 }
 
+RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+   resolve(ALCoreController.versionNumber);
+}
+
 
 -(void)initView:(NSString *)scanMode {
     NSData *data = [self.config dataUsingEncoding:NSUTF8StringEncoding];

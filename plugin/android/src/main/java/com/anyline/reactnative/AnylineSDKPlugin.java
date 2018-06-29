@@ -69,6 +69,11 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         return REACT_CLASS;
     }
 
+    @ReactMethod
+    public void getSDKVersion(final Promise promise) {
+        promise.resolve(at.nineyards.anyline.BuildConfig.VERSION_NAME);
+    }
+
     // Deprecated
     @ReactMethod
     public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
