@@ -991,7 +991,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp-resources.sh",
-				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_3.23.0/Framework/AnylineResources.bundle",
+				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_3.25.1/Framework/AnylineResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (

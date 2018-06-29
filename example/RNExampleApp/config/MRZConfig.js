@@ -56,6 +56,10 @@ export default {
       "style": "rect",
       "strokeColor": "0099FF",
       "strokeWidth": 2
+    },
+    "mrz": {
+      "cropAndTransformID": true,
+      "cropAndTransformErrorMessage": "Edges are not detected"
     }
   }
 }

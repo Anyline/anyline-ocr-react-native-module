@@ -179,6 +179,21 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                 } else {
                     mrzVC.strictMode = false;
                 }
+                  // Check for cropAndTransformID Config and set it
+                if([mrzConfig valueForKey:@"cropAndTransformID"]){
+                    mrzVC.cropAndTransformID = [[mrzConfig valueForKey:@"cropAndTransformID"] boolValue];
+                } else {
+                    mrzVC.cropAndTransformID = false;
+                }
+                
+                // Check for showPointsOutOfCutoutError Config and set it
+                if([mrzConfig valueForKey:@"cropAndTransformErrorMessage"]){
+                    NSString *str = [mrzConfig objectForKey:@"cropAndTransformErrorMessage"];
+                    mrzVC.cropAndTransformErrorMessage = str;
+                } else {
+                    mrzVC.cropAndTransformErrorMessage = @"";
+                }
+
             }
             return mrzVC;
         } else if ([[scanMode uppercaseString] isEqualToString:[@"BARCODE" uppercaseString]]) {
