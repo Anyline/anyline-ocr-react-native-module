@@ -26,6 +26,7 @@ import LicensePlateConfig from '../config/LicensePlateConfig';
 import SerialNumberConfig from '../config/SerialNumber';
 import VinConfig from '../config/VINConfig';
 import USNRConfig from "../config/USNRConfig";
+import ShipConConfig from "../config/ContainerShipConfig";
 
 
 class Anyline extends Component {
@@ -91,6 +92,11 @@ class Anyline extends Component {
       case 'USNR':
         type = 'ANYLINE_OCR';
         config = USNRConfig;
+        break;
+        break;
+      case 'SHIPPING_CONTAINER':
+        type = 'ANYLINE_OCR';
+        config = ShipConConfig;
         break;
       case 'MRZ':
         config = MRZConfig;

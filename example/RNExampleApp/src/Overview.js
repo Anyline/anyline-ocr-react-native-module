@@ -103,6 +103,14 @@ export default function Overview({openAnyline, checkCameraPermissionAndOpen, dis
                   onPress={() => {
                     platformPermissionCheck('USNR')
                   }}/>
+        </View>
+        
+        <View style={styles.buttons}>
+          <Button style={styles.buttons} title={'  Shipping Container'} color="#0099FF"
+                  disabled={disabled}
+                  onPress={() => {
+                    platformPermissionCheck('SHIPPING_CONTAINER')
+                  }}/>
 
         </View>
         <Text style={styles.text}>OTHER</Text>
