@@ -31,12 +31,12 @@ export default {
       "outerColor": "000000",
       "outerAlpha": 0.3,
       "cropPadding": {
-        "x": -30,
-        "y": -90
+        "x": 0,
+        "y": 0
       },
       "cropOffset": {
         "x": 0,
-        "y": 90
+        "y": 0
       },
       "feedbackStrokeColor": "0099FF",
       "offset": {
@@ -58,7 +58,7 @@ export default {
       "strokeWidth": 2
     },
     "mrz": {
-      "cropAndTransformID": true,
+      "cropAndTransformID": false,
       "cropAndTransformErrorMessage": "Edges are not detected"
     }
   }

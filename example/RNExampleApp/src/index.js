@@ -28,6 +28,8 @@ import VinConfig from '../config/VINConfig';
 import USNRConfig from "../config/USNRConfig";
 import ShipConConfig from "../config/ContainerShipConfig";
 
+// Disable Warnings 
+console.disableYellowBox = true;
 
 class Anyline extends Component {
 

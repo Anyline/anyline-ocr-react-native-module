@@ -68,3 +68,7 @@ tsconfig.json
 example/RNExampleApp/ios/Podfile.lock
 
 yarn-error.log
+example/RNExampleApp/android/app/src/main/assets/index.android.bundle
+example/RNExampleApp/android/app/src/main/assets/index.android.bundle.meta
+example/RNExampleApp/ios/main.jsbundle
+example/RNExampleApp/ios/main.jsbundle.meta
