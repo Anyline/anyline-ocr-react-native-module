@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,6 +62,8 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
     private Double ratioDeviation = null;
 
     private android.os.Handler handler = new android.os.Handler();
+
+    private Button btnCapture;
 
     // takes care of fading the error message out after some time with no error reported from the SDK
     private Runnable errorMessageCleanup = new Runnable() {
@@ -113,6 +116,13 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             return;
         }
 
+        btnCapture = (Button) findViewById(getResources().getIdentifier("capture", "id", getPackageName()));
+        btnCapture.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            documentScanView.triggerPictureCornerDetection();
+          }
+        });
         // get Document specific Configs
         if (jsonObject.has("document")) {
             try {
@@ -319,6 +329,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             public void onPictureCornersDetected(AnylineImage anylineImage, List<PointF> list) {
                 // this is called after manual corner detection was requested
                 // Note: not implemented in this example
+              documentScanView.transformPicture(anylineImage, list);
             }
 
             @Override
@@ -326,6 +337,70 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 // this is called after a full frame image and 4 corners were passed to the SDK for
                 // transformation (e.g. when a user manually selected the corners in an image)
                 // Note: not implemented in this example
+
+              // handle the result document images here
+              if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+              }
+
+              /**
+               * IMPORTANT: cache provided frames here, and release them at the end of this onResult. Because
+               * keeping them in memory (e.g. setting the full frame to an ImageView)
+               * will result in a OutOfMemoryError soon. This error is reported in {@link #onTakePictureError
+               * (Throwable)}
+               *
+               * Use a DiskCache http://developer.android.com/training/displaying-bitmaps/cache-bitmap.html#disk-cache
+               * for example
+               *
+               */
+              File outDir = new File(getCacheDir(), "ok");
+              outDir.mkdir();
+              // change the file ending to png if you want a png
+              JSONObject jsonResult = new JSONObject();
+              try {
+                // convert the transformed image into a gray scaled image internally
+                // transformedImage.getGrayCvMat(false);
+                // get the transformed image as bitmap
+                // Bitmap bmp = transformedImage.getBitmap();
+                // save the image with quality 100 (only used for jpeg, ignored for png)
+                File imageFile = TempFileUtil.createTempFileCheckCache(DocumentActivity.this,
+                  UUID.randomUUID().toString(), ".jpg");
+                anylineImage.save(imageFile, quality);
+                showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
+
+                jsonResult.put("imagePath", imageFile.getAbsolutePath());
+
+//                // Put outline and conficence to result
+//                jsonResult.put("outline", jsonForOutline(documentResult.getOutline()));
+//                jsonResult.put("confidence", documentResult.getConfidence());
+
+              } catch (IOException e) {
+                e.printStackTrace();
+              } catch (JSONException jsonException) {
+                //should not be possible
+                Log.e(TAG, "Error while putting image path to json.", jsonException);
+              }
+
+              // release the images
+              anylineImage.release();
+
+              Boolean cancelOnResult = true;
+
+              JSONObject jsonObject;
+              try {
+                jsonObject = new JSONObject(configJson);
+                cancelOnResult = jsonObject.getBoolean("cancelOnResult");
+              } catch (Exception e) {
+
+              }
+
+              if (cancelOnResult) {
+                ResultReporter.onResult(jsonResult, true);
+                setResult(AnylineSDKPlugin.RESULT_OK);
+                finish();
+              } else {
+                ResultReporter.onResult(jsonResult, false);
+              }
             }
 
             @Override
