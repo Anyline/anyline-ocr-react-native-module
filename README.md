@@ -90,6 +90,7 @@ packagingOptions {
 from our example Project to your native iOS root folder.
 - Change the target and project of the Podfile to your project name.
 - ```pod update```
+  - if you get an error about node_modules dependencies initialize your project with `npm install` first.
 
 ##### Permissions
 Add Camera Permissions to Info.plist
