@@ -117,6 +117,11 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
         }
 
         btnCapture = (Button) findViewById(getResources().getIdentifier("capture", "id", getPackageName()));
+        if (jsonObject.has("showCaptureButton") && jsonObject.getBoolean("showCaptureButton")) {
+            btnCapture.setVisibility(View.VISIBLE);
+        } else {
+            btnCapture.setVisibility(View.GONE);
+        }
         btnCapture.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
