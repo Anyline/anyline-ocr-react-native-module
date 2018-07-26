@@ -71,6 +71,25 @@ and add the package to your getPackages function
       );
     }
 ```
+
+##### Add Repositorys to your app
+
+You need to add the Anyline and the google Repository to your build.gradle, so gradle does know, where to find these.
+
+Therefor go to your App/android/build.gradle and add this to allprojects:
+
+```
+allprojects {
+    repositories {
+    	...
+        google()
+        maven {
+            url 'https://anylinesdk.blob.core.windows.net/maven/'
+        }
+    }
+}
+```
+
 #### Issues
 Strict mode does not allow function declarations in a lexically nested statement.
  
