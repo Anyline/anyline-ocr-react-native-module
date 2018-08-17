@@ -54,6 +54,8 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
     private int quality = 100;
     private boolean postProcessing = true;
 
+    private boolean showSuccessToast = false;
+
     private Double maxDocumentOutputResolutionWidth = null;
     private Double maxDocumentOutputResolutionHeight = null;
 
@@ -111,6 +113,16 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             //JSONException or IllegalArgumentException is possible, return it to javascript
             finishWithError("error_invalid_json_data");
             return;
+        }
+
+        // Check if we have the ovverride toast boolean
+        if (jsonObject.has("showSuccessToast")) {
+            try {
+                this.showSuccessToast = jsonObject.getBoolean("showSuccessToast");
+            } catch (JSONException e) {
+                Log.e(TAG, e.getMessage());
+            }
+
         }
 
         // get Document specific Configs
@@ -188,7 +200,11 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                     File imageFile = TempFileUtil.createTempFileCheckCache(DocumentActivity.this,
                             UUID.randomUUID().toString(), ".jpg");
                     transformedImage.save(imageFile, quality);
-                    showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
+
+                    if (showSuccessToast == true) {
+                        // Only show toast if user has specified it should be shown
+                        showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
+                    }
 
                     jsonResult.put("imagePath", imageFile.getAbsolutePath());
 
