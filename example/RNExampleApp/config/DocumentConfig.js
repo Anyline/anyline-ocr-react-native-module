@@ -52,13 +52,14 @@ export default {
     "blinkAnimationOnResult": true,
     "cancelOnResult": true,
     "document": {
+      "showSuccessToast" : true,
       "quality" : 90,
       "maxOutputResolution" : {
         "width" : 1920,
         "height" : 1080
       },
       "ratio" : {
-        "ratios" : [0.707, 1.41, 1.58, 0.633, 1.296, 0.772],
+        "ratios" : [0.707, 1.41, 1.58, 0.633, 1.296, 0.772, 0.704],
         "deviation" : 0.15
       }
     }
