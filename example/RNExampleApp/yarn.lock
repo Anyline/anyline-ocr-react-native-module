@@ -1028,8 +1028,13 @@ buffer-from@^1.0.0:
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.0.0.tgz#4cb8832d23612589b0406e9e2956c17f06fdf531"
 
 buffer@^5.1.0:
+<<<<<<< HEAD
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.2.0.tgz#53cf98241100099e9eeae20ee6d51d21b16e541e"
+=======
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.2.1.tgz#dd57fa0f109ac59c602479044dca7b8b3d0b71d6"
+>>>>>>> bvanleeuwen1995-succes-toast-optional
   dependencies:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
