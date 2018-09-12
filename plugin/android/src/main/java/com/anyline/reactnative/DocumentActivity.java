@@ -54,6 +54,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
     private long lastErrorRecieved = 0;
     private int quality = 100;
     private boolean postProcessing = true;
+    private boolean showSuccessToast = true;
 
     private Double maxDocumentOutputResolutionWidth = null;
     private Double maxDocumentOutputResolutionHeight = null;
@@ -131,13 +132,48 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
         // get Document specific Configs
         if (jsonObject.has("document")) {
             try {
+
+                // Get the Document specific Config
                 JSONObject documentConfig = jsonObject.getJSONObject("document");
-                this.quality = documentConfig.getInt("quality");
-                this.maxDocumentOutputResolutionWidth = documentConfig.getJSONObject("maxOutputResolution").getDouble("width");
-                this.maxDocumentOutputResolutionHeight = documentConfig.getJSONObject("maxOutputResolution").getDouble("height");
-                this.ratios = getArrayListFromJsonArray(documentConfig.getJSONObject("ratio").getJSONArray("ratios"));
-                this.ratioDeviation = documentConfig.getJSONObject("ratio").getDouble("deviation");
-                this.postProcessing = documentConfig.getBoolean("postProcessing");
+
+                // Get Quality Config
+                if(documentConfig.has("quality")){
+                    this.quality = documentConfig.getInt("quality");
+                }
+
+                // Get Output Resolution Config
+                if(documentConfig.has("maxOutputResolution")){
+                    JSONObject documentOutputResoConfig = documentConfig.getJSONObject("maxOutputResolution");
+                    if(documentOutputResoConfig.has("width")){
+                        this.maxDocumentOutputResolutionWidth = documentOutputResoConfig.getDouble("width");
+                    }
+                    if(documentOutputResoConfig.has("height")){
+                        this.maxDocumentOutputResolutionHeight = documentOutputResoConfig.getDouble("height");
+                    }
+                }
+
+                // Get Ratio Config
+                if(documentConfig.has("ratio")){
+                    JSONObject ratioConfig = documentConfig.getJSONObject("ratio");
+
+                    if(ratioConfig.has("ratios")) {
+                        this.ratios = getArrayListFromJsonArray(ratioConfig.getJSONArray("ratios"));
+                    }
+                    if(ratioConfig.has("deviation")){
+                        this.ratioDeviation = ratioConfig.getDouble("deviation");
+                    }
+                }
+
+                // Get PostProcessing Config
+                if(documentConfig.has("postProcessing")){
+                    this.postProcessing = documentConfig.getBoolean("postProcessing");
+                }
+
+                // Get SuccessToast Config
+                if(documentConfig.has("showSuccessToast")){
+                    this.showSuccessToast = documentConfig.getBoolean("showSuccessToast");
+                }
+
             } catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -203,7 +239,11 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                     File imageFile = TempFileUtil.createTempFileCheckCache(DocumentActivity.this,
                             UUID.randomUUID().toString(), ".jpg");
                     transformedImage.save(imageFile, quality);
-                    showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
+
+                    if (showSuccessToast) {
+                        // Only show toast if user has specified it should be shown
+                        showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
+                    }
 
                     jsonResult.put("imagePath", imageFile.getAbsolutePath());
 
