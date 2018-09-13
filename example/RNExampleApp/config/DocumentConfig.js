@@ -50,7 +50,7 @@ export default {
     "beepOnResult": false,
     "vibrateOnResult": false,
     "blinkAnimationOnResult": true,
-    "cancelOnResult": true,
+    "cancelOnResult": false,
     "document": {
       "showSuccessToast" : true,
       "quality" : 90,

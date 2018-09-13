@@ -34,8 +34,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginHorizontal="90dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/selector_green_circle_button"
+            android:layout_marginBottom="50dp"
             android:adjustViewBounds="true"/>
 
     <FrameLayout
