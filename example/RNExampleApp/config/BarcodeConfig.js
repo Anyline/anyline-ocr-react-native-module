@@ -30,12 +30,18 @@ export default {
       "cornerRadius": 3,
       "strokeColor": "FFFFFF",
       "outerColor": "000000",
-      "outerAlpha": 0.3
+      "outerAlpha": 0.3,
+      "feedbackStrokeColor": "0099FF",
     },
     "flash": {
       "mode": "auto",
       "alignment": "bottom_right"
     },
+    "visualFeedback": {
+      "style": "RECT",
+      "strokeColor": "0099FF",
+      "fillColor": "220099FF"
+  },
     "beepOnResult": true,
     "vibrateOnResult": true,
     "blinkAnimationOnResult": true,

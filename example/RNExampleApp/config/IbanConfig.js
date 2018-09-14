@@ -42,7 +42,7 @@ export default {
     "blinkAnimationOnResult": true,
     "cancelOnResult": true,
     "visualFeedback": {
-      "style": "contour_point",
+      "style": "contour_underline",
       "strokeColor": "0099FF",
       "strokeWidth": 2,
       "fillColor": "110099FF"

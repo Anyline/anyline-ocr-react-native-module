@@ -45,7 +45,6 @@ export default {
     "visualFeedback": {
         "style": "CONTOUR_RECT",
         "strokeColor": "0099FF",
-        "fillColor": "220099FF"
     },
     "beepOnResult": true,
     "vibrateOnResult": true,
