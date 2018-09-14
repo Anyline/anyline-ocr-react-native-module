@@ -3,7 +3,9 @@ package com.anyline.reactnative;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.graphics.PointF;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,6 +63,8 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
 
     private ArrayList<Double> ratios = null;
     private Double ratioDeviation = null;
+
+    private JSONObject manualResult = new JSONObject();
 
     private android.os.Handler handler = new android.os.Handler();
 
@@ -114,6 +119,8 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             return;
         }
 
+        final Button btnCapture = findViewById(getResources().getIdentifier("capture", "id", getPackageName()));
+
         // get Document specific Configs
         if (jsonObject.has("document")) {
             try {
@@ -122,41 +129,86 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                 JSONObject documentConfig = jsonObject.getJSONObject("document");
 
                 // Get Quality Config
-                if(documentConfig.has("quality")){
+                if (documentConfig.has("quality")) {
                     this.quality = documentConfig.getInt("quality");
                 }
 
                 // Get Output Resolution Config
-                if(documentConfig.has("maxOutputResolution")){
+                if (documentConfig.has("maxOutputResolution")) {
                     JSONObject documentOutputResoConfig = documentConfig.getJSONObject("maxOutputResolution");
-                    if(documentOutputResoConfig.has("width")){
+                    if (documentOutputResoConfig.has("width")) {
                         this.maxDocumentOutputResolutionWidth = documentOutputResoConfig.getDouble("width");
                     }
-                    if(documentOutputResoConfig.has("height")){
+                    if (documentOutputResoConfig.has("height")) {
                         this.maxDocumentOutputResolutionHeight = documentOutputResoConfig.getDouble("height");
                     }
                 }
 
                 // Get Ratio Config
-                if(documentConfig.has("ratio")){
+                if (documentConfig.has("ratio")) {
                     JSONObject ratioConfig = documentConfig.getJSONObject("ratio");
 
-                    if(ratioConfig.has("ratios")) {
+                    if (ratioConfig.has("ratios")) {
                         this.ratios = getArrayListFromJsonArray(ratioConfig.getJSONArray("ratios"));
                     }
-                    if(ratioConfig.has("deviation")){
+                    if (ratioConfig.has("deviation")) {
                         this.ratioDeviation = ratioConfig.getDouble("deviation");
                     }
                 }
 
                 // Get PostProcessing Config
-                if(documentConfig.has("postProcessing")){
+                if (documentConfig.has("postProcessing")) {
                     this.postProcessing = documentConfig.getBoolean("postProcessing");
                 }
 
                 // Get SuccessToast Config
-                if(documentConfig.has("showSuccessToast")){
+                if (documentConfig.has("showSuccessToast")) {
                     this.showSuccessToast = documentConfig.getBoolean("showSuccessToast");
+                }
+
+                // set manual capture Button Config
+                if (documentConfig.has("manualCaptureButton")) {
+                    JSONObject manCapBtnConf = documentConfig.getJSONObject("manualCaptureButton");
+
+                    if(manCapBtnConf.has("text")){
+                        btnCapture.setText(manCapBtnConf.getString("text"));
+                    }
+
+                    if(manCapBtnConf.has("textSize")){
+                        btnCapture.setTextSize(manCapBtnConf.getInt("textSize"));
+                    }
+
+                    if(manCapBtnConf.has("textColor")){
+                        btnCapture.setTextColor(Color.parseColor(manCapBtnConf.getString("textColor")));
+                    }
+
+                    if(manCapBtnConf.has("buttonColor")){
+                        btnCapture.setBackgroundColor(Color.parseColor(manCapBtnConf.getString("buttonColor")));
+                    }
+
+                    if(manCapBtnConf.has("width")){
+                        btnCapture.setWidth(manCapBtnConf.getInt("width"));
+                    }
+
+                    if(manCapBtnConf.has("height")){
+                        btnCapture.setHeight(manCapBtnConf.getInt("height"));
+                    }
+
+
+                    // init Manual Capture Button
+                    btnCapture.setVisibility(View.VISIBLE);
+                    btnCapture.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            btnCapture.setClickable(false);
+                            documentScanView.cancelScanning();
+                            documentScanView.triggerPictureCornerDetection();
+                        }
+                    });
+
+                } else {
+                    btnCapture.setVisibility(View.GONE);
                 }
 
             } catch (JSONException e) {
@@ -164,15 +216,16 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             }
         }
 
+
         // Set a ratio you want the documents to be restricted to.
-        if(this.ratios != null){
+        if (this.ratios != null) {
             documentScanView.setDocumentRatios(this.ratios.toArray(new Double[0]));
         } else {
             documentScanView.setDocumentRatios(DocumentScanView.DocumentRatio.DIN_AX_PORTRAIT.getRatio(), DocumentScanView.DocumentRatio.DIN_AX_LANDSCAPE.getRatio());
         }
 
         // Set a maximum deviation for the ratio. 0.15 is the default
-        if(this.ratioDeviation != null){
+        if (this.ratioDeviation != null) {
             documentScanView.setMaxDocumentRatioDeviation(this.ratioDeviation);
         } else {
             documentScanView.setMaxDocumentRatioDeviation(0.15);
@@ -262,7 +315,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                     jsonObject = new JSONObject(configJson);
                     cancelOnResult = jsonObject.getBoolean("cancelOnResult");
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
 
                 if (cancelOnResult) {
@@ -358,27 +411,80 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             @Override
             public void onPictureCornersDetected(AnylineImage anylineImage, List<PointF> list) {
                 // this is called after manual corner detection was requested
-                // Note: not implemented in this example
+
+                // save fullFrame
+                try {
+                    File imageFile = TempFileUtil.createTempFileCheckCache(DocumentActivity.this, UUID.randomUUID().toString(), ".jpg");
+                    anylineImage.save(imageFile, quality);
+                    manualResult.put("fullImagePath", imageFile.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                documentScanView.transformPicture(anylineImage, list);
+                anylineImage.release();
             }
 
             @Override
             public void onPictureTransformed(AnylineImage anylineImage) {
                 // this is called after a full frame image and 4 corners were passed to the SDK for
                 // transformation (e.g. when a user manually selected the corners in an image)
-                // Note: not implemented in this example
+
+                // handle the result document images here
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                // save fullFrame
+                try {
+                    File imageFile = TempFileUtil.createTempFileCheckCache(DocumentActivity.this, UUID.randomUUID().toString(), ".jpg");
+                    anylineImage.save(imageFile, quality);
+                    manualResult.put("imagePath", imageFile.getAbsolutePath());
+
+                    if (showSuccessToast) {
+                        // Only show toast if user has specified it should be shown
+                        showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                anylineImage.release();
+
+                Boolean cancelOnResult = true;
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(configJson);
+                    cancelOnResult = jsonObject.getBoolean("cancelOnResult");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (cancelOnResult) {
+                    ResultReporter.onResult(manualResult, true);
+                    setResult(AnylineSDKPlugin.RESULT_OK);
+                    finish();
+                } else {
+                    btnCapture.setClickable(true);
+                    ResultReporter.onResult(manualResult, false);
+                }
+
             }
 
             @Override
             public void onPictureTransformError(DocumentScanView.DocumentError documentError) {
                 // this is called on any error while transforming the document image from the 4 corners
                 // Note: not implemented in this example
+
+                Log.e(TAG, documentError.toString());
             }
 
         });
-
-
-        // optionally stop the scan once a valid result was returned
-//        documentScanView.setCancelOnResult(cancelOnResult);
 
     }
 
