@@ -24,6 +24,12 @@ export default {
       "strokeColor": 'FFFFFF',
       "outerColor": '000000',
       "outerAlpha": 0.3,
+      "feedbackStrokeColor": "0099FF",
+    },
+    "visualFeedback": {
+      "style": "CONTOUR_RECT",
+      "strokeColor": "0099FF",
+      "fillColor": "220099FF"
     },
     "flash": {
       "mode": 'manual',
@@ -34,9 +40,6 @@ export default {
     "blinkAnimationOnResult": true,
     "cancelOnResult": true,
     "reportingEnabled": true,
-    "visualFeedback": {
-      "style": "CONTOUR_RECT"
-    },
     "serialNumber": {
       "numberCharWhitelist": '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ',
       "validationRegex": '^[0-9A-Z]{5,}$'

@@ -77,8 +77,8 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy.MM.dd"];
 
-    NSString *expirationDateObject = [formatter stringFromDate:scanResult.result.expirationDateObject];
-    NSString *dayOfBirthDateObject = [formatter stringFromDate:scanResult.result.dayOfBirthDateObject];
+    NSString *expirationDateObject = [formatter stringFromDate:[scanResult.result expirationDateObject]];
+    NSString *dayOfBirthDateObject = [formatter stringFromDate:[scanResult.result dayOfBirthDateObject]];
 
 
     NSMutableDictionary *scanResultDict = [[scanResult.result dictionaryWithValuesForKeys:@[@"documentType",

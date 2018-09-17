@@ -179,11 +179,11 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                     }
 
                     if(manCapBtnConf.has("textColor")){
-                        btnCapture.setTextColor(Color.parseColor(manCapBtnConf.getString("textColor")));
+                        btnCapture.setTextColor(Color.parseColor("#" + manCapBtnConf.getString("textColor")));
                     }
 
                     if(manCapBtnConf.has("buttonColor")){
-                        btnCapture.setBackgroundColor(Color.parseColor(manCapBtnConf.getString("buttonColor")));
+                        btnCapture.setBackgroundColor(Color.parseColor("#" + manCapBtnConf.getString("buttonColor")));
                     }
 
                     if(manCapBtnConf.has("width")){

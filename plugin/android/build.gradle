@@ -51,14 +51,14 @@ repositories {
         dirs 'libs'
     }
     maven {
-        url 'https://anylinesdk.blob.core.windows.net/testing/'
+        url 'https://anylinesdk.blob.core.windows.net/maven/'
     }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'io.anyline:anylinesdk:3.27.0-RC9@aar'
+    implementation 'io.anyline:anylinesdk:3.27.0@aar'
   	implementation 'com.google.android.gms:play-services-vision:15.0.2'
     implementation 'com.android.support:design:26.1.0'
     implementation "com.facebook.react:react-native:+"  // From node_modules

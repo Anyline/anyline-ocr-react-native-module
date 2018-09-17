@@ -29,6 +29,7 @@
 		7C42F22120516865002BB8E4 /* deu.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21B20516865002BB8E4 /* deu.traineddata */; };
 		7C42F22220516865002BB8E4 /* eng_no_dict.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = 7C42F21C20516865002BB8E4 /* eng_no_dict.traineddata */; };
 		7C79532D20C9923400F2EAFA /* USNr.any in Resources */ = {isa = PBXBuildFile; fileRef = 7C79532C20C9923300F2EAFA /* USNr.any */; };
+		7CC2F05A215010F600B2AB23 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CC2F037215010F500B2AB23 /* WebKit.framework */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 /* End PBXBuildFile section */
@@ -316,6 +317,7 @@
 		7C42F21B20516865002BB8E4 /* deu.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = deu.traineddata; sourceTree = "<group>"; };
 		7C42F21C20516865002BB8E4 /* eng_no_dict.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = eng_no_dict.traineddata; sourceTree = "<group>"; };
 		7C79532C20C9923300F2EAFA /* USNr.any */ = {isa = PBXFileReference; lastKnownFileType = file; path = USNr.any; sourceTree = "<group>"; };
+		7CC2F037215010F500B2AB23 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		9A41F1852761173E71490E7B /* Pods-RNExampleApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNExampleApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp.debug.xcconfig"; sourceTree = "<group>"; };
 		AA0049A81087564E18C8F99C /* libPods-RNExampleApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNExampleApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -327,6 +329,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CC2F05A215010F600B2AB23 /* WebKit.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -555,6 +558,7 @@
 		A21A27D6B8BAEB7E38742628 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7CC2F037215010F500B2AB23 /* WebKit.framework */,
 				AA0049A81087564E18C8F99C /* libPods-RNExampleApp.a */,
 			);
 			name = Frameworks;
@@ -991,7 +995,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp-resources.sh",
-				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_3.25.1/Framework/AnylineResources.bundle",
+				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_3.27.0/Framework/AnylineResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
