@@ -104,12 +104,6 @@ packagingOptions {
 ```
 #### iOS 
 
-##### Add WebKit to your iOS project
-- Open your platforms/ios *.xcworkspace with XCode.
-- In the info.plist go to the "Linked Frameworks and Libraries".
-- Add WebKit.framework
-
-
 ##### Podfile
 - Copy the [Podfile](https://github.com/Anyline/anyline-ocr-react-native-module/blob/master/example/RNExampleApp/ios/Podfile) 
 from our example Project to your native iOS root folder.
