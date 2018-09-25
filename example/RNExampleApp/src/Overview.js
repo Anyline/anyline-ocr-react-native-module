@@ -2,14 +2,14 @@
  * Created by jonas on 14.03.17.
  */
 import React from 'react';
-import {Button, Platform, StyleSheet, Text, View} from 'react-native';
+import {Button, Platform, StyleSheet, Text, View, ScrollView} from 'react-native';
 
 export default function Overview({openAnyline, checkCameraPermissionAndOpen, disabled}) {
 
   const platformPermissionCheck = (Platform.OS === 'android') ? checkCameraPermissionAndOpen : openAnyline;
 
   return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
 
         <Text style={styles.text}>ENERGY</Text>
         <View style={styles.buttons}>
@@ -143,14 +143,14 @@ export default function Overview({openAnyline, checkCameraPermissionAndOpen, dis
                     platformPermissionCheck('DOCUMENT')
                   }}/>
         </View>
-      </View>
+      </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     backgroundColor: '#303030',
     marginTop: '40%',
     marginBottom: '20%'

@@ -1,6 +1,6 @@
 {
   "name": "RNExampleApp",
-  "version": "3.27.0",
+  "version": "3.27.1",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -12,14 +12,15 @@
   },
   "dependencies": {
     "anyline-ocr-react-native-module": "../../plugin",
-    "react": "16.0.0",
-    "react-native": "0.51.0"
+    "react": "^16.5.2",
+    "react-native": "^0.57.1"
   },
   "devDependencies": {
     "babel-jest": "21.2.0",
-    "babel-preset-react-native": "4.0.0",
+    "babel-preset-react-native": "^5.0.1",
     "jest": "21.2.1",
-    "react-test-renderer": "16.0.0"
+    "react-test-renderer": "16.0.0",
+    "schedule": "^0.4.0"
   },
   "jest": {
     "preset": "react-native"

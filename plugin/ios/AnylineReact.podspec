@@ -21,5 +21,5 @@ Pod::Spec.new do |s|
   s.source_files  = "*.{h,m}"
 
   s.dependency "React"
-  s.dependency "Anyline", "~> 3.27.1"
+  s.dependency "Anyline", "~> 3.27.2"
 end
