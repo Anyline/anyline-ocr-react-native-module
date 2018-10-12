@@ -106,7 +106,7 @@ public class EnergyActivity extends AnylineBaseActivity {
 
         Log.d(TAG, enableBarcodeScanning.toString());
         if (enableBarcodeScanning) {
-            energyScanView.enableBarcodeDetection(true, new NativeBarcodeResultListener() {
+            energyScanView.enableBarcodeDetection(new NativeBarcodeResultListener() {
                 @Override
                 public void onBarcodesReceived(SparseArray<Barcode> sparseArray) {
 

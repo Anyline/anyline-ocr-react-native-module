@@ -63,6 +63,11 @@ public class AnylineOcrActivity extends AnylineBaseActivity {
             JSONObject json = new JSONObject(ocrConfigString);
 
             AnylineOcrConfig ocrConfig = new AnylineOcrConfig(json);
+
+            if (ocrConfig.getCharWhitelist() == "") {
+                ocrConfig.setCharWhitelist(null);
+            }
+
             if (ocrConfig.getCustomCmdFile() != null) {
                 ocrConfig.setCustomCmdFile(ocrConfig.getCustomCmdFile());
             }
