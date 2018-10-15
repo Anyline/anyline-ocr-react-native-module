@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Button, Image, ScrollView, StyleSheet, Text, View, Dimensions} from 'react-native';
 
 export default function Result({
                                  result,
@@ -53,9 +53,10 @@ export default function Result({
 
 const styles = StyleSheet.create({
   image: {
-    flex: 1,
-    height: 200,
-    width: '100%'
+    // flex: 1,
+    height: 300,
+    width: Dimensions.get('window').width,
+    alignSelf: 'stretch',
   },
   container: {
     flex: 1,
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#303030',
     marginBottom: 50,
-    marginTop: 50
+    marginTop: 50,
   },
   text: {
     color: "white",
@@ -71,7 +72,10 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   scrollContainer: {
+    display: 'flex',
     alignItems: 'center',
+    width: '100%',
+    flexDirection: 'column',
   },
 
   backButton: {

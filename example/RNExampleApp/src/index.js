@@ -245,7 +245,8 @@ class Anyline extends Component {
 
 const styles = StyleSheet.create({
   versions: {
-    color: "white"
+    color: "white",
+    marginTop: 10
   },
   container: {
     flex: 1,
