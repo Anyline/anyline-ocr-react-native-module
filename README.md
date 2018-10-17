@@ -10,6 +10,18 @@
 
 The plugin lets you connect to the SDK with React-Native.
 	  
+
+## Requirements:
+
+### iOS
+
+Platform >= 8
+
+
+### Android 
+
+minSDK >= 17
+
 ## Example
 
 Go to the Example project in the [example folder](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline).
