@@ -3,16 +3,17 @@ package com.anyline.reactnative;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
-import android.graphics.Color;
+import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,27 +24,26 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import at.nineyards.anyline.camera.AnylineViewConfig;
-import at.nineyards.anyline.camera.CameraConfig;
 import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.camera.CameraOpenListener;
 import at.nineyards.anyline.models.AnylineImage;
-import at.nineyards.anyline.modules.document.DocumentResult;
-import at.nineyards.anyline.modules.document.DocumentResultListener;
-import at.nineyards.anyline.modules.document.DocumentScanView;
 import at.nineyards.anyline.util.TempFileUtil;
+import io.anyline.plugin.ScanResult;
+import io.anyline.plugin.document.DocumentScanResultListener;
+import io.anyline.plugin.document.DocumentScanViewPlugin;
+import io.anyline.view.ScanView;
 
 /**
  * Example activity for the Anyline-Document-Detection-Module
  */
-public class DocumentActivity extends AnylineBaseActivity implements CameraOpenListener {
+public class Document4Activity extends AnylineBaseActivity implements CameraOpenListener {
 
+    private static final long ERROR_MESSAGE_DELAY = 2000;
     private static final String TAG = DocumentActivity.class.getSimpleName();
-    private DocumentScanView documentScanView;
+    private ScanView documentScanView;
     private Toast notificationToast;
     private ImageView imageViewResult;
     private ProgressDialog progressDialog;
@@ -53,204 +53,97 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
     private TextView errorMessage;
     private long lastErrorRecieved = 0;
     private int quality = 100;
-    private boolean postProcessing = true;
-    private boolean showSuccessToast = true;
-
-    private Double maxDocumentOutputResolutionWidth = null;
-    private Double maxDocumentOutputResolutionHeight = null;
-
-    private ArrayList<Double> ratios = null;
-    private Double ratioDeviation = null;
-
-    private JSONObject manualResult = new JSONObject();
+    private Runnable errorMessageCleanup;
 
     private android.os.Handler handler = new android.os.Handler();
-
-    // takes care of fading the error message out after some time with no error reported from the SDK
-    private Runnable errorMessageCleanup = new Runnable() {
-        @Override
-        public void run() {
-            if (System.currentTimeMillis() > lastErrorRecieved + getApplication().getResources().getIdentifier("error_message_delay", "integer", getPackageName())) {
-                if (errorMessage == null || errorMessageAnimator == null) {
-                    return;
-                }
-                if (errorMessage.getAlpha() == 0f) {
-                    errorMessage.setText("");
-                } else if (!errorMessageAnimator.isRunning()) {
-                    errorMessageAnimator = ObjectAnimator.ofFloat(errorMessage, "alpha", errorMessage.getAlpha(), 0f);
-                    errorMessageAnimator.setDuration(getResources().getIdentifier("error_message_delay", "integer", getPackageName()));
-                    errorMessageAnimator.setInterpolator(new AccelerateInterpolator());
-                    errorMessageAnimator.start();
-                }
-            }
-            handler.postDelayed(errorMessageCleanup, getResources().getIdentifier("error_message_delay", "integer", getPackageName()));
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getResources().getIdentifier("activity_scan_document", "layout", getPackageName()));
-        //Set the flag to keep the screen on (otherwise the screen may go dark during scanning)
+        setContentView(getResources().getIdentifier("activity_scan_scanview", "layout", getPackageName()));
+
+
+        // takes care of fading the error message out after some time with no error reported from the SDK
+        errorMessageCleanup = new Runnable() {
+            @Override
+            public void run() {
+                if (Document4Activity.this.isFinishing()) {
+                    return;
+                }
+                if (System.currentTimeMillis() > lastErrorRecieved + ERROR_MESSAGE_DELAY) {
+                    if (errorMessage == null || errorMessageAnimator == null) {
+                        return;
+                    }
+                    if (errorMessage.getAlpha() == 0f) {
+                        errorMessage.setText("");
+                    } else if (!errorMessageAnimator.isRunning()) {
+                        errorMessageAnimator = ObjectAnimator.ofFloat(errorMessage, "alpha", errorMessage.getAlpha(), 0f);
+                        errorMessageAnimator.setDuration(ERROR_MESSAGE_DELAY);
+                        errorMessageAnimator.setInterpolator(new AccelerateInterpolator());
+                        errorMessageAnimator.start();
+                    }
+                }
+                handler.postDelayed(errorMessageCleanup, ERROR_MESSAGE_DELAY);
+
+            }
+        };
+
+        // Set the flag to keep the screen on (otherwise the screen may go dark during scanning)
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         imageViewResult = (ImageView) findViewById(getResources().getIdentifier("image_result", "id", getPackageName()));
         errorMessageLayout = (FrameLayout) findViewById(getResources().getIdentifier("error_message_layout", "id", getPackageName()));
         errorMessage = (TextView) findViewById(getResources().getIdentifier("error_message", "id", getPackageName()));
 
-        documentScanView = (DocumentScanView) findViewById(getResources().getIdentifier("document_scan_view", "id", getPackageName()));
+        documentScanView = (ScanView) findViewById(getResources().getIdentifier("document_scan_view", "id", getPackageName()));
         // add a camera open listener that will be called when the camera is opened or an error occurred
-        //  this is optional (if not set a RuntimeException will be thrown if an error occurs)
+        // this is optional (if not set a RuntimeException will be thrown if an error occurs)
         documentScanView.setCameraOpenListener(this);
         // the view can be configured via a json file in the assets, and this config is set here
-        // (alternatively it can be configured via xml, see the Energy Example for that)
-        JSONObject jsonObject;
+
         try {
-            jsonObject = new JSONObject(configJson);
-            // set individual camera settings for this example by getting the current preferred settings and adapting them
-            CameraConfig camConfig = documentScanView.getPreferredCameraConfig();
-            setFocusConfig(jsonObject, camConfig);
+            final JSONObject json = new JSONObject(configJson);
+            documentScanView.setScanConfig(json, licenseKey);
         } catch (Exception e) {
-            //JSONException or IllegalArgumentException is possible, return it to javascript
-            finishWithError("error_invalid_json_data");
-            return;
-        }
-
-        final Button btnCapture = findViewById(getResources().getIdentifier("capture", "id", getPackageName()));
-
-        // get Document specific Configs
-        if (jsonObject.has("document")) {
-            try {
-
-                // Get the Document specific Config
-                JSONObject documentConfig = jsonObject.getJSONObject("document");
-
-                // Get Quality Config
-                if (documentConfig.has("quality")) {
-                    this.quality = documentConfig.getInt("quality");
-                }
-
-                // Get Output Resolution Config
-                if (documentConfig.has("maxOutputResolution")) {
-                    JSONObject documentOutputResoConfig = documentConfig.getJSONObject("maxOutputResolution");
-                    if (documentOutputResoConfig.has("width")) {
-                        this.maxDocumentOutputResolutionWidth = documentOutputResoConfig.getDouble("width");
-                    }
-                    if (documentOutputResoConfig.has("height")) {
-                        this.maxDocumentOutputResolutionHeight = documentOutputResoConfig.getDouble("height");
-                    }
-                }
-
-                // Get Ratio Config
-                if (documentConfig.has("ratio")) {
-                    JSONObject ratioConfig = documentConfig.getJSONObject("ratio");
-
-                    if (ratioConfig.has("ratios")) {
-                        this.ratios = getArrayListFromJsonArray(ratioConfig.getJSONArray("ratios"));
-                    }
-                    if (ratioConfig.has("deviation")) {
-                        this.ratioDeviation = ratioConfig.getDouble("deviation");
-                    }
-                }
-
-                // Get PostProcessing Config
-                if (documentConfig.has("postProcessing")) {
-                    this.postProcessing = documentConfig.getBoolean("postProcessing");
-                }
-
-                // Get SuccessToast Config
-                if (documentConfig.has("showSuccessToast")) {
-                    this.showSuccessToast = documentConfig.getBoolean("showSuccessToast");
-                }
-
-                // set manual capture Button Config
-                if (documentConfig.has("manualCaptureButton")) {
-                    JSONObject manCapBtnConf = documentConfig.getJSONObject("manualCaptureButton");
-
-                    if(manCapBtnConf.has("text")){
-                        btnCapture.setText(manCapBtnConf.getString("text"));
-                    }
-
-                    if(manCapBtnConf.has("textSize")){
-                        btnCapture.setTextSize(manCapBtnConf.getInt("textSize"));
-                    }
-
-                    if(manCapBtnConf.has("textColor")){
-                        btnCapture.setTextColor(Color.parseColor("#" + manCapBtnConf.getString("textColor")));
-                    }
-
-                    if(manCapBtnConf.has("buttonColor")){
-                        btnCapture.setBackgroundColor(Color.parseColor("#" + manCapBtnConf.getString("buttonColor")));
-                    }
-
-                    if(manCapBtnConf.has("width")){
-                        btnCapture.setWidth(manCapBtnConf.getInt("width"));
-                    }
-
-                    if(manCapBtnConf.has("height")){
-                        btnCapture.setHeight(manCapBtnConf.getInt("height"));
-                    }
-
-
-                    // init Manual Capture Button
-                    btnCapture.setVisibility(View.VISIBLE);
-                    btnCapture.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            btnCapture.setClickable(false);
-                            documentScanView.cancelScanning();
-                            documentScanView.triggerPictureCornerDetection();
-                        }
-                    });
-
-                } else {
-                    btnCapture.setVisibility(View.GONE);
-                }
-
-            } catch (JSONException e) {
-                Log.e(TAG, e.getMessage());
-            }
+            e.printStackTrace();
         }
 
 
-        // Set a ratio you want the documents to be restricted to.
-        if (this.ratios != null) {
-            documentScanView.setDocumentRatios(this.ratios.toArray(new Double[0]));
-        } else {
-            documentScanView.setDocumentRatios(DocumentScanView.DocumentRatio.DIN_AX_PORTRAIT.getRatio(), DocumentScanView.DocumentRatio.DIN_AX_LANDSCAPE.getRatio());
-        }
-
-        // Set a maximum deviation for the ratio. 0.15 is the default
-        if (this.ratioDeviation != null) {
-            documentScanView.setMaxDocumentRatioDeviation(this.ratioDeviation);
-        } else {
-            documentScanView.setMaxDocumentRatioDeviation(0.15);
-        }
-
-        documentScanView.setConfig(new AnylineViewConfig(this, jsonObject));
-
-        // Set maximum output resolution
-        if (maxDocumentOutputResolutionWidth != null && maxDocumentOutputResolutionHeight != null) {
-            documentScanView.setMaxDocumentOutputResolution(maxDocumentOutputResolutionWidth, maxDocumentOutputResolutionHeight);
-        }
-
-        // Set PostProcessing
-        documentScanView.setPostProcessingEnabled(this.postProcessing);
 
         // initialize Anyline with the license key and a Listener that is called if a result is found
-        documentScanView.initAnyline(licenseKey, new DocumentResultListener() {
+        documentScanView.getScanViewPlugin().addScanResultListener(new DocumentScanResultListener() {
             @Override
-            public void onResult(DocumentResult documentResult) {
+            public void onResult(ScanResult documentResult) {
 
                 // handle the result document images here
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
 
-                AnylineImage transformedImage = documentResult.getResult();
+                AnylineImage transformedImage = (AnylineImage) documentResult.getResult();
                 AnylineImage fullFrame = documentResult.getFullImage();
+
+
+                // resize display view based on larger side of document, and display document
+                int widthDP, heightDP;
+                Bitmap bmpTransformedImage = transformedImage.getBitmap();
+
+                if (bmpTransformedImage.getHeight() > bmpTransformedImage.getWidth()) {
+                    widthDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+                    heightDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 160, getResources().getDisplayMetrics());
+                    //Add a comment to this line
+
+                    imageViewResult.getLayoutParams().width = widthDP;
+                    imageViewResult.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                } else {
+                    widthDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 160, getResources().getDisplayMetrics());
+                    heightDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+
+                    imageViewResult.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    imageViewResult.getLayoutParams().height = heightDP;
+                }
+
+                imageViewResult.setImageBitmap(Bitmap.createScaledBitmap(transformedImage.getBitmap(), widthDP, heightDP, false));
 
                 /**
                  * IMPORTANT: cache provided frames here, and release them at the end of this onResult. Because
@@ -272,21 +165,17 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                     // get the transformed image as bitmap
                     // Bitmap bmp = transformedImage.getBitmap();
                     // save the image with quality 100 (only used for jpeg, ignored for png)
-                    File imageFile = TempFileUtil.createTempFileCheckCache(DocumentActivity.this,
+                    File imageFile = TempFileUtil.createTempFileCheckCache(Document4Activity.this,
                             UUID.randomUUID().toString(), ".jpg");
                     transformedImage.save(imageFile, quality);
-
-                    if (showSuccessToast) {
-                        // Only show toast if user has specified it should be shown
-                        showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
-                    }
+                    showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
 
                     jsonResult.put("imagePath", imageFile.getAbsolutePath());
 
 
                     // Save the Full Frame Image
                     if (fullFrame != null) {
-                        imageFile = TempFileUtil.createTempFileCheckCache(DocumentActivity.this,
+                        imageFile = TempFileUtil.createTempFileCheckCache(Document4Activity.this,
                                 UUID.randomUUID().toString(), ".jpg");
                         fullFrame.save(imageFile, quality);
                         jsonResult.put("fullImagePath", imageFile.getAbsolutePath());
@@ -294,7 +183,6 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                     // Put outline and conficence to result
                     jsonResult.put("outline", jsonForOutline(documentResult.getOutline()));
                     jsonResult.put("confidence", documentResult.getConfidence());
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException jsonException) {
@@ -313,7 +201,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
                     jsonObject = new JSONObject(configJson);
                     cancelOnResult = jsonObject.getBoolean("cancelOnResult");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.d(TAG, e.getLocalizedMessage());
                 }
 
                 if (cancelOnResult) {
@@ -335,7 +223,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             }
 
             @Override
-            public void onPreviewProcessingFailure(DocumentScanView.DocumentError documentError) {
+            public void onPreviewProcessingFailure(DocumentScanViewPlugin.DocumentError documentError) {
                 // this is called on any error while processing the document image
                 // Note: this is called every time an error occurs in a run, so that might be quite often
                 // An error message should only be presented to the user after some time
@@ -344,7 +232,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             }
 
             @Override
-            public void onPictureProcessingFailure(DocumentScanView.DocumentError documentError) {
+            public void onPictureProcessingFailure(DocumentScanViewPlugin.DocumentError documentError) {
 
                 showErrorMessageFor(documentError, true);
                 if (progressDialog != null && progressDialog.isShowing()) {
@@ -353,16 +241,14 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
 
                 // if there is a problem, here is how images could be saved in the error case
                 // this will be a full, not cropped, not transformed image
-                AnylineImage image = documentScanView.getCurrentFullImage();
+                AnylineImage image = ((DocumentScanViewPlugin)documentScanView.getScanViewPlugin()).getCurrentFullImage();
 
                 if (image != null) {
                     File outDir = new File(getCacheDir(), "error");
                     outDir.mkdir();
                     File outFile = new File(outDir, "" + System.currentTimeMillis() + documentError.name() + ".jpg");
                     try {
-                        File imageFile = TempFileUtil.createTempFileCheckCache(DocumentActivity.this,
-                                UUID.randomUUID().toString(), ".jpg");
-                        image.save(imageFile, 100);
+                        image.save(outFile, 100);
                         Log.d(TAG, "error image saved to " + outFile.getAbsolutePath());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -372,17 +258,17 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             }
 
             @Override
-            public boolean onDocumentOutlineDetected(List<PointF> list, boolean documentShapeAndBrightnessValid) {
+            public boolean onDocumentOutlineDetected(List rect, boolean documentShapeAndBrightnessValid) {
                 // is called when the outline of the document is detected. return true if the outline is consumed by
                 // the implementation here, false if the outline should be drawn by the DocumentScanView
-                lastOutline = list; // saving the outline for the animations
-                return false;
+                lastOutline = rect; // saving the outline for the animations
+                return true;
             }
 
             @Override
             public void onTakePictureSuccess() {
                 // this is called after the image has been captured from the camera and is about to be processed
-                progressDialog = ProgressDialog.show(DocumentActivity.this, getString(getResources().getIdentifier("document_processing_picture_header", "string", getPackageName())),
+                progressDialog = ProgressDialog.show(Document4Activity.this, getString(getResources().getIdentifier("document_processing_picture_header", "string", getPackageName())),
                         getString(getResources().getIdentifier("document_processing_picture", "string", getPackageName())),
                         true);
 
@@ -407,91 +293,38 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
             }
 
             @Override
-            public void onPictureCornersDetected(AnylineImage anylineImage, List<PointF> list) {
+            public void onPictureCornersDetected(AnylineImage anylineImage, List rect) {
                 // this is called after manual corner detection was requested
-
-                // save fullFrame
-                try {
-                    File imageFile = TempFileUtil.createTempFileCheckCache(DocumentActivity.this, UUID.randomUUID().toString(), ".jpg");
-                    anylineImage.save(imageFile, quality);
-                    manualResult.put("fullImagePath", imageFile.getAbsolutePath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                documentScanView.transformPicture(anylineImage, list);
-                anylineImage.release();
+                // Note: not implemented in this example
             }
 
             @Override
             public void onPictureTransformed(AnylineImage anylineImage) {
                 // this is called after a full frame image and 4 corners were passed to the SDK for
                 // transformation (e.g. when a user manually selected the corners in an image)
-
-                // handle the result document images here
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-
-                // save fullFrame
-                try {
-                    File imageFile = TempFileUtil.createTempFileCheckCache(DocumentActivity.this, UUID.randomUUID().toString(), ".jpg");
-                    anylineImage.save(imageFile, quality);
-                    manualResult.put("imagePath", imageFile.getAbsolutePath());
-
-                    if (showSuccessToast) {
-                        // Only show toast if user has specified it should be shown
-                        showToast(getString(getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                anylineImage.release();
-
-                Boolean cancelOnResult = true;
-                JSONObject jsonObject;
-                try {
-                    jsonObject = new JSONObject(configJson);
-                    cancelOnResult = jsonObject.getBoolean("cancelOnResult");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                if (cancelOnResult) {
-                    ResultReporter.onResult(manualResult, true);
-                    setResult(AnylineSDKPlugin.RESULT_OK);
-                    finish();
-                } else {
-                    btnCapture.setClickable(true);
-                    ResultReporter.onResult(manualResult, false);
-                }
-
+                // Note: not implemented in this example
             }
 
             @Override
-            public void onPictureTransformError(DocumentScanView.DocumentError documentError) {
+            public void onPictureTransformError(DocumentScanViewPlugin.DocumentError documentError) {
                 // this is called on any error while transforming the document image from the 4 corners
                 // Note: not implemented in this example
-
-                Log.e(TAG, documentError.toString());
             }
 
         });
 
+
+        // optionally stop the scan once a valid result was returned
+        // documentScanView.setCancelOnResult(cancelOnResult);
+
     }
 
 
-    private void showErrorMessageFor(DocumentScanView.DocumentError documentError) {
+    private void showErrorMessageFor(DocumentScanViewPlugin.DocumentError documentError) {
         showErrorMessageFor(documentError, false);
     }
 
-    private void showErrorMessageFor(DocumentScanView.DocumentError documentError, boolean highlight) {
+    private void showErrorMessageFor(DocumentScanViewPlugin.DocumentError documentError, boolean highlight) {
         String text = getString(getResources().getIdentifier("document_picture_error", "string", getPackageName()));
         switch (documentError) {
             case DOCUMENT_NOT_SHARP:
@@ -545,7 +378,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
         errorMessage.setAlpha(0f);
         errorMessage.setText(message);
         errorMessageAnimator = ObjectAnimator.ofFloat(errorMessage, "alpha", 0f, 1f);
-        errorMessageAnimator.setDuration(getResources().getInteger(getResources().getIdentifier("error_message_delay", "integer", getPackageName())));
+        errorMessageAnimator.setDuration(ERROR_MESSAGE_DELAY);
         errorMessageAnimator.setInterpolator(new DecelerateInterpolator());
         errorMessageAnimator.start();
     }
@@ -562,7 +395,7 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
         }
 
         errorMessageAnimator = ObjectAnimator.ofFloat(errorMessage, "alpha", 0f, 1f);
-        errorMessageAnimator.setDuration(getResources().getInteger(getResources().getIdentifier("error_message_delay", "integer", getPackageName())));
+        errorMessageAnimator.setDuration(ERROR_MESSAGE_DELAY);
         errorMessageAnimator.setInterpolator(new DecelerateInterpolator());
         errorMessageAnimator.setRepeatMode(ValueAnimator.REVERSE);
         errorMessageAnimator.setRepeatCount(1);
@@ -582,17 +415,22 @@ public class DocumentActivity extends AnylineBaseActivity implements CameraOpenL
     protected void onResume() {
         super.onResume();
         //start the actual scanning
-        documentScanView.startScanning();
+        documentScanView.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //stop the scanning
-        documentScanView.cancelScanning();
+        documentScanView.stop();
         //release the camera (must be called in onPause, because there are situations where
         // it cannot be auto-detected that the camera should be released)
         documentScanView.releaseCameraInBackground();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override

@@ -2,148 +2,149 @@
  * Created by jonas on 14.03.17.
  */
 import React from 'react';
-import {Button, Platform, StyleSheet, Text, View, ScrollView} from 'react-native';
+import { Button, Platform, StyleSheet, Text, View, ScrollView } from 'react-native';
 
-export default function Overview({openAnyline, checkCameraPermissionAndOpen, disabled}) {
+export default function Overview({ openAnyline, checkCameraPermissionAndOpen, disabled }) {
 
   const platformPermissionCheck = (Platform.OS === 'android') ? checkCameraPermissionAndOpen : openAnyline;
 
   return (
-      <ScrollView style={styles.container}>
+    <ScrollView style={styles.container}>
 
-        <Text style={styles.text}>ENERGY</Text>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Auto Analog/Digital Meter Scanner'}
-                  color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('AUTO_ANALOG_DIGITAL_METER')
-                  }}/>
-        </View>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Analog Meter Scanner'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('ANALOG_METER')
-                  }}/>
-        </View>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Digital Meter Scanner'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('DIGITAL_METER')
-                  }}/>
-        </View>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Serial Number'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('SERIAL_NUMBER')
-                  }}/>
-        </View>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Dial Meter Scanner ALPHA'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('DIAL_METER')
-                  }}/>
-        </View>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Dot Matrix Meter'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('DOT_MATRIX_METER')
-                  }}/>
-        </View>
-        <Text style={styles.text}>VEHICLE</Text>
+      <Text style={styles.text}>METER READING</Text>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Auto Analog/Digital Meter Scanner'}
+          color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('AUTO_ANALOG_DIGITAL_METER')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Analog Meter Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('ANALOG_METER')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Digital Meter Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('DIGITAL_METER')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Serial Number'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('SERIAL_NUMBER')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Dial Meter Scanner ALPHA'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('DIAL_METER')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Dot Matrix Meter'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('DOT_MATRIX_METER')
+          }} />
+      </View>
+      <Text style={styles.text}>ID</Text>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  AUT/GER Driving License'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('DRIVING_LICENSE')
+          }} />
 
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  License Plate Scanner'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('LICENSE_PLATE')
-                  }}/>
-        </View>
-        <Text style={styles.text}>OCR</Text>
+      </View>
 
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  IBAN Scanner'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('IBAN')
-                  }}/>
-        </View>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Voucher Code Scanner'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('VOUCHER')
-                  }}/>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  MRZ Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('MRZ')
+          }} />
+      </View>
 
-        </View>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Austrian Driving License'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('DRIVING_LICENSE')
-                  }}/>
+      <Text style={styles.text}>VEHICLE</Text>
 
-        </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  License Plate Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('LICENSE_PLATE')
+          }} />
+      </View>
+      <Text style={styles.text}>OCR</Text>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  IBAN Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('IBAN')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Voucher Code Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('VOUCHER')
+          }} />
+
+      </View>
+
+      <Text style={styles.text}>MRO</Text>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Vehicle Identification Number'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('VIN')
+          }} />
+
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Universal Serial Number'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('USNR')
+          }} />
+      </View>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Shipping Container'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('SHIPPING_CONTAINER')
+          }} />
+
+      </View>
 
 
+      <Text style={styles.text}>OTHER</Text>
 
-        <Text style={styles.text}>MRO</Text>
-
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Vehicle Identification Number'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('VIN')
-                  }}/>
-
-        </View>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Universal Serial Number'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('USNR')
-                  }}/>
-        </View>
-        
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Shipping Container'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('SHIPPING_CONTAINER')
-                  }}/>
-
-        </View>
-
-
-        <Text style={styles.text}>OTHER</Text>
-
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Barcode Scanner'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('BARCODE')
-                  }}/>
-        </View>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  MRZ Scanner'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('MRZ')
-                  }}/>
-        </View>
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'  Document Scanner'} color="#0099FF"
-                  disabled={disabled}
-                  onPress={() => {
-                    platformPermissionCheck('DOCUMENT')
-                  }}/>
-        </View>
-      </ScrollView>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Barcode Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('BARCODE')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Document Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('DOCUMENT')
+          }} />
+      </View>
+    </ScrollView>
   );
 }
 

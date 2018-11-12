@@ -95,7 +95,6 @@ class Anyline extends Component {
         type = 'ANYLINE_OCR';
         config = USNRConfig;
         break;
-        break;
       case 'SHIPPING_CONTAINER':
         type = 'ANYLINE_OCR';
         config = ShipConConfig;
@@ -113,14 +112,13 @@ class Anyline extends Component {
         config = EnergyConfig;
         break;
       case 'DIGITAL_METER':
-      default:
         config = EnergyConfig;
         break;
     }
 
 
     try {
-      const result = await AnylineOCR.setupPromise(JSON.stringify(config), type);
+      const result = await AnylineOCR.setupPromise(JSON.stringify(config), 'scan');
 
       console.log(result);
       this.setState({buttonsDisabled: false});

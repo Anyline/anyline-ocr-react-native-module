@@ -18,7 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
 
     public static final String REACT_CLASS = "AnylineSDKPlugin";
@@ -46,7 +45,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     public static final int LICENSE_PLATE = 11;
     public static final int SERIAL_NUMBER = 12;
     public static final int DOT_MATRIX_METER = 13;
-
+    public static final int REQUEST_ANYLINE_4 = 14;
 
     private JSONObject configObject;
     private ReactApplicationContext reactContext;
@@ -76,7 +75,8 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     // Deprecated
     @ReactMethod
-    public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
+    public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact,
+            Callback onErrorReact) {
         onResultCallback = onResultReact;
         onErrorCallback = onErrorReact;
         this.returnMethod = "callback";
@@ -104,43 +104,70 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         routeScanMode(scanMode);
     }
 
-    private void routeScanMode(String scanMode){
+    private void routeScanMode(String scanMode) {
         switch (scanMode) {
-            case "AUTO_ANALOG_DIGITAL_METER":
-                scan(EnergyActivity.class, scanMode, AUTO_ANALOG_DIGITAL_METER);
-                break;
-            case "DIGITAL_METER":
-                scan(EnergyActivity.class, scanMode, DIGITAL_METER);
-                break;
-            case "SERIAL_NUMBER":
-                scan(EnergyActivity.class, scanMode, SERIAL_NUMBER);
-                break;
-            case "DIAL_METER":
-                scan(EnergyActivity.class, scanMode, DIAL_METER);
-                break;
-            case "ANALOG_METER":
-                scan(EnergyActivity.class, scanMode, ANALOG_METER);
-                break;
-            case "DOT_MATRIX_METER":
-                scan(EnergyActivity.class, scanMode, DOT_MATRIX_METER);
-                break;
-            case "ANYLINE_OCR":
-                scan(AnylineOcrActivity.class, scanMode, ANYLINE_OCR);
-                break;
-            case "BARCODE":
-                scan(BarcodeActivity.class, scanMode, BARCODE);
-                break;
-            case "MRZ":
-                scan(MrzActivity.class, scanMode, ANYLINE_MRZ);
-                break;
-            case "DOCUMENT":
-                scan(DocumentActivity.class, scanMode, ANYLINE_DOCUMENT);
-                break;
-            case "LICENSE_PLATE":
-                scan(LicensePlateActivity.class, scanMode, LICENSE_PLATE);
-                break;
-            default:
-                returnError("Wrong ScanMode");
+        case "AUTO_ANALOG_DIGITAL_METER":
+            scan(EnergyActivity.class, scanMode, AUTO_ANALOG_DIGITAL_METER);
+            break;
+        case "DIGITAL_METER":
+            scan(EnergyActivity.class, scanMode, DIGITAL_METER);
+            break;
+        case "SERIAL_NUMBER":
+            scan(EnergyActivity.class, scanMode, SERIAL_NUMBER);
+            break;
+        case "DIAL_METER":
+            scan(EnergyActivity.class, scanMode, DIAL_METER);
+            break;
+        case "ANALOG_METER":
+            scan(EnergyActivity.class, scanMode, ANALOG_METER);
+            break;
+        case "DOT_MATRIX_METER":
+            scan(EnergyActivity.class, scanMode, DOT_MATRIX_METER);
+            break;
+        case "ANYLINE_OCR":
+            scan(AnylineOcrActivity.class, scanMode, ANYLINE_OCR);
+            break;
+        case "BARCODE":
+            scan(BarcodeActivity.class, scanMode, BARCODE);
+            break;
+        case "MRZ":
+            scan(MrzActivity.class, scanMode, ANYLINE_MRZ);
+            break;
+        case "DOCUMENT":
+            scan(DocumentActivity.class, scanMode, ANYLINE_DOCUMENT);
+            break;
+        case "LICENSE_PLATE":
+            scan(LicensePlateActivity.class, scanMode, LICENSE_PLATE);
+            break;
+        case "scan": // > Anyline 4
+            scanAnyline4();
+            break;
+        default:
+            returnError("Wrong ScanMode");
+        }
+    }
+
+    private void scanAnyline4() {
+        try {
+            configObject = new JSONObject(this.config);
+            JSONObject options = configObject.getJSONObject("options");
+            if (options.has("viewPlugin")) {
+                JSONObject viewPlugin = options.getJSONObject("viewPlugin");
+                if (viewPlugin != null && viewPlugin.has("plugin")) {
+                    JSONObject plugin = viewPlugin.getJSONObject("plugin");
+                    if (plugin != null && plugin.has("documentPlugin")) {
+                        scan(Document4Activity.class, null, REQUEST_ANYLINE_4);
+                    } else {
+                        scan(Anyline4Activity.class, null, REQUEST_ANYLINE_4);
+                    }
+                } else {
+                    returnError("No Plugin in config. Please check your configuration.");
+                }
+            } else {
+                returnError("No ViewPlugin in config. Please check your configuration.");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -151,7 +178,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         try {
             configObject = new JSONObject(this.config);
 
-            //Hacky -> force cancelOnResult = true
+            // Hacky -> force cancelOnResult = true
             options = configObject.getJSONObject("options");
             options.put("cancelOnResult", true);
 
@@ -167,7 +194,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         intent.putExtra(EXTRA_LICENSE_KEY, license);
         intent.putExtra(EXTRA_CONFIG_JSON, options.toString());
 
-        //Check if OCR
+        // Check if OCR
         if (configObject.has("ocr")) {
             try {
                 intent.putExtra(EXTRA_OCR_CONFIG_JSON, configObject.get("ocr").toString());
@@ -191,7 +218,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         returnSuccess(result.toString());
     }
 
-
     @Override
     public void onError(String error) {
         returnError(error);
@@ -204,27 +230,27 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     private void returnError(String error) {
         switch (this.returnMethod) {
-            case "callback":
-                onErrorCallback.invoke(error);
-                break;
-            case "promise":
-                promise.reject(E_ERROR, error);
-                break;
-            default:
-                break;
+        case "callback":
+            onErrorCallback.invoke(error);
+            break;
+        case "promise":
+            promise.reject(E_ERROR, error);
+            break;
+        default:
+            break;
         }
     }
 
     private void returnSuccess(String result) {
         switch (this.returnMethod) {
-            case "callback":
-                onResultCallback.invoke(result);
-                break;
-            case "promise":
-                promise.resolve(result);
-                break;
-            default:
-                break;
+        case "callback":
+            onResultCallback.invoke(result);
+            break;
+        case "promise":
+            promise.resolve(result);
+            break;
+        default:
+            break;
         }
     }
 }

@@ -15,30 +15,39 @@ export default {
     'NE9tUzVraWdNUVZLaW8vaWlJS2tIVEVUdUxjYWJEWWtacExZdVR2YnU1S1hIc0R6\n' +
     'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
   options: {
-    "captureResolution": '1080p',
-    "cutout": {
-      "style": 'rect',
-      "alignment": 'top_half',
-      "strokeWidth": 2,
-      "cornerRadius": 4,
-      "strokeColor": 'FFFFFF',
-      "outerColor": '000000',
-      "outerAlpha": 0.3,
-      "feedbackStrokeColor": "0099FF",
+    "camera": {
+      "captureResolution": "720p"
     },
     "flash": {
-      "mode": 'manual',
-      "alignment": 'bottom_right',
+      "mode": "manual",
+      "alignment": "bottom_right",
     },
-    "beepOnResult": true,
-    "vibrateOnResult": true,
-    "blinkAnimationOnResult": true,
-    "cancelOnResult": true,
-    "reportingEnabled": true,
-    "visualFeedback": {
-      "style": "CONTOUR_RECT",
-      "strokeColor": "0099FF",
-      "fillColor": "220099FF"
-    },
+    "viewPlugin": {
+      "plugin": {
+        "id": "Meter_ID",
+        "meterPlugin": {
+          "scanMode": "AUTO_ANALOG_DIGITAL_METER"
+        }
+      },
+      "cutoutConfig": {
+        "style": "rect",
+        "alignment": "top_half",
+        "strokeWidth": 2,
+        "cornerRadius": 4,
+        "strokeColor": "FFFFFF",
+        "outerColor": "000000",
+        "outerAlpha": 0.3,
+        "feedbackStrokeColor": "0099FF"
+      },
+      "scanFeedback": {
+        "style": "CONTOUR_RECT",
+        "strokeColor": "0099FF",
+        "fillColor": "220099FF",
+        "blinkOnResult": true,
+        "beepOnResult": true,
+        "vibrateOnResult": true
+      },
+      "cancelOnResult": true
+    }
   }
 }

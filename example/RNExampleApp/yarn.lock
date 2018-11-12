@@ -1005,7 +1005,7 @@ ansi@^0.3.0, ansi@~0.3.1:
   resolved "https://registry.yarnpkg.com/ansi/-/ansi-0.3.1.tgz#0c42d4fb17160d5a9af1e484bace1c66922c1b21"
 
 anyline-ocr-react-native-module@../../plugin:
-  version "4.0.0"
+  version "5.0.0"
   dependencies:
     buffer "^5.1.0"
 

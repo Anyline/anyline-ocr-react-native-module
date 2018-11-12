@@ -30,6 +30,7 @@ import at.nineyards.anyline.camera.CameraConfig;
 import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.camera.CameraFeatures;
 import at.nineyards.anyline.camera.CameraOpenListener;
+import io.anyline.view.ScanViewPlugin;
 
 public abstract class AnylineBaseActivity extends Activity
         implements CameraOpenListener, Thread.UncaughtExceptionHandler {
@@ -229,6 +230,17 @@ public abstract class AnylineBaseActivity extends Activity
                 camConfig.setAutoExposureRegionEnabled(focusConfig.getBoolean("autoExposureRegionEnabled"));
             }
         }
+    }
+
+    protected void setResult(ScanViewPlugin scanViewPlugin, JSONObject jsonResult){
+        if(scanViewPlugin != null && scanViewPlugin.getScanViewPluginConfig().isCancelOnResult()){
+            ResultReporter.onResult(jsonResult, true);
+            setResult(AnylineSDKPlugin.RESULT_OK);
+            finish();
+        }else{
+            ResultReporter.onResult(jsonResult, false);
+        }
+
     }
 
 }

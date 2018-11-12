@@ -13,5 +13,7 @@
       <activity android:name="com.anyline.reactnative.AnylineOcrActivity" android:screenOrientation="portrait"/>
       <activity android:name="com.anyline.reactnative.DocumentActivity" android:screenOrientation="portrait"/>
       <activity android:name="com.anyline.reactnative.LicensePlateActivity" android:screenOrientation="portrait"/>
+      <activity android:name="com.anyline.reactnative.Anyline4Activity" android:screenOrientation="portrait"/>
+      <activity android:name="com.anyline.reactnative.Document4Activity" android:screenOrientation="portrait"/>
   </application>
 </manifest>

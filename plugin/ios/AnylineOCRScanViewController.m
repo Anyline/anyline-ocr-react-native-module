@@ -25,10 +25,10 @@
 
     ALOCRConfig *ocrConf = [[ALOCRConfig alloc] initWithJsonDictionary:self.ocrConfDict];
 
-    if ([self.ocrConfDict objectForKey:@"aleFile"]) {
-        NSString *aleDirectoryPath = [[self.ocrConfDict objectForKey:@"aleFile"] stringByDeletingLastPathComponent];
-        NSString *pathResource = [[[self.ocrConfDict objectForKey:@"aleFile"] lastPathComponent] stringByDeletingPathExtension];
-        ocrConf.customCmdFilePath = [[NSBundle mainBundle] pathForResource:[[[self.ocrConfDict objectForKey:@"aleFile"] lastPathComponent] stringByDeletingPathExtension] ofType:@"ale" inDirectory:aleDirectoryPath];
+    if ([self.ocrConfDict objectForKey:@"customCmdFile"]) {
+        NSString *aleDirectoryPath = [[self.ocrConfDict objectForKey:@"customCmdFile"] stringByDeletingLastPathComponent];
+        NSString *pathResource = [[[self.ocrConfDict objectForKey:@"customCmdFile"] lastPathComponent] stringByDeletingPathExtension];
+        ocrConf.customCmdFilePath = [[NSBundle mainBundle] pathForResource:[[[self.ocrConfDict objectForKey:@"customCmdFile"] lastPathComponent] stringByDeletingPathExtension] ofType:@"ale" inDirectory:aleDirectoryPath];
     }
 
 

@@ -7,8 +7,10 @@
 #import "AnylineDocumentScanViewController.h"
 #import "AnylineLicensePlateViewController.h"
 #import "ALJsonUIConfiguration.h"
+#import "ALPluginScanViewController.h"
+#import "ALPluginHelper.h"
 
-@interface AnylineSDKPlugin()<AnylineBaseScanViewControllerDelegate>
+@interface AnylineSDKPlugin()<AnylineBaseScanViewControllerDelegate, ALPluginScanViewControllerDelegate>
 
 @property (nonatomic, strong) AnylineBaseScanViewController *baseScanViewController;
 @property (nonatomic, strong) ALUIConfiguration *conf;
@@ -88,13 +90,40 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        AnylineBaseScanViewController* baseViewController = [self ViewControllerFromScanMode:scanMode];  //returns nil if ScanMode is not valid
-        if(baseViewController != nil){
-            self.baseScanViewController = baseViewController;
-            [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:self.baseScanViewController animated:YES completion:nil];
+        
+        if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
+            ALPluginScanViewController *pluginScanViewController =
+            [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
+                                                     configuration:[dictionary objectForKey:@"options"]
+                                              uiConfiguration:self.jsonUIConf
+                                                          delegate:self];
+            
+            if([self.jsonConfigDictionary valueForKey:@"quality"]){
+                pluginScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
+            }
+            
+            if([self.jsonConfigDictionary valueForKey:@"cropAndTransformErrorMessage"]){
+                NSString *str = [self.jsonConfigDictionary objectForKey:@"cropAndTransformErrorMessage"];
+                pluginScanViewController.cropAndTransformErrorMessage = str;
+            }
+            
+            if ([self.jsonConfigDictionary valueForKey:@"nativeBarcodeEnabled"]) {
+                pluginScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
+            }
+            
+            if(pluginScanViewController != nil){
+                [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
+            }
         } else {
-            [self returnError:[scanMode stringByAppendingString:@" - Unknown ScanMode"]];
+            AnylineBaseScanViewController* baseViewController = [self ViewControllerFromScanMode:scanMode];  //returns nil if ScanMode is not valid
+            if(baseViewController != nil){
+                self.baseScanViewController = baseViewController;
+                [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:self.baseScanViewController animated:YES completion:nil];
+            } else {
+                [self returnError:[scanMode stringByAppendingString:@" - Unknown ScanMode"]];
+            }
         }
+        
     });
 
 }
@@ -120,6 +149,30 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 -(void)anylineBaseScanViewController:(AnylineBaseScanViewController *)baseScanViewController didStopScanning:(id)sender {
     [self returnError:(@"Canceled")];
 }
+
+#pragma mark - ALPluginScanViewControllerDelegate
+
+- (void)pluginScanViewController:(nonnull ALPluginScanViewController *)pluginScanViewController didScan:(nonnull id)scanResult continueScanning:(BOOL)continueScanning {
+    NSString *resultJson = @"";
+    
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject: scanResult
+                                                       options:0
+                                                         error:&error];
+    
+    if (! jsonData) {
+        NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
+    } else {
+        resultJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    [self returnSuccess:resultJson];
+}
+
+- (void)pluginScanViewController:(nonnull ALPluginScanViewController *)pluginScanViewController didStopScanning:(nonnull id)sender {
+    [self returnError:(@"Canceled")];
+}
+
+
 
 #pragma mark - Utility Funcitons
 - (AnylineBaseScanViewController *)ViewControllerFromScanMode:(NSString *)scanMode {
@@ -205,28 +258,32 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
             [ocrVC setOcrConfDict:self.ocrConfigDict];
             return ocrVC;
         } else {
-            AnylineEnergyScanViewController *meterVC = [[AnylineEnergyScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-
-            // Set SerialNumber Configuration
-            NSDictionary *options = [self.jsonConfigDictionary valueForKey:@"options"];
-            if ([options valueForKey:@"serialNumber"]) {
-                NSDictionary *serNumConf = [options valueForKey:@"serialNumber"];
-
-                // Check for Serial Number Whitelist and set it
-                if([serNumConf valueForKey:@"numberCharWhitelist"]){
-                    meterVC.serialWhitelist = [serNumConf valueForKey:@"numberCharWhitelist"];
-                }
-
-                // Check for Serial Number ValidationRegex and set it
-                if([serNumConf valueForKey:@"validationRegex"]){
-                    meterVC.serialValRegex = [serNumConf valueForKey:@"validationRegex"];
-                }
-            }
-
-            meterVC.scanMode = [self energyScanModeFromString:scanMode];
-            meterVC.nativeBarcodeEnabled = self.nativeBarcodeScanning;
-            return meterVC;
+            return nil;
         }
+//        else { // > Anyline 4
+//                ALPluginScanViewController *pluginScanViewController =
+//                [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
+//                                                         configuration:self.jsonConfigDictionary
+//                                                  cordovaConfiguration:self.jsonUIConf
+//                                                              delegate:self];
+//
+//                if([self.jsonConfigDictionary valueForKey:@"quality"]){
+//                    pluginScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
+//                }
+//
+//                if([self.jsonConfigDictionary valueForKey:@"cropAndTransformErrorMessage"]){
+//                    NSString *str = [self.jsonConfigDictionary objectForKey:@"cropAndTransformErrorMessage"];
+//                    pluginScanViewController.cropAndTransformErrorMessage = str;
+//                }
+//
+//                if ([self.jsonConfigDictionary valueForKey:@"nativeBarcodeEnabled"]) {
+//                    pluginScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
+//                }
+//            return pluginScanViewController;
+//                self.baseScanViewController = pluginScanViewController;
+            
+//                [self presentViewController];
+//        }
     } else {
         return nil;
     }
@@ -282,7 +339,5 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
         _rejectBlock(@"ANYLINE_ERROR", error, nil);
     }
 }
-
-
 
 @end
