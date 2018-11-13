@@ -16,40 +16,28 @@ export default {
         'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
     options: {
         "camera": {
-            "captureResolution": "1080p"
+            "captureResolution": "720p"
         },
         "flash": {
             "mode": "manual",
-            "alignment": "bottom_right"
+            "alignment": "bottom_right",
         },
         "viewPlugin": {
             "plugin": {
-                "id": "Container_ID",
-                "ocrPlugin": {
-                    "scanMode": "AUTO",
-                    "languages": ["USNr.any"],
-                    "customCmdFile": "container_scanner.ale"
+                "id": "Meter_ID",
+                "meterPlugin": {
+                    "scanMode": "DIGITAL_METER"
                 }
             },
             "cutoutConfig": {
                 "style": "rect",
-                "width": 720,
-                "maxWidthPercent": "80%",
                 "alignment": "top_half",
-                "ratioFromSize": {
-                    "width": 720,
-                    "height": 144
-                },
                 "strokeWidth": 2,
-                "strokeColor": "FFFFFF",
                 "cornerRadius": 4,
+                "strokeColor": "FFFFFF",
                 "outerColor": "000000",
-                "outerAlpha": 0.5,
-                "feedbackStrokeColor": "0099FF",
-                "offset": {
-                    "x": 0,
-                    "y": -15
-                }
+                "outerAlpha": 0.3,
+                "feedbackStrokeColor": "0099FF"
             },
             "scanFeedback": {
                 "style": "CONTOUR_RECT",
@@ -59,7 +47,17 @@ export default {
                 "beepOnResult": true,
                 "vibrateOnResult": true
             },
-            "cancelOnResult": true
+            "cancelOnResult": true,
+        },
+        "nativeBarcodeEnabled": true,
+        "segment": {
+            "titles": ["Analog", "Digital"],
+            "modes": ["ANALOG_METER", "DIGITAL_METER"],
+            "tintColor": "CCCCCC",
+            "offset": {
+                "x": 0,
+                "y": 400
+            }
         }
     }
 }

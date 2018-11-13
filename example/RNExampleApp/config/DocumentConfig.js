@@ -43,14 +43,11 @@ export default {
         "style": "rect",
         "maxWidthPercent": "100%",
         "maxHeightPercent": "100%",
-        "ratioFromSize": {
-          "width": 10,
-          "height": 15
-        },
         "alignment": "center",
-        "strokeWidth": 2,
+        "strokeWidth": 0,
         "cornerRadius": 0,
-        "strokeColor": "00000000"
+        "strokeColor": "00000000",
+        "feedbackStrokeColor": "00000000"
       },
       "scanFeedback": {
         "blinkOnResult": true,
@@ -60,5 +57,5 @@ export default {
       "cancelOnResult": true
     },
     "quality": 90
-  }
+  },
 }

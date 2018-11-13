@@ -16,9 +16,11 @@ import Overview from './Overview';
 
 import BarcodeConfig from '../config/BarcodeConfig';
 import DocumentConfig from '../config/DocumentConfig';
-import EnergyConfig from '../config/EnergyConfig';
 import MRZConfig from '../config/MRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
+import AnalogEnergyConfig from '../config/AnalogMeterConfig';
+import DigitalEnergyConfig from '../config/DigitalMeterConfig';
+import DialEnergyConfig from '../config/DialMeterConfig';
 import IBANConfig from '../config/IbanConfig';
 import VoucherConfig from '../config/VoucherConfig';
 import DrivingLicenseConfig from '../config/DrivingLicenseConfig';
@@ -64,7 +66,7 @@ class Anyline extends Component {
         config = AutoEnergyConfig;
         break;
       case 'DIAL_METER':
-        config = AutoEnergyConfig;
+        config = DialEnergyConfig;
         break;
       case 'SERIAL_NUMBER':
         config = SerialNumberConfig;
@@ -109,10 +111,10 @@ class Anyline extends Component {
         config = DocumentConfig;
         break;
       case 'ANALOG_METER':
-        config = EnergyConfig;
+        config = AnalogEnergyConfig;
         break;
       case 'DIGITAL_METER':
-        config = EnergyConfig;
+        config = DigitalEnergyConfig;
         break;
     }
 

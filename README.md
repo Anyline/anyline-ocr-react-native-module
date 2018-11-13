@@ -15,12 +15,12 @@ The plugin lets you connect to the SDK with React-Native.
 
 ### iOS
 
-Platform >= 8
+Platform >= 10
 
 
 ### Android 
 
-minSDK >= 17
+minSDK >= 19
 
 ## Example
 

@@ -24,11 +24,11 @@ export default {
     },
     "viewPlugin": {
       "plugin": {
-        "id": "USNR_ID",
+        "id": "VIN_ID",
         "ocrPlugin": {
           "scanMode": "AUTO",
-          "languages": ["USNr.any"],
-          "aleFile": "vin.ale"
+          "languages": ["vin.any"],
+          "customCmdFile": "vin.ale"
         }
       },
       "cutoutConfig": {
