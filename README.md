@@ -11,6 +11,14 @@
 The plugin lets you connect to the SDK with React-Native.
 	  
 
+## Update to >= 5.0
+
+If you use this plugin with a equal or greater version then 5.0, you can use our new Anyline structure, which will provide the whole
+configuration of every SDK Feature through the config file. If you use the the 'scan' call in your Javascript files, you have to 
+use a new config style.
+The old calls with the old configurations will still work.
+
+
 ## Requirements:
 
 ### iOS
@@ -161,7 +169,7 @@ If you want to get detailed information on the config JSON, go to our[`documenta
 ```
 AnylineOCR.setup(
         JSON.stringify(config),
-        “ANALOG_METER”,
+        "scan",
         this.onResult,
         this.onError
     );
@@ -173,7 +181,7 @@ openAnyline = async () => {
     ...
     
     try {
-        const result = await AnylineOCR.setupPromise(JSON.stringify(config), “ANALOG_METER”);
+        const result = await AnylineOCR.setupPromise(JSON.stringify(config), "scan");
     } catch(error) {
         console.error(error);
     }
@@ -186,7 +194,7 @@ openAnyline = async () => {
 ```
 AnylineOCR.setupScanViewWithConfigJson(
         JSON.stringify(config),
-        “ANALOG_METER”,
+        "scan”,
         this.onResult,
         this.onError
     );
@@ -223,7 +231,7 @@ android
 | Key | Type | Default | Description |
 | --- | --- | --- | --- |
 | config | string | \*required | config (JSON String)|
-| scanMode | string |  \*required  | Will set the scanMode/Module of the Plugin. |
+| scanMode | string |  \*required  | In the new Version, this is always 'scan', and the scanMode is declared through the configuration |
 | onResult | function | \*required | The function you pass will be the onResult callback. Use this callback to handle the found scan results. |
 | onError | function |  \*required  | The onError function will be called when the AnylinePlugin encounters an error. Handle the error messages in this method. |
 
@@ -231,29 +239,6 @@ android
 Stringified JSON with all the configurations, detailed information [here](https://documentation.anyline.io/toc/view_configuration/index.html).
 
 Keep in mind, that you have to add every permission to your project, you add in the config (vibrateOnResult -> vibration permission)
-### scanMode
-Available settings: 
-
-##### Energy Meter
-```
-"AUTO_ANALOG_DIGITAL_METER"
-"ANALOG_METER"
-"DIGITAL_METER"
-"DIAL_METER"
-"HEAT_METER_4"
-"HEAT_METER_5"
-"HEAT_METER_6"
-"SERIAL_NUMBER"
-```
-##### Other ScanModes
-```
-"BARCODE"
-"MRZ"
-"ANYLINE_OCR"
-"DOCUMENT"
-"LICENSE_PLATE"
-```
-Get more information in our [Docu](https://documentation.anyline.io/toc/platforms/react-native/getting_started.html#react-native-set-scan-mode).
 
 ### onResult Function
 Callback -> Stringified JSON
