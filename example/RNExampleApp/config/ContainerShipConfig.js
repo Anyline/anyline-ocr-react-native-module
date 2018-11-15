@@ -24,7 +24,7 @@ export default {
         },
         "viewPlugin": {
             "plugin": {
-                "id": "Container_ID",
+                "id": "CONTAINER_ID",
                 "ocrPlugin": {
                     "scanMode": "AUTO",
                     "languages": ["USNr.any"],

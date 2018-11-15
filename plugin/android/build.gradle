@@ -25,7 +25,7 @@ android {
     buildToolsVersion "27.0.3"
 
     defaultConfig {
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -43,6 +43,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
+    }
+    packagingOptions { 
+        pickFirst('lib/*/libgnustl_shared.so') 
+        pickFirst('lib/*/libopencv_java3.so')
     }
 }
 

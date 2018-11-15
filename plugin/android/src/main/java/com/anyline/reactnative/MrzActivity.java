@@ -1,5 +1,5 @@
 /*
- * Anyline Cordova Plugin
+ * Anyline React-Native Plugin
  * MrzActivity.java
  *
  * Copyright (c) 2015 Anyline GmbH
