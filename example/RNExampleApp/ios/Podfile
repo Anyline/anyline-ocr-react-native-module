@@ -1,5 +1,5 @@
 project 'RNExampleApp.xcodeproj'
-platform :ios, '9.0'
+platform :ios, '10.0'
 
 target 'RNExampleApp' do
   pod 'React', :path => '../node_modules/react-native'
