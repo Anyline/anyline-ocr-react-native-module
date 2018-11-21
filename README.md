@@ -83,11 +83,13 @@ The package name must match with the bundleID from your Anyline license.
 Open `MainApplication.java` inside your native Android folder of your project:
 
 Import `AnylinePackage`
-```
+
+```Java
 import com.anyline.reactnative.AnylinePackage;
 ```
 and add the package to your `getPackages` method
-```
+
+```Java
 @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
