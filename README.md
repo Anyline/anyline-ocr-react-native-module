@@ -8,13 +8,13 @@
 
 [Anyline](https://www.anyline.io) is mobile OCR SDK, which can be configured by yourself to scan all kinds of numbers, characters, text and codes. 
 
-The plugin lets you connect to the SDK with React-Native.
+The plugin enables the connection to the SDK via React-Native.
 	  
 
 ## Update to >= 5.0
 
-If you use this plugin with a equal or greater version then 5.0, you can use our new Anyline structure, which will provide the whole
-configuration of every SDK Feature through the config file. If you use the the 'scan' call in your Javascript files, you have to 
+If you use this plugin with an equal or greater version then 5.0, you can use our new Anyline structure, which will provide the whole
+configuration of every SDK feature through the config file. If you use the the `scan` call in your Javascript files, you have to 
 use a new config style.
 The old calls with the old configurations will still work.
 
@@ -32,9 +32,7 @@ minSDK >= 19
 
 ## Example
 
-Go to the Example project in the [example folder](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/Anyline).
-
-Check out the examples ResultView.js and config.json to see the implementation.
+Take a look into  [example/RNExampleApp/src/Result.js](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/RNExampleApp/src/Result.js) to see the implementation.
 	                
 ## Quick Start Guide
 
@@ -43,27 +41,34 @@ Go to [our pricing page](https://www.anyline.io/pricing/) and get your license o
 
 ### 2. Get the Anyline react-native plugin
 
-Download or Clone the Repo to your node_modules
-```
+Via npm:
+
+```bash
+ npm i anyline-ocr-react-native-module
+``` 
+
+or download / clone this repository and copy the content of the `plugin` folder into `node_modules` inside a new folder named `anyline-ocr-react-native-module`:
+
+```bash
 project   
-│    android.index.js
-│    ios.index.js
+│    android
+│    ios
 └─── node_modules
+     │    ...
      └─── anyline-ocr-react-native-module
 ```
 
-or just go 
+Install react-native-cli
 
-```
- npm i anyline-ocr-react-native-module
-``` 
- 
-
-Link the project. Run in root:
+ ```bash
+npm i -g react-native-cli
  ```
+
+Link the project. Run as root inside your project root:
+
+ ```bash
 react-native link
  ```
-in the root folder.
 
 ### 3. Get the native Dependencies
 
@@ -71,17 +76,17 @@ in the root folder.
 
 ##### Setup Packages
 
-Package name must match with the bundleID from your Anyline License. 
+The package name must match with the bundleID from your Anyline license. 
 
-##### Add Anyline Package
+##### Add the Anyline package
 
-Go into the native Android folder of your Project to your MainApplication.
+Open `MainApplication.java` inside your native Android folder of your project:
 
-Import the AnylinePackage
+Import `AnylinePackage`
 ```
 import com.anyline.reactnative.AnylinePackage;
 ```
-and add the package to your getPackages function
+and add the package to your `getPackages` method
 ```
 @Override
     protected List<ReactPackage> getPackages() {
@@ -92,11 +97,11 @@ and add the package to your getPackages function
     }
 ```
 
-##### Add Repositorys to your app
+##### Add repositories to your app
 
-You need to add the Anyline and the google Repository to your build.gradle, so gradle does know, where to find these.
+You need to add the Anyline and the google repository to your `build.gradle`, so gradle does know, where to find these.
 
-Therefor go to your App/android/build.gradle and add this to allprojects:
+To do this open `yourApp/android/build.gradle` and add this to allprojects:
 
 ```
 allprojects {
@@ -126,27 +131,27 @@ packagingOptions {
 
 ##### Podfile
 - Copy the [Podfile](https://github.com/Anyline/anyline-ocr-react-native-module/blob/master/example/RNExampleApp/ios/Podfile) 
-from our example Project to your native iOS root folder.
+from our example Project into your native iOS root folder.
 - Change the target and project of the Podfile to your project name.
 - ```pod update```
-  - if you get an error about node_modules dependencies initialize your project with `npm install` first.
+  - if you get an error about `node_modules` dependencies initialize your project with `npm install` first.
 
 ##### Permissions
-Add Camera Permissions to Info.plist
+Add camera permissions to `Info.plist`
 ```
 Privacy - Camera Usage Description
 ```
-Add also every other permission you want to configure in your config.js (vibrate, sound).
+Add also every other permission you want to configure in your `config.js` (vibrate, sound).
 
 ##### Anyline License
 Your BundleIdentifier of your app has to match with your bundleID from your Anyline License.
 
-### 4. Import the plugin to your JavaScript file
-```
+### 4. Import the plugin into your JavaScript file
+```JavaScript
 import AnylineOCR from 'anyline-ocr-react-native-module';
 ```
 ### 5. Import the config file
-```
+```JavaScript
 import config from './config.js';
 ```
 Add and import a JSON file with the proper structure and elements. The JSON config contains: 
@@ -158,30 +163,30 @@ Add and import a JSON file with the proper structure and elements. The JSON conf
 -	“segment”: which contains the scanModes for the UI Segment (e.g. switch between Analog and Digital) - optional
 3. OCR field with (Only if you want to use the OCR module)
 -   your custom training data
--   RegEx Validation
+-   RegEx validation
 
-If you want to get detailed information on the config JSON, go to our[`documentation`](https://documentation.anyline.io/toc/view_configuration/index.html).
+If you want to get detailed information about the config JSON, check out the official [documentation](https://documentation.anyline.io/toc/view_configuration/index.html).
 
 ### 6. Call the Anyline component 
 
 #### Callbacks
 
-```
+```JavaScript
 AnylineOCR.setup(
         JSON.stringify(config),
-        "scan",
+        'scan',
         this.onResult,
         this.onError
     );
 ```
 
 #### Promise
-```
-openAnyline = async () => {
+```JavaScript
+const openAnyline = async () => {
     ...
     
     try {
-        const result = await AnylineOCR.setupPromise(JSON.stringify(config), "scan");
+        const result = await AnylineOCR.setupPromise(JSON.stringify(config), 'scan');
     } catch(error) {
         console.error(error);
     }
@@ -191,10 +196,10 @@ openAnyline = async () => {
 ```
 
 ##### Deprecated
-```
+```JavaScript
 AnylineOCR.setupScanViewWithConfigJson(
         JSON.stringify(config),
-        "scan”,
+        'scan',
         this.onResult,
         this.onError
     );
@@ -203,11 +208,10 @@ AnylineOCR.setupScanViewWithConfigJson(
 
 
 ### 7. Add TrainData to the OCR Module
-If you are using the ANYLINE_OCR module, you'll have to add some traineddata. There are some predefined traineddata which
-you can find in the example app. Also the OCR Config has to reflect the path. Check the VoucherConfig.js in the 
-example/RNExampleApp/config folder.
+If you are using the `ANYLINE_OCR` module, you'll have to add some `traineddata`. There are some predefined `traineddata` which
+you can find in the example app. Also the OCR Config has to reflect the path. Check the VoucherConfig.js in the [example/RNExampleApp/config](https://github.com/Anyline/anyline-ocr-react-native-module/tree/master/example/RNExampleApp/config) folder.
 
-IMPORTANT: The trainedFiles have to be directly in the Asset folder in Android.
+> __IMPORTANT:__ The trainedFiles have to be directly in the Asset folder in Android.
 
 #### iOS
 ```
@@ -242,7 +246,7 @@ Keep in mind, that you have to add every permission to your project, you add in 
 
 ### onResult Function
 Callback -> Stringified JSON
-```
+```JavaScript
 {
     reading : 'Result of the Scan',
     imagePath : 'path to cropped image',
@@ -261,8 +265,8 @@ Callback -> String
 ## Additional Functions
 
 #### getLicenseExpiryDate
-Check till when the provided License is or was valid. Returns a string.
-```
+Get the exparation date of the provided license. Returns a string.
+```JavaScript
 import AnylineOCR, { getLicenseExpiryDate } from 'anyline-ocr-react-native-module';
 
 ...
