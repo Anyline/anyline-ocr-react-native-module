@@ -37,7 +37,8 @@ Take a look into  [example/RNExampleApp/src/Result.js](https://github.com/Anylin
 ## Quick Start Guide
 
 ### 1. Get a License
-Go to [our pricing page](https://www.anyline.io/pricing/) and get your license or sign up for your expiring test license.
+Get your [trial license](https://anyline.com/free-demos/) to try Anyline inside your app. 
+Reach out to our sales team to get a [commercial license](https://anyline.com/contact-sales/).
 
 ### 2. Get the Anyline react-native plugin
 
