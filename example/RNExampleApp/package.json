@@ -13,9 +13,10 @@
   "dependencies": {
     "anyline-ocr-react-native-module": "../../plugin",
     "react": "^16.5.2",
-    "react-native": "^0.57.1"
+    "react-native": "^0.55.4"
   },
   "devDependencies": {
+    "babel-core": "^7.0.0-bridge",
     "babel-jest": "21.2.0",
     "babel-preset-react-native": "^5.0.1",
     "jest": "21.2.1",

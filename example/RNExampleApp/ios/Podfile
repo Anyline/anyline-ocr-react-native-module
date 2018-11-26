@@ -2,7 +2,10 @@ project 'RNExampleApp.xcodeproj'
 platform :ios, '10.0'
 
 target 'RNExampleApp' do
-  pod 'React', :path => '../node_modules/react-native'
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+    'DevSupport',
+    'RCTNetwork',
+  ]
   pod 'AnylineReact', path: '../node_modules/anyline-ocr-react-native-module/ios'
   pod 'yoga', :path => '../node_modules/react-native/ReactCommon/Yoga'
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'

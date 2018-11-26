@@ -14,12 +14,11 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/Anyline/anyline-ocr-react-native-module"
 
   s.license      = "MIT"
-  s.platform     = :ios, "8"
+  s.platform     = :ios, "10"
 
   s.source       = { :git => "https://github.com/Anyline/anyline-ocr-react-native-module.git", :tag => "#{s.version}" }
 
   s.source_files  = "*.{h,m}"
 
-  s.dependency "React"
   s.dependency "Anyline", "~> 5"
 end

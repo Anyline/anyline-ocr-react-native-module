@@ -73,3 +73,4 @@ example/RNExampleApp/android/app/src/main/assets/index.android.bundle.meta
 example/RNExampleApp/ios/main.jsbundle
 example/RNExampleApp/ios/main.jsbundle.meta
 example/RNExampleApp/third-party
+example/RNExampleApp/yarn.lock
