@@ -16,8 +16,9 @@ export default {
     'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
   options: {
     "camera": {
+      "captureResolution": "720p",
       "pictureResolution": "1080p",
-      "captureResolution": "720p"
+      "pictureAspectRatios": ["16:9"]
     },
     "flash": {
       "mode": "manual",
@@ -27,35 +28,33 @@ export default {
         "y": 0
       }
     },
+
     "viewPlugin": {
       "plugin": {
-        "id": "Document_ID",
+        "id": "DOCUMENT",
         "documentPlugin": {
-          "documentRatios": [0.707, 1.41, 1.58, 0.633, 1.296, 0.772],
-          "maxDocumentRatioDeviation": 0.15,
-          "maxOutputResolution": {
-            "width": 1920,
-            "height": 1080
-          }
         }
       },
       "cutoutConfig": {
         "style": "rect",
         "maxWidthPercent": "100%",
         "maxHeightPercent": "100%",
+        "width": 720,
+        "ratioFromSize": {
+          "width": 10,
+          "height": 15
+        },
         "alignment": "center",
-        "strokeWidth": 0,
+        "strokeWidth": 2,
         "cornerRadius": 0,
-        "strokeColor": "00000000",
-        "feedbackStrokeColor": "00000000"
+        "strokeColor": "00000000"
       },
       "scanFeedback": {
-        "blinkOnResult": true,
-        "beepOnResult": false,
-        "vibrateOnResult": false
+        "beepOnResult": true,
+        "vibrateOnResult": true,
+        "blinkAnimationOnResult": true
       },
       "cancelOnResult": true
-    },
-    "quality": 90
+    }
   },
 }

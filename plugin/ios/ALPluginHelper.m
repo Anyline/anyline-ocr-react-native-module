@@ -397,6 +397,7 @@
                                                                        @"documentNumber",
                                                                        @"checkdigitNumber",
                                                                        @"dayOfBirth",
+                                                                       @"issuingDate",
                                                                        @"checkdigitDayOfBirth",
                                                                        @"sex",
                                                                        @"expirationDate",
@@ -429,11 +430,11 @@
         //        NSString *issuingDateObject = [formatter stringFromDate:[scanResult.result issuingDateObject]];
         //        [dictResult setValue:issuingDateObject forKey:@"issuingDateObject"];
     }
-    NSString *dayOfBirthDateObject = [formatter stringFromDate:[scanResult.result dayOfBirthDateObject]];
-    [dictResult setValue:dayOfBirthDateObject forKey:@"dayOfBirthObject"];
+    // NSString *dayOfBirthDateObject = [formatter stringFromDate:[scanResult.result dayOfBirthDateObject]];
+    [dictResult setValue:[scanResult.result dayOfBirthDateObject] forKey:@"dayOfBirthObject"];
     
-    NSString *expirationDateObject = [formatter stringFromDate:[scanResult.result expirationDateObject]];
-    [dictResult setValue:expirationDateObject forKey:@"expirationDateObject"];
+    // NSString *expirationDateObject = [formatter stringFromDate:[scanResult.result expirationDateObject]];
+    [dictResult setValue:[scanResult.result expirationDateObject] forKey:@"expirationDateObject"];
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
     

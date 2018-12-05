@@ -176,16 +176,17 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             @Override
                             public void onResult(ScanResult<ID> idScanResult) {
                                 JSONObject jsonResult = ((Identification) idScanResult.getResult()).toJSONObject();
-                                if (jsonResult.has("issuingCountryCode")) {
-                                    try {
+                                try {
+                                    if (jsonResult.get("issuingCountryCode").equals("D") && jsonResult.get("documentType").equals("ID")) {
                                         if (jsonResult.get("issuingCountryCode").equals("D")) {
                                             jsonResult.put("address", jsonResult.get("address"));
                                         } else {
                                             jsonResult.remove("address");
                                         }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+
                                     }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                                 //clean this
                                 if (jsonResult.has("nr")) {

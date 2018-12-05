@@ -40,7 +40,6 @@ export default function Result({
               {(value !== 'confidence' || result[value] > 0) &&
                `${value}: ${result[value]}`
               }
-
             </Text>);
           })}
           <View style={styles.backButton}>
