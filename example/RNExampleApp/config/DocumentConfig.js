@@ -55,6 +55,7 @@ export default {
         "blinkAnimationOnResult": true
       },
       "cancelOnResult": true
-    }
+    },
+    quality: 90
   },
 }
