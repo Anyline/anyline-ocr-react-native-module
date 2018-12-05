@@ -39,10 +39,11 @@ export default {
         "style": "rect",
         "maxWidthPercent": "100%",
         "maxHeightPercent": "100%",
-        "width": 720,
+        "widthPercent" : "100%",
+        "width": 1080,
         "ratioFromSize": {
           "width": 10,
-          "height": 15
+          "height": 18
         },
         "alignment": "center",
         "strokeWidth": 2,
