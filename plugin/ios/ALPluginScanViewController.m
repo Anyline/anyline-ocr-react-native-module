@@ -90,9 +90,8 @@
         if (customCmdFile) {
             NSString *fileName = [self.anylineConfig valueForKeyPath:@"viewPlugin.plugin.ocrPlugin.customCmdFile"];
             if (fileName) {
-                NSString *cmdFileDirectoryPath = [NSString stringWithFormat:@"%@/%@",@"ale", [fileName stringByDeletingLastPathComponent]];
                 NSString *pathResource = [[fileName lastPathComponent] stringByDeletingPathExtension];
-                NSString *filePath =  [[NSBundle mainBundle] pathForResource:pathResource ofType:@"ale" inDirectory:cmdFileDirectoryPath];
+                NSString *filePath =  [[NSBundle mainBundle] pathForResource:pathResource ofType:@"ale"];
                 
                 ALOCRConfig *ocrConfig = ((ALOCRScanViewPlugin *)self.scanView.scanViewPlugin).ocrScanPlugin.ocrConfig;
                 [ocrConfig setCustomCmdFilePath:filePath];
