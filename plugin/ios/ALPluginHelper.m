@@ -431,10 +431,13 @@
         //        [dictResult setValue:issuingDateObject forKey:@"issuingDateObject"];
     }
     // NSString *dayOfBirthDateObject = [formatter stringFromDate:[scanResult.result dayOfBirthDateObject]];
-    [dictResult setValue:[scanResult.result dayOfBirthDateObject] forKey:@"dayOfBirthObject"];
+    [dictResult setValue:[NSString stringWithFormat: @"%@",[scanResult.result dayOfBirthDateObject]] forKey:@"dayOfBirthObject"];
     
     // NSString *expirationDateObject = [formatter stringFromDate:[scanResult.result expirationDateObject]];
-    [dictResult setValue:[scanResult.result expirationDateObject] forKey:@"expirationDateObject"];
+    [dictResult setValue:[NSString stringWithFormat: @"%@",[scanResult.result expirationDateObject]] forKey:@"expirationDateObject"];
+    
+    [dictResult setValue:[NSString stringWithFormat: @"%@",[scanResult.result issuingDateObject]] forKey:@"issuingDateObject"];
+
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
     
