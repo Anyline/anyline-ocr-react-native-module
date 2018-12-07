@@ -13,9 +13,7 @@ The plugin lets you connect to the SDK with React-Native.
 
 ## Update to >= 5.0
 
-If you use this plugin with a equal or greater version then 5.0, you can use our new Anyline structure, which will provide the whole
-configuration of every SDK Feature through the config file. If you use the the 'scan' call in your Javascript files, you have to 
-use a new config style.
+If you use this plugin with a equal or greater version then 5.0, you can use our new Anyline structure, which will provide the whole configuration of every SDK Feature through the config file. If you use the the 'scan' call in your Javascript files, you have to use a new config style.
 The old calls with the old configurations will still work.
 
 
