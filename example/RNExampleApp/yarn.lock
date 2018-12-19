@@ -1201,7 +1201,7 @@ ansi@^0.3.0, ansi@~0.3.1:
   integrity sha1-DELU+xcWDVqa8eSEus4cZpIsGyE=
 
 anyline-ocr-react-native-module@../../plugin:
-  version "6.0.0"
+  version "6.1.0"
   dependencies:
     buffer "^5.1.0"
 
