@@ -95,8 +95,11 @@ public class AnylinePluginHelper {
         try {
             File imageFile = TempFileUtil.createTempFileCheckCache(activity, UUID.randomUUID().toString(), ".jpg");
             scanResult.getCutoutImage().save(imageFile, 90);
-
             jsonObject.put("imagePath", imageFile.getAbsolutePath());
+
+            File imageFileFull = TempFileUtil.createTempFileCheckCache(activity, UUID.randomUUID().toString(), ".jpg");
+            scanResult.getFullImage().save(imageFileFull, 90);
+            jsonObject.put("fullImagePath", imageFile.getAbsolutePath());
 
             if(scanResult.getOutline() != null){
                 jsonObject.put("outline", activity.jsonForOutline(scanResult.getOutline()));
