@@ -33,9 +33,13 @@ export default {
       },
       "cutoutConfig": {
         "style": "rect",
-        "maxWidthPercent": "100%",
-        "maxHeightPercent": "100%",
+        "maxWidthPercent": "99%%",
+        "maxHeightPercent": "99%",
         "alignment": "center",
+        "offset": {
+            "x": 1,
+            "y": 0
+        },
         "ratioFromSize": {
           "width": 134,
           "height": 85

@@ -1,6 +1,6 @@
 {
   "name": "anyline-react-native-example-app",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -13,13 +13,13 @@
   "dependencies": {
     "anyline-ocr-react-native-module": "../../plugin",
     "react": "^16.6.3",
-    "react-native": "^0.57.7"
+    "react-native": "^0.58.5"
   },
   "devDependencies": {
     "babel-core": "^7.0.0-bridge",
-    "babel-jest": "21.2.0",
+    "babel-jest": "^24.1.0",
     "babel-preset-react-native": "^5.0.1",
-    "jest": "21.2.1",
+    "jest": "^24.1.0",
     "react-test-renderer": "16.0.0",
     "schedule": "^0.4.0"
   },
