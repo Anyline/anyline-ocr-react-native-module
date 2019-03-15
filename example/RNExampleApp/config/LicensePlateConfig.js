@@ -16,7 +16,8 @@ export default {
     'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
   options: {
     "camera": {
-      "captureResolution": "1080p"
+      "captureResolution": "1080p",
+      "zoomGesture": true
     },
     "flash": {
       "mode": "manual",
@@ -26,7 +27,8 @@ export default {
       "plugin": {
         "id": "LicensePlate_ID",
         "licensePlatePlugin": {
-        }
+        },
+        "delayStartScanTime": 1000
       },
       "cutoutConfig": {
         "style": "rect",
@@ -56,5 +58,5 @@ export default {
       },
       "cancelOnResult": true
     }
-  }
+  },
 }

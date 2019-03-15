@@ -363,7 +363,7 @@
     
     [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
     
-    if (detectedBarcodes || detectedBarcodes.count == 0) {
+    if (detectedBarcodes && detectedBarcodes.count != 0) {
         [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
     }
     
@@ -383,18 +383,21 @@
     
     NSString *imagePath = [self saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
     
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy.MM.dd"];
+    
     if ([scanResult.result isKindOfClass:[ALMRZIdentification class]]) {
         ALMRZIdentification *mrzIdentification = (ALMRZIdentification *)scanResult.result;
         
         dictResult = [[scanResult.result dictionaryWithValuesForKeys:@[@"documentType",
                                                                        @"nationalityCountryCode",
                                                                        @"issuingCountryCode",
+                                                                       @"issuingDate",
                                                                        @"surNames",
                                                                        @"givenNames",
                                                                        @"documentNumber",
                                                                        @"checkdigitNumber",
                                                                        @"dayOfBirth",
-                                                                       @"issuingDate",
                                                                        @"checkdigitDayOfBirth",
                                                                        @"sex",
                                                                        @"expirationDate",
@@ -403,13 +406,13 @@
                                                                        @"checkDigitPersonalNumber",
                                                                        @"checkdigitFinal"]] mutableCopy];
         
-        
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result issuingDateObject]] forKey:@"issuingDateObject"];
         [dictResult setValue:@(scanResult.allCheckDigitsValid) forKey:@"allCheckDigitsValid"];
         
         if ([[scanResult.result documentType] isEqualToString:@"ID"] && [[scanResult.result issuingCountryCode] isEqualToString:@"D"]) {
             [dictResult setValue:mrzIdentification.address forKey:@"address"];
         }
-    } else {
+    } else if ([scanResult.result isKindOfClass:[ALDrivingLicenseIdentification class]]) {
         dictResult = [[scanResult.result dictionaryWithValuesForKeys:@[@"documentNumber",
                                                                        @"surNames",
                                                                        @"givenNames",
@@ -420,20 +423,31 @@
                                                                        @"authority",
                                                                        @"categories",
                                                                        @"drivingLicenseString"]] mutableCopy];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result issuingDateObject]] forKey:@"issuingDateObject"];
+    } else if ([scanResult.result isKindOfClass:[ALGermanIDFrontIdentification class]]) {
+        ALGermanIDFrontIdentification *germanIDFrontIdentification = (ALGermanIDFrontIdentification *)scanResult.result;
+        dictResult = [[germanIDFrontIdentification dictionaryWithValuesForKeys:@[@"documentNumber",
+                                                                       @"surNames",
+                                                                       @"givenNames",
+                                                                       @"dayOfBirth",
+                                                                       @"placeOfBirth",
+                                                                       @"nationality",
+                                                                       @"cardAccessNumber",
+                                                                       @"expirationDate",
+                                                                       @"germanIdFrontString"]] mutableCopy];
     }
-    
+                
     [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dayOfBirthObject"];
     [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result expirationDateObject]] forKey:@"expirationDateObject"];
-    [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result issuingDateObject]] forKey:@"issuingDateObject"];
-    
+                
     [dictResult setValue:imagePath forKey:@"imagePath"];
-    
+                
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
     [dictResult setValue:[self stringForOutline:outline] forKey:@"outline"];
-    
+                
     return dictResult;
 }
-
+                
 + (NSDictionary *)dictionaryForOCRResult:(ALOCRResult *)scanResult
                         detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
                                  outline:(ALSquare *)outline
@@ -451,7 +465,7 @@
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
     [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
     
-    if (detectedBarcodes || detectedBarcodes.count == 0) {
+    if (detectedBarcodes && detectedBarcodes.count != 0) {
         [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
     }
     
@@ -499,7 +513,7 @@
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
     [dictResult setValue:imagePath forKey:@"imagePath"];
     
-    if (detectedBarcodes || detectedBarcodes.count == 0) {
+    if (detectedBarcodes && detectedBarcodes.count != 0) {
         [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
     }
     
@@ -523,15 +537,16 @@
     [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
     [dictResult setValue:outlineString forKey:@"outline"];
     
-    if (detectedBarcodes || detectedBarcodes.count == 0) {
+    if (detectedBarcodes && detectedBarcodes.count != 0) {
         [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
     }
     
     return dictResult;
 }
-
+                
+                
 #pragma mark - Date Parsing Utils
-
+                
 + (NSString *)stringForDate:(NSDate *)date {
     if (!date) {
         return nil;
@@ -546,6 +561,5 @@
     
     return dateString;
 }
-
 
 @end
