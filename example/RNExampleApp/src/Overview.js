@@ -73,6 +73,14 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
           }} />
       </View>
 
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  German ID Front'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('GERMAN_ID_FRONT')
+          }} />
+      </View>
+
       <Text style={styles.text}>VEHICLE</Text>
 
       <View style={styles.buttons}>
@@ -142,6 +150,13 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
           disabled={disabled}
           onPress={() => {
             platformPermissionCheck('DOCUMENT')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Cow Tags'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('COW_TAG')
           }} />
       </View>
     </ScrollView>

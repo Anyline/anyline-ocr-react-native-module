@@ -29,6 +29,8 @@ import SerialNumberConfig from '../config/SerialNumber';
 import VinConfig from '../config/VINConfig';
 import USNRConfig from "../config/USNRConfig";
 import ShipConConfig from "../config/ContainerShipConfig";
+import CowTagConfig from "../config/CowTagConfig";
+import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
 
 // Disable Warnings 
 console.disableYellowBox = true;
@@ -101,8 +103,15 @@ class Anyline extends Component {
         type = 'ANYLINE_OCR';
         config = ShipConConfig;
         break;
+      case 'COW_TAG':
+        type = 'ANYLINE_OCR';
+        config = CowTagConfig;
+        break;
       case 'MRZ':
         config = MRZConfig;
+        break;
+      case 'GERMAN_ID_FRONT':
+        config = GermanIDFrontConfig;
         break;
       case 'LICENSE_PLATE':
         config = LicensePlateConfig;
