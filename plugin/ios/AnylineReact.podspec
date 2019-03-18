@@ -20,5 +20,5 @@ Pod::Spec.new do |s|
 
   s.source_files  = "*.{h,m}"
 
-  s.dependency "Anyline", "~> 8.1"
+  s.dependency "Anyline", "~> 9"
 end

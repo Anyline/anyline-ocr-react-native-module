@@ -29,7 +29,7 @@ import SerialNumberConfig from '../config/SerialNumber';
 import VinConfig from '../config/VINConfig';
 import USNRConfig from "../config/USNRConfig";
 import ShipConConfig from "../config/ContainerShipConfig";
-import CowTagConfig from "../config/CowTagConfig";
+import CattleTagConfig from "../config/CattleTagConfig";
 import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
 
 // Disable Warnings 
@@ -103,9 +103,9 @@ class Anyline extends Component {
         type = 'ANYLINE_OCR';
         config = ShipConConfig;
         break;
-      case 'COW_TAG':
+      case 'CATTLE_TAG':
         type = 'ANYLINE_OCR';
-        config = CowTagConfig;
+        config = CattleTagConfig;
         break;
       case 'MRZ':
         config = MRZConfig;

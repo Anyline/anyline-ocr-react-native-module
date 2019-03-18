@@ -13,14 +13,13 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.vision.barcode.Barcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,12 +27,13 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import at.nineyards.anyline.camera.AnylineViewConfig;
 import at.nineyards.anyline.camera.CameraConfig;
 import at.nineyards.anyline.camera.CameraController;
-import at.nineyards.anyline.modules.barcode.NativeBarcodeResultListener;
+import at.nineyards.anyline.camera.NativeBarcodeResultListener;
 import at.nineyards.anyline.modules.energy.EnergyResult;
 import at.nineyards.anyline.modules.energy.EnergyResultListener;
 import at.nineyards.anyline.modules.energy.EnergyScanView;
@@ -106,15 +106,20 @@ public class EnergyActivity extends AnylineBaseActivity {
 
         Log.d(TAG, enableBarcodeScanning.toString());
         if (enableBarcodeScanning) {
+
             energyScanView.enableBarcodeDetection(new NativeBarcodeResultListener() {
                 @Override
-                public void onBarcodesReceived(SparseArray<Barcode> sparseArray) {
+                public void onFailure(String e) {
 
-                    if (sparseArray.size() > 0) {
-                        lastDetectedBarcodeValue = sparseArray.valueAt(0).displayValue;
+                }
+
+                @Override
+                public void onSuccess(List<FirebaseVisionBarcode> barcodes) {
+                    if (barcodes != null && barcodes.size() > 0) {
+                        lastDetectedBarcodeValue = barcodes.get(0).getDisplayValue();
                     }
                 }
-            });
+            }, null);
         }
 
         // Creating a new RelativeLayout

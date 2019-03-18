@@ -6,6 +6,7 @@ import android.util.SparseArray;
 import android.widget.Toast;
 
 import com.google.android.gms.vision.barcode.Barcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,11 +19,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import at.nineyards.anyline.camera.NativeBarcodeResultListener;
 import at.nineyards.anyline.modules.barcode.BarcodeScanView;
-import at.nineyards.anyline.modules.barcode.NativeBarcodeResultListener;
 import at.nineyards.anyline.util.AssetUtil;
 import at.nineyards.anyline.util.TempFileUtil;
 import io.anyline.plugin.ScanResult;
+import io.anyline.plugin.barcode.BarcodeFormat;
 import io.anyline.plugin.meter.MeterScanMode;
 import io.anyline.view.ScanView;
 
@@ -118,14 +120,14 @@ public class AnylinePluginHelper {
         return jsonObject;
     }
 
-    public static JSONObject wrapBarcodeInJson(Barcode b) {
+    public static JSONObject wrapBarcodeInJson(FirebaseVisionBarcode b) {
         JSONObject json = new JSONObject();
 
         try {
-            json.put("value", b.rawValue);
-            json.put("format", findValidFormatForReference(b.format));
+            json.put("value", b.getDisplayValue());
+            json.put("format", findValidFormatForReference(b.getFormat()));
         } catch (JSONException jsonException) {
-            // should not be possible
+            //should not be possible
             Log.e(TAG, "Error while putting image path to json.", jsonException);
         }
         return json;
@@ -178,21 +180,27 @@ public class AnylinePluginHelper {
 
     }
 
-    public static List<Barcode> nativeBarcodeList(ScanView anylineScanView) {
-        final List<Barcode> barcodeList = new ArrayList<>();
+    public static List<FirebaseVisionBarcode> nativeBarcodeList(ScanView anylineScanView, List<BarcodeFormat> barcodeFormats) {
+        final List<FirebaseVisionBarcode> barcodeList = new ArrayList<>();
         anylineScanView.getCameraView().enableBarcodeDetection(new NativeBarcodeResultListener() {
             @Override
-            public void onBarcodesReceived(SparseArray<Barcode> barcodes) {
-                if (barcodes.size() > 0) {
+            public void onFailure(String e) {
+
+            }
+
+            @Override
+            public void onSuccess(List<FirebaseVisionBarcode> barcodes) {
+                if (barcodes != null && barcodes.size() > 0) {
+                    // for demonstration purpose, we only show the latest found barcode (and only this one)
                     for (int i = 0; i < barcodes.size(); i++) {
-                        if (!barcodeList.contains(barcodes.valueAt(i).rawValue)) {
-                            barcodeList.add(barcodes.valueAt(i));
+                        if (!barcodeList.contains(barcodes.get(i))) {
+                            barcodeList.add(barcodes.get(i));
                         }
                     }
 
                 }
             }
-        });
+        }, barcodeFormats);
         return barcodeList;
     }
 

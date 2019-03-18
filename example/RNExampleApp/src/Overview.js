@@ -153,10 +153,10 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
           }} />
       </View>
       <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Cow Tags'} color="#0099FF"
+        <Button style={styles.buttons} title={'  Cattle Tag'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
-            platformPermissionCheck('COW_TAG')
+            platformPermissionCheck('CATTLE_TAG')
           }} />
       </View>
     </ScrollView>

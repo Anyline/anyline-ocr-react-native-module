@@ -39,6 +39,7 @@
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		7C3B6F7D21A81AC10025AC32 /* libAnylineReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C3B6F7C21A81AC10025AC32 /* libAnylineReact.a */; };
 		7C8225FB21BAE8AB0094FAD6 /* vin.ale in Resources */ = {isa = PBXBuildFile; fileRef = 7C8225FA21BAE8AB0094FAD6 /* vin.ale */; };
+		7C8DF008223C22380092811D /* cow_tag_scanner.ale in Resources */ = {isa = PBXBuildFile; fileRef = 7C8DEFE3223C22380092811D /* cow_tag_scanner.ale */; };
 		7C93BFAE215A8CAF00A07675 /* container_scanner.ale in Resources */ = {isa = PBXBuildFile; fileRef = 7C93BFAB215A8CAF00A07675 /* container_scanner.ale */; };
 		7C93BFAF215A8CAF00A07675 /* anyline_austrian_driving_license.ale in Resources */ = {isa = PBXBuildFile; fileRef = 7C93BFAC215A8CAF00A07675 /* anyline_austrian_driving_license.ale */; };
 		7C93BFB6215A8CBA00A07675 /* anyline_capitals.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = 7C93BFB1215A8CBA00A07675 /* anyline_capitals.traineddata */; };
@@ -360,6 +361,7 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7C3B6F7C21A81AC10025AC32 /* libAnylineReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libAnylineReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C8225FA21BAE8AB0094FAD6 /* vin.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vin.ale; sourceTree = "<group>"; };
+		7C8DEFE3223C22380092811D /* cow_tag_scanner.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cow_tag_scanner.ale; sourceTree = "<group>"; };
 		7C93BFAB215A8CAF00A07675 /* container_scanner.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = container_scanner.ale; sourceTree = "<group>"; };
 		7C93BFAC215A8CAF00A07675 /* anyline_austrian_driving_license.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = anyline_austrian_driving_license.ale; sourceTree = "<group>"; };
 		7C93BFB1215A8CBA00A07675 /* anyline_capitals.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = anyline_capitals.traineddata; sourceTree = "<group>"; };
@@ -578,6 +580,7 @@
 			isa = PBXGroup;
 			children = (
 				7C8225FA21BAE8AB0094FAD6 /* vin.ale */,
+				7C8DEFE3223C22380092811D /* cow_tag_scanner.ale */,
 				7C93BFAB215A8CAF00A07675 /* container_scanner.ale */,
 				7C93BFAC215A8CAF00A07675 /* anyline_austrian_driving_license.ale */,
 			);
@@ -1126,6 +1129,7 @@
 				7C93BFB7215A8CBA00A07675 /* deu.traineddata in Resources */,
 				7C93BFAE215A8CAF00A07675 /* container_scanner.ale in Resources */,
 				7C93BFAF215A8CAF00A07675 /* anyline_austrian_driving_license.ale in Resources */,
+				7C8DF008223C22380092811D /* cow_tag_scanner.ale in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				7C93BFBA215A8CBA00A07675 /* vin.any in Resources */,

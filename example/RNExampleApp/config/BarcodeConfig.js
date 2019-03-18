@@ -26,7 +26,7 @@ export default {
       "plugin": {
         "id": "Barcode_ID",
         "barcodePlugin": {
-          "barcodeFormatOptions": ["CODABAR", "EAN_13", "UPC_A"]
+          // "barcodeFormatOptions": ["CODABAR", "EAN_13", "UPC_A"]
         }
       },
       "cutoutConfig": {

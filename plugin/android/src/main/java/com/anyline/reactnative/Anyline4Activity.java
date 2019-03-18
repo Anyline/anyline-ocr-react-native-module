@@ -1,6 +1,5 @@
 package com.anyline.reactnative;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.Build;
@@ -12,31 +11,29 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.vision.barcode.Barcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import at.nineyards.anyline.AnylineDebugListener;
 import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.core.RunFailure;
 import at.nineyards.anyline.core.Vector_Contour;
 import at.nineyards.anyline.core.exception_error_codes;
-import at.nineyards.anyline.modules.barcode.NativeBarcodeResultListener;
 import at.nineyards.anyline.modules.mrz.Identification;
-import at.nineyards.anyline.util.AssetUtil;
 import io.anyline.plugin.ScanResult;
 import io.anyline.plugin.ScanResultListener;
 import io.anyline.plugin.barcode.BarcodeScanResult;
 import io.anyline.plugin.barcode.BarcodeScanViewPlugin;
-import io.anyline.plugin.document.DocumentScanViewPlugin;
 import io.anyline.plugin.id.DrivingLicenseConfig;
 import io.anyline.plugin.id.DrivingLicenseResult;
+import io.anyline.plugin.id.GermanIdFrontConfig;
+import io.anyline.plugin.id.GermanIdFrontResult;
 import io.anyline.plugin.id.ID;
 import io.anyline.plugin.id.IdScanPlugin;
 import io.anyline.plugin.id.IdScanViewPlugin;
@@ -51,7 +48,6 @@ import io.anyline.plugin.ocr.OcrScanViewPlugin;
 import io.anyline.view.ScanView;
 import io.anyline.view.ScanViewPlugin;
 
-
 public class Anyline4Activity extends AnylineBaseActivity {
     private static final String TAG = Anyline4Activity.class.getSimpleName();
 
@@ -65,12 +61,11 @@ public class Anyline4Activity extends AnylineBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //init the scan view
+        // init the scan view
         anylineScanView = new ScanView(this, null);
 
-
         try {
-            //start initialize anyline
+            // start initialize anyline
             initAnyline();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -82,7 +77,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //start scanning
+        // start scanning
         anylineScanView.start();
     }
 
@@ -90,11 +85,10 @@ public class Anyline4Activity extends AnylineBaseActivity {
     protected void onPause() {
         super.onPause();
 
-        //stop scanning
+        // stop scanning
         anylineScanView.stop();
         anylineScanView.releaseCameraInBackground();
     }
-
 
     private void setDebugListener() {
         if (scanViewPlugin != null) {
@@ -102,8 +96,8 @@ public class Anyline4Activity extends AnylineBaseActivity {
                 @Override
                 public void onDebug(String name, Object value) {
 
-                    if (name.equals(AnylineDebugListener.BRIGHTNESS_VARIABLE_NAME) && value.getClass().equals
-                            (AnylineDebugListener.BRIGHTNESS_VARIABLE_CLASS)) {
+                    if (name.equals(AnylineDebugListener.BRIGHTNESS_VARIABLE_NAME)
+                            && value.getClass().equals(AnylineDebugListener.BRIGHTNESS_VARIABLE_CLASS)) {
                         Double val = AnylineDebugListener.BRIGHTNESS_VARIABLE_CLASS.cast(value);
 
                         Log.d(TAG, name + ": " + val);
@@ -118,7 +112,8 @@ public class Anyline4Activity extends AnylineBaseActivity {
                 @Override
                 public void onRunSkipped(RunFailure runFailure) {
                     // Show Toast, if cropAndTransform is on true, but not all corners are detected
-                    if (runFailure != null && runFailure.errorCode() == exception_error_codes.PointsOutOfCutout.swigValue()) {
+                    if (runFailure != null
+                            && runFailure.errorCode() == exception_error_codes.PointsOutOfCutout.swigValue()) {
                         AnylinePluginHelper.showToast(cropAndTransformError, getApplicationContext());
                     }
                     Log.w(TAG, "run skipped: " + runFailure);
@@ -130,7 +125,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
     private void initAnyline() {
         try {
             JSONObject json = new JSONObject(configJson);
-            //this is used for the OCR Plugin, when languages has to be added
+            // this is used for the OCR Plugin, when languages has to be added
             json = AnylinePluginHelper.setLanguages(json, getApplicationContext());
             anylineScanView.setScanConfig(json, licenseKey);
             if (anylineScanView != null) {
@@ -154,7 +149,8 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                 jsonResult.put("country", licensePlateResult.getCountry());
                                 jsonResult.put("licensePlate", licensePlateResult.getResult());
 
-                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, licensePlateResult, jsonResult);
+                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, licensePlateResult,
+                                        jsonResult);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -171,13 +167,13 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             cropAndTransformError = json.getString("cropAndTransformErrorMessage");
                         }
 
-
                         scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
                             @Override
                             public void onResult(ScanResult<ID> idScanResult) {
                                 JSONObject jsonResult = ((Identification) idScanResult.getResult()).toJSONObject();
                                 try {
-                                    if (jsonResult.get("issuingCountryCode").equals("D") && jsonResult.get("documentType").equals("ID")) {
+                                    if (jsonResult.get("issuingCountryCode").equals("D")
+                                            && jsonResult.get("documentType").equals("ID")) {
                                         if (jsonResult.get("issuingCountryCode").equals("D")) {
                                             jsonResult.put("address", jsonResult.get("address"));
                                         } else {
@@ -188,7 +184,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                //clean this
+                                // clean this
                                 if (jsonResult.has("nr")) {
                                     try {
                                         String documentNumber = jsonResult.getString("nr");
@@ -209,7 +205,8 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                 }
 
                                 try {
-                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult, jsonResult);
+                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
+                                            jsonResult);
                                 } catch (Exception e) {
                                     Log.e(TAG, "Exception is: ", e);
 
@@ -219,16 +216,18 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                             }
 
-
                         });
-                    } else if (((IdScanPlugin) scanViewPlugin.getScanPlugin()).getIdConfig() instanceof DrivingLicenseConfig) {
+                    } else if (((IdScanPlugin) scanViewPlugin.getScanPlugin())
+                            .getIdConfig() instanceof DrivingLicenseConfig) {
                         scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
                             @Override
                             public void onResult(ScanResult<ID> idScanResult) {
-                                JSONObject jsonResult = ((DrivingLicenseResult) idScanResult.getResult()).toJSONObject();
+                                JSONObject jsonResult = ((DrivingLicenseResult) idScanResult.getResult())
+                                        .toJSONObject();
 
                                 try {
-                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult, jsonResult);
+                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
+                                            jsonResult);
                                 } catch (Exception e) {
                                     Log.e(TAG, "Exception is: ", e);
 
@@ -238,7 +237,22 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                             }
 
+                        });
+                    } else if (((IdScanPlugin) scanViewPlugin.getScanPlugin()).getIdConfig() instanceof GermanIdFrontConfig) {
+                        scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
+                            @Override
+                            public void onResult(ScanResult<ID> idScanResult) {
+                                JSONObject jsonResult = ((GermanIdFrontResult) idScanResult.getResult()).toJSONObject();
 
+                                try {
+                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
+                                            jsonResult);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Exception is: ", e);
+
+                                }
+                                setResult(scanViewPlugin, jsonResult);
+                            }
                         });
                     }
 
@@ -253,14 +267,14 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             JSONObject jsonResult = new JSONObject();
                             try {
                                 jsonResult.put("text", ocrScanResult.getResult().trim());
-                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, ocrScanResult, jsonResult);
+                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, ocrScanResult,
+                                        jsonResult);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             setResult(scanViewPlugin, jsonResult);
 
                         }
-
 
                     });
 
@@ -274,7 +288,8 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                                 jsonResult.put("value", barcodeScanResult.getResult());
                                 jsonResult.put("format", barcodeScanResult.getBarcodeFormat());
-                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, barcodeScanResult, jsonResult);
+                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, barcodeScanResult,
+                                        jsonResult);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -282,7 +297,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             setResult(scanViewPlugin, jsonResult);
 
                         }
-
 
                     });
 
@@ -295,13 +309,13 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     if (json.has("nativeBarcodeEnabled")) {
                         nativeBarcodeEnabled = json.getBoolean("nativeBarcodeEnabled");
                     }
-                    //create the radio button for the UI
+                    // create the radio button for the UI
                     createSegmentRadioButtonUI(json);
 
                     anylineScanView.setCameraOpenListener(this);
                     if (nativeBarcodeEnabled) {
-                        List<Barcode> barcodeList = AnylinePluginHelper.nativeBarcodeList(anylineScanView);
-                        for (int i = 0; i < barcodeList.size(); i++) {
+                        List<FirebaseVisionBarcode> barcodeList = AnylinePluginHelper.nativeBarcodeList(anylineScanView, null);
+                        for(int i=0; i< barcodeList.size(); i++) {
                             jsonArray.put(AnylinePluginHelper.wrapBarcodeInJson(barcodeList.get(i)));
                         }
                     }
@@ -311,10 +325,12 @@ public class Anyline4Activity extends AnylineBaseActivity {
                         public void onResult(MeterScanResult meterScanResult) {
                             JSONObject jsonResult = new JSONObject();
                             try {
-                                jsonResult = AnylinePluginHelper.setMeterScanMode(meterScanResult.getScanMode(), jsonResult);
+                                jsonResult = AnylinePluginHelper.setMeterScanMode(meterScanResult.getScanMode(),
+                                        jsonResult);
                                 jsonResult.put("reading", meterScanResult.getResult());
 
-                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, meterScanResult, jsonResult);
+                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, meterScanResult,
+                                        jsonResult);
 
                                 if (jsonArray.length() > 0) {
                                     jsonResult.put("detectedBarcodes", jsonArray);
@@ -334,12 +350,14 @@ public class Anyline4Activity extends AnylineBaseActivity {
         } catch (Exception e) {
             // JSONException or IllegalArgumentException is possible for errors in json
             // IOException is possible for errors during asset copying
-            finishWithError(getString(getResources().getIdentifier("error_invalid_json_data", "string", getPackageName())) + "\n" + e.getLocalizedMessage());
+            finishWithError(
+                    getString(getResources().getIdentifier("error_invalid_json_data", "string", getPackageName()))
+                            + "\n" + e.getLocalizedMessage());
         }
 
     }
 
-    //this method is used only for the meter scanning which contains radio buttons
+    // this method is used only for the meter scanning which contains radio buttons
     @Override
     public void onCameraOpened(CameraController cameraController, int width, int height) {
         super.onCameraOpened(cameraController, width, height);
@@ -350,7 +368,8 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     Rect rect = anylineScanView.getScanViewPlugin().getCutoutImageOnSurface();
 
                     RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) radioGroup.getLayoutParams();
-                    lp.setMargins(rect.left + anylineUIConfig.getOffsetX(), rect.top + anylineUIConfig.getOffsetY(), 0, 0);
+                    lp.setMargins(rect.left + anylineUIConfig.getOffsetX(), rect.top + anylineUIConfig.getOffsetY(), 0,
+                            0);
                     radioGroup.setLayoutParams(lp);
 
                     radioGroup.setVisibility(View.VISIBLE);
@@ -370,8 +389,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
         // Defining the RelativeLayout layout parameters.
         // In this case I want to fill its parent
         RelativeLayout.LayoutParams matchParentParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         relativeLayout.addView(anylineScanView, matchParentParams);
 
         ArrayList<String> titles = anylineUIConfig.getTitles();
@@ -380,7 +398,8 @@ public class Anyline4Activity extends AnylineBaseActivity {
         if (titles != null && titles.size() > 0) {
 
             if (titles.size() != modes.size()) {
-                finishWithError(getString(getResources().getIdentifier("error_invalid_segment_config", "string", getPackageName() + "Titles not mathcing with modes")));
+                finishWithError(getString(getResources().getIdentifier("error_invalid_segment_config", "string",
+                        getPackageName() + "Titles not mathcing with modes")));
             }
 
             RadioButton[] radioButtons = new RadioButton[titles.size()];
@@ -413,9 +432,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                 }
             });
 
-
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
             lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 
