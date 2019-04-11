@@ -28,7 +28,11 @@ export default {
         "idPlugin": {
           "mrzConfig": {
             "strictMode": false,
-            "cropAndTransformID": false
+            "cropAndTransformID": false,
+	    "mrzFieldScanOptions": {
+            	"dateOfIssue" : "optional",
+                "address" : "optional"
+            }
           }
         }
       },

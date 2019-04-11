@@ -56,7 +56,8 @@ export default {
         "beepOnResult": true,
         "vibrateOnResult": true
       },
-      "cancelOnResult": true
+      "cancelOnResult": true,
+      "delayStartScanTime": 2000
     }
   },
 }

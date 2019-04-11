@@ -31,9 +31,9 @@ import io.anyline.plugin.ScanResultListener;
 import io.anyline.plugin.barcode.BarcodeScanResult;
 import io.anyline.plugin.barcode.BarcodeScanViewPlugin;
 import io.anyline.plugin.id.DrivingLicenseConfig;
-import io.anyline.plugin.id.DrivingLicenseResult;
+import io.anyline.plugin.id.DrivingLicenseIdentification;
 import io.anyline.plugin.id.GermanIdFrontConfig;
-import io.anyline.plugin.id.GermanIdFrontResult;
+import io.anyline.plugin.id.GermanIdFrontIdentification;
 import io.anyline.plugin.id.ID;
 import io.anyline.plugin.id.IdScanPlugin;
 import io.anyline.plugin.id.IdScanViewPlugin;
@@ -184,25 +184,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                // clean this
-                                if (jsonResult.has("nr")) {
-                                    try {
-                                        String documentNumber = jsonResult.getString("nr");
-                                        jsonResult.remove("nr");
-                                        jsonResult.put("documentNumber", documentNumber);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                if (jsonResult.has("dateOfBirth")) {
-                                    try {
-                                        String dateOfBirth = jsonResult.getString("dateOfBirth");
-                                        jsonResult.remove("dateOfBirth");
-                                        jsonResult.put("dayOfBirth", dateOfBirth);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
 
                                 try {
                                     jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
@@ -222,7 +203,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                         scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
                             @Override
                             public void onResult(ScanResult<ID> idScanResult) {
-                                JSONObject jsonResult = ((DrivingLicenseResult) idScanResult.getResult())
+                                JSONObject jsonResult = ((DrivingLicenseIdentification) idScanResult.getResult())
                                         .toJSONObject();
 
                                 try {
@@ -242,7 +223,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                         scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
                             @Override
                             public void onResult(ScanResult<ID> idScanResult) {
-                                JSONObject jsonResult = ((GermanIdFrontResult) idScanResult.getResult()).toJSONObject();
+                                JSONObject jsonResult = ((GermanIdFrontIdentification) idScanResult.getResult()).toJSONObject();
 
                                 try {
                                     jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
@@ -445,3 +426,4 @@ public class Anyline4Activity extends AnylineBaseActivity {
     }
 
 }
+
