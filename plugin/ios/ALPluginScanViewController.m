@@ -30,8 +30,6 @@
 
 @property (nonatomic, strong) NSMutableArray<NSDictionary *> *detectedBarcodes;
 
-@property (nonatomic) NSTimeInterval scanDelay;
-
 @end
 
 @implementation ALPluginScanViewController
@@ -50,7 +48,6 @@
         self.quality = 100;
         self.nativeBarcodeEnabled = NO;
         self.cropAndTransformErrorMessage = @"";
-        self.scanDelay = 0;
     }
     return self;
 }
@@ -108,12 +105,6 @@
         }
     }
     
-    double delayTime = [[self.anylineConfig valueForKeyPath:@"viewPlugin.plugin.delayStartScanTime"] doubleValue];
-    if (delayTime > 0) {
-        self.scanDelay = delayTime;
-    }
-    
-    
     [self.scanView startCamera];
     
     [self.view addSubview:self.scanView];
@@ -151,15 +142,13 @@
     
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC*self.scanDelay), dispatch_get_current_queue(), ^{
-        NSError *error;
-        BOOL success = [self.scanView.scanViewPlugin startAndReturnError:&error];
-        if(!success) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not start scanning" message:error.localizedDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [alert show];
-        }
-        
-    });
+    NSError *error;
+    BOOL success = [self.scanView.scanViewPlugin startAndReturnError:&error];
+    if(!success) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not start scanning" message:error.localizedDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    
     
     if(self.uiConfig.segmentModes){
         self.segment.frame = CGRectMake(self.scanView.scanViewPlugin.cutoutRect.origin.x + self.uiConfig.segmentXPositionOffset/2,

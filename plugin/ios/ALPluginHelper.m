@@ -389,62 +389,64 @@
     if ([scanResult.result isKindOfClass:[ALMRZIdentification class]]) {
         ALMRZIdentification *mrzIdentification = (ALMRZIdentification *)scanResult.result;
         
-        dictResult = [[scanResult.result dictionaryWithValuesForKeys:@[@"documentType",
-                                                                       @"nationalityCountryCode",
-                                                                       @"issuingCountryCode",
-                                                                       @"issuingDate",
-                                                                       @"surNames",
+        dictResult = [[scanResult.result dictionaryWithValuesForKeys:@[@"surname",
                                                                        @"givenNames",
+                                                                       @"dateOfBirth",
+                                                                       @"dateOfExpiry",
                                                                        @"documentNumber",
-                                                                       @"checkdigitNumber",
-                                                                       @"dayOfBirth",
-                                                                       @"checkdigitDayOfBirth",
+                                                                       @"documentType",
+                                                                       @"issuingCountryCode",
+                                                                       @"nationalityCountryCode",
                                                                        @"sex",
-                                                                       @"expirationDate",
-                                                                       @"checkdigitExpirationDate",
                                                                        @"personalNumber",
+                                                                       @"optionalData",
+                                                                       @"mrzString",
+                                                                       @"checkdigitExpirationDate",
+                                                                       @"dateOfIssue",
+                                                                       @"checkDigitDateOfExpiry",
+                                                                       @"checkDigitDocumentNumber",
+                                                                       @"checkDigitDateOfBirth",
+                                                                       @"checkDigitFinal",
                                                                        @"checkDigitPersonalNumber",
-                                                                       @"checkdigitFinal"]] mutableCopy];
-        
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result issuingDateObject]] forKey:@"issuingDateObject"];
-        [dictResult setValue:@(scanResult.allCheckDigitsValid) forKey:@"allCheckDigitsValid"];
+                                                                       @"allCheckDigitsValid"]] mutableCopy];
         
         if ([[scanResult.result documentType] isEqualToString:@"ID"] && [[scanResult.result issuingCountryCode] isEqualToString:@"D"]) {
             [dictResult setValue:mrzIdentification.address forKey:@"address"];
         }
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfIssueObject"];
     } else if ([scanResult.result isKindOfClass:[ALDrivingLicenseIdentification class]]) {
-        dictResult = [[scanResult.result dictionaryWithValuesForKeys:@[@"documentNumber",
-                                                                       @"surNames",
+        dictResult = [[scanResult.result dictionaryWithValuesForKeys:@[@"surname",
                                                                        @"givenNames",
-                                                                       @"dayOfBirth",
+                                                                       @"dateOfBirth",
                                                                        @"placeOfBirth",
-                                                                       @"issuingDate",
-                                                                       @"expirationDate",
+                                                                       @"dateOfIssue",
+                                                                       @"dateOfExpiry",
                                                                        @"authority",
+                                                                       @"documentNumber",
                                                                        @"categories",
                                                                        @"drivingLicenseString"]] mutableCopy];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result issuingDateObject]] forKey:@"issuingDateObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfIssueObject"];
     } else if ([scanResult.result isKindOfClass:[ALGermanIDFrontIdentification class]]) {
         ALGermanIDFrontIdentification *germanIDFrontIdentification = (ALGermanIDFrontIdentification *)scanResult.result;
-        dictResult = [[germanIDFrontIdentification dictionaryWithValuesForKeys:@[@"documentNumber",
-                                                                       @"surNames",
-                                                                       @"givenNames",
-                                                                       @"dayOfBirth",
-                                                                       @"placeOfBirth",
-                                                                       @"nationality",
-                                                                       @"cardAccessNumber",
-                                                                       @"expirationDate",
-                                                                       @"germanIdFrontString"]] mutableCopy];
+        dictResult = [[germanIDFrontIdentification dictionaryWithValuesForKeys:@[@"surname",
+                                                                                 @"givenNames",
+                                                                                 @"dateOfBirth",
+                                                                                 @"nationality",
+                                                                                 @"placeOfBirth",
+                                                                                 @"dateOfExpiry",
+                                                                                 @"documentNumber",
+                                                                                 @"cardAccessNumber",
+                                                                                 @"germanIdFrontString"]] mutableCopy];
     }
-                
-    [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dayOfBirthObject"];
-    [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result expirationDateObject]] forKey:@"expirationDateObject"];
-                
+    
+    [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
+    [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result expirationDateObject]] forKey:@"dateOfExpiryObject"];
+    
     [dictResult setValue:imagePath forKey:@"imagePath"];
-                
+    
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
     [dictResult setValue:[self stringForOutline:outline] forKey:@"outline"];
-                
+    
     return dictResult;
 }
                 
