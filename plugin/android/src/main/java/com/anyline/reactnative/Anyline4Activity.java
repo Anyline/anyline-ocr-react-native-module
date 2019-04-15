@@ -294,13 +294,13 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     createSegmentRadioButtonUI(json);
 
                     anylineScanView.setCameraOpenListener(this);
+                    List<FirebaseVisionBarcode> barcodeList = new ArrayList<>();
                     if (nativeBarcodeEnabled) {
-                        List<FirebaseVisionBarcode> barcodeList = AnylinePluginHelper.nativeBarcodeList(anylineScanView, null);
-                        for(int i=0; i< barcodeList.size(); i++) {
-                            jsonArray.put(AnylinePluginHelper.wrapBarcodeInJson(barcodeList.get(i)));
-                        }
+                        barcodeList = AnylinePluginHelper.nativeBarcodeList(anylineScanView, null);
+
                     }
 
+                    final List<FirebaseVisionBarcode> finalBarcodeList = barcodeList;
                     scanViewPlugin.addScanResultListener(new ScanResultListener<MeterScanResult>() {
                         @Override
                         public void onResult(MeterScanResult meterScanResult) {
@@ -312,6 +312,10 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                                 jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, meterScanResult,
                                         jsonResult);
+
+                                for(int i = 0; i< finalBarcodeList.size(); i++) {
+                                    jsonArray.put(AnylinePluginHelper.wrapBarcodeInJson(finalBarcodeList.get(i)));
+                                }
 
                                 if (jsonArray.length() > 0) {
                                     jsonResult.put("detectedBarcodes", jsonArray);
@@ -426,4 +430,5 @@ public class Anyline4Activity extends AnylineBaseActivity {
     }
 
 }
+
 

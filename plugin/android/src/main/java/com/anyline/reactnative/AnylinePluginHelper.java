@@ -180,8 +180,9 @@ public class AnylinePluginHelper {
 
     }
 
-    public static List<FirebaseVisionBarcode> nativeBarcodeList(ScanView anylineScanView, List<BarcodeFormat> barcodeFormats) {
+    public static List<FirebaseVisionBarcode> nativeBarcodeList(ScanView anylineScanView, final List<BarcodeFormat> barcodeFormats) {
         final List<FirebaseVisionBarcode> barcodeList = new ArrayList<>();
+        final List<String> barcodesDisplayedVal = new ArrayList<>();
         anylineScanView.getCameraView().enableBarcodeDetection(new NativeBarcodeResultListener() {
             @Override
             public void onFailure(String e) {
@@ -190,10 +191,15 @@ public class AnylinePluginHelper {
 
             @Override
             public void onSuccess(List<FirebaseVisionBarcode> barcodes) {
+                if(barcodeList.size() == 0){
+                    barcodeList.add(barcodes.get(0));
+                }
+
                 if (barcodes != null && barcodes.size() > 0) {
-                    // for demonstration purpose, we only show the latest found barcode (and only this one)
-                    for (int i = 0; i < barcodes.size(); i++) {
-                        if (!barcodeList.contains(barcodes.get(i))) {
+                    barcodesDisplayedVal.add(barcodes.get(0).getDisplayValue());
+
+                    for(int i = 0; i<barcodes.size(); i++){
+                        if(!barcodesDisplayedVal.contains(barcodes.get(i).getDisplayValue())){
                             barcodeList.add(barcodes.get(i));
                         }
                     }
@@ -246,3 +252,4 @@ public class AnylinePluginHelper {
         return jsonResult;
     }
 }
+
