@@ -1,52 +1,62 @@
 import React from 'react';
-import {Button, Image, ScrollView, StyleSheet, Text, View, Dimensions} from 'react-native';
+import { Button, Image, ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native';
 
 export default function Result({
-                                 result,
-                                 imagePath,
-                                 fullImagePath,
-                                 emptyResult,
-                                 currentScanMode,
-                               }) {
-  let fullImage = (<View/>);
-  let fullImageText = (<View/>);
+  result,
+  imagePath,
+  fullImagePath,
+  emptyResult,
+  currentScanMode,
+}) {
+  let fullImage = (<View />);
+  let fullImageText = (<View />);
   if (fullImagePath && fullImagePath != '') {
     fullImage = (
-        <Image
-            style={styles.image}
-            resizeMode={'contain'}
-            source={{uri: `file://${fullImagePath}`}}
-        />);
+      <Image
+        style={styles.image}
+        resizeMode={'contain'}
+        source={{ uri: `file://${fullImagePath}` }}
+      />);
     fullImageText = (
-        <Text style={styles.text}>Full Image:</Text>
+      <Text style={styles.text}>Full Image:</Text>
     );
   }
 
   return (
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContainer} >
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} >
 
-          {fullImageText}
-          {fullImage}
+        {fullImageText}
+        {fullImage}
 
-          <Text style={styles.text}>Cutout:</Text>
-          <Image
-              style={styles.image}
-              resizeMode={'contain'}
-              source={{uri: `file://${imagePath}`}}
-          />
-          {Object.keys(result).map((value, key) => {
-            return (<Text style={styles.text} key={`Result_Text_${key}`}>
+        <Text style={styles.text}>Cutout:</Text>
+        <Image
+          style={styles.image}
+          resizeMode={'contain'}
+          source={{ uri: `file://${imagePath}` }}
+        />
+        {Object.keys(result).map((value, key) => {
+          return (value === 'detectedBarcodes') ? (
+            <View>
+              <Text style={styles.headline}>Detected Barcodes</Text>
+              {result[value].map((valueBar, keyBar) =>
+                (<View key={`Result_Text_${keyBar}`}>
+                  <Text style={styles.text} >Format: {valueBar.format}</Text>
+                  <Text style={styles.text} >Value: {valueBar.value}</Text>
+                </View>))}
+            </View>)
+            :
+            (<Text style={styles.text} key={`Result_Text_${key}`}>
               {(value !== 'confidence' || result[value] > 0) &&
-               `${value}: ${result[value]}`
+                `${value}: ${result[value]}`
               }
             </Text>);
-          })}
-          <View style={styles.backButton}>
-            <Button title={'Back'} onPress={emptyResult}/>
-          </View>
-        </ScrollView>
-      </View>
+        })}
+        <View style={styles.backButton}>
+          <Button title={'Back'} onPress={emptyResult} />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -64,6 +74,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#303030',
     marginBottom: 50,
     marginTop: 50,
+  },
+  headline: {
+    fontWeight: "bold",
+    color: "white",
+    marginTop: 20,
+    fontSize: 15,
+    justifyContent: 'center',
   },
   text: {
     color: "white",
