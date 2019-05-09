@@ -30,8 +30,8 @@ export default {
             "strictMode": false,
             "cropAndTransformID": false,
 	    "mrzFieldScanOptions": {
-            	"dateOfIssue" : "optional",
-                "address" : "optional"
+            	"vizDateOfIssue" : "optional",
+                "vizAddress" : "optional"
             }
           }
         }
