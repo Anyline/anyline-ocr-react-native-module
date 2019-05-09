@@ -402,18 +402,35 @@
                                                                        @"optionalData",
                                                                        @"mrzString",
                                                                        @"checkdigitExpirationDate",
-                                                                       @"dateOfIssue",
                                                                        @"checkDigitDateOfExpiry",
                                                                        @"checkDigitDocumentNumber",
                                                                        @"checkDigitDateOfBirth",
                                                                        @"checkDigitFinal",
                                                                        @"checkDigitPersonalNumber",
                                                                        @"allCheckDigitsValid"]] mutableCopy];
-        
-        if ([[scanResult.result documentType] isEqualToString:@"ID"] && [[scanResult.result issuingCountryCode] isEqualToString:@"D"]) {
-            [dictResult setValue:mrzIdentification.address forKey:@"address"];
+        //VIZ Fields
+        if ([mrzIdentification vizGivenNames] && [mrzIdentification vizGivenNames].length > 0) {
+            [dictResult setValue:mrzIdentification.vizGivenNames forKey:@"vizGivenNames"];
         }
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfIssueObject"];
+        if ([mrzIdentification vizSurname] && [mrzIdentification vizSurname].length > 0) {
+            [dictResult setValue:mrzIdentification.vizSurname forKey:@"vizSurname"];
+        }
+        if ([mrzIdentification vizAddress] && [mrzIdentification vizAddress].length > 0) {
+            [dictResult setValue:mrzIdentification.vizAddress forKey:@"vizAddress"];
+        }
+        if ([mrzIdentification vizDateOfBirth] && [mrzIdentification vizDateOfBirth].length > 0) {
+            [dictResult setValue:mrzIdentification.vizDateOfBirth forKey:@"vizDateOfBirth"];
+            [dictResult setValue:mrzIdentification.vizDateOfBirthObject forKey:@"vizDateOfBirthObject"];
+        }
+        if ([mrzIdentification vizDateOfExpiry] && [mrzIdentification vizDateOfExpiry].length > 0) {
+            [dictResult setValue:mrzIdentification.vizDateOfExpiry forKey:@"vizDateOfExpiry"];
+            [dictResult setValue:mrzIdentification.vizDateOfExpiryObject forKey:@"vizDateOfExpiryObject"];
+        }
+        if ([mrzIdentification vizDateOfIssue] && [mrzIdentification vizDateOfIssue].length > 0) {
+            [dictResult setValue:mrzIdentification.vizDateOfIssue forKey:@"vizDateOfIssue"];
+            [dictResult setValue:mrzIdentification.vizDateOfIssueObject forKey:@"vizDateOfIssueObject"];
+        }
+        
     } else if ([scanResult.result isKindOfClass:[ALDrivingLicenseIdentification class]]) {
         dictResult = [[scanResult.result dictionaryWithValuesForKeys:@[@"surname",
                                                                        @"givenNames",
@@ -426,6 +443,9 @@
                                                                        @"categories",
                                                                        @"drivingLicenseString"]] mutableCopy];
         [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfIssueObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result expirationDateObject]] forKey:@"dateOfExpiryObject"];
+        
     } else if ([scanResult.result isKindOfClass:[ALGermanIDFrontIdentification class]]) {
         ALGermanIDFrontIdentification *germanIDFrontIdentification = (ALGermanIDFrontIdentification *)scanResult.result;
         dictResult = [[germanIDFrontIdentification dictionaryWithValuesForKeys:@[@"surname",
@@ -437,10 +457,10 @@
                                                                                  @"documentNumber",
                                                                                  @"cardAccessNumber",
                                                                                  @"germanIdFrontString"]] mutableCopy];
+        
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result expirationDateObject]] forKey:@"dateOfExpiryObject"];
     }
-    
-    [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
-    [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result expirationDateObject]] forKey:@"dateOfExpiryObject"];
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
     
@@ -449,7 +469,7 @@
     
     return dictResult;
 }
-                
+
 + (NSDictionary *)dictionaryForOCRResult:(ALOCRResult *)scanResult
                         detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
                                  outline:(ALSquare *)outline
@@ -545,10 +565,10 @@
     
     return dictResult;
 }
-                
-                
+
+
 #pragma mark - Date Parsing Utils
-                
+
 + (NSString *)stringForDate:(NSDate *)date {
     if (!date) {
         return nil;
