@@ -420,15 +420,15 @@
         }
         if ([mrzIdentification vizDateOfBirth] && [mrzIdentification vizDateOfBirth].length > 0) {
             [dictResult setValue:mrzIdentification.vizDateOfBirth forKey:@"vizDateOfBirth"];
-            [dictResult setValue:mrzIdentification.vizDateOfBirthObject forKey:@"vizDateOfBirthObject"];
+            [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfBirthObject] forKey:@"vizDateOfBirthObject"];
         }
         if ([mrzIdentification vizDateOfExpiry] && [mrzIdentification vizDateOfExpiry].length > 0) {
             [dictResult setValue:mrzIdentification.vizDateOfExpiry forKey:@"vizDateOfExpiry"];
-            [dictResult setValue:mrzIdentification.vizDateOfExpiryObject forKey:@"vizDateOfExpiryObject"];
+            [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfExpiryObject] forKey:@"vizDateOfExpiryObject"];
         }
         if ([mrzIdentification vizDateOfIssue] && [mrzIdentification vizDateOfIssue].length > 0) {
             [dictResult setValue:mrzIdentification.vizDateOfIssue forKey:@"vizDateOfIssue"];
-            [dictResult setValue:mrzIdentification.vizDateOfIssueObject forKey:@"vizDateOfIssueObject"];
+            [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfIssueObject] forKey:@"vizDateOfIssueObject"];
         }
         
     } else if ([scanResult.result isKindOfClass:[ALDrivingLicenseIdentification class]]) {
