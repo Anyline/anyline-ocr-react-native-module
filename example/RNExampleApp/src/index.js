@@ -15,6 +15,7 @@ import Result from './Result';
 import Overview from './Overview';
 
 import BarcodeConfig from '../config/BarcodeConfig';
+import BarcodePDF417Config from '../config/Barcode_PDF417Config';
 import DocumentConfig from '../config/DocumentConfig';
 import MRZConfig from '../config/MRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
@@ -31,6 +32,7 @@ import USNRConfig from "../config/USNRConfig";
 import ShipConConfig from "../config/ContainerShipConfig";
 import CattleTagConfig from "../config/CattleTagConfig";
 import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
+import VerticalContainerConfig from '../config/VerticalContainerConfig';
 
 // Disable Warnings 
 console.disableYellowBox = true;
@@ -79,6 +81,9 @@ class Anyline extends Component {
       case 'BARCODE':
         config = BarcodeConfig;
         break;
+      case 'BARCODE_PDF417':
+        config = BarcodePDF417Config;
+        break;
       case 'IBAN':
         type = 'ANYLINE_OCR';
         config = IBANConfig;
@@ -124,6 +129,9 @@ class Anyline extends Component {
         break;
       case 'DIGITAL_METER':
         config = DigitalEnergyConfig;
+        break;
+      case 'VERTICAL_CONTAINER':
+        config = VerticalContainerConfig;
         break;
     }
 

@@ -81,6 +81,15 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
           }} />
       </View>
 
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Barcode PDF417'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('BARCODE_PDF417')
+          }} />
+      </View>
+
+
       <Text style={styles.text}>VEHICLE</Text>
 
       <View style={styles.buttons}>
@@ -132,9 +141,15 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
           onPress={() => {
             platformPermissionCheck('SHIPPING_CONTAINER')
           }} />
-
       </View>
 
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Vertical Container'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('VERTICAL_CONTAINER')
+          }} />
+      </View>
 
       <Text style={styles.text}>OTHER</Text>
 
