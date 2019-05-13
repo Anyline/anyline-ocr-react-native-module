@@ -431,6 +431,9 @@
             [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfIssueObject] forKey:@"vizDateOfIssueObject"];
         }
         
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result expirationDateObject]] forKey:@"dateOfExpiryObject"];
+        
     } else if ([scanResult.result isKindOfClass:[ALDrivingLicenseIdentification class]]) {
         dictResult = [[scanResult.result dictionaryWithValuesForKeys:@[@"surname",
                                                                        @"givenNames",
