@@ -20,58 +20,43 @@ export default {
     },
     "flash": {
       "mode": "manual",
-      "alignment": "bottom_left"
+      "alignment": "bottom_right"
     },
-    "viewPlugin" : {
-      "plugin" : {
-          "id" : "IDPlugin_ID",
-          "idPlugin" : {
-              "mrzConfig" : {
-                  "strictMode" : false,
-                  "cropAndTransformID" : false,
-                  "mrzFieldScanOptions": {
-                                  }
-              }
-          }
+    "viewPlugin": {
+      "plugin": {
+        "id": "CONTAINER_ID",
+        "ocrPlugin": {
+          "scanMode": "AUTO",
+          "languages": ["USNr.any"],
+          "customCmdFile": "container_scanner_vertical.ale"
+        }
       },
       "cutoutConfig": {
         "style": "rect",
-        "maxWidthPercent": "90%",
-        "maxHeightPercent": "90%",
-        "alignment": "center",
+        "maxWidthPercent": "10%",
+        "alignment": "top_half",
         "ratioFromSize": {
-          "width": 125,
-          "height": 85
+          "width": 9,
+          "height": 62
         },
-        "strokeWidth": 2,
-        "cornerRadius": 4,
-        "strokeColor": "FFFFFF",
         "outerColor": "000000",
         "outerAlpha": 0.3,
-        "cropPadding": {
-          "x": 0,
-          "y": 0
-        },
-        "cropOffset": {
-          "x": 0,
-          "y": 0
-        },
+        "strokeWidth": 1,
+        "strokeColor": "FFFFFF",
+        "cornerRadius": 2,
         "feedbackStrokeColor": "0099FF",
-        "offset": {
-          "x": 0,
-          "y": 30
-        }
       },
       "scanFeedback": {
-        "style": "rect",
-        "strokeColor": "0099FF",
+        "animation": "traverse_multi",
+        "animationDuration": 250,
+        "style": "contour_rect",
         "strokeWidth": 2,
-        "blinkOnResult": true,
+        "strokeColor": "0099FF",
         "beepOnResult": true,
-        "vibrateOnResult": true
+        "vibrateOnResult": true,
+        "blinkAnimationOnResult": true
       },
       "cancelOnResult": true
-    },
-    "cropAndTransformErrorMessage": "Edges are not detected"
+    }
   }
 }
