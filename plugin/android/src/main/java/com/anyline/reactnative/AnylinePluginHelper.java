@@ -30,8 +30,11 @@ import io.anyline.view.ScanView;
 
 public class AnylinePluginHelper {
 
-    private static final String TAG = AnylinePluginHelper.class.getSimpleName();;
+    private static final String TAG = AnylinePluginHelper.class.getSimpleName();
+
     private static Toast notificationToast;
+    private static boolean nativeBarcodeEnabled = false;
+    private static List<FirebaseVisionBarcode> finalBarcodeList;
 
     public static JSONObject setLanguages(JSONObject json, Context context) {
         if (json.has("viewPlugin")) {
@@ -56,10 +59,10 @@ public class AnylinePluginHelper {
 
                                     // Check where to copy the training files
                                     File dirToCopy = new File(context.getFilesDir(),
-                                            "anyline/module_anyline_ocr/tessdata/");
+                                                              "anyline/module_anyline_ocr/tessdata/");
                                     if (Objects.equals(fileExtension, "any")) {
                                         dirToCopy = new File(context.getFilesDir(),
-                                                "anyline/module_anyline_ocr/trained_models/");
+                                                             "anyline/module_anyline_ocr/trained_models/");
                                     }
 
                                     int lastFileSeparatorIndex = traineddataFilePath.lastIndexOf(File.separator);
@@ -93,6 +96,39 @@ public class AnylinePluginHelper {
         return json;
     }
 
+    public static void setNativeBarcodeMode(JSONObject jsonObject, ScanView anylineScanView) {
+        boolean nativeBarcodeEnabledJson = false;
+        if (jsonObject.has("nativeBarcodeEnabled")) {
+            try {
+                nativeBarcodeEnabledJson = jsonObject.getBoolean("nativeBarcodeEnabled");
+                if (nativeBarcodeEnabledJson) {
+                    enableNativeBarcode(anylineScanView, null);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        nativeBarcodeEnabled = nativeBarcodeEnabledJson;
+    }
+
+    public static boolean getNativeBarcodeMode() {
+        return nativeBarcodeEnabled;
+    }
+
+    public static JSONArray arrayOfDetectedBarcodes() {
+
+        if (nativeBarcodeEnabled) {
+            //List<FirebaseVisionBarcode> finalBarcodeList = new ArrayList<>();
+            finalBarcodeList = AnylinePluginHelper.getNativeBarcodeList();
+            final JSONArray jsonArray = new JSONArray();
+            for (int i = 0; i < finalBarcodeList.size(); i++) {
+                jsonArray.put(AnylinePluginHelper.wrapBarcodeInJson(finalBarcodeList.get(i)));
+            }
+            return jsonArray;
+        }
+        return null;
+    }
+
     public static JSONObject jsonHelper(Anyline4Activity activity, ScanResult<?> scanResult, JSONObject jsonObject) {
         try {
             File imageFile = TempFileUtil.createTempFileCheckCache(activity, UUID.randomUUID().toString(), ".jpg");
@@ -103,13 +139,20 @@ public class AnylinePluginHelper {
             scanResult.getFullImage().save(imageFileFull, 90);
             jsonObject.put("fullImagePath", imageFile.getAbsolutePath());
 
-            if(scanResult.getOutline() != null){
+            if (scanResult.getOutline() != null) {
                 jsonObject.put("outline", activity.jsonForOutline(scanResult.getOutline()));
             }
-            if(scanResult.getConfidence() != null){
+            if (scanResult.getConfidence() != null) {
                 jsonObject.put("confidence", scanResult.getConfidence());
-            }
 
+                if (nativeBarcodeEnabled) {
+                    JSONArray barcodeArray = arrayOfDetectedBarcodes();
+
+                    if (barcodeArray.length() > 0) {
+                        jsonObject.put("detectedBarcodes", barcodeArray);
+                    }
+                }
+            }
         } catch (IOException e) {
             Log.e(TAG, "Image file could not be saved.", e);
 
@@ -119,6 +162,7 @@ public class AnylinePluginHelper {
         }
         return jsonObject;
     }
+
 
     public static JSONObject wrapBarcodeInJson(FirebaseVisionBarcode b) {
         JSONObject json = new JSONObject();
@@ -131,6 +175,33 @@ public class AnylinePluginHelper {
             Log.e(TAG, "Error while putting image path to json.", jsonException);
         }
         return json;
+    }
+
+    private static void setNativeBarcodeList(List<FirebaseVisionBarcode> barcodes) {
+        final List<FirebaseVisionBarcode> barcodeList = new ArrayList<>();
+        final List<String> barcodesDisplayedVal = new ArrayList<>();
+
+        if (barcodeList.size() == 0) {
+            barcodeList.add(barcodes.get(0));
+        }
+
+        if (barcodes != null && barcodes.size() > 0) {
+            barcodesDisplayedVal.add(barcodes.get(0).getDisplayValue());
+
+            for (int i = 0; i < barcodes.size(); i++) {
+                if (!barcodesDisplayedVal.contains(barcodes.get(i).getDisplayValue())) {
+                    barcodeList.add(barcodes.get(i));
+                }
+            }
+
+        }
+
+        finalBarcodeList = barcodeList;
+
+    }
+
+    private static List<FirebaseVisionBarcode> getNativeBarcodeList() {
+        return finalBarcodeList;
     }
 
     private static String findValidFormatForReference(int format) {
@@ -180,9 +251,7 @@ public class AnylinePluginHelper {
 
     }
 
-    public static List<FirebaseVisionBarcode> nativeBarcodeList(ScanView anylineScanView, final List<BarcodeFormat> barcodeFormats) {
-        final List<FirebaseVisionBarcode> barcodeList = new ArrayList<>();
-        final List<String> barcodesDisplayedVal = new ArrayList<>();
+    public static void enableNativeBarcode(ScanView anylineScanView, final List<BarcodeFormat> barcodeFormats) {
         anylineScanView.getCameraView().enableBarcodeDetection(new NativeBarcodeResultListener() {
             @Override
             public void onFailure(String e) {
@@ -191,23 +260,9 @@ public class AnylinePluginHelper {
 
             @Override
             public void onSuccess(List<FirebaseVisionBarcode> barcodes) {
-                if(barcodeList.size() == 0){
-                    barcodeList.add(barcodes.get(0));
-                }
-
-                if (barcodes != null && barcodes.size() > 0) {
-                    barcodesDisplayedVal.add(barcodes.get(0).getDisplayValue());
-
-                    for(int i = 0; i<barcodes.size(); i++){
-                        if(!barcodesDisplayedVal.contains(barcodes.get(i).getDisplayValue())){
-                            barcodeList.add(barcodes.get(i));
-                        }
-                    }
-
-                }
+                setNativeBarcodeList(barcodes);
             }
         }, barcodeFormats);
-        return barcodeList;
     }
 
     protected static void showToast(String st, Context context) {
@@ -224,24 +279,24 @@ public class AnylinePluginHelper {
     public static JSONObject setMeterScanMode(MeterScanMode scanMode, JSONObject jsonResult) {
         try {
             switch (scanMode) {
-            case DIGITAL_METER:
-                jsonResult.put("meterType", "Digital Meter");
-                break;
-            case DIAL_METER:
-                jsonResult.put("meterType", "Dial Meter");
-                break;
-            case ANALOG_METER:
-                jsonResult.put("meterType", "Analog Meter");
-                break;
-            case AUTO_ANALOG_DIGITAL_METER:
-                jsonResult.put("meterType", "Auto Analog Digital Meter");
-                break;
-            case SERIAL_NUMBER:
-                jsonResult.put("meterType", "Serial Number");
-                break;
-            default:
-                jsonResult.put("meterType", "Electric Meter");
-                break;
+                case DIGITAL_METER:
+                    jsonResult.put("meterType", "Digital Meter");
+                    break;
+                case DIAL_METER:
+                    jsonResult.put("meterType", "Dial Meter");
+                    break;
+                case ANALOG_METER:
+                    jsonResult.put("meterType", "Analog Meter");
+                    break;
+                case AUTO_ANALOG_DIGITAL_METER:
+                    jsonResult.put("meterType", "Auto Analog Digital Meter");
+                    break;
+                case SERIAL_NUMBER:
+                    jsonResult.put("meterType", "Serial Number");
+                    break;
+                default:
+                    jsonResult.put("meterType", "Electric Meter");
+                    break;
             }
 
             jsonResult.put("scanMode", scanMode.toString());
@@ -252,4 +307,3 @@ public class AnylinePluginHelper {
         return jsonResult;
     }
 }
-

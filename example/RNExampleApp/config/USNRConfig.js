@@ -26,8 +26,9 @@ export default {
       "plugin": {
         "id": "USNR_ID",
         "ocrPlugin": {
-          "scanMode": "AUTO",
-          "languages": ["USNr.any"]
+	  "ocrConfig" : {
+            "scanMode" : "AUTO",
+          }
         }
       },
       "cutoutConfig": {

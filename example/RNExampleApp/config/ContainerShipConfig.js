@@ -26,9 +26,8 @@ export default {
             "plugin": {
                 "id": "CONTAINER_ID",
                 "ocrPlugin": {
-                    "scanMode": "AUTO",
-                    "languages": ["USNr.any"],
-                    "customCmdFile": "container_scanner.ale"
+	          "containerConfig": {
+                  }
                 }
             },
             "cutoutConfig": {

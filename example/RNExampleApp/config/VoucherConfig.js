@@ -26,12 +26,13 @@ export default {
       "plugin": {
         "id": "OCR_VC",
         "ocrPlugin": {
-          "scanMode": "AUTO",
-          "languages": ["anyline_capitals.traineddata"],
-          "charWhitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-          "validationRegex": "[A-Z0-9]{8}$",
-          "minConfidence": 85
-
+	  "ocrConfig": {
+            "scanMode": "AUTO",
+            "languages": ["anyline_capitals.traineddata"],
+            "charWhitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            "validationRegex": "[A-Z0-9]{8}$",
+            "minConfidence": 85
+	  }
         }
       },
       "cutoutConfig": {
