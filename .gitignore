@@ -13,6 +13,9 @@ example/RNExampleApp/android/.settings
 example/RNExampleApp/ios/build/
 example/RNExampleApp/node_modules/
 example/RNExampleApp/ios/Pods
+example/RNExampleApp/yarn.lock
+example/RNExampleApp/package-lock.json
+
 # OSX
 #
 .DS_Store
