@@ -26,9 +26,8 @@ export default {
       "plugin": {
         "id": "VIN_ID",
         "ocrPlugin": {
-          "scanMode": "AUTO",
-          "languages": ["vin.any"],
-          "customCmdFile": "vin.ale"
+          "vinConfig":{
+          }
         }
       },
       "cutoutConfig": {

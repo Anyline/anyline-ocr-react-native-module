@@ -26,9 +26,8 @@ export default {
       "plugin": {
         "id": "OCR_COW",
         "ocrPlugin": {
-          "scanMode": "AUTO",
-          "languages": ["USNr.any"],
-          "customCmdFile": "cow_tag_scanner.ale"
+	  "cattleTagConfig":{
+          }
         }
       },
       "cutoutConfig": {

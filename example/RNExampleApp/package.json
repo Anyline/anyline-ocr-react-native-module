@@ -1,6 +1,6 @@
 {
   "name": "anyline-react-native-example-app",
-  "version": "10.1.0",
+  "version": "10.2.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
