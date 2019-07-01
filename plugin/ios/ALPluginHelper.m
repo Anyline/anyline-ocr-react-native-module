@@ -407,7 +407,8 @@
                                                                        @"checkDigitDateOfBirth",
                                                                        @"checkDigitFinal",
                                                                        @"checkDigitPersonalNumber",
-                                                                       @"allCheckDigitsValid"]] mutableCopy];
+                                                                       @"allCheckDigitsValid",
+                                                                       @"fieldConfidences"]] mutableCopy];
         //VIZ Fields
         if ([mrzIdentification vizGivenNames] && [mrzIdentification vizGivenNames].length > 0) {
             [dictResult setValue:mrzIdentification.vizGivenNames forKey:@"vizGivenNames"];
