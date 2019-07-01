@@ -467,6 +467,9 @@
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
     
+    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+    
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
     [dictResult setValue:[self stringForOutline:outline] forKey:@"outline"];
     
@@ -486,6 +489,9 @@
     NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
+    
+    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
     
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
     [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
@@ -516,6 +522,9 @@
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
     
+    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+    
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
     [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
     
@@ -536,7 +545,11 @@
     [dictResult setValue:scanResult.result forKey:@"licensePlate"];
     [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
+    
     [dictResult setValue:imagePath forKey:@"imagePath"];
+    
+    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
     
     if (detectedBarcodes && detectedBarcodes.count != 0) {
         [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
