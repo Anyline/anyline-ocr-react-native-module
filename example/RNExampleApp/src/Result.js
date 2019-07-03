@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Image, ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { flattenObject } from './utils/utils';
 
 export default function Result({
   result,
@@ -22,6 +23,8 @@ export default function Result({
     );
   }
 
+  const flattenResult = flattenObject(result);
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} >
@@ -35,11 +38,11 @@ export default function Result({
           resizeMode={'contain'}
           source={{ uri: `file://${imagePath}` }}
         />
-        {Object.keys(result).map((value, key) => {
+        {Object.keys(flattenResult).map((value, key) => {
           return (value === 'detectedBarcodes') ? (
             <View>
               <Text style={styles.headline}>Detected Barcodes</Text>
-              {result[value].map((valueBar, keyBar) =>
+              {flattenResult[value].map((valueBar, keyBar) =>
                 (<View key={`Result_Text_${keyBar}`}>
                   <Text style={styles.text} >Format: {valueBar.format}</Text>
                   <Text style={styles.text} >Value: {valueBar.value}</Text>
@@ -47,8 +50,8 @@ export default function Result({
             </View>)
             :
             (<Text style={styles.text} key={`Result_Text_${key}`}>
-              {(value !== 'confidence' || result[value] > 0) &&
-                `${value}: ${result[value]}`
+              {(value !== 'confidence' || flattenResult[value] > 0) &&
+                `${value}: ${flattenResult[value]}`
               }
             </Text>);
         })}
