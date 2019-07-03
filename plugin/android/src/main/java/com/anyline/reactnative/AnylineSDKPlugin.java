@@ -231,7 +231,10 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private void returnError(String error) {
         switch (this.returnMethod) {
         case "callback":
-            onErrorCallback.invoke(error);
+            if (onErrorCallback != null) {
+                onErrorCallback.invoke(error);
+                onErrorCallback = null;
+            }
             break;
         case "promise":
             promise.reject(E_ERROR, error);
@@ -244,7 +247,10 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private void returnSuccess(String result) {
         switch (this.returnMethod) {
         case "callback":
-            onResultCallback.invoke(result);
+            if (onResultCallback != null) {
+                onResultCallback.invoke(result);
+                onResultCallback = null;
+            }
             break;
         case "promise":
             promise.resolve(result);
