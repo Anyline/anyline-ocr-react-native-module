@@ -47,6 +47,12 @@ public class AnylinePluginHelper {
                         JSONObject ocrScanPlugin = plugin.getJSONObject("ocrPlugin");
                         {
                             JSONArray tesseractArray = ocrScanPlugin.optJSONArray("languages");
+                            if (tesseractArray == null) {
+                                if (ocrScanPlugin.has("ocrConfig")) {
+                                    JSONObject ocrConfig = ocrScanPlugin.getJSONObject("ocrConfig");
+                                    tesseractArray = ocrConfig.optJSONArray("languages");
+                                }
+                            }
                             JSONArray newLanguagesArray = new JSONArray();
                             if (tesseractArray != null) {
                                 String[] languages = new String[tesseractArray.length()];
@@ -59,10 +65,10 @@ public class AnylinePluginHelper {
 
                                     // Check where to copy the training files
                                     File dirToCopy = new File(context.getFilesDir(),
-                                                              "anyline/module_anyline_ocr/tessdata/");
+                                            "anyline/module_anyline_ocr/tessdata/");
                                     if (Objects.equals(fileExtension, "any")) {
                                         dirToCopy = new File(context.getFilesDir(),
-                                                             "anyline/module_anyline_ocr/trained_models/");
+                                                "anyline/module_anyline_ocr/trained_models/");
                                     }
 
                                     int lastFileSeparatorIndex = traineddataFilePath.lastIndexOf(File.separator);
@@ -118,7 +124,7 @@ public class AnylinePluginHelper {
     public static JSONArray arrayOfDetectedBarcodes() {
 
         if (nativeBarcodeEnabled) {
-            //List<FirebaseVisionBarcode> finalBarcodeList = new ArrayList<>();
+            // List<FirebaseVisionBarcode> finalBarcodeList = new ArrayList<>();
             finalBarcodeList = AnylinePluginHelper.getNativeBarcodeList();
             final JSONArray jsonArray = new JSONArray();
             for (int i = 0; i < finalBarcodeList.size(); i++) {
@@ -163,7 +169,6 @@ public class AnylinePluginHelper {
         return jsonObject;
     }
 
-
     public static JSONObject wrapBarcodeInJson(FirebaseVisionBarcode b) {
         JSONObject json = new JSONObject();
 
@@ -171,7 +176,7 @@ public class AnylinePluginHelper {
             json.put("value", b.getDisplayValue());
             json.put("format", findValidFormatForReference(b.getFormat()));
         } catch (JSONException jsonException) {
-            //should not be possible
+            // should not be possible
             Log.e(TAG, "Error while putting image path to json.", jsonException);
         }
         return json;
@@ -279,24 +284,24 @@ public class AnylinePluginHelper {
     public static JSONObject setMeterScanMode(MeterScanMode scanMode, JSONObject jsonResult) {
         try {
             switch (scanMode) {
-                case DIGITAL_METER:
-                    jsonResult.put("meterType", "Digital Meter");
-                    break;
-                case DIAL_METER:
-                    jsonResult.put("meterType", "Dial Meter");
-                    break;
-                case ANALOG_METER:
-                    jsonResult.put("meterType", "Analog Meter");
-                    break;
-                case AUTO_ANALOG_DIGITAL_METER:
-                    jsonResult.put("meterType", "Auto Analog Digital Meter");
-                    break;
-                case SERIAL_NUMBER:
-                    jsonResult.put("meterType", "Serial Number");
-                    break;
-                default:
-                    jsonResult.put("meterType", "Electric Meter");
-                    break;
+            case DIGITAL_METER:
+                jsonResult.put("meterType", "Digital Meter");
+                break;
+            case DIAL_METER:
+                jsonResult.put("meterType", "Dial Meter");
+                break;
+            case ANALOG_METER:
+                jsonResult.put("meterType", "Analog Meter");
+                break;
+            case AUTO_ANALOG_DIGITAL_METER:
+                jsonResult.put("meterType", "Auto Analog Digital Meter");
+                break;
+            case SERIAL_NUMBER:
+                jsonResult.put("meterType", "Serial Number");
+                break;
+            default:
+                jsonResult.put("meterType", "Electric Meter");
+                break;
             }
 
             jsonResult.put("scanMode", scanMode.toString());
