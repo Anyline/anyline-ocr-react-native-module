@@ -432,8 +432,8 @@
             [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfIssueObject] forKey:@"vizDateOfIssueObject"];
         }
         
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result expirationDateObject]] forKey:@"dateOfExpiryObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfBirthObject]] forKey:@"dateOfBirthObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfExpiryObject]] forKey:@"dateOfExpiryObject"];
         
     } else if ([scanResult.result isKindOfClass:[ALDrivingLicenseIdentification class]]) {
         dictResult = [[scanResult.result dictionaryWithValuesForKeys:@[@"surname",
@@ -446,9 +446,9 @@
                                                                        @"documentNumber",
                                                                        @"categories",
                                                                        @"drivingLicenseString"]] mutableCopy];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfIssueObject"];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result expirationDateObject]] forKey:@"dateOfExpiryObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfBirthObject]] forKey:@"dateOfBirthObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfIssueObject]] forKey:@"dateOfIssueObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfExpiryObject]] forKey:@"dateOfExpiryObject"];
         
     } else if ([scanResult.result isKindOfClass:[ALGermanIDFrontIdentification class]]) {
         ALGermanIDFrontIdentification *germanIDFrontIdentification = (ALGermanIDFrontIdentification *)scanResult.result;
@@ -462,8 +462,8 @@
                                                                                  @"cardAccessNumber",
                                                                                  @"germanIdFrontString"]] mutableCopy];
         
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result expirationDateObject]] forKey:@"dateOfExpiryObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfBirthObject]] forKey:@"dateOfBirthObject"];
+        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfExpiryObject]] forKey:@"dateOfExpiryObject"];
     }
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
