@@ -57,7 +57,7 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
       </View>
       <Text style={styles.text}>ID</Text>
       <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  AUT/GER Driving License'} color="#0099FF"
+        <Button style={styles.buttons} title={'  Driving License'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
             platformPermissionCheck('DRIVING_LICENSE')
