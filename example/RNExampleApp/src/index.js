@@ -25,6 +25,8 @@ import DialEnergyConfig from '../config/DialMeterConfig';
 import IBANConfig from '../config/IbanConfig';
 import VoucherConfig from '../config/VoucherConfig';
 import DrivingLicenseConfig from '../config/DrivingLicenseConfig';
+import DrivingLicenseNLConfig from '../config/DrivingLicenseNLConfig';
+import DrivingLicenseBEConfig from '../config/DrivingLicenseBEConfig';
 import LicensePlateConfig from '../config/LicensePlateConfig';
 import SerialNumberConfig from '../config/SerialNumber';
 import VinConfig from '../config/VINConfig';
@@ -95,6 +97,14 @@ class Anyline extends Component {
       case 'DRIVING_LICENSE':
         type = 'ANYLINE_OCR';
         config = DrivingLicenseConfig;
+        break;
+      case 'DRIVING_LICENSE_NL':
+        type = 'ANYLINE_OCR';
+        config = DrivingLicenseNLConfig;
+        break;
+	  case 'DRIVING_LICENSE_BE':
+        type = 'ANYLINE_OCR';
+        config = DrivingLicenseBEConfig;
         break;
       case 'VIN':
         type = 'ANYLINE_OCR';
