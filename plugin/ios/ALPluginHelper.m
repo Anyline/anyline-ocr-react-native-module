@@ -610,6 +610,68 @@
     return dictResult;
 }
 
++ (NSDictionary *)dictionaryForCompositeResult:(ALCompositeResult *)scanResult
+                              detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+                                       quality:(NSInteger)quality {
+    
+    
+    NSMutableDictionary *dictResult = [[NSMutableDictionary alloc] init];
+    
+    for (NSString *pluginID in [scanResult.result allKeys]) {
+        
+        NSDictionary *singleResultDict = [ALPluginHelper dictForResult:[scanResult.result objectForKey:pluginID]
+                                                      detectedBarcodes:detectedBarcodes
+                                                               quality:quality];
+        
+        [dictResult setObject:singleResultDict forKey:pluginID];
+        
+    }
+    return dictResult;
+}
+
+
++ (NSDictionary *)dictForResult:(ALScanResult *)result
+               detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+                        quality:(NSInteger)quality {
+    if ([result isKindOfClass:[ALMeterResult class]]) {
+        return [ALPluginHelper dictionaryForMeterResult:(ALMeterResult *)result
+                                       detectedBarcodes:detectedBarcodes
+                                                outline:[[ALSquare alloc] init]
+                                                quality:quality];
+        
+    } else if ([result isKindOfClass:[ALLicensePlateResult class]]) {
+        return [ALPluginHelper dictionaryForLicensePlateResult:(ALLicensePlateResult *)result
+                                              detectedBarcodes:detectedBarcodes
+                                                       outline:[[ALSquare alloc] init]
+                                                       quality:quality];
+    } else if ([result isKindOfClass:[ALIDResult class]]) {
+        return [ALPluginHelper dictionaryForIDResult:(ALIDResult *)result
+                                    detectedBarcodes:detectedBarcodes
+                                             outline:[[ALSquare alloc] init]
+                                             quality:quality];
+        
+    } else if ([result isKindOfClass:[ALBarcodeResult class]]) {
+        return [ALPluginHelper dictionaryForBarcodeResult:(ALBarcodeResult *)result
+                                                  outline:[[ALSquare alloc] init]
+                                                  quality:quality];
+        
+    } else if ([result isKindOfClass:[ALOCRResult class]]) {
+        return [ALPluginHelper dictionaryForOCRResult:(ALOCRResult *)result
+                                     detectedBarcodes:detectedBarcodes
+                                              outline:[[ALSquare alloc] init]
+                                              quality:quality];
+        
+    } else if ([result.result isKindOfClass:[UIImage class]]) {
+        return [ALPluginHelper dictionaryForTransformedImage:(UIImage *)result.result
+                                                   fullFrame:result.fullImage
+                                                     quality:quality
+                                            detectedBarcodes:detectedBarcodes
+                                                     outline:[[ALSquare alloc] init]];
+        
+    }
+    
+    return nil;
+}
 
 #pragma mark - Date Parsing Utils
 

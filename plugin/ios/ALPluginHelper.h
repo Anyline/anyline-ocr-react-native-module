@@ -81,6 +81,11 @@ NS_ASSUME_NONNULL_BEGIN
                                detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
                                         outline:(ALSquare *)outline;
 
+
++ (NSDictionary *)dictionaryForCompositeResult:(ALCompositeResult *)scanResult
+                              detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+                                       quality:(NSInteger)quality;
+
 @end
 
 NS_ASSUME_NONNULL_END
