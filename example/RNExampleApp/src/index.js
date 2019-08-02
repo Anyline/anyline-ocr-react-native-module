@@ -33,6 +33,8 @@ import ShipConConfig from "../config/ContainerShipConfig";
 import CattleTagConfig from "../config/CattleTagConfig";
 import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
 import VerticalContainerConfig from '../config/VerticalContainerConfig';
+import SerialScanningConfig from '../config/SerialScanningConfig';
+
 
 // Disable Warnings 
 console.disableYellowBox = true;
@@ -133,6 +135,9 @@ class Anyline extends Component {
       case 'VERTICAL_CONTAINER':
         config = VerticalContainerConfig;
         break;
+      case 'SERIAL_SCANNING':
+        config = SerialScanningConfig;
+        break;
     }
 
 
@@ -145,8 +150,9 @@ class Anyline extends Component {
       const data = JSON.parse(result);
       LayoutAnimation.easeInEaseOut();
       const fullImagePath = data.fullImagePath;
-      const imagePath = data.imagePath;
-
+      const imagePath = data.DRIVING_LICENSE.imagePath;
+	  // const fullImagePath = "/tmp";
+	  //  	  const imagePath = "/tmp";
       delete data.fullImagePath;
       delete data.imagePath;
 

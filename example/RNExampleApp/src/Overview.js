@@ -174,6 +174,14 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
             platformPermissionCheck('CATTLE_TAG')
           }} />
       </View>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Serial Scanning'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('SERIAL_SCANNING')
+          }} />
+      </View>
     </ScrollView>
   );
 }
