@@ -108,7 +108,8 @@ export default {
           "plugin": {
             "id": "VIN",
             "ocrPlugin": {
-              "scanMode": "AUTO"
+              "vinConfig": {
+              }
             }
           },
           "cutoutConfig": {
