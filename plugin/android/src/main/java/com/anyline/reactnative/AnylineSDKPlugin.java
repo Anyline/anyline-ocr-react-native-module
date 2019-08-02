@@ -163,6 +163,8 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
                 } else {
                     returnError("No Plugin in config. Please check your configuration.");
                 }
+            } else if (options.has("serialViewPluginComposite")) {
+                scan(Anyline4Activity.class, null, REQUEST_ANYLINE_4);
             } else {
                 returnError("No ViewPlugin in config. Please check your configuration.");
             }

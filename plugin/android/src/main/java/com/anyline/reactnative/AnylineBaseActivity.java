@@ -30,7 +30,14 @@ import at.nineyards.anyline.camera.CameraConfig;
 import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.camera.CameraFeatures;
 import at.nineyards.anyline.camera.CameraOpenListener;
-import io.anyline.view.ScanViewPlugin;
+import io.anyline.plugin.barcode.BarcodeScanViewPlugin;
+import io.anyline.plugin.id.IdScanViewPlugin;
+import io.anyline.plugin.licenseplate.LicensePlateScanViewPlugin;
+import io.anyline.plugin.meter.MeterScanViewPlugin;
+import io.anyline.plugin.ocr.OcrScanViewPlugin;
+import io.anyline.view.AbstractBaseScanViewPlugin;
+import io.anyline.view.SerialScanViewComposite;
+//import io.anyline.view.ScanViewPlugin;
 
 public abstract class AnylineBaseActivity extends Activity
         implements CameraOpenListener, Thread.UncaughtExceptionHandler {
@@ -232,8 +239,24 @@ public abstract class AnylineBaseActivity extends Activity
         }
     }
 
-    protected void setResult(ScanViewPlugin scanViewPlugin, JSONObject jsonResult){
-        if(scanViewPlugin != null && scanViewPlugin.getScanViewPluginConfig().isCancelOnResult()){
+    protected void setResult(AbstractBaseScanViewPlugin scanViewPlugin, JSONObject jsonResult){
+        Boolean isCancelOnResult = true;
+        if (scanViewPlugin instanceof MeterScanViewPlugin) {
+            isCancelOnResult = ((MeterScanViewPlugin) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
+        } else if (scanViewPlugin instanceof BarcodeScanViewPlugin) {
+            isCancelOnResult = ((BarcodeScanViewPlugin) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
+        } else if (scanViewPlugin instanceof IdScanViewPlugin) {
+            isCancelOnResult = ((IdScanViewPlugin) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
+        } else if (scanViewPlugin instanceof LicensePlateScanViewPlugin) {
+            isCancelOnResult = ((LicensePlateScanViewPlugin) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
+        } else if (scanViewPlugin instanceof OcrScanViewPlugin) {
+            isCancelOnResult = ((OcrScanViewPlugin) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
+        } else if (scanViewPlugin instanceof SerialScanViewComposite) {
+            isCancelOnResult = ((SerialScanViewComposite) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
+        }
+
+        if(scanViewPlugin != null && isCancelOnResult){
+//          if(scanViewPlugin != null && scanViewPlugin.getScanViewPluginConfig().isCancelOnResult()){
             ResultReporter.onResult(jsonResult, true);
             setResult(AnylineSDKPlugin.RESULT_OK);
             finish();

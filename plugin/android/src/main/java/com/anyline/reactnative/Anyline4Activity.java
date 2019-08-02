@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import at.nineyards.anyline.AnylineDebugListener;
@@ -45,14 +46,18 @@ import io.anyline.plugin.meter.MeterScanResult;
 import io.anyline.plugin.meter.MeterScanViewPlugin;
 import io.anyline.plugin.ocr.OcrScanResult;
 import io.anyline.plugin.ocr.OcrScanViewPlugin;
+import io.anyline.view.AbstractBaseScanViewPlugin;
+import io.anyline.view.CutoutRect;
 import io.anyline.view.ScanView;
-import io.anyline.view.ScanViewPlugin;
+import io.anyline.view.ScanViewPluginComposite;
+import io.anyline.view.SerialScanViewComposite;
+//import io.anyline.view.ScanViewPlugin;
 
 public class Anyline4Activity extends AnylineBaseActivity {
     private static final String TAG = Anyline4Activity.class.getSimpleName();
 
     private ScanView anylineScanView;
-    private ScanViewPlugin scanViewPlugin;
+    private AbstractBaseScanViewPlugin scanViewPlugin;
     private RadioGroup radioGroup;
     private AnylineUIConfig anylineUIConfig;
     private String cropAndTransformError;
@@ -127,7 +132,13 @@ public class Anyline4Activity extends AnylineBaseActivity {
             JSONObject json = new JSONObject(configJson);
             // this is used for the OCR Plugin, when languages has to be added
             json = AnylinePluginHelper.setLanguages(json, getApplicationContext());
-            anylineScanView.setScanConfig(json, licenseKey);
+
+            if (json.has("serialViewPluginComposite")) {
+                anylineScanView.initComposite(json, licenseKey); // for composite
+                scanViewPlugin = anylineScanView.getScanViewPlugin();
+            } else {
+                anylineScanView.setScanConfig(json, licenseKey); // for non-composite
+            }
             if (anylineScanView != null) {
                 scanViewPlugin = anylineScanView.getScanViewPlugin();
             }
@@ -139,9 +150,113 @@ public class Anyline4Activity extends AnylineBaseActivity {
                 if (!(scanViewPlugin instanceof MeterScanViewPlugin)) {
                     setContentView(anylineScanView);
                 }
-                if (scanViewPlugin instanceof LicensePlateScanViewPlugin) {
+
+                if (scanViewPlugin instanceof SerialScanViewComposite) {
+                    scanViewPlugin.addScanResultListener(new ScanResultListener() {
+                        @Override
+                        public void onResult(ScanResult result) {
+                            // only triggered if all plugins reached a result
+                            JSONObject jsonResult = new JSONObject();
+                            //String sResult = "";
+
+
+                            for (ScanResult subResult : (Collection<ScanResult>) result.getResult()) {
+                                if (subResult instanceof LicensePlateScanResult) {
+                                    JSONObject jsonLPResult = new JSONObject();
+                                    try {
+                                        LicensePlateScanResult licensePlateResult = (LicensePlateScanResult) subResult;
+                                        jsonLPResult.put("country", licensePlateResult.getCountry());
+                                        jsonLPResult.put("licensePlate", licensePlateResult.getResult());
+                                        jsonLPResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, licensePlateResult,
+                                                                                      jsonLPResult);
+
+                                        jsonResult.put(subResult.getPluginId(), jsonLPResult);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else if (subResult.getResult() instanceof Identification) {
+                                    JSONObject jsonIdResult = ((Identification) subResult.getResult()).toJSONObject();
+                                    try {
+                                        if (jsonIdResult.get("issuingCountryCode").equals("D")
+                                            && jsonIdResult.get("documentType").equals("ID")) {
+                                            if (jsonIdResult.get("issuingCountryCode").equals("D")) {
+                                                jsonIdResult.put("address", jsonResult.get("address"));
+                                            } else {
+                                                jsonIdResult.remove("address");
+                                            }
+                                        }
+                                        jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
+                                                                                      jsonIdResult);
+
+                                        jsonResult.put(subResult.getPluginId(), jsonIdResult);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else if (subResult.getResult() instanceof DrivingLicenseIdentification) {
+                                    JSONObject jsonIdResult = ((DrivingLicenseIdentification) subResult.getResult())
+                                            .toJSONObject();
+                                    try {
+                                        jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
+                                                                                      jsonIdResult);
+
+                                        jsonResult.put(subResult.getPluginId(), jsonIdResult);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else if (subResult.getResult() instanceof GermanIdFrontIdentification) {
+                                    JSONObject jsonIdResult = ((GermanIdFrontIdentification) subResult.getResult()).toJSONObject();
+                                    try {
+                                        jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
+                                                                                      jsonIdResult);
+
+                                        jsonResult.put(subResult.getPluginId(), jsonIdResult);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else if (subResult instanceof OcrScanResult) {
+                                    JSONObject jsonOcrResult = new JSONObject();
+                                    try {
+                                        jsonOcrResult.put("text", (((OcrScanResult) subResult).getResult()).trim());
+                                        jsonOcrResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
+                                                                                       jsonOcrResult);
+                                        jsonResult.put(subResult.getPluginId(), jsonOcrResult);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else if (subResult instanceof BarcodeScanResult) {
+                                    JSONObject jsonBcResult = new JSONObject();
+                                    try {
+                                        jsonBcResult.put("value", subResult.getResult());
+                                        jsonBcResult.put("format", ((BarcodeScanResult) subResult).getBarcodeFormat());
+                                        jsonBcResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
+                                                                                      jsonBcResult);
+                                        jsonResult.put(subResult.getPluginId(), jsonBcResult);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else if (subResult instanceof MeterScanResult) {
+                                    JSONObject jsonMeterResult = new JSONObject();
+                                    try {
+                                        jsonMeterResult = AnylinePluginHelper.setMeterScanMode(
+                                                ((MeterScanResult) subResult).getScanMode(), jsonMeterResult);
+                                        jsonMeterResult.put("reading", subResult.getResult());
+                                        jsonMeterResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
+                                                                                         jsonMeterResult);
+                                        jsonResult.put(subResult.getPluginId(), jsonMeterResult);
+
+                                    } catch (Exception e) {
+                                        Log.e(TAG, "EXCEPTION", e);
+                                    }
+                                }
+                            }
+
+                            setResult(scanViewPlugin, jsonResult);
+                        }
+                    });
+                } else if (scanViewPlugin instanceof LicensePlateScanViewPlugin) {
                     if (json.has("reportingEnabled")) {
-                        scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
+                        //(IdScanViewPlugin) scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
+                        (((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
                     }
                     scanViewPlugin.addScanResultListener(new ScanResultListener<LicensePlateScanResult>() {
                         @Override
@@ -162,7 +277,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                     });
                 } else if (scanViewPlugin instanceof IdScanViewPlugin) {
-                    if (((IdScanPlugin) scanViewPlugin.getScanPlugin()).getIdConfig() instanceof MrzConfig) {
+                    if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof MrzConfig) {
 
                         if (json.has("cropAndTransformErrorMessage")) {
                             setDebugListener();
@@ -200,7 +315,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             }
 
                         });
-                    } else if (((IdScanPlugin) scanViewPlugin.getScanPlugin())
+                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin())
                             .getIdConfig() instanceof DrivingLicenseConfig) {
                         scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
                             @Override
@@ -221,7 +336,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             }
 
                         });
-                    } else if (((IdScanPlugin) scanViewPlugin.getScanPlugin()).getIdConfig() instanceof GermanIdFrontConfig) {
+                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof GermanIdFrontConfig) {
                         scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
                             @Override
                             public void onResult(ScanResult<ID> idScanResult) {
@@ -241,7 +356,8 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                 } else if (scanViewPlugin instanceof OcrScanViewPlugin) {
                     if (json.has("reportingEnabled")) {
-                        scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
+                        //scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
+                        (((OcrScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
                     }
 
                     scanViewPlugin.addScanResultListener(new ScanResultListener<OcrScanResult>() {
@@ -286,7 +402,9 @@ public class Anyline4Activity extends AnylineBaseActivity {
                 } else if (scanViewPlugin instanceof MeterScanViewPlugin) {
 
                     if (json.has("reportingEnabled")) {
-                        scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
+                        //scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
+                        (((MeterScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
+
                     }
                     // create the radio button for the UI
                     createSegmentRadioButtonUI(json);
@@ -333,11 +451,14 @@ public class Anyline4Activity extends AnylineBaseActivity {
             @Override
             public void run() {
                 if (radioGroup != null) {
-                    Rect rect = anylineScanView.getScanViewPlugin().getCutoutImageOnSurface();
+                    //orig: Rect rect = anylineScanView.getScanViewPlugin().getCutoutImageOnSurface(); // =cutoutRect.rectOnVisibleView
+                    Rect rect = ((MeterScanViewPlugin) scanViewPlugin).getCutoutRectOnVisibleView();
 
                     RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) radioGroup.getLayoutParams();
-                    lp.setMargins(rect.left + anylineUIConfig.getOffsetX(), rect.top + anylineUIConfig.getOffsetY(), 0,
-                            0);
+//                    lp.setMargins(50 + anylineUIConfig.getOffsetX(), anylineUIConfig.getOffsetY(), 0,
+//                            0);
+                    orig: lp.setMargins(rect.left + anylineUIConfig.getOffsetX(), rect.top + anylineUIConfig.getOffsetY(), 0,
+                                  0);
                     radioGroup.setLayoutParams(lp);
 
                     radioGroup.setVisibility(View.VISIBLE);
