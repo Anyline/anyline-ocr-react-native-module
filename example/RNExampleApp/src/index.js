@@ -150,7 +150,8 @@ class Anyline extends Component {
       const data = JSON.parse(result);
       LayoutAnimation.easeInEaseOut();
       const fullImagePath = data.fullImagePath;
-      const imagePath = data.DRIVING_LICENSE.imagePath;
+//      const imagePath = data.DRIVING_LICENSE.imagePath;
+      const imagePath = data..imagePath;
 	  // const fullImagePath = "/tmp";
 	  //  	  const imagePath = "/tmp";
       delete data.fullImagePath;
