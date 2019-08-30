@@ -262,7 +262,7 @@ public class Document4Activity extends AnylineBaseActivity implements CameraOpen
                 // is called when the outline of the document is detected. return true if the outline is consumed by
                 // the implementation here, false if the outline should be drawn by the DocumentScanView
                 lastOutline = rect; // saving the outline for the animations
-                return true;
+                return false;
             }
 
             @Override
