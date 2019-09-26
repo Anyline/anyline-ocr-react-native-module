@@ -150,7 +150,7 @@ class Anyline extends Component {
       const data = JSON.parse(result);
       LayoutAnimation.easeInEaseOut();
       const fullImagePath = data.fullImagePath;
-      const imagePath = data..imagePath;
+      const imagePath = data.imagePath;
       delete data.fullImagePath;
       delete data.imagePath;
 

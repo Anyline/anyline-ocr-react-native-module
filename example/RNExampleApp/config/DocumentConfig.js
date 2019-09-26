@@ -53,7 +53,11 @@ export default {
       "scanFeedback": {
         "beepOnResult": true,
         "vibrateOnResult": true,
-        "blinkAnimationOnResult": true
+        "blinkAnimationOnResult": true,
+        "style": "contour_rect",
+        "strokeWidth": 2,
+        "strokeColor": "0099FF"
+
       },
       "cancelOnResult": true
     },
