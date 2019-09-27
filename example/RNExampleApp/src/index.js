@@ -34,6 +34,7 @@ import CattleTagConfig from "../config/CattleTagConfig";
 import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
 import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
+import TinConfig from '../config/TINConfig';
 
 
 // Disable Warnings 
@@ -101,6 +102,10 @@ class Anyline extends Component {
       case 'VIN':
         type = 'ANYLINE_OCR';
         config = VinConfig;
+        break;
+      case 'TIN':
+        type = 'ANYLINE_OCR';
+        config = TinConfig;
         break;
       case 'USNR':
         type = 'ANYLINE_OCR';

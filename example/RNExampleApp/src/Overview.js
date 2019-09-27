@@ -99,6 +99,13 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
             platformPermissionCheck('LICENSE_PLATE')
           }} />
       </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  TIN Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('TIN')
+          }} />
+      </View>
       <Text style={styles.text}>OCR</Text>
 
       <View style={styles.buttons}>

@@ -49,9 +49,7 @@ import io.anyline.plugin.ocr.OcrScanViewPlugin;
 import io.anyline.view.AbstractBaseScanViewPlugin;
 import io.anyline.view.CutoutRect;
 import io.anyline.view.ScanView;
-import io.anyline.view.ScanViewPluginComposite;
 import io.anyline.view.SerialScanViewComposite;
-//import io.anyline.view.ScanViewPlugin;
 
 public class Anyline4Activity extends AnylineBaseActivity {
     private static final String TAG = Anyline4Activity.class.getSimpleName();
