@@ -33,7 +33,6 @@ export default {
       },
       "cutoutConfig": {
         "style": "rect",
-        "maxWidthPercent": "10%",
         "alignment": "top_half",
         "ratioFromSize": {
           "width": 9,

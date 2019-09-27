@@ -10,7 +10,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 
 import org.json.JSONArray;
@@ -532,5 +531,3 @@ public class Anyline4Activity extends AnylineBaseActivity {
     }
 
 }
-
-
