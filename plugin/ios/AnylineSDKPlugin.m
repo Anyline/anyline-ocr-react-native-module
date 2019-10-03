@@ -90,7 +90,7 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+        self.baseScanViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
             ALPluginScanViewController *pluginScanViewController =
             [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
