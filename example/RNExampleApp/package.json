@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "anyline-ocr-react-native-module": "../../plugin",
-    "react": "^16.6.3",
-    "react-native": "^0.58.5"
+    "hermesvm": "^0.1.1",
+    "jsc-android": "^241213.1.0",
+    "react": "^16.10.2",
+    "react-native": "^0.61.2"
   },
   "devDependencies": {
     "babel-core": "^7.0.0-bridge",

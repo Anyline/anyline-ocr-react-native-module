@@ -2,6 +2,7 @@ package com.anyline.example.reactnative;
 
 import android.app.Application;
 
+import com.anyline.example.reactnative.BuildConfig;
 import com.facebook.react.ReactApplication;
 import com.anyline.reactnative.AnylinePackage;
 import com.facebook.react.ReactNativeHost;
