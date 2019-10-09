@@ -30,4 +30,6 @@
     <string name="document_processing">Processing</string>
     <string name="document_processing_picture_please_wait">Processing the picture. Please wait.</string>
 
+    <string name="scan_document">Scan Document</string>
+
 </resources>

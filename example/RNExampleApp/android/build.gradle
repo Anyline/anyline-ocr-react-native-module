@@ -36,6 +36,9 @@ allprojects {
         maven { url 'https://anylinesdk.blob.core.windows.net/maven/' }
         google()
         jcenter()
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 

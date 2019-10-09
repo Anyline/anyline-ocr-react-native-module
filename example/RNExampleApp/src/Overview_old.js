@@ -175,13 +175,6 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
           }} />
       </View>
       <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Document Scanner UI'} color="#0099FF"
-          disabled={disabled}
-          onPress={() => {
-            platformPermissionCheck('DOCUMENT_UI')
-          }} />
-      </View>
-      <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  Cattle Tag'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
