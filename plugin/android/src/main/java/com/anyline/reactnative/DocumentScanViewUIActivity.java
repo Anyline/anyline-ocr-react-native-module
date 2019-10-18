@@ -33,11 +33,10 @@ public class DocumentScanViewUIActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rn_activity_document_scan_view_ui);
 
-        //Set the flag to keep the screen on (otherwise the screen may go dark during scanning)
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
         String licenseKey = getIntent().getExtras().getString("License");
         String configJson = getIntent().getExtras().getString("Config");
+
+        // convert json string to json object:
         JSONObject obj = null;
         try {
             obj = new JSONObject(configJson);
@@ -45,8 +44,12 @@ public class DocumentScanViewUIActivity extends AppCompatActivity {
             //Log.e("My App", "Could not parse malformed JSON: \"" + json + "\"");
         }
 
+        // init the documentScanViewUI from the layout file:
         documentScanViewUI = findViewById(R.id.document_scan_view_ui);
-        DocumentScanViewConfig documentScanViewConfig = DocScanUIMainActivity.initDocumentScanViewConfig(this);
+
+        // initialize the documentScanViewConfig from a scan-view config file:
+        DocumentScanViewConfig documentScanViewConfig = new DocumentScanViewConfig(this, "document_scan_view_config.json");
+
         documentScanViewUI.init(licenseKey, documentScanViewConfig, obj, savedInstanceState);
         documentScanViewUI.setDocumentScanViewListener(new DocumentScanViewUI.DocumentScanViewListener() {
 
@@ -54,6 +57,7 @@ public class DocumentScanViewUIActivity extends AppCompatActivity {
             public void onSave(ArrayList<ScanPage> scannedPages) {
                 documentScanViewUI.stopScanning();
 
+                // pass a list of scanned pages to the calling activity:
                 Intent data = new Intent();
                 data.putExtra(DocScanUIMainActivity.RESULT_PAGES, scannedPages);
                 DocumentScanViewUIActivity.this.setResult(DocScanUIMainActivity.RESULT_SWITCH, data);
@@ -61,7 +65,7 @@ public class DocumentScanViewUIActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancel(String s) {
+            public void onCancel() {
                 DocumentScanViewUIActivity.this.finish();
             }
         });
@@ -70,6 +74,7 @@ public class DocumentScanViewUIActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+        // save state of activity before an activity is paused:
         savedInstanceState = documentScanViewUI.addSavedInstanceState(savedInstanceState);
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -77,6 +82,7 @@ public class DocumentScanViewUIActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        // is required, otherwise scanning will not happen:
         super.onResume();
         documentScanViewUI.startScanning();
     }

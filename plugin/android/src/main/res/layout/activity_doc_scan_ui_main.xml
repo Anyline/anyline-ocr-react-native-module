@@ -14,33 +14,33 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:cacheColorHint="#ffffff"
-        android:divider="#ffffff"
-        android:dividerHeight="12dp"
+        android:cacheColorHint="@color/white"
+        android:divider="@color/white"
+        android:dividerHeight="@dimen/divider_height"
         android:drawSelectorOnTop="false"
-        android:paddingStart="8dip"
-        android:paddingLeft="8dip"
-        android:paddingTop="6dip"
-        android:paddingEnd="8dip"
-        android:paddingRight="8dip"
-        android:paddingBottom="6dip"
-        android:textColor="#000000"
+        android:paddingStart="@dimen/listViewPaddingStartEnd"
+        android:paddingLeft="@dimen/listViewPaddingStartEnd"
+        android:paddingTop="@dimen/listViewPaddingTopBottom"
+        android:paddingEnd="@dimen/listViewPaddingStartEnd"
+        android:paddingRight="@dimen/listViewPaddingStartEnd"
+        android:paddingBottom="@dimen/listViewPaddingTopBottom"
+        android:textColor="@color/black"
         />
-
 
     <Button
         android:id="@+id/btScan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_margin="8dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:paddingStart="36dp"
-        android:paddingEnd="36dp"
+        android:layout_margin="@dimen/btnLayoutMargin"
+        android:paddingTop="@dimen/btnPaddingTopBottom"
+        android:paddingBottom="@dimen/btnPaddingTopBottom"
+        android:paddingStart="@dimen/btnPaddingStartEnd"
+        android:paddingLeft="@dimen/btnPaddingStartEnd"
+        android:paddingEnd="@dimen/btnPaddingStartEnd"
+        android:paddingRight="@dimen/btnPaddingStartEnd"
         android:text="@string/scan_document"
-        android:background="#007acc"
-        android:textColor="#ffffff"/>
-
+        android:background="@color/blue"
+        android:textColor="@color/white"/>
 </LinearLayout>
 

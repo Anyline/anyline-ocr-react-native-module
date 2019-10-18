@@ -3,4 +3,8 @@
     <color name="scrabble_green">#327466</color>
     <color name="anyline_blue_darker">#AA007ACC</color>
     <color name="anyline_red">#AAE53F16</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blue">#007ACC</color>
 </resources>

@@ -3,4 +3,14 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Document Scanner UI -->
+    <dimen name="divider_height">16dp</dimen>
+    <dimen name="listViewPaddingStartEnd">8dp</dimen>
+    <dimen name="listViewPaddingTopBottom">12dp</dimen>
+    <dimen name="btnPaddingStartEnd">36dp</dimen>
+    <dimen name="btnPaddingTopBottom">12dp</dimen>
+    <dimen name="btnLayoutMargin">8dp</dimen>
+    <dimen name="listItemSpace">8dp</dimen>
+
 </resources>

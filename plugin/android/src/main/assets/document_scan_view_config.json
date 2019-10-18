@@ -1,60 +1,60 @@
 {
-  "ScanMode": "multiple_pages",
-  "EnablePostProcessing": true,
+  "scanMode": "multiple_pages",
+  "enablePostProcessing": true,
   "showCancelOnCropView": true,
 
-  "ReducePictureSize": {
-    "AllowChangeCustomSize": "true",
-    "Option": "Small",
+  "reducePictureSize": {
+    "allowChangeCustomSize": "true",
+    "option": "Small",
     "maxSizeSmall": 300,
     "maxSizeMedium": 600,
     "maxSizeLarge": 1200,
     "maxSizeCustom": 900
   },
 
-  "ScanFormat": {
-    "A4Portrait": true,
-    "A4Landscape": true,
-    "ComplimentSlipPortrait": false,
-    "ComplimentSlipLandscape": false,
-    "BusinessCardPortrait": false,
-    "BusinessCardLandscape": false,
-    "LetterPortrait": true,
-    "LetterLandscape": false,
-    "CustomRatioPortrait": true,
-    "CustomRatioLandscape": true,
-    "CustomRatioValueShortSide": 3,
-    "CustomRatioValueLongSide": 4
+  "scanFormat": {
+    "a4Portrait": true,
+    "a4Landscape": true,
+    "complimentSlipPortrait": false,
+    "complimentSlipLandscape": false,
+    "businessCardPortrait": false,
+    "businessCardLandscape": false,
+    "letterPortrait": true,
+    "letterLandscape": false,
+    "customRatioPortrait": true,
+    "customRatioLandscape": true,
+    "customRatioValueShortSide": 3,
+    "customRatioValueLongSide": 4
   },
 
-  "BottomBar": {
-    "Position0": {
-      "Control": "flash",
-      "Width": 2
+  "bottomBar": {
+    "position0": {
+      "control": "flash",
+      "width": 2
     },
-    "Position1": {
-      "Control": "scan_mode",
-      "Width": 2
+    "position1": {
+      "control": "scan_mode",
+      "width": 2
     },
-    "Position2": {
-      "Control": "manual_picture",
-      "Width": 3
+    "position2": {
+      "control": "manual_picture",
+      "width": 3
     },
-    "Position3": {
-      "Control": "cancel",
-      "Width": 2
+    "position3": {
+      "control": "cancel",
+      "width": 2
     },
-    "Position4": {
-      "Control": "ok",
-      "Width": 2
+    "position4": {
+      "control": "ok",
+      "width": 2
     }
   },
 
-  "BottomBarExtension": {
-    "Line0": "format",
-    "Line1": "picture_resize",
-    "Line2": "empty",
-    "Line3": "empty"
+  "bottomBarExtension": {
+    "line0": "format",
+    "line1": "picture_resize",
+    "line2": "empty",
+    "line3": "empty"
   }
 
 }
