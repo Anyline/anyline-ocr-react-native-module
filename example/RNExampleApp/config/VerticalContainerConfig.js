@@ -33,10 +33,11 @@ export default {
       },
       "cutoutConfig": {
         "style": "rect",
+		"maxWidthPercent": "10%",
         "alignment": "top_half",
         "ratioFromSize": {
           "width": 9,
-          "height": 62
+			"height": 62
         },
         "outerColor": "000000",
         "outerAlpha": 0.3,

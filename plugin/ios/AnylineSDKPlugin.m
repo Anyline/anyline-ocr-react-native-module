@@ -90,7 +90,9 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.baseScanViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+//        self.baseScanViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[UIApplication sharedApplication] keyWindow].rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+        
         if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
             ALPluginScanViewController *pluginScanViewController =
             [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
@@ -112,10 +114,12 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
             }
             
             if(pluginScanViewController != nil){
+                [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
                 [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
             }
         } else {
             AnylineBaseScanViewController* baseViewController = [self ViewControllerFromScanMode:scanMode];  //returns nil if ScanMode is not valid
+            [self.baseScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
             if(baseViewController != nil){
                 self.baseScanViewController = baseViewController;
                 [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:self.baseScanViewController animated:YES completion:nil];
