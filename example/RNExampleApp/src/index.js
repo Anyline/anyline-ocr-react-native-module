@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  View,
 } from 'react-native';
 
 import AnylineOCR from 'anyline-ocr-react-native-module';
@@ -184,7 +185,7 @@ class Anyline extends Component {
         PermissionsAndroid.PERMISSIONS.CAMERA,
         {
           'title': 'Anyline Camera Permissions',
-          'message': 'Allow Anyline to access you camera?'
+          'message': 'Allow Anyline to access your camera?'
         }
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -295,4 +296,4 @@ const styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('RNExampleApp', () => Anyline);
+export default Anyline;

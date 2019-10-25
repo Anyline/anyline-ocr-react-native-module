@@ -1,5 +1,5 @@
 {
-  "name": "anyline-react-native-example-app",
+  "name": "RNExampleApp",
   "version": "14.1.0",
   "private": true,
   "scripts": {
@@ -18,12 +18,14 @@
     "react-native": "^0.61.2"
   },
   "devDependencies": {
-    "babel-core": "^7.0.0-bridge",
-    "babel-jest": "^24.1.0",
-    "babel-preset-react-native": "^5.0.1",
-    "jest": "^24.1.0",
-    "react-test-renderer": "16.0.0",
-    "schedule": "^0.4.0"
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "16.9.0"
   },
   "jest": {
     "preset": "react-native"
