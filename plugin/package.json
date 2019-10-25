@@ -1,25 +1,51 @@
 {
-  "name": "anyline-ocr-react-native-module",
-  "version": "14.1.0",
-  "main": "index.js",
-  "description": "A Plugin for connecting Anyline with React-Native",
-  "license": "SEE LICENSE IN LICENSE",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Anyline/anyline-ocr-react-native-module"
+  "_from": "anyline-ocr-react-native-module@^14.1.0",
+  "_id": "anyline-ocr-react-native-module@14.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-BGi9zNkSsoxXywDBIqzgBRvKUBniQOJHDKBrozZubKthZNRBAj8Ry5tW0Me0yLXt/fauME//hbC0wsenfPJZqw==",
+  "_location": "/anyline-ocr-react-native-module",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "anyline-ocr-react-native-module@^14.1.0",
+    "name": "anyline-ocr-react-native-module",
+    "escapedName": "anyline-ocr-react-native-module",
+    "rawSpec": "^14.1.0",
+    "saveSpec": null,
+    "fetchSpec": "^14.1.0"
   },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/anyline-ocr-react-native-module/-/anyline-ocr-react-native-module-14.1.0.tgz",
+  "_shasum": "62ab2a6c30e365851e5c6951546576a711d9183e",
+  "_spec": "anyline-ocr-react-native-module@^14.1.0",
+  "_where": "/Users/amiransari/Projects/anyline-ocr-react-native-module1/example/RNExampleApp",
   "bugs": {
     "url": "https://github.com/Anyline/anyline-ocr-react-native-module/issues"
   },
+  "bundleDependencies": false,
+  "dependencies": {
+    "buffer": "^5.1.0"
+  },
+  "deprecated": false,
+  "description": "A Plugin for connecting Anyline with React-Native",
+  "directories": {
+    "example": "examples"
+  },
+  "homepage": "https://github.com/Anyline/anyline-ocr-react-native-module#readme",
   "keywords": [
     "reactnative",
     "anyline",
     "ocr"
   ],
-  "directories": {
-    "example": "examples"
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "index.js",
+  "name": "anyline-ocr-react-native-module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anyline/anyline-ocr-react-native-module.git"
   },
-  "dependencies": {
-    "buffer": "^5.1.0"
-  }
+  "version": "15.0.0"
 }
