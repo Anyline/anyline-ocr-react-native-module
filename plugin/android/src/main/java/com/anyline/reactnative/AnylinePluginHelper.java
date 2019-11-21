@@ -20,7 +20,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import at.nineyards.anyline.camera.NativeBarcodeResultListener;
-import at.nineyards.anyline.modules.barcode.BarcodeScanView;
 import at.nineyards.anyline.util.AssetUtil;
 import at.nineyards.anyline.util.TempFileUtil;
 import io.anyline.plugin.ScanResult;
@@ -211,48 +210,48 @@ public class AnylinePluginHelper {
 
     private static String findValidFormatForReference(int format) {
         if (format == Barcode.AZTEC) {
-            return BarcodeScanView.BarcodeFormat.AZTEC.toString();
+            return BarcodeFormat.AZTEC.toString();
         }
         if (format == Barcode.CODABAR) {
-            return BarcodeScanView.BarcodeFormat.CODABAR.toString();
+            return BarcodeFormat.CODABAR.toString();
         }
         if (format == Barcode.CODE_39) {
-            return BarcodeScanView.BarcodeFormat.CODE_39.toString();
+            return BarcodeFormat.CODE_39.toString();
         }
         if (format == Barcode.CODE_93) {
-            return BarcodeScanView.BarcodeFormat.CODE_93.toString();
+            return BarcodeFormat.CODE_93.toString();
         }
         if (format == Barcode.CODE_128) {
-            return BarcodeScanView.BarcodeFormat.CODE_128.toString();
+            return BarcodeFormat.CODE_128.toString();
         }
         if (format == Barcode.DATA_MATRIX) {
-            return BarcodeScanView.BarcodeFormat.DATA_MATRIX.toString();
+            return BarcodeFormat.DATA_MATRIX.toString();
         }
         if (format == Barcode.EAN_8) {
-            return BarcodeScanView.BarcodeFormat.EAN_8.toString();
+            return BarcodeFormat.EAN_8.toString();
         }
         if (format == Barcode.EAN_13) {
-            return BarcodeScanView.BarcodeFormat.EAN_13.toString();
+            return BarcodeFormat.EAN_13.toString();
         }
         if (format == Barcode.ITF) {
-            return BarcodeScanView.BarcodeFormat.ITF.toString();
+            return BarcodeFormat.ITF.toString();
         }
         if (format == Barcode.PDF417) {
-            return BarcodeScanView.BarcodeFormat.PDF_417.toString();
+            return BarcodeFormat.PDF_417.toString();
         }
         if (format == Barcode.QR_CODE) {
-            return BarcodeScanView.BarcodeFormat.QR_CODE.toString();
+            return BarcodeFormat.QR_CODE.toString();
         }
         if (format == Barcode.UPC_A) {
-            return BarcodeScanView.BarcodeFormat.UPC_A.toString();
+            return BarcodeFormat.UPC_A.toString();
         }
         if (format == Barcode.UPC_E) {
-            return BarcodeScanView.BarcodeFormat.UPC_E.toString();
+            return BarcodeFormat.UPC_E.toString();
         }
 
         // others are currently not supported by the native scanner (RSS_14,
         // RSS_EXPANDED, UPC_EAN_EXTENSION)
-        return BarcodeScanView.BarcodeFormat.UNKNOWN.toString();
+        return BarcodeFormat.UNKNOWN.toString();
 
     }
 

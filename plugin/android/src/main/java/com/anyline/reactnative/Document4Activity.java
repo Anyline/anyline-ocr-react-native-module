@@ -42,7 +42,7 @@ import io.anyline.view.ScanView;
 public class Document4Activity extends AnylineBaseActivity implements CameraOpenListener {
 
     private static final long ERROR_MESSAGE_DELAY = 2000;
-    private static final String TAG = DocumentActivity.class.getSimpleName();
+    private static final String TAG = Document4Activity.class.getSimpleName();
     private ScanView documentScanView;
     private Toast notificationToast;
     private ImageView imageViewResult;
