@@ -36,6 +36,7 @@ import io.anyline.plugin.licenseplate.LicensePlateScanViewPlugin;
 import io.anyline.plugin.meter.MeterScanViewPlugin;
 import io.anyline.plugin.ocr.OcrScanViewPlugin;
 import io.anyline.view.AbstractBaseScanViewPlugin;
+import io.anyline.view.ParallelScanViewComposite;
 import io.anyline.view.SerialScanViewComposite;
 //import io.anyline.view.ScanViewPlugin;
 
@@ -253,6 +254,8 @@ public abstract class AnylineBaseActivity extends Activity
             isCancelOnResult = ((OcrScanViewPlugin) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
         } else if (scanViewPlugin instanceof SerialScanViewComposite) {
             isCancelOnResult = ((SerialScanViewComposite) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
+        } else if (scanViewPlugin instanceof ParallelScanViewComposite) {
+            isCancelOnResult = ((ParallelScanViewComposite) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
         }
 
         if(scanViewPlugin != null && isCancelOnResult){

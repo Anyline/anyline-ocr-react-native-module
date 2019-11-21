@@ -36,6 +36,7 @@ import CattleTagConfig from "../config/CattleTagConfig";
 import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
 import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
+import ParallelScanningConfig from '../config/ParallelScanningConfig';
 import TinConfig from '../config/TINConfig';
 
 
@@ -147,6 +148,9 @@ class Anyline extends Component {
         break;
       case 'SERIAL_SCANNING':
         config = SerialScanningConfig;
+        break;
+      case 'PARALLEL_SCANNING':
+        config = ParallelScanningConfig;
         break;
     }
 

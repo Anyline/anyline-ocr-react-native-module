@@ -104,39 +104,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     private void routeScanMode(String scanMode) {
         switch (scanMode) {
-            case "AUTO_ANALOG_DIGITAL_METER":
-                scan(EnergyActivity.class, scanMode, AUTO_ANALOG_DIGITAL_METER);
-                break;
-            case "DIGITAL_METER":
-                scan(EnergyActivity.class, scanMode, DIGITAL_METER);
-                break;
-            case "SERIAL_NUMBER":
-                scan(EnergyActivity.class, scanMode, SERIAL_NUMBER);
-                break;
-            case "DIAL_METER":
-                scan(EnergyActivity.class, scanMode, DIAL_METER);
-                break;
-            case "ANALOG_METER":
-                scan(EnergyActivity.class, scanMode, ANALOG_METER);
-                break;
-            case "DOT_MATRIX_METER":
-                scan(EnergyActivity.class, scanMode, DOT_MATRIX_METER);
-                break;
-            case "ANYLINE_OCR":
-                scan(AnylineOcrActivity.class, scanMode, ANYLINE_OCR);
-                break;
-            case "BARCODE":
-                scan(BarcodeActivity.class, scanMode, BARCODE);
-                break;
-            case "MRZ":
-                scan(MrzActivity.class, scanMode, ANYLINE_MRZ);
-                break;
-            case "DOCUMENT":
-                scan(DocumentActivity.class, scanMode, ANYLINE_DOCUMENT);
-                break;
-            case "LICENSE_PLATE":
-                scan(LicensePlateActivity.class, scanMode, LICENSE_PLATE);
-                break;
             case "scan": // > Anyline 4
                 scanAnyline4();
                 break;
@@ -163,7 +130,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
                 } else {
                     returnError("No Plugin in config. Please check your configuration.");
                 }
-            } else if (options.has("serialViewPluginComposite")) {
+            } else if (options.has("serialViewPluginComposite") || options.has("parallelViewPluginComposite")) {
                 scan(Anyline4Activity.class, null, REQUEST_ANYLINE_4);
             } else {
                 returnError("No ViewPlugin in config. Please check your configuration.");

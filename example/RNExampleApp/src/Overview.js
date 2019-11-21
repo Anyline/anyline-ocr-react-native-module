@@ -196,6 +196,13 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
             platformPermissionCheck('SERIAL_SCANNING')
           }} />
       </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Parallel Scanning'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('PARALLEL_SCANNING')
+          }} />
+      </View>
     </ScrollView>
   );
 }
