@@ -22,6 +22,7 @@ import MRZConfig from '../config/MRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
 import AnalogEnergyConfig from '../config/AnalogMeterConfig';
 import DigitalEnergyConfig from '../config/DigitalMeterConfig';
+import DotMatrixConfig from '../config/DotMatrixConfig';
 import DialEnergyConfig from '../config/DialMeterConfig';
 import IBANConfig from '../config/IbanConfig';
 import VoucherConfig from '../config/VoucherConfig';
@@ -81,7 +82,7 @@ class Anyline extends Component {
         config = SerialNumberConfig;
         break;
       case 'DOT_MATRIX_METER':
-        config = AutoEnergyConfig;
+        config = DotMatrixConfig;
         break;
       case 'BARCODE':
         config = BarcodeConfig;
