@@ -1,19 +1,12 @@
 #import "AnylineSDKPlugin.h"
 #import <Anyline/Anyline.h>
-#import "AnylineBarcodeScanViewController.h"
-#import "AnylineEnergyScanViewController.h"
-#import "AnylineMRZScanViewController.h"
-#import "AnylineOCRScanViewController.h"
-#import "AnylineDocumentScanViewController.h"
-#import "AnylineLicensePlateViewController.h"
 #import "ALJsonUIConfiguration.h"
 #import "ALPluginScanViewController.h"
 #import "ALPluginHelper.h"
 
-@interface AnylineSDKPlugin()<AnylineBaseScanViewControllerDelegate, ALPluginScanViewControllerDelegate>
+@interface AnylineSDKPlugin()<ALPluginScanViewControllerDelegate>
 
-@property (nonatomic, strong) AnylineBaseScanViewController *baseScanViewController;
-@property (nonatomic, strong) ALUIConfiguration *conf;
+@property (nonatomic, strong) ALScanViewPluginConfig *conf;
 
 @property (nonatomic, strong) NSString *callbackId;
 @property (nonatomic, strong) NSString *appKey;
@@ -85,12 +78,11 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
 
     self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
-    self.conf = [[ALUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
+    self.conf = [[ALScanViewPluginConfig alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
     self.conf.cancelOnResult = true;
     self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-//        self.baseScanViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         [[UIApplication sharedApplication] keyWindow].rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         
         if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
@@ -117,41 +109,10 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                 [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
                 [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
             }
-        } else {
-            AnylineBaseScanViewController* baseViewController = [self ViewControllerFromScanMode:scanMode];  //returns nil if ScanMode is not valid
-            [self.baseScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
-            if(baseViewController != nil){
-                self.baseScanViewController = baseViewController;
-                [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:self.baseScanViewController animated:YES completion:nil];
-            } else {
-                [self returnError:[scanMode stringByAppendingString:@" - Unknown ScanMode"]];
-            }
         }
         
     });
 
-}
-
-
-#pragma mark - AnylineBaseScanViewControllerDelegate
-- (void)anylineBaseScanViewController:(AnylineBaseScanViewController *)baseScanViewController didScan:(id)scanResult continueScanning:(BOOL)continueScanning {
-    NSString *resultJson = @"";
-
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject: scanResult
-                                                       options:0
-                                                         error:&error];
-
-    if (! jsonData) {
-        NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
-    } else {
-        resultJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    }
-    [self returnSuccess:resultJson];
-}
-
--(void)anylineBaseScanViewController:(AnylineBaseScanViewController *)baseScanViewController didStopScanning:(id)sender {
-    [self returnError:(@"Canceled")];
 }
 
 #pragma mark - ALPluginScanViewControllerDelegate
@@ -174,123 +135,6 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 
 - (void)pluginScanViewController:(nonnull ALPluginScanViewController *)pluginScanViewController didStopScanning:(nonnull id)sender {
     [self returnError:(@"Canceled")];
-}
-
-
-
-#pragma mark - Utility Funcitons
-- (AnylineBaseScanViewController *)ViewControllerFromScanMode:(NSString *)scanMode {
-
-    if([self scanModeIndex:scanMode]){
-        if ([[scanMode uppercaseString] isEqualToString:[@"DOCUMENT" uppercaseString]]) {
-            AnylineDocumentScanViewController *docVC = [[AnylineDocumentScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-            NSDictionary *options = [self.jsonConfigDictionary valueForKey:@"options"];
-            if ([options valueForKey:@"document"]) {
-                NSDictionary *docConfig = [options valueForKey:@"document"];
-                
-                // Check for Document quality Config and set it
-                if([docConfig valueForKey:@"quality"]){
-                    docVC.quality = [[docConfig valueForKey:@"quality"] integerValue];
-                } else {
-                    docVC.quality = 100;
-                }
-                
-                // Check for Document PostProcessing and set it
-                if([docConfig valueForKey:@"postProcessing"]){
-                    docVC.postProcessing = [[docConfig valueForKey:@"postProcessing"] boolValue];
-                } else {
-                    docVC.postProcessing = true;
-                }
-
-                // Check for Document Max Output Config and set it
-                if([docConfig valueForKey:@"maxOutputResoultion"]){
-                    NSDictionary *maxOutputResoultionConfig = [docConfig valueForKey:@"maxOutputResoultion"];
-                    if([maxOutputResoultionConfig valueForKey:@"width"] && [maxOutputResoultionConfig valueForKey:@"height"]){
-                        docVC.maxOutputResolution = CGSizeMake([[maxOutputResoultionConfig valueForKey:@"width"] doubleValue], [[maxOutputResoultionConfig valueForKey:@"height"] doubleValue]);
-                    }
-                }
-                
-                // Check for Document Ratio Config and set it
-                if([docConfig valueForKey:@"ratio"]){
-                    NSDictionary *ratioConfig = [docConfig valueForKey:@"ratio"];
-                    if([ratioConfig valueForKey:@"ratios"]){
-                        docVC.ratios = [ratioConfig valueForKey:@"ratios"];
-                    }
-                    if([ratioConfig valueForKey:@"deviation"]){
-                        docVC.ratioDeviation = [[ratioConfig valueForKey:@"deviation"] doubleValue];
-                    }
-                }
-            }
-            return docVC;
-        } else if ([[scanMode uppercaseString] isEqualToString:[@"MRZ" uppercaseString]]) {
-
-            AnylineMRZScanViewController *mrzVC = [[AnylineMRZScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-            NSDictionary *options = [self.jsonConfigDictionary valueForKey:@"options"];
-
-            if ([options valueForKey:@"mrz"]) {
-                NSDictionary *mrzConfig = [options valueForKey:@"mrz"];
-
-                // Check for Document quality Config and set it
-                if([mrzConfig valueForKey:@"strictMode"]){
-                    mrzVC.strictMode = [[mrzConfig valueForKey:@"strictMode"] boolValue];
-                } else {
-                    mrzVC.strictMode = false;
-                }
-                  // Check for cropAndTransformID Config and set it
-                if([mrzConfig valueForKey:@"cropAndTransformID"]){
-                    mrzVC.cropAndTransformID = [[mrzConfig valueForKey:@"cropAndTransformID"] boolValue];
-                } else {
-                    mrzVC.cropAndTransformID = false;
-                }
-                
-                // Check for showPointsOutOfCutoutError Config and set it
-                if([mrzConfig valueForKey:@"cropAndTransformErrorMessage"]){
-                    NSString *str = [mrzConfig objectForKey:@"cropAndTransformErrorMessage"];
-                    mrzVC.cropAndTransformErrorMessage = str;
-                } else {
-                    mrzVC.cropAndTransformErrorMessage = @"";
-                }
-
-            }
-            return mrzVC;
-        } else if ([[scanMode uppercaseString] isEqualToString:[@"BARCODE" uppercaseString]]) {
-            return [[AnylineBarcodeScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-        } else if ([[scanMode uppercaseString] isEqualToString:[@"LICENSE_PLATE" uppercaseString]]) {
-            return [[AnylineLicensePlateViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-        } else if ([[scanMode uppercaseString] isEqualToString:[@"ANYLINE_OCR" uppercaseString]]) {
-            AnylineOCRScanViewController *ocrVC = [[AnylineOCRScanViewController alloc] initWithKey:self.appKey configuration:self.conf jsonConfiguration:self.jsonUIConf  delegate:self];
-            [ocrVC setOcrConfDict:self.ocrConfigDict];
-            return ocrVC;
-        } else {
-            return nil;
-        }
-//        else { // > Anyline 4
-//                ALPluginScanViewController *pluginScanViewController =
-//                [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
-//                                                         configuration:self.jsonConfigDictionary
-//                                                  cordovaConfiguration:self.jsonUIConf
-//                                                              delegate:self];
-//
-//                if([self.jsonConfigDictionary valueForKey:@"quality"]){
-//                    pluginScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
-//                }
-//
-//                if([self.jsonConfigDictionary valueForKey:@"cropAndTransformErrorMessage"]){
-//                    NSString *str = [self.jsonConfigDictionary objectForKey:@"cropAndTransformErrorMessage"];
-//                    pluginScanViewController.cropAndTransformErrorMessage = str;
-//                }
-//
-//                if ([self.jsonConfigDictionary valueForKey:@"nativeBarcodeEnabled"]) {
-//                    pluginScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
-//                }
-//            return pluginScanViewController;
-//                self.baseScanViewController = pluginScanViewController;
-            
-//                [self presentViewController];
-//        }
-    } else {
-        return nil;
-    }
 }
 
 - (ALScanMode)energyScanModeFromString:(NSString *)scanMode{
