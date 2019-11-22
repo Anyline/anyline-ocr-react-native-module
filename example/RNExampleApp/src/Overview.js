@@ -143,7 +143,7 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
       </View>
 
       <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Shipping Container'} color="#0099FF"
+        <Button style={styles.buttons} title={'  Horizontal Container'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
             platformPermissionCheck('SHIPPING_CONTAINER')
@@ -172,13 +172,6 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
           disabled={disabled}
           onPress={() => {
             platformPermissionCheck('DOCUMENT')
-          }} />
-      </View>
-      <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Document Scanner UI'} color="#0099FF"
-          disabled={disabled}
-          onPress={() => {
-            platformPermissionCheck('DOCUMENT_UI')
           }} />
       </View>
       <View style={styles.buttons}>

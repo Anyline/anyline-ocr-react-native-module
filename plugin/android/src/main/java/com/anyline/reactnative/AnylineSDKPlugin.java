@@ -116,9 +116,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         try {
             configObject = new JSONObject(this.config);
             JSONObject options = configObject.getJSONObject("options");
-            if (options.has("documentScannerUI")) {
-                scan(DocScanUIMainActivity.class, null, REQUEST_ANYLINE_4);
-            } else if (options.has("viewPlugin")) {
+            if (options.has("viewPlugin")) {
                 JSONObject viewPlugin = options.getJSONObject("viewPlugin");
                 if (viewPlugin != null && viewPlugin.has("plugin")) {
                     JSONObject plugin = viewPlugin.getJSONObject("plugin");

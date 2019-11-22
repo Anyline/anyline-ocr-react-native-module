@@ -64,10 +64,10 @@ public class AnylinePluginHelper {
 
                                     // Check where to copy the training files
                                     File dirToCopy = new File(context.getFilesDir(),
-                                            "anyline/module_anyline_ocr/tessdata/");
+                                                              "anyline/module_anyline_ocr/tessdata/");
                                     if (Objects.equals(fileExtension, "any")) {
                                         dirToCopy = new File(context.getFilesDir(),
-                                                "anyline/module_anyline_ocr/trained_models/");
+                                                             "anyline/module_anyline_ocr/trained_models/");
                                     }
 
                                     int lastFileSeparatorIndex = traineddataFilePath.lastIndexOf(File.separator);
@@ -283,24 +283,27 @@ public class AnylinePluginHelper {
     public static JSONObject setMeterScanMode(MeterScanMode scanMode, JSONObject jsonResult) {
         try {
             switch (scanMode) {
-            case DIGITAL_METER:
-                jsonResult.put("meterType", "Digital Meter");
-                break;
-            case DIAL_METER:
-                jsonResult.put("meterType", "Dial Meter");
-                break;
-            case ANALOG_METER:
-                jsonResult.put("meterType", "Analog Meter");
-                break;
-            case AUTO_ANALOG_DIGITAL_METER:
-                jsonResult.put("meterType", "Auto Analog Digital Meter");
-                break;
-            case SERIAL_NUMBER:
-                jsonResult.put("meterType", "Serial Number");
-                break;
-            default:
-                jsonResult.put("meterType", "Electric Meter");
-                break;
+                case DIGITAL_METER:
+                    jsonResult.put("meterType", "Digital Meter");
+                    break;
+                case DIAL_METER:
+                    jsonResult.put("meterType", "Dial Meter");
+                    break;
+                case ANALOG_METER:
+                    jsonResult.put("meterType", "Analog Meter");
+                    break;
+                case AUTO_ANALOG_DIGITAL_METER:
+                    jsonResult.put("meterType", "Auto Analog Digital Meter");
+                    break;
+                case SERIAL_NUMBER:
+                    jsonResult.put("meterType", "Serial Number");
+                    break;
+                case DOT_MATRIX_METER:
+                    jsonResult.put("meterType", "Dot Matrix Meter");
+                    break;
+                default:
+                    jsonResult.put("meterType", "Electric Meter");
+                    break;
             }
 
             jsonResult.put("scanMode", scanMode.toString());

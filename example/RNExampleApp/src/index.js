@@ -18,11 +18,11 @@ import Overview from './Overview';
 import BarcodeConfig from '../config/BarcodeConfig';
 import BarcodePDF417Config from '../config/Barcode_PDF417Config';
 import DocumentConfig from '../config/DocumentConfig';
-import DocumentConfigUI from '../config/DocumentConfigUI';
 import MRZConfig from '../config/MRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
 import AnalogEnergyConfig from '../config/AnalogMeterConfig';
 import DigitalEnergyConfig from '../config/DigitalMeterConfig';
+import DotMatrixConfig from '../config/DotMatrixConfig';
 import DialEnergyConfig from '../config/DialMeterConfig';
 import IBANConfig from '../config/IbanConfig';
 import VoucherConfig from '../config/VoucherConfig';
@@ -82,7 +82,7 @@ class Anyline extends Component {
         config = SerialNumberConfig;
         break;
       case 'DOT_MATRIX_METER':
-        config = AutoEnergyConfig;
+        config = DotMatrixConfig;
         break;
       case 'BARCODE':
         config = BarcodeConfig;
@@ -133,9 +133,6 @@ class Anyline extends Component {
         break;
       case 'DOCUMENT':
         config = DocumentConfig;
-        break;
-      case 'DOCUMENT_UI':
-        config = DocumentConfigUI;
         break;
       case 'ANALOG_METER':
         config = AnalogEnergyConfig;

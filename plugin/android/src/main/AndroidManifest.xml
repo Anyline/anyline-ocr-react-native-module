@@ -7,16 +7,7 @@
   <uses-permission android:name="android.permission.CAMERA"/>
 
   <application android:allowBackup="true">
-      <activity android:name="com.anyline.reactnative.EnergyActivity" android:screenOrientation="portrait"/>
-      <activity android:name="com.anyline.reactnative.MrzActivity" android:screenOrientation="portrait"/>
-      <activity android:name="com.anyline.reactnative.BarcodeActivity" android:screenOrientation="portrait"/>
-      <activity android:name="com.anyline.reactnative.AnylineOcrActivity" android:screenOrientation="portrait"/>
-      <activity android:name="com.anyline.reactnative.DocumentActivity" android:screenOrientation="portrait"/>
-      <activity android:name="com.anyline.reactnative.LicensePlateActivity" android:screenOrientation="portrait"/>
       <activity android:name="com.anyline.reactnative.Anyline4Activity" android:screenOrientation="portrait"/>
       <activity android:name="com.anyline.reactnative.Document4Activity" android:screenOrientation="portrait"/>
-      <activity android:name="com.anyline.reactnative.CropViewUIActivity" android:screenOrientation="portrait"/>
-      <activity android:name="com.anyline.reactnative.DocScanUIMainActivity" android:screenOrientation="portrait"/>
-      <activity android:name="com.anyline.reactnative.DocumentScanViewUIActivity" android:screenOrientation="portrait"/>
   </application>
 </manifest>

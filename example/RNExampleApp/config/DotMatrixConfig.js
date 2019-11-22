@@ -20,41 +20,24 @@ export default {
         },
         "flash": {
             "mode": "manual",
-            "alignment": "top_left",
+            "alignment": "bottom_right",
         },
         "viewPlugin": {
             "plugin": {
                 "id": "Meter_ID",
                 "meterPlugin": {
-                    "scanMode": "DIAL_METER"
+                    "scanMode": "DOT_MATRIX_METER"
                 }
             },
-            "cutout": {
+            "cutoutConfig": {
                 "style": "rect",
-                "maxWidthPercent": "90%",
-                "maxHeightPercent": "90%",
                 "alignment": "top_half",
-                "ratioFromSize": {
-                    "width": 125,
-                    "height": 85
-                },
-                "offset": {
-                    "x": 0,
-                    "y": 15
-                },
-                "cropPadding": {
-                    "x": 0,
-                    "y": 0
-                },
-                "cropOffset": {
-                    "x": 0,
-                    "y": 0
-                },
                 "strokeWidth": 2,
                 "cornerRadius": 4,
                 "strokeColor": "FFFFFF",
                 "outerColor": "000000",
-                "outerAlpha": 0.3
+                "outerAlpha": 0.3,
+                "feedbackStrokeColor": "0099FF"
             },
             "scanFeedback": {
                 "style": "CONTOUR_RECT",
@@ -64,8 +47,8 @@ export default {
                 "beepOnResult": true,
                 "vibrateOnResult": true
             },
-            "cancelOnResult": true,
+            "cancelOnResult": true
         },
         "nativeBarcodeEnabled": true
-    },
+    }
 }

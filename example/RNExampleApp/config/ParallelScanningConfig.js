@@ -16,7 +16,7 @@ export default {
     'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
   options: {
   "camera": {
-    "captureResolution": "1080p",
+    "captureResolution": "1080p"
   },
   "flash": {
     "mode": "manual",
@@ -29,73 +29,33 @@ export default {
       {
         "viewPlugin": {
           "plugin": {
-            "id": "LPT",
-            "licensePlatePlugin": {
-              "scanMode": "AUTO"
+            "id": "METER_PLUGIN",
+            "meterPlugin": {
+              "scanMode": "AUTO_ANALOG_DIGITAL_METER"
             }
           },
           "cutoutConfig": {
             "style": "rect",
-            "maxWidthPercent": "80%",
-            "maxHeightPercent": "80%",
-            "alignment": "top_half",
-            "width": 720,
-            "ratioFromSize": {
-              "width": 2,
-              "height": 1
-            },
+            "alignment": "top",
             "strokeWidth": 2,
-            "cornerRadius": 10,
             "strokeColor": "FFFFFF",
-            "outerColor": "000000",
-            "outerAlpha": 0.3,
-            "feedbackStrokeColor": "0099FF"
-          },
-          "scanFeedback": {
-            "style": "rect",
-            "strokeWidth": 2,
-            "strokeColor": "0099FF",
-            "fillColor": "330099FF",
-            "cornerRadius": 0,
-            "beepOnResult": true,
-            "vibrateOnResult": true,
-            "blinkAnimationOnResult": true
-          },
-          "cancelOnResult": true
-        }
-      },
-
-      {
-        "viewPlugin": {
-          "plugin": {
-            "id": "DRIVING_LICENSE",
-            "idPlugin": {
-              "drivingLicenseConfig": {
-                "scanMode": "AUTO"
-              }
-            }
-          },
-          "cutoutConfig": {
-            "style": "rect",
-            "maxWidthPercent": "99%",
-            "maxHeightPercent": "100%",
-            "alignment": "center",
-            "ratioFromSize": {
-              "width": 560,
-              "height": 354
-            },
-            "strokeWidth": 2,
             "cornerRadius": 4,
-            "strokeColor": "FFFFFF",
             "outerColor": "000000",
-            "outerAlpha": 0.3,
-            "feedbackStrokeColor": "0099FF"
+            "outerAlpha": 0.5,
+            "feedbackStrokeColor": "0099FF",
+            "offset": {
+              "x": 0,
+              "y": 120
+            }
           },
           "scanFeedback": {
-            "fillColor": "220099FF",
-            "style": "CONTOUR_POINT",
+            "style": "CONTOUR_RECT",
             "strokeColor": "0099FF",
             "strokeWidth": 2,
+            "fillColor": "220099FF",
+            "cornerRadius": 2,
+            "redrawTimeout": 200,
+            "animationDuration": 75,
             "blinkOnResult": true,
             "beepOnResult": true,
             "vibrateOnResult": true
@@ -106,31 +66,34 @@ export default {
       {
         "viewPlugin": {
           "plugin": {
-            "id": "VIN",
+            "id": "USNR_ID",
             "ocrPlugin": {
-              "scanMode": "AUTO"
-            }
+              "ocrConfig": {}
+            },
+            "delayStartScanTime": 1000
           },
           "cutoutConfig": {
             "style": "rect",
-            "maxWidthPercent": "70%",
-            "alignment": "bottom_half",
+            "width": 720,
+            "alignment": "center",
+            "maxWidthPercent": "80%",
             "ratioFromSize": {
-              "width": 62,
-              "height": 9
+              "width": 720,
+              "height": 144
             },
-            "outerColor": "000000",
-            "outerAlpha": 0.3,
             "strokeWidth": 2,
             "strokeColor": "FFFFFF",
             "cornerRadius": 4,
-            "feedbackStrokeColor": "0099FF"
+            "outerColor": "000000",
+            "outerAlpha": 0.5,
+            "feedbackStrokeColor": "0099FF",
+            "offset": {
+              "x": 0,
+              "y": 0
+            }
           },
           "scanFeedback": {
-            "animation": "traverse_multi",
-            "animationDuration": 250,
-            "style": "contour_rect",
-            "strokeWidth": 2,
+            "style": "CONTOUR_RECT",
             "strokeColor": "0099FF",
             "fillColor": "220099FF",
             "beepOnResult": true,
@@ -142,5 +105,6 @@ export default {
       }
     ]
   }
+
 }
 }
