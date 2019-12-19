@@ -518,7 +518,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     ((MeterScanViewPlugin) scanViewPlugin).setScanMode(MeterScanMode.valueOf(mode));
                     anylineScanView.stop();
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
