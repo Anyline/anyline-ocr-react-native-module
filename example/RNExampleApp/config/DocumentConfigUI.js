@@ -15,52 +15,48 @@ export default {
     'NE9tUzVraWdNUVZLaW8vaWlJS2tIVEVUdUxjYWJEWWtacExZdVR2YnU1S1hIc0R6\n' +
     'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
   options: {
-    "camera": {
-      "captureResolution": "720p",
-      "pictureResolution": "1080p",
-      "pictureAspectRatios": ["16:9"]
-    },
-    "flash": {
-      "mode": "manual",
-      "alignment": "bottom_left",
-      "offset": {
-        "x": 10,
-        "y": 0
-      }
-    },
-
-    "viewPlugin": {
-      "plugin": {
-        "id": "DOCUMENT",
-        "documentPlugin": {
-        }
-      },
-      "cutoutConfig": {
-        "style": "rect",
-        "maxWidthPercent": "100%",
-        "maxHeightPercent": "100%",
-        "widthPercent" : "100%",
-        "width": 1080,
-        "ratioFromSize": {
-          "width": 10,
-          "height": 18
+        "camera": {
+            "captureResolution": "720p",
+            "pictureResolution": "1080p",
+            "pictureAspectRatios": ["16:9"]
         },
-        "alignment": "center",
-        "strokeWidth": 2,
-        "cornerRadius": 0,
-        "strokeColor": "00000000"
-      },
-      "scanFeedback": {
-        "beepOnResult": true,
-        "vibrateOnResult": true,
-        "blinkAnimationOnResult": true,
-        "style": "contour_rect",
-        "strokeWidth": 2,
-        "strokeColor": "0099FF"
+        "flash": {
+            "mode": "manual",
+            "alignment": "bottom_left",
+            "offset": {
+                "x": 10,
+                "y": 0
+            }
+        },
 
-      },
-      "cancelOnResult": true
-    },
+        "viewPlugin": {
+            "plugin": {
+                "id": "DOCUMENT",
+                "documentPlugin": {
+                }
+            },
+            "cutoutConfig": {
+                "style": "rect",
+                "maxWidthPercent": "100%",
+                "maxHeightPercent": "100%",
+                "widthPercent": "100%",
+                "width": 1080,
+                "ratioFromSize": {
+                    "width": 10,
+                    "height": 18
+                },
+                "alignment": "center",
+                "strokeWidth": 2,
+                "cornerRadius": 0,
+                "strokeColor": "00000000"
+            },
+            "scanFeedback": {
+                "beepOnResult": true,
+                "vibrateOnResult": true,
+                "blinkAnimationOnResult": true
+            },
+            "cancelOnResult": true
+        },
    "documentScannerUI": true,
     quality: 90
   },
