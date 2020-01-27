@@ -1,6 +1,15 @@
 import React from 'react';
-import { Button, Image, ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native';
-import { flattenObject } from './utils/utils';
+import {
+  Button,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import {flattenObject} from './utils/utils';
 
 export default function Result({
   result,
@@ -8,27 +17,41 @@ export default function Result({
   fullImagePath,
   emptyResult,
   currentScanMode,
+  hasBackButton,
+  title = false,
 }) {
-  let fullImage = (<View />);
-  let fullImageText = (<View />);
-  if (fullImagePath && fullImagePath != '') {
+  let fullImage = <View />;
+  let fullImageText = <View />;
+  if (fullImagePath && fullImagePath !== '') {
     fullImage = (
       <Image
         style={styles.image}
         resizeMode={'contain'}
-        source={{ uri: `file://${fullImagePath}` }}
-      />);
-    fullImageText = (
-      <Text style={styles.text}>Full Image:</Text>
+        source={{uri: `file://${fullImagePath}`}}
+      />
+    );
+    fullImageText = <Text style={styles.text}>Full Image:</Text>;
+  }
+  const flattenResult = flattenObject(result);
+
+  let BackButton = <View />;
+  if (hasBackButton) {
+    BackButton = (
+      <View style={styles.backButton}>
+        <Button title={'Back'} onPress={emptyResult} />
+      </View>
     );
   }
-
-  const flattenResult = flattenObject(result);
+  console.log(title);
+  let Title = <View />;
+  if (title) {
+    Title = <Text style={styles.titleText}>{title}</Text>;
+  }
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer} >
-
+      {Title}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         {fullImageText}
         {fullImage}
 
@@ -36,28 +59,27 @@ export default function Result({
         <Image
           style={styles.image}
           resizeMode={'contain'}
-          source={{ uri: `file://${imagePath}` }}
+          source={{uri: `file://${imagePath}`}}
         />
         {Object.keys(flattenResult).map((value, key) => {
-          return (value === 'detectedBarcodes') ? (
+          return value === 'detectedBarcodes' ? (
             <View>
               <Text style={styles.headline}>Detected Barcodes</Text>
-              {flattenResult[value].map((valueBar, keyBar) =>
-                (<View key={`Result_Text_${keyBar}`}>
-                  <Text style={styles.text} >Format: {valueBar.format}</Text>
-                  <Text style={styles.text} >Value: {valueBar.value}</Text>
-                </View>))}
-            </View>)
-            :
-            (<Text style={styles.text} key={`Result_Text_${key}`}>
+              {flattenResult[value].map((valueBar, keyBar) => (
+                <View key={`Result_Text_${keyBar}`}>
+                  <Text style={styles.text}>Format: {valueBar.format}</Text>
+                  <Text style={styles.text}>Value: {valueBar.value}</Text>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <Text style={styles.text} key={`Result_Text_${key}`}>
               {(value !== 'confidence' || flattenResult[value] > 0) &&
-                `${value}: ${flattenResult[value]}`
-              }
-            </Text>);
+                `${value}: ${flattenResult[value]}`}
+            </Text>
+          );
         })}
-        <View style={styles.backButton}>
-          <Button title={'Back'} onPress={emptyResult} />
-        </View>
+        {BackButton}
       </ScrollView>
     </View>
   );
@@ -79,16 +101,16 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   headline: {
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
     marginTop: 20,
     fontSize: 15,
     justifyContent: 'center',
   },
   text: {
-    color: "white",
+    color: 'white',
     justifyContent: 'space-around',
-    marginTop: 5
+    marginTop: 5,
   },
   scrollContainer: {
     display: 'flex',
@@ -99,6 +121,13 @@ const styles = StyleSheet.create({
 
   backButton: {
     marginTop: 25,
-    width: '100%'
-  }
+    width: '100%',
+  },
+
+  titleText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#0099FF',
+  },
 });
