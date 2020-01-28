@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import {flattenObject} from './utils/utils';
 
+const withoutImagePaths = value =>
+  value !== 'imagePath' && value !== 'fullImagePath';
+
 export default function Result({
   result,
   imagePath,
@@ -61,24 +64,32 @@ export default function Result({
           resizeMode={'contain'}
           source={{uri: `file://${imagePath}`}}
         />
-        {Object.keys(flattenResult).map((value, key) => {
-          return value === 'detectedBarcodes' ? (
-            <View>
-              <Text style={styles.headline}>Detected Barcodes</Text>
-              {flattenResult[value].map((valueBar, keyBar) => (
-                <View key={`Result_Text_${keyBar}`}>
-                  <Text style={styles.text}>Format: {valueBar.format}</Text>
-                  <Text style={styles.text}>Value: {valueBar.value}</Text>
-                </View>
-              ))}
-            </View>
-          ) : (
-            <Text style={styles.text} key={`Result_Text_${key}`}>
-              {(value !== 'confidence' || flattenResult[value] > 0) &&
-                `${value}: ${flattenResult[value]}`}
-            </Text>
-          );
-        })}
+        {Object.keys(flattenResult)
+          .filter(withoutImagePaths)
+          .map((value, key) => {
+            return value === 'detectedBarcodes' ? (
+              <View>
+                <Text style={styles.headline}>Detected Barcodes</Text>
+                {flattenResult[value].map((valueBar, keyBar) => (
+                  <View key={`Result_Text_${keyBar}`}>
+                    <Text style={styles.text}>Format: {valueBar.format}</Text>
+                    <Text style={styles.text}>Value: {valueBar.value}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <View style={styles.resultContainer}>
+                <Text
+                  style={styles.textResultLabel}
+                  key={`Result_Label_${key}`}>
+                  {value}:
+                </Text>
+                <Text style={styles.textResult} key={`Result_Text_${key}`}>
+                  {flattenResult[value]}
+                </Text>
+              </View>
+            );
+          })}
         {BackButton}
       </ScrollView>
     </View>
@@ -97,8 +108,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#303030',
-    marginBottom: 50,
+    marginBottom: 20,
     marginTop: 50,
+  },
+  resultContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    color: 'white',
+    alignContent: 'flex-end',
+    marginLeft: '10%',
+    marginRight: '10%',
+    alignItems: 'baseline',
+    flexWrap: 'wrap',
   },
   headline: {
     fontWeight: 'bold',
@@ -109,12 +130,28 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
+    alignContent: 'flex-end',
     justifyContent: 'space-around',
+    alignSelf: 'center',
     marginTop: 5,
+  },
+  textResult: {
+    color: 'white',
+    alignContent: 'flex-end',
+    marginTop: 2,
+    marginRight: '10%',
+  },
+  textResultLabel: {
+    color: 'white',
+    alignContent: 'flex-end',
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginRight: 20,
   },
   scrollContainer: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
     width: '100%',
     flexDirection: 'column',
   },
@@ -122,12 +159,12 @@ const styles = StyleSheet.create({
   backButton: {
     marginTop: 25,
     width: '100%',
+    alignSelf: 'center',
   },
 
   titleText: {
-    color: 'white',
+    color: '#0099FF',
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#0099FF',
   },
 });
