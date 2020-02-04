@@ -17,6 +17,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "10"
 
   s.source       = { :git => "https://github.com/Anyline/anyline-ocr-react-native-module.git", :tag => "#{s.version}" }
+  s.static_framework = true
 
   s.source_files  = "*.{h,m}"
 
