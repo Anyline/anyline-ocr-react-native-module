@@ -55,13 +55,13 @@ repositories {
         dirs 'libs'
     }
     maven {
-        url 'https://anylinesdk.blob.core.windows.net/maven/'
+        url 'https://anylinesdk.blob.core.windows.net/testing/'
     }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'io.anyline:anylinesdk:18@aar'
+    implementation 'io.anyline:anylinesdk:18-RC3@aar'
 
     implementation 'com.google.firebase:firebase-ml-vision:19.0.2'
     implementation 'com.google.firebase:firebase-ml-vision-face-model:17.0.2'
