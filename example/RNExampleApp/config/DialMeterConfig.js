@@ -24,7 +24,7 @@ export default {
         },
         "viewPlugin": {
             "plugin": {
-                "id": "Meter_ID",
+                "id": "DIAL_METER",
                 "meterPlugin": {
                     "scanMode": "DIAL_METER"
                 }
@@ -57,9 +57,7 @@ export default {
                 "outerAlpha": 0.3
             },
             "scanFeedback": {
-                "style": "CONTOUR_RECT",
-                "strokeColor": "0099FF",
-                "fillColor": "220099FF",
+	        "style": "CONTOUR_RECT",
                 "blinkOnResult": true,
                 "beepOnResult": true,
                 "vibrateOnResult": true
