@@ -15,7 +15,6 @@ export default {
     'NE9tUzVraWdNUVZLaW8vaWlJS2tIVEVUdUxjYWJEWWtacExZdVR2YnU1S1hIc0R6\n' +
     'b1NxUUJTL3ZFS3VYUHhhCjNnanZnS285M3lrSjJKQjVBZjZiSkE9PQo=',
   options: {
-
       "camera": {
           "captureResolution": "720p"
       },
@@ -26,7 +25,6 @@ export default {
           "imageOff": "flash_off"
       },
       "viewPlugin" : {
-
           "plugin": {
             "id": "TIN",
             "ocrPlugin": {
