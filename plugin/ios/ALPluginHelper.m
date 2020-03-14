@@ -504,6 +504,53 @@
     return dictResult;
 }
 
++ (NSDictionary *)dictionaryForNFCResult:(ALNFCResult *)scanResult
+                                 quality:(NSInteger)quality API_AVAILABLE(ios(13)) {
+    CGFloat dividedCompRate = (CGFloat)quality/100;
+    
+    NSMutableDictionary *dictResult = [[NSMutableDictionary alloc] init];
+    
+    
+    //DataGroup1
+    NSMutableDictionary *dictResultDataGroup1 = [[NSMutableDictionary alloc] init];
+    
+    [dictResultDataGroup1 setValue:[ALPluginHelper stringForDate:scanResult.dataGroup1.dateOfBirth] forKey:@"dateOfBirth"];
+    [dictResultDataGroup1 setValue:[ALPluginHelper stringForDate:scanResult.dataGroup1.dateOfExpiry] forKey:@"dateOfExpiry"];
+    [dictResultDataGroup1 setValue:scanResult.dataGroup1.documentNumber forKey:@"documentNumber"];
+    [dictResultDataGroup1 setValue:scanResult.dataGroup1.documentType forKey:@"documentType"];
+    [dictResultDataGroup1 setValue:scanResult.dataGroup1.firstName forKey:@"firstName"];
+    [dictResultDataGroup1 setValue:scanResult.dataGroup1.gender forKey:@"gender"];
+    [dictResultDataGroup1 setValue:scanResult.dataGroup1.issuingStateCode forKey:@"issuingStateCode"];
+    [dictResultDataGroup1 setValue:scanResult.dataGroup1.lastName forKey:@"lastName"];
+    [dictResultDataGroup1 setValue:scanResult.dataGroup1.nationality forKey:@"nationality"];
+    
+    [dictResult setObject:dictResultDataGroup1 forKey:@"dataGroup1"];
+    
+    
+    //DataGroup2 (= Image)
+    NSMutableDictionary *dictResultDataGroup2 = [[NSMutableDictionary alloc] initWithCapacity:1];
+    NSString *imagePath = [self saveImageToFileSystem:scanResult.dataGroup2.faceImage compressionQuality:dividedCompRate];
+    [dictResultDataGroup2 setValue:imagePath forKey:@"imagePath"];
+    
+    [dictResult setObject:dictResultDataGroup2 forKey:@"dataGroup2"];
+    
+    //SOB
+    NSMutableDictionary *dictResultSOB = [[NSMutableDictionary alloc] init];
+    
+    [dictResultSOB setValue:scanResult.sod.issuerCertificationAuthority forKey:@"issuerCertificationAuthority"];
+    [dictResultSOB setValue:scanResult.sod.issuerCountry forKey:@"issuerCountry"];
+    [dictResultSOB setValue:scanResult.sod.issuerOrganization forKey:@"issuerOrganization"];
+    [dictResultSOB setValue:scanResult.sod.issuerOrganizationalUnit forKey:@"issuerOrganizationalUnit"];
+    [dictResultSOB setValue:scanResult.sod.ldsHashAlgorithm forKey:@"ldsHashAlgorithm"];
+    [dictResultSOB setValue:scanResult.sod.signatureAlgorithm forKey:@"signatureAlgorithm"];
+    [dictResultSOB setValue:scanResult.sod.validFromString forKey:@"validFromString"];
+    [dictResultSOB setValue:scanResult.sod.validUntilString forKey:@"validUntilString"];
+    
+    [dictResult setObject:dictResultSOB forKey:@"sob"];
+    
+    return dictResult;
+}
+
 + (NSDictionary *)dictionaryForOCRResult:(ALOCRResult *)scanResult
                         detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
                                  outline:(ALSquare *)outline

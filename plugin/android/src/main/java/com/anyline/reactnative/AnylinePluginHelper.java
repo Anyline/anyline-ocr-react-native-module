@@ -124,10 +124,12 @@ public class AnylinePluginHelper {
 
         if (nativeBarcodeEnabled) {
             // List<FirebaseVisionBarcode> finalBarcodeList = new ArrayList<>();
-            finalBarcodeList = AnylinePluginHelper.getNativeBarcodeList();
+            //finalBarcodeList = AnylinePluginHelper.getNativeBarcodeList();
             final JSONArray jsonArray = new JSONArray();
-            for (int i = 0; i < finalBarcodeList.size(); i++) {
-                jsonArray.put(AnylinePluginHelper.wrapBarcodeInJson(finalBarcodeList.get(i)));
+            if (finalBarcodeList!= null) {
+                for (int i = 0; i < finalBarcodeList.size(); i++) {
+                    jsonArray.put(AnylinePluginHelper.wrapBarcodeInJson(finalBarcodeList.get(i)));
+                }
             }
             return jsonArray;
         }
@@ -259,7 +261,7 @@ public class AnylinePluginHelper {
         anylineScanView.getCameraView().enableBarcodeDetection(new NativeBarcodeResultListener() {
             @Override
             public void onFailure(String e) {
-
+                finalBarcodeList=null;  // otherwise result from previous scan would be shown
             }
 
             @Override
