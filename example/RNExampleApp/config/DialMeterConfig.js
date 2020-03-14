@@ -24,12 +24,12 @@ export default {
         },
         "viewPlugin": {
             "plugin": {
-                "id": "Meter_ID",
+                "id": "DIAL_METER",
                 "meterPlugin": {
                     "scanMode": "DIAL_METER"
                 }
             },
-            "cutout": {
+            "cutoutConfig": {
                 "style": "rect",
                 "maxWidthPercent": "90%",
                 "maxHeightPercent": "90%",
@@ -54,12 +54,13 @@ export default {
                 "cornerRadius": 4,
                 "strokeColor": "FFFFFF",
                 "outerColor": "000000",
-                "outerAlpha": 0.3
+                "outerAlpha": 0.3,
+	        "feedbackStrokeColor": "0099FF"
             },
             "scanFeedback": {
-                "style": "CONTOUR_RECT",
-                "strokeColor": "0099FF",
-                "fillColor": "220099FF",
+	        "style": "CONTOUR_RECT",
+        	"strokeColor": "0099FF",
+	        "fillColor": "220099FF",
                 "blinkOnResult": true,
                 "beepOnResult": true,
                 "vibrateOnResult": true
