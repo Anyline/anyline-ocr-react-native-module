@@ -72,6 +72,13 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
             platformPermissionCheck('MRZ')
           }} />
       </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  NFC+MRZ Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('NFC+MRZ')
+          }} />
+      </View>
 
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  German ID Front'} color="#0099FF"

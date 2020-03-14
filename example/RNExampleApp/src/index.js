@@ -19,6 +19,7 @@ import BarcodeConfig from '../config/BarcodeConfig';
 import BarcodePDF417Config from '../config/Barcode_PDF417Config';
 import DocumentConfig from '../config/DocumentConfig';
 import MRZConfig from '../config/MRZConfig';
+import NFCAndMRZConfig from '../config/NFCAndMRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
 import AnalogEnergyConfig from '../config/AnalogMeterConfig';
 import DigitalEnergyConfig from '../config/DigitalMeterConfig';
@@ -38,6 +39,9 @@ import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
 import ParallelScanningConfig from '../config/ParallelScanningConfig';
 import TinConfig from '../config/TINConfig';
+
+
+
 
 // Disable Warnings
 console.disableYellowBox = true;
@@ -126,6 +130,9 @@ class Anyline extends Component {
         break;
       case 'MRZ':
         config = MRZConfig;
+        break; 
+      case 'NFC+MRZ':
+        config = NFCAndMRZConfig;
         break;
       case 'GERMAN_ID_FRONT':
         config = GermanIDFrontConfig;
@@ -192,6 +199,7 @@ class Anyline extends Component {
     } catch (error) {
       if (error !== 'Canceled') {
         console.log(error);
+        alert(error)
       }
     }
     this.setState({buttonsDisabled: false});
