@@ -20,7 +20,6 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.source_files  = "*.{h,m}"
-
-  s.dependency "Anyline", "~> 18.0"
+  s.dependency "Anyline", "~> 20"
   s.dependency "React"
 end

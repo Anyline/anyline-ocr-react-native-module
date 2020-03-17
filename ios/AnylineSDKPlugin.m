@@ -4,6 +4,8 @@
 #import "ALPluginScanViewController.h"
 #import "ALPluginHelper.h"
 
+#import "ALNFCScanViewController.h"
+
 @interface AnylineSDKPlugin()<ALPluginScanViewControllerDelegate>
 
 @property (nonatomic, strong) ALScanViewPluginConfig *conf;
@@ -28,8 +30,6 @@
     RCTPromiseResolveBlock _resolveBlock;
     RCTPromiseRejectBlock _rejectBlock;
 }
-
-
 
 RCT_EXPORT_MODULE();
 - (UIView *)view
@@ -86,6 +86,63 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
         [[UIApplication sharedApplication] keyWindow].rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         
         if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
+            NSString *customCmdFile = [[dictionary objectForKey:@"options"] valueForKeyPath:@"viewPlugin.plugin.nfcPlugin"];
+            if (customCmdFile) {
+               if (@available(iOS 13.0, *)) {
+                   if ([ALNFCDetector readingAvailable]) {
+                       ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:self.appKey
+                                                                                                              configuration:[dictionary objectForKey:@"options"]
+                                                                                                       uiConfig:self.jsonUIConf
+                                                                                                                   delegate:self];
+                       if([self.jsonConfigDictionary valueForKey:@"quality"]){
+                           nfcScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
+                       }
+                       
+                       if([self.jsonConfigDictionary valueForKey:@"cropAndTransformErrorMessage"]){
+                           NSString *str = [self.jsonConfigDictionary objectForKey:@"cropAndTransformErrorMessage"];
+                           nfcScanViewController.cropAndTransformErrorMessage = str;
+                       }
+                       
+                       if ([self.jsonConfigDictionary valueForKey:@"nativeBarcodeEnabled"]) {
+                           nfcScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
+                       }
+                       
+                       if(nfcScanViewController != nil){
+                           [nfcScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
+                           [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:nfcScanViewController animated:YES completion:nil];
+                       }
+                   } else {
+                       [self returnError:@"NFC passport reading is not supported on this device or app."];
+                   }
+               } else {
+                   [self returnError:@"NFC passport reading is only supported on iOS 13 and later."];
+               }
+            } else {
+                ALPluginScanViewController *pluginScanViewController =
+                [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
+                                                         configuration:[dictionary objectForKey:@"options"]
+                                                  uiConfiguration:self.jsonUIConf
+                                                              delegate:self];
+                
+                if([self.jsonConfigDictionary valueForKey:@"quality"]){
+                    pluginScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
+                }
+                
+                if([self.jsonConfigDictionary valueForKey:@"cropAndTransformErrorMessage"]){
+                    NSString *str = [self.jsonConfigDictionary objectForKey:@"cropAndTransformErrorMessage"];
+                    pluginScanViewController.cropAndTransformErrorMessage = str;
+                }
+                
+                if ([self.jsonConfigDictionary valueForKey:@"nativeBarcodeEnabled"]) {
+                    pluginScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
+                }
+                
+                if(pluginScanViewController != nil){
+                    [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
+                    [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
+                }
+            }
+        } else {
             ALPluginScanViewController *pluginScanViewController =
             [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
                                                      configuration:[dictionary objectForKey:@"options"]
@@ -110,7 +167,6 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                 [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
             }
         }
-        
     });
 
 }

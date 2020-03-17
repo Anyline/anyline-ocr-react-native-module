@@ -57,6 +57,9 @@ NS_ASSUME_NONNULL_BEGIN
                                 outline:(ALSquare *)outline
                                 quality:(NSInteger)quality;
 
++ (NSDictionary *)dictionaryForNFCResult:(ALNFCResult *)scanResult
+                                 quality:(NSInteger)quality API_AVAILABLE(ios(13));
+
 + (NSDictionary *)dictionaryForBarcodeResults:(NSMutableArray<NSDictionary *> *)detectedBarcodes
                                   barcodeType:(NSString *)barcodeType
                                    scanResult:(NSString *)scanResult;
