@@ -19,6 +19,7 @@ import BarcodeConfig from '../config/BarcodeConfig';
 import BarcodePDF417Config from '../config/Barcode_PDF417Config';
 import DocumentConfig from '../config/DocumentConfig';
 import MRZConfig from '../config/MRZConfig';
+import NFCAndMRZConfig from '../config/NFCAndMRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
 import AnalogEnergyConfig from '../config/AnalogMeterConfig';
 import DigitalEnergyConfig from '../config/DigitalMeterConfig';
@@ -30,9 +31,9 @@ import DrivingLicenseConfig from '../config/DrivingLicenseConfig';
 import LicensePlateConfig from '../config/LicensePlateConfig';
 import SerialNumberConfig from '../config/SerialNumber';
 import VinConfig from '../config/VINConfig';
-import USNRConfig from "../config/USNRConfig";
-import ShipConConfig from "../config/ContainerShipConfig";
-import CattleTagConfig from "../config/CattleTagConfig";
+import USNRConfig from '../config/USNRConfig';
+import ShipConConfig from '../config/ContainerShipConfig';
+import CattleTagConfig from '../config/CattleTagConfig';
 import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
 import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
@@ -40,11 +41,12 @@ import ParallelScanningConfig from '../config/ParallelScanningConfig';
 import TinConfig from '../config/TINConfig';
 
 
-// Disable Warnings 
+
+
+// Disable Warnings
 console.disableYellowBox = true;
 
 class Anyline extends Component {
-
   state = {
     hasScanned: false,
     result: '',
@@ -53,23 +55,27 @@ class Anyline extends Component {
     currentScanMode: '',
     buttonsDisabled: false,
     SDKVersion: '',
+    hasMultipleResults: false,
+    titles: [],
   };
   componentDidMount = async () => {
     const SDKVersion = await AnylineOCR.getSDKVersion();
     this.setState({SDKVersion: SDKVersion});
-  }
+  };
 
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
   }
 
-  openAnyline = async (type) => {
-
+  openAnyline = async type => {
     this.setState({buttonsDisabled: true});
+    this.setState({titles: []});
     let config;
+    let {titles} = this.state;
 
     this.setState({
-      currentScanMode: type
+      currentScanMode: type,
+      hasMultipleResults: false,
     });
     switch (type) {
       case 'AUTO_ANALOG_DIGITAL_METER':
@@ -124,6 +130,9 @@ class Anyline extends Component {
         break;
       case 'MRZ':
         config = MRZConfig;
+        break; 
+      case 'NFC+MRZ':
+        config = NFCAndMRZConfig;
         break;
       case 'GERMAN_ID_FRONT':
         config = GermanIDFrontConfig;
@@ -144,18 +153,34 @@ class Anyline extends Component {
         config = VerticalContainerConfig;
         break;
       case 'SERIAL_SCANNING':
+        this.setState({hasMultipleResults: true});
         config = SerialScanningConfig;
+        titles = config.options.serialViewPluginComposite.viewPlugins.map(
+          viewPlug => viewPlug.viewPlugin.plugin.id,
+        );
         break;
       case 'PARALLEL_SCANNING':
+        this.setState({hasMultipleResults: true});
         config = ParallelScanningConfig;
+        titles = config.options.parallelViewPluginComposite.viewPlugins.map(
+          viewPlug => viewPlug.viewPlugin.plugin.id,
+        );
         break;
     }
 
-
+    // If Title is not set, set it to Type
+    if (titles.length === 0) {
+      titles = [type];
+    }
+    this.setState({titles});
     try {
-      const result = await AnylineOCR.setupPromise(JSON.stringify(config), 'scan');
+      const result = await AnylineOCR.setupPromise(
+        JSON.stringify(config),
+        'scan',
+      );
 
       console.log(result);
+
       this.setState({buttonsDisabled: false});
 
       const data = JSON.parse(result);
@@ -168,32 +193,32 @@ class Anyline extends Component {
       this.setState({
         hasScanned: true,
         result: data,
-        imagePath: imagePath,
-        fullImagePath: fullImagePath,
+        imagePath,
+        fullImagePath,
       });
     } catch (error) {
       if (error !== 'Canceled') {
         console.log(error);
+        alert(error)
       }
     }
     this.setState({buttonsDisabled: false});
   };
 
-  requestCameraPermission = async (type) => {
-
+  requestCameraPermission = async type => {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
         {
-          'title': 'Anyline Camera Permissions',
-          'message': 'Allow Anyline to access your camera?'
-        }
+          title: 'Anyline Camera Permissions',
+          message: 'Allow Anyline to access your camera?',
+        },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('Camera permission allowed');
         this.openAnyline(type);
       } else {
-        console.log("Camera permission denied");
+        console.log('Camera permission denied');
       }
     } catch (err) {
       console.warn(err);
@@ -202,14 +227,16 @@ class Anyline extends Component {
 
   hasCameraPermission = async () => {
     try {
-      return await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
+      return await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
     } catch (err) {
       console.warn(err, 'PERMISSION CHECK');
     }
   };
 
-  checkCameraPermissionAndOpen = (type) => {
-    this.hasCameraPermission().then((hasCameraPermission) => {
+  checkCameraPermissionAndOpen = type => {
+    this.hasCameraPermission().then(hasCameraPermission => {
       console.log('hasCameraPermission result is ' + hasCameraPermission);
       if (hasCameraPermission) {
         console.log('Opening OCR directly');
@@ -223,15 +250,13 @@ class Anyline extends Component {
   emptyResult = () => {
     this.setState({
       hasScanned: false,
-      result: '',
+      result: {},
       imagePath: '',
-      fullImagePath: ''
+      fullImagePath: '',
     });
   };
 
-
   render() {
-
     const {
       hasScanned,
       result,
@@ -239,7 +264,9 @@ class Anyline extends Component {
       fullImagePath,
       currentScanMode,
       buttonsDisabled,
-      SDKVersion
+      SDKVersion,
+      hasMultipleResults,
+      titles,
     } = this.state;
 
     BackHandler.addEventListener('hardwareBackPress', () => {
@@ -250,23 +277,50 @@ class Anyline extends Component {
         BackHandler.exitApp();
       }
     });
-
+    console.log(titles);
     return (
-      <ScrollView style={styles.container} contentContainerStyle={styles.ContainerContent}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.ContainerContent}>
         <Text style={styles.headline}>Anyline React-Native Example</Text>
         {hasScanned ? (
-          <Result
-            key="ResultView"
-            currentScanMode={currentScanMode}
-            result={result}
-            imagePath={imagePath}
-            fullImagePath={fullImagePath}
-            data={result}
-            emptyResult={this.emptyResult}
+          hasMultipleResults ? (
+            Object.keys(result).map((key, index) => {
+              return (
+                <Result
+                  key={`ResultView_${index}`}
+                  currentScanMode={currentScanMode}
+                  result={result[key]}
+                  imagePath={result[key].imagePath}
+                  fullImagePath={result[key].fullImagePath}
+                  data={result}
+                  emptyResult={this.emptyResult}
+                  hasBackButton={Object.keys(result).length - 1 === index}
+                  title={titles[index]}
+                />
+              );
+            })
+          ) : (
+            <Result
+              key="ResultView"
+              currentScanMode={currentScanMode}
+              result={result}
+              imagePath={imagePath}
+              fullImagePath={fullImagePath}
+              data={result}
+              emptyResult={this.emptyResult}
+              hasBackButton
+              title={titles[0]}
+            />
+          )
+        ) : (
+          <Overview
+            key="OverView"
+            openAnyline={this.openAnyline}
+            checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}
+            disabled={buttonsDisabled}
           />
-        ) : <Overview key="OverView" openAnyline={this.openAnyline}
-                      checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}
-                      disabled={buttonsDisabled}/>}
+        )}
         <Text style={styles.versions}>SDK Version: {SDKVersion}</Text>
         <Text style={styles.versions}>RN-Build Number: 1</Text>
       </ScrollView>
@@ -274,16 +328,15 @@ class Anyline extends Component {
   }
 }
 
-
 const styles = StyleSheet.create({
   versions: {
-    color: "white",
-    marginTop: 10
+    color: 'white',
+    marginTop: 10,
   },
   container: {
     flex: 1,
-    width: "100%",
-    backgroundColor: '#303030'
+    width: '100%',
+    backgroundColor: '#303030',
   },
   ContainerContent: {
     alignItems: 'center',
@@ -292,9 +345,9 @@ const styles = StyleSheet.create({
   headline: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: "white",
-    marginTop: 50
-  }
+    color: 'white',
+    marginTop: 50,
+  },
 });
 
 export default Anyline;

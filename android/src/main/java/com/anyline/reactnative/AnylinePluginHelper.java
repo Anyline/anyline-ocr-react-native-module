@@ -120,6 +120,10 @@ public class AnylinePluginHelper {
         return nativeBarcodeEnabled;
     }
 
+    public static void clearFinalBarcodeList() {
+        finalBarcodeList=null;
+    }
+
     public static JSONArray arrayOfDetectedBarcodes() {
 
         if (nativeBarcodeEnabled) {
@@ -261,7 +265,7 @@ public class AnylinePluginHelper {
         anylineScanView.getCameraView().enableBarcodeDetection(new NativeBarcodeResultListener() {
             @Override
             public void onFailure(String e) {
-                finalBarcodeList=null;  // otherwise result from previous scan would be shown
+                //finalBarcodeList=null;  // otherwise result from previous scan would be shown
             }
 
             @Override

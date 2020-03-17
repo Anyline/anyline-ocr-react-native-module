@@ -72,6 +72,13 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
             platformPermissionCheck('MRZ')
           }} />
       </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  NFC+MRZ Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('NFC+MRZ')
+          }} />
+      </View>
 
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  German ID Front'} color="#0099FF"
@@ -183,14 +190,14 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
       </View>
 
       <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Serial Scanning'} color="#0099FF"
+        <Button style={styles.buttons} title={'  Serial Scanning (LP > DL > VIN)'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
             platformPermissionCheck('SERIAL_SCANNING')
           }} />
       </View>
       <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Parallel Scanning'} color="#0099FF"
+        <Button style={styles.buttons} title={'  Parallel Scanning (Meter / USRN)'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
             platformPermissionCheck('PARALLEL_SCANNING')
