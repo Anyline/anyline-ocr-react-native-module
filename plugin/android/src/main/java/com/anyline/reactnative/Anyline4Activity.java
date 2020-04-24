@@ -8,8 +8,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Button;
 import android.widget.RelativeLayout;
-
+import android.view.Gravity;
+import android.graphics.Color;
+import android.util.TypedValue;
+import android.graphics.Typeface;
+import com.anyline.reactnative.R;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 
 import org.json.JSONArray;
@@ -51,6 +59,10 @@ import io.anyline.view.CutoutRect;
 import io.anyline.view.ParallelScanViewComposite;
 import io.anyline.view.ScanView;
 import io.anyline.view.SerialScanViewComposite;
+import android.app.Activity;
+import android.os.Bundle;
+import android.graphics.drawable.Drawable;
+
 
 public class Anyline4Activity extends AnylineBaseActivity {
     private static final String TAG = Anyline4Activity.class.getSimpleName();
@@ -74,7 +86,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setDebugListener();
     }
 
@@ -146,7 +158,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                 //set nativeBarcodeMode
                 AnylinePluginHelper.setNativeBarcodeMode(json, anylineScanView);
 
-                if (!(scanViewPlugin instanceof MeterScanViewPlugin)) {
+                if (!(scanViewPlugin instanceof MeterScanViewPlugin) && !(scanViewPlugin instanceof BarcodeScanViewPlugin)) {
                     setContentView(anylineScanView);
                 }
 
@@ -167,7 +179,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                         jsonLPResult.put("country", licensePlateResult.getCountry());
                                         jsonLPResult.put("licensePlate", licensePlateResult.getResult());
                                         jsonLPResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, licensePlateResult,
-                                                                                      jsonLPResult);
+                                                jsonLPResult);
 
                                         jsonResult.put(subResult.getPluginId(), jsonLPResult);
                                     } catch (JSONException e) {
@@ -177,7 +189,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                     JSONObject jsonIdResult = ((MrzIdentification) subResult.getResult()).toJSONObject();
                                     try {
                                         if (jsonIdResult.get("issuingCountryCode").equals("D")
-                                            && jsonIdResult.get("documentType").equals("ID")) {
+                                                && jsonIdResult.get("documentType").equals("ID")) {
                                             if (jsonIdResult.get("issuingCountryCode").equals("D")) {
                                                 jsonIdResult.put("address", jsonResult.get("address"));
                                             } else {
@@ -185,7 +197,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                             }
                                         }
                                         jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                      jsonIdResult);
+                                                jsonIdResult);
 
                                         jsonResult.put(subResult.getPluginId(), jsonIdResult);
                                     } catch (JSONException e) {
@@ -196,7 +208,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                             .toJSONObject();
                                     try {
                                         jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                      jsonIdResult);
+                                                jsonIdResult);
 
                                         jsonResult.put(subResult.getPluginId(), jsonIdResult);
                                     } catch (JSONException e) {
@@ -206,7 +218,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                     JSONObject jsonIdResult = ((GermanIdFrontIdentification) subResult.getResult()).toJSONObject();
                                     try {
                                         jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                      jsonIdResult);
+                                                jsonIdResult);
 
                                         jsonResult.put(subResult.getPluginId(), jsonIdResult);
                                     } catch (JSONException e) {
@@ -217,7 +229,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                     try {
                                         jsonOcrResult.put("text", (((OcrScanResult) subResult).getResult()).trim());
                                         jsonOcrResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                       jsonOcrResult);
+                                                jsonOcrResult);
                                         jsonResult.put(subResult.getPluginId(), jsonOcrResult);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -228,7 +240,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                         jsonBcResult.put("value", subResult.getResult());
                                         jsonBcResult.put("format", ((BarcodeScanResult) subResult).getBarcodeFormat());
                                         jsonBcResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                      jsonBcResult);
+                                                jsonBcResult);
                                         jsonResult.put(subResult.getPluginId(), jsonBcResult);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -240,9 +252,9 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                                 ((MeterScanResult) subResult).getScanMode(), jsonMeterResult);
                                         jsonMeterResult.put("reading", subResult.getResult());
                                         jsonMeterResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                         jsonMeterResult);
+                                                jsonMeterResult);
                                         jsonResult.put(subResult.getPluginId(), jsonMeterResult);
-                                        AnylinePluginHelper.clearFinalBarcodeList();	// otherwise result from previous scan could be shown if new scan does not include barcode
+                                        AnylinePluginHelper.clearFinalBarcodeList();    // otherwise result from previous scan could be shown if new scan does not include barcode
 
                                     } catch (Exception e) {
                                         Log.e(TAG, "EXCEPTION", e);
@@ -379,6 +391,12 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                 } else if (scanViewPlugin instanceof BarcodeScanViewPlugin) {
 
+
+                    RelativeLayout relativeLayout = getRelativeLayoutWithScanView();
+                    // create the radio button for the UI
+                    addText(relativeLayout, "You're scanning barcode", false,"","");
+
+
                     scanViewPlugin.addScanResultListener(new ScanResultListener<BarcodeScanResult>() {
                         @Override
                         public void onResult(BarcodeScanResult barcodeScanResult) {
@@ -400,15 +418,37 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     });
 
                 } else if (scanViewPlugin instanceof MeterScanViewPlugin) {
-
                     if (json.has("reportingEnabled")) {
                         //scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
                         (((MeterScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
 
                     }
-                    // create the radio button for the UI
-                    createSegmentRadioButtonUI(json);
+                    String code="";
+                    String name="";
+                    String type="";
+                    if (json.has("viewPlugin")) {
+                        JSONObject meterJson = json.getJSONObject("viewPlugin");
+                        if(meterJson.has("meterInformation")){
+                            JSONObject labelDataJson = meterJson.getJSONObject("meterInformation");
+                            if(labelDataJson.has("barcode") ){
+                                code = labelDataJson.getString("barcode");
+                                if(labelDataJson.has("name") && labelDataJson.has("costumerType")){
+                                    name = labelDataJson.getString("name");
+                                    type = labelDataJson.getString("costumerType");
+                                }
+                                else{
+                                    name = "unknown";
+                                    type = "unknown";
+                                }
+                            }
+                        }
 
+                    }
+                    // scanViewPlugin.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    final RelativeLayout relativeLayout = getRelativeLayoutWithScanView();
+                    // create the radio button for the UI
+                    createSegmentRadioButtonUI(json, relativeLayout);
+                    addText(relativeLayout, "You're scanning meter: "+code, true,name,type);
                     anylineScanView.setCameraOpenListener(this);
                     scanViewPlugin.addScanResultListener(new ScanResultListener<MeterScanResult>() {
                         @Override
@@ -428,7 +468,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             }
 
                             setResult(scanViewPlugin, jsonResult);
-                            AnylinePluginHelper.clearFinalBarcodeList();	// otherwise result from previous scan could be shown if new scan does not include barcode
+                            AnylinePluginHelper.clearFinalBarcodeList();    // otherwise result from previous scan could be shown if new scan does not include barcode
                         }
                     });
                 }
@@ -442,6 +482,88 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             + "\n" + e.getLocalizedMessage());
         }
 
+    }
+
+    private void addText(RelativeLayout relativeLayout, String message, boolean isCode, String name, String type) {
+        // Defining the RelativeLayout layout parameters.
+        // In this case I want to fill its parent
+        RelativeLayout.LayoutParams matchParentParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        TextView textView = setInfoTV(message, 20);
+        ImageButton button = setButton();
+
+        RelativeLayout.LayoutParams textParams = createLayout();
+        textParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        RelativeLayout.LayoutParams buttonParams = createLayout();
+
+        LinearLayout backLayout= new LinearLayout(this);
+        backLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        if(isCode){
+            buttonParams.topMargin = 28;
+            textParams.topMargin=30;
+        }
+        else{
+            buttonParams.topMargin = 52;
+            textParams.topMargin=60;
+        }
+
+        Drawable drawable = getResources().getDrawable( R.drawable.bg );
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,200);
+        backLayout.setLayoutParams(layoutParams);
+        backLayout.setBackground(drawable);
+        backLayout.addView(button,buttonParams);
+        backLayout.addView(textView, textParams);
+
+        LinearLayout textLayout= new LinearLayout(this);
+        RelativeLayout.LayoutParams infoParams = createLayout();
+        infoParams.topMargin = 220;
+        infoParams.leftMargin = 30;
+        textLayout.setLayoutParams(infoParams);
+
+        if(isCode){
+            TextView nameTV =setInfoTV("Meter name: "+name+", ", 14);
+            TextView typeTV =setInfoTV("Consumer type: "+type, 14);
+            textLayout.addView(nameTV);
+            textLayout.addView(typeTV);
+        }
+
+        relativeLayout.addView(backLayout);
+        relativeLayout.addView(textLayout);
+        setContentView(relativeLayout, matchParentParams);
+    }
+
+    private ImageButton setButton(){
+        ImageButton bt = new ImageButton(this);
+        Drawable icon = getResources().getDrawable( R.drawable.arrow );
+        bt.setBackgroundDrawable(icon);
+        bt.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                JSONObject jsonResult = new JSONObject();
+                try {
+                    jsonResult.put("message", "cancel");
+                } catch (JSONException e) {
+                }
+                setResult(scanViewPlugin, jsonResult);
+            }
+        });
+        return bt;
+    }
+
+    private RelativeLayout.LayoutParams createLayout(){
+        return new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+    }
+
+    private TextView setInfoTV(String text, Integer size){
+        TextView textView = new TextView(this);
+        textView.setText(text);
+        textView.setTextColor(0xffffffff);
+        textView.setTextSize(size);
+        textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+        textView.setGravity(Gravity.CENTER);
+        return textView;
     }
 
     // this method is used only for the meter scanning which contains radio buttons
@@ -459,7 +581,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
 //                    lp.setMargins(50 + anylineUIConfig.getOffsetX(), anylineUIConfig.getOffsetY(), 0,
 //                            0);
                     orig: lp.setMargins(rect.left + anylineUIConfig.getOffsetX(), rect.top + anylineUIConfig.getOffsetY(), 0,
-                                  0);
+                            0);
                     radioGroup.setLayoutParams(lp);
 
                     radioGroup.setVisibility(View.VISIBLE);
@@ -468,19 +590,27 @@ public class Anyline4Activity extends AnylineBaseActivity {
         });
     }
 
-    private void createSegmentRadioButtonUI(JSONObject json) {
-
-        final String scanModeString = ((MeterScanViewPlugin) scanViewPlugin).getScanMode().toString();
-        anylineUIConfig = new AnylineUIConfig(this, json);
-
-        // Creating a new RelativeLayout
+    private RelativeLayout getRelativeLayoutWithScanView() {
         final RelativeLayout relativeLayout = new RelativeLayout(this);
-
         // Defining the RelativeLayout layout parameters.
         // In this case I want to fill its parent
         RelativeLayout.LayoutParams matchParentParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        relativeLayout.addView(anylineScanView, matchParentParams);
+        try {
+
+            relativeLayout.addView(anylineScanView, matchParentParams);
+        }catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return relativeLayout;
+    }
+
+    private void createSegmentRadioButtonUI(JSONObject json, RelativeLayout relativeLayout) {
+
+        final String scanModeString = ((MeterScanViewPlugin) scanViewPlugin).getScanMode().toString();
+        anylineUIConfig = new AnylineUIConfig(this, json);
+
+
 
         ArrayList<String> titles = anylineUIConfig.getTitles();
         final ArrayList<String> modes = anylineUIConfig.getModes();
@@ -536,6 +666,9 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
             relativeLayout.addView(radioGroup, lp);
         }
+
+        RelativeLayout.LayoutParams matchParentParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         setContentView(relativeLayout, matchParentParams);
 
     }
