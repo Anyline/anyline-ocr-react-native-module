@@ -57,6 +57,11 @@ export default {
             },
             "cancelOnResult": true
         },
+	"document": {
+	    "manualCaptureButton": {
+		"buttonColor": "0099ff"
+	    }
+	},
         quality: 90
     },
 }
