@@ -451,7 +451,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
             public void run() {
                 if (radioGroup != null) {
                     //orig: Rect rect = anylineScanView.getScanViewPlugin().getCutoutImageOnSurface(); // =cutoutRect.rectOnVisibleView
-                    Rect rect = ((MeterScanViewPlugin) scanViewPlugin).getCutoutRectOnVisibleView();
+                    Rect rect = ((MeterScanViewPlugin) scanViewPlugin).getCutoutRect().rectOnVisibleView;
 
                     RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) radioGroup.getLayoutParams();
 //                    lp.setMargins(50 + anylineUIConfig.getOffsetX(), anylineUIConfig.getOffsetY(), 0,

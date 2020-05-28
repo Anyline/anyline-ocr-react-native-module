@@ -139,6 +139,13 @@ android {
         pickFirst 'lib/x86/libgnustl_shared.so'
         pickFirst 'lib/*/libc++_shared.so'
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
 }
 
 
