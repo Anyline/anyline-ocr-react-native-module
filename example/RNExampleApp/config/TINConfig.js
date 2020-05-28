@@ -20,9 +20,7 @@ export default {
       },
       "flash": {
           "mode": "manual",
-          "alignment": "bottom_right",
-          "imageOn": "flash_on",
-          "imageOff": "flash_off"
+          "alignment": "bottom_right"
       },
       "viewPlugin" : {
           "plugin": {
