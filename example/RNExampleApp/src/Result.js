@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
     marginRight: 20,
+
   },
   scrollContainer: {
     display: 'flex',
@@ -158,13 +159,12 @@ const styles = StyleSheet.create({
 
   backButton: {
     marginTop: 25,
-    width: '100%',
+    width: Dimensions.get('window').width/4,
     alignSelf: 'center',
   },
 
   titleText: {
     color: '#0099FF',
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 20
   },
 });
