@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        minSdkVersion = 19
+        minSdkVersion = 21
         compileSdkVersion = 28
         targetSdkVersion = 28
         supportLibVersion = "28.0.0"
@@ -43,7 +43,7 @@ allprojects {
 }
 
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.7'
-    distributionUrl = distributionUrl.replace("bin", "all")
-}
+//task wrapper(type: Wrapper) {
+//    gradleVersion = '5.4'
+//    distributionUrl = distributionUrl.replace("bin", "all")
+//}
