@@ -197,8 +197,8 @@ class Anyline extends Component {
         fullImagePath,
       });
     } catch (error) {
-      if (error !== 'Canceled') {
-        console.log(error);
+      if (error.message !== 'Canceled') {
+        console.log(error.message);
         alert(error)
       }
     }
