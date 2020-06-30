@@ -296,7 +296,7 @@ class Anyline extends Component {
                   data={result}
                   emptyResult={this.emptyResult}
                   hasBackButton={Object.keys(result).length - 1 === index}
-                  title={titles[index]}
+                  title={key}
                 />
               );
             })
