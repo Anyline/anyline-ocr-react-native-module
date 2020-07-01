@@ -7,6 +7,7 @@ import { Button, Platform, StyleSheet, Text, View, ScrollView } from 'react-nati
 export default function Overview({ openAnyline, checkCameraPermissionAndOpen, disabled }) {
 
   const platformPermissionCheck = (Platform.OS === 'android') ? checkCameraPermissionAndOpen : openAnyline;
+  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
   return (
     <ScrollView style={styles.container}>
@@ -72,6 +73,8 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
             platformPermissionCheck('MRZ')
           }} />
       </View>
+
+      { iOS &&
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  NFC+MRZ Scanner'} color="#0099FF"
           disabled={disabled}
@@ -79,6 +82,7 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
             platformPermissionCheck('NFC+MRZ')
           }} />
       </View>
+      }
 
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  German ID Front'} color="#0099FF"
