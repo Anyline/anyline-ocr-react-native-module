@@ -100,6 +100,14 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
           }} />
       </View>
 
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Universal Id'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('UNIVERSAL_ID')
+          }} />
+      </View>
+
 
       <Text style={styles.text}>VEHICLE</Text>
 
