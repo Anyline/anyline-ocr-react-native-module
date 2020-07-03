@@ -282,7 +282,6 @@ class Anyline extends Component {
         BackHandler.exitApp();
       }
     });
-    console.log("TITLES:::" + titles);
     return (
       <ScrollView
         style={styles.container}
