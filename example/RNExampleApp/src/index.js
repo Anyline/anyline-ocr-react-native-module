@@ -257,6 +257,7 @@ class Anyline extends Component {
       result: {},
       imagePath: '',
       fullImagePath: '',
+	  titles: [],
     });
   };
 
@@ -281,7 +282,7 @@ class Anyline extends Component {
         BackHandler.exitApp();
       }
     });
-    console.log(titles);
+    console.log("TITLES:::" + titles);
     return (
       <ScrollView
         style={styles.container}
