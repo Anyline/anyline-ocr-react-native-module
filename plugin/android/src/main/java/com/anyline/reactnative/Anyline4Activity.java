@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import at.nineyards.anyline.AnylineDebugListener;
@@ -37,8 +38,10 @@ import io.anyline.plugin.id.GermanIdFrontIdentification;
 import io.anyline.plugin.id.ID;
 import io.anyline.plugin.id.IdScanPlugin;
 import io.anyline.plugin.id.IdScanViewPlugin;
+import io.anyline.plugin.id.Identification;
 import io.anyline.plugin.id.MrzConfig;
 import io.anyline.plugin.id.MrzIdentification;
+import io.anyline.plugin.id.TemplateConfig;
 import io.anyline.plugin.licenseplate.LicensePlateScanResult;
 import io.anyline.plugin.licenseplate.LicensePlateScanViewPlugin;
 import io.anyline.plugin.meter.MeterScanMode;
@@ -352,8 +355,26 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                 setResult(scanViewPlugin, jsonResult);
                             }
                         });
-                    }
+                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof TemplateConfig) {
+                        scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
+                            @Override
+                            public void onResult(ScanResult<ID> idScanResult) {
+                                Identification identification = (Identification) idScanResult.getResult();
+                                HashMap<String, String> data = (HashMap<String, String>) identification.getResultData();
 
+                                JSONObject jsonResult = new JSONObject (data);
+
+                                try {
+                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
+                                                                                jsonResult);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Exception is: ", e);
+
+                                }
+                                setResult(scanViewPlugin, jsonResult);
+                            }
+                        });
+                    }
                 } else if (scanViewPlugin instanceof OcrScanViewPlugin) {
                     if (json.has("reportingEnabled")) {
                         //scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
