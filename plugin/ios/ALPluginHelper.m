@@ -379,7 +379,7 @@
                                 quality:(NSInteger)quality {
     CGFloat dividedCompRate = (CGFloat)quality/100;
     
-    NSMutableDictionary *dictResult = nil;
+    NSMutableDictionary *dictResult = [[NSMutableDictionary alloc] init];
     
     NSString *imagePath = [self saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
     
