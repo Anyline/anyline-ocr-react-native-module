@@ -7,7 +7,7 @@ import { Button, Platform, StyleSheet, Text, View, ScrollView } from 'react-nati
 export default function Overview({ openAnyline, checkCameraPermissionAndOpen, disabled }) {
 
   const platformPermissionCheck = (Platform.OS === 'android') ? checkCameraPermissionAndOpen : openAnyline;
-  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const iOS = Platform.OS === 'ios';
 
   return (
     <ScrollView style={styles.container}>
