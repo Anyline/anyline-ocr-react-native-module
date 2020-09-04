@@ -40,7 +40,7 @@ export default {
         "beepOnResult": true,
         "vibrateOnResult": true
       },
-      "cancelOnResult": true
+      "cancelOnResult": false
     },
     "doneButton": { // iOS only. Android uses hardware back button.
       "title": "OK",
