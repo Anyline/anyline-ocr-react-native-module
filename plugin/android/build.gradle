@@ -62,13 +62,14 @@ repositories {
         dirs 'libs'
     }
     maven {
-        url 'https://anylinesdk.blob.core.windows.net/maven/'
+        url 'https://anylinesdk.blob.core.windows.net/testing/'
     }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'io.anyline:anylinesdk:22@aar'
+    implementation 'io.anyline:anylinesdk:24-RC3@aar'
+        implementation("com.google.guava:guava:29.0-android")
     implementation 'com.google.firebase:firebase-ml-vision:19.0.2'
     implementation 'com.google.firebase:firebase-ml-vision-face-model:17.0.2'
     implementation "com.facebook.react:react-native:+"  // From node_modules

@@ -213,8 +213,8 @@ public class Document4Activity extends AnylineBaseActivity implements CameraOpen
                     File imageFile = TempFileUtil.createTempFileCheckCache(Document4Activity.this,
                                                                            UUID.randomUUID().toString(), ".jpg");
                     transformedImage.save(imageFile, quality);
-                    showToast(getString(
-                            getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
+//                    showToast(getString(
+//                            getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
 
                     jsonResult.put("imagePath", imageFile.getAbsolutePath());
 
