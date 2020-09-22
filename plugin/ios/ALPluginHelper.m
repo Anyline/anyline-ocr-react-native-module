@@ -386,8 +386,8 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy.MM.dd"];
     
-    if ([scanResult.result isKindOfClass:[ALTemplateIdentification class]]) {
-        ALTemplateIdentification *identification = (ALTemplateIdentification *)scanResult.result;
+    if ([scanResult.result isKindOfClass:[ALUniversalIDIdentification class]]) {
+        ALUniversalIDIdentification *identification = (ALUniversalIDIdentification *)scanResult.result;
         
         [[identification fieldNames] enumerateObjectsUsingBlock:^(NSString *fieldName, NSUInteger idx, BOOL *stop) {
             [dictResult setValue:[identification valueForField:fieldName] forKey:fieldName];
