@@ -13,10 +13,16 @@ export default {
           "id" : "IDPlugin_ID",
           "idPlugin" : {
               "mrzConfig" : {
-                  "strictMode" : false,
-                  "cropAndTransformID" : false,
-                  "mrzFieldScanOptions": {
-                                  }
+                "strictMode" : false,
+                 "cropAndTransformID" : false,
+                 "mrzFieldScanOptions": {
+                   "vizAddress" : "default",
+                   "vizDateOfIssue" : "default",
+                   "vizSurname" : "default",
+                   "vizGivenNames" : "default",
+                   "vizDateOfBirth" : "default",
+                   "vizDateOfExpiry" : "default",
+                  }
               }
           }
       },
@@ -24,6 +30,7 @@ export default {
         "style": "rect",
         "maxWidthPercent": "90%",
         "maxHeightPercent": "90%",
+        "width" : 972,
         "alignment": "center",
         "ratioFromSize": {
           "width": 125,
@@ -35,12 +42,12 @@ export default {
         "outerColor": "000000",
         "outerAlpha": 0.3,
         "cropPadding": {
-          "x": 0,
-          "y": 0
+          "x": -30,
+          "y": -90
         },
         "cropOffset": {
           "x": 0,
-          "y": 0
+          "y": 90
         },
         "feedbackStrokeColor": "0099FF",
         "offset": {
