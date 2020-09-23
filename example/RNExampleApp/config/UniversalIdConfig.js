@@ -49,6 +49,7 @@ export default {
       "maxWidthPercent": "90%",
       "maxHeightPercent": "90%",
       "alignment": "center",
+      "width": 1080,
       "strokeWidth": 2,
       "cornerRadius": 4,
       "strokeColor": "FFFFFF",
