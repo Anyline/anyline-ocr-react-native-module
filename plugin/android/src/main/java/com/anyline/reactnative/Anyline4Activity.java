@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.os.Handler;
+
 
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 
@@ -64,10 +66,13 @@ public class Anyline4Activity extends AnylineBaseActivity {
     private RadioGroup radioGroup;
     private AnylineUIConfig anylineUIConfig;
     private String cropAndTransformError;
+    private Boolean isFirstCameraOpen; // only if camera is opened the first time get coordinates of the cutout to avoid flickering when switching between analog and digital
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        isFirstCameraOpen=true;
 
         // init the scan view
         anylineScanView = new ScanView(this, null);
@@ -474,17 +479,22 @@ public class Anyline4Activity extends AnylineBaseActivity {
             @Override
             public void run() {
                 if (radioGroup != null) {
-                    //orig: Rect rect = anylineScanView.getScanViewPlugin().getCutoutImageOnSurface(); // =cutoutRect.rectOnVisibleView
-                    Rect rect = ((MeterScanViewPlugin) scanViewPlugin).getCutoutRect().rectOnVisibleView;
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            if (isFirstCameraOpen) {
+                                isFirstCameraOpen=false;
+                                Rect rect = ((MeterScanViewPlugin) scanViewPlugin).getCutoutRect().rectOnVisibleView;
 
-                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) radioGroup.getLayoutParams();
-//                    lp.setMargins(50 + anylineUIConfig.getOffsetX(), anylineUIConfig.getOffsetY(), 0,
-//                            0);
-                    orig: lp.setMargins(rect.left + anylineUIConfig.getOffsetX(), rect.top + anylineUIConfig.getOffsetY(), 0,
-                                  0);
-                    radioGroup.setLayoutParams(lp);
+                                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) radioGroup.getLayoutParams();
+                                lp.setMargins(rect.left + anylineUIConfig.getOffsetX(), rect.top + anylineUIConfig.getOffsetY(), 0, 0);
+                                radioGroup.setLayoutParams(lp);
 
-                    radioGroup.setVisibility(View.VISIBLE);
+                                radioGroup.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }, 600);
+
                 }
             }
         });
@@ -540,6 +550,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     View button = group.findViewById(checkedId);
                     String mode = modes.get(group.indexOfChild(button));
                     ((MeterScanViewPlugin) scanViewPlugin).setScanMode(MeterScanMode.valueOf(mode));
+                    anylineScanView.releaseCameraInBackground();
                     anylineScanView.stop();
                     try {
                         Thread.sleep(100);
