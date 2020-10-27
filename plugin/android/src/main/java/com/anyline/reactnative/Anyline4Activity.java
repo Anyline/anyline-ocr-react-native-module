@@ -31,6 +31,7 @@ import at.nineyards.anyline.core.exception_error_codes;
 //import at.nineyards.anyline.modules.mrz.Identification;
 import io.anyline.plugin.ScanResult;
 import io.anyline.plugin.ScanResultListener;
+import io.anyline.plugin.barcode.Barcode;
 import io.anyline.plugin.barcode.BarcodeScanResult;
 import io.anyline.plugin.barcode.BarcodeScanViewPlugin;
 import io.anyline.plugin.id.DrivingLicenseConfig;
@@ -232,13 +233,21 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                         e.printStackTrace();
                                     }
                                 } else if (subResult instanceof BarcodeScanResult) {
-                                    JSONObject jsonBcResult = new JSONObject();
                                     try {
-                                        jsonBcResult.put("value", subResult.getResult());
-                                        jsonBcResult.put("format", ((BarcodeScanResult) subResult).getBarcodeFormat());
-                                        jsonBcResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                      jsonBcResult);
-                                        jsonResult.put(subResult.getPluginId(), jsonBcResult);
+                                        List<Barcode> barcodeList = (List<Barcode>) subResult.getResult();
+
+                                        JSONArray barcodeArray = new JSONArray();
+                                        if(barcodeList.size() > 1) {
+                                            for (int i = 0; i < barcodeList.size(); i++) {
+                                                barcodeArray.put(barcodeList.get(i).toJSONObject());
+                                            }
+                                            JSONObject finalObject = new JSONObject();
+                                            finalObject.put("multiBarcodes", barcodeArray);
+                                            jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult, finalObject);
+                                        }else{
+                                            jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult, barcodeList.get(0).toJSONObject());
+
+                                        }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -411,23 +420,29 @@ public class Anyline4Activity extends AnylineBaseActivity {
                         public void onResult(BarcodeScanResult barcodeScanResult) {
                             JSONObject jsonResult = new JSONObject();
                             try {
+                                List<Barcode> barcodeList = barcodeScanResult.getResult();
 
-                                jsonResult.put("value", barcodeScanResult.getResult());
-                                jsonResult.put("format", barcodeScanResult.getBarcodeFormat());
-                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, barcodeScanResult,
-                                        jsonResult);
+                                JSONArray barcodeArray = new JSONArray();
+                                if(barcodeList.size() > 1) {
+                                    for (int i = 0; i < barcodeList.size(); i++) {
+                                        barcodeArray.put(barcodeList.get(i).toJSONObject());
+                                    }
+                                    JSONObject finalObject = new JSONObject();
+                                    finalObject.put("multiBarcodes", barcodeArray);
+                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, barcodeScanResult, finalObject);
+                                }else{
+                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, barcodeScanResult, barcodeList.get(0).toJSONObject());
+
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
                             setResult(scanViewPlugin, jsonResult);
-
                         }
-
                     });
 
                 } else if (scanViewPlugin instanceof MeterScanViewPlugin) {
-
                     if (json.has("reportingEnabled")) {
                         //scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
                         (((MeterScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
