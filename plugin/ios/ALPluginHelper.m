@@ -76,7 +76,7 @@
                       @"AUTO_ANALOG_DIGITAL_METER" : @(ALAutoAnalogDigitalMeter),
                       @"DIAL_METER" : @(ALDialMeter),
                       @"ANALOG_METER" : @(ALAnalogMeter),
-                      @"BARCODE" : @(ALBarcode),
+                      @"BARCODE" : @(ALMeterBarcode),
                       @"SERIAL_NUMBER" : @(ALSerialNumber),
                       @"DOT_MATRIX_METER" : @(ALDotMatrixMeter),
                       @"DIGITAL_METER" : @(ALDigitalMeter),
@@ -393,7 +393,7 @@
             [dictResult setValue:[identification valueForField:fieldName] forKey:fieldName];
         }];
     }
-
+    
     if ([scanResult.result isKindOfClass:[ALMRZIdentification class]]) {
         ALMRZIdentification *mrzIdentification = (ALMRZIdentification *)scanResult.result;
         NSMutableArray<NSString *> *keys=[@[
@@ -512,6 +512,7 @@
     return dictResult;
 }
 
+
 + (NSDictionary *)dictionaryForNFCResult:(ALNFCResult *)scanResult
                                  quality:(NSInteger)quality API_AVAILABLE(ios(13)) {
     CGFloat dividedCompRate = (CGFloat)quality/100;
@@ -559,6 +560,7 @@
     return dictResult;
 }
 
+
 + (NSDictionary *)dictionaryForOCRResult:(ALOCRResult *)scanResult
                         detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
                                  outline:(ALSquare *)outline
@@ -576,7 +578,6 @@
     NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
     [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
     
-    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
     [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
     
     if (detectedBarcodes && detectedBarcodes.count != 0) {
@@ -593,13 +594,17 @@
     
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:2];
     
-    [dictResult setObject:(NSString *)scanResult.result forKey:@"value"];
-    if (!scanResult.barcodeFormat) {
-        [dictResult setObject:@"Unknown" forKey:@"barcodeFormat"];
-    } else {
-        [dictResult setObject:[ALPluginHelper stringFromBarcodeFormat:scanResult.barcodeFormat] forKey:@"barcodeFormat"];
+    NSMutableArray *barcodeArray = [[NSMutableArray alloc] init];
+    
+    
+    for(ALBarcode *barcode in scanResult.result) {
+        [barcodeArray addObject:@{
+            @"value":barcode.value,
+            @"barcodeFormat": [ALBarcodeResult barcodeStringForFormat:barcode.barcodeFormat]
+        }];
     }
     
+    [dictResult setValue:barcodeArray forKey:@"barcodes"];
     
     NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
     
@@ -628,7 +633,6 @@
     [dictResult setValue:scanResult.result forKey:@"licensePlate"];
     [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
-    
     [dictResult setValue:imagePath forKey:@"imagePath"];
     
     NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
