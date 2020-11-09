@@ -29,6 +29,7 @@ import at.nineyards.anyline.core.RunFailure;
 import at.nineyards.anyline.core.Vector_Contour;
 import at.nineyards.anyline.core.exception_error_codes;
 //import at.nineyards.anyline.modules.mrz.Identification;
+import io.anyline.AnylineSDK;
 import io.anyline.plugin.ScanResult;
 import io.anyline.plugin.ScanResultListener;
 import io.anyline.plugin.barcode.Barcode;
@@ -142,11 +143,13 @@ public class Anyline4Activity extends AnylineBaseActivity {
             // this is used for the OCR Plugin, when languages has to be added
             json = AnylinePluginHelper.setLanguages(json, getApplicationContext());
 
+            AnylineSDK.init(licenseKey, this);
+
             if (json.has("serialViewPluginComposite") || json.has("parallelViewPluginComposite")) {
-                anylineScanView.initComposite(json, licenseKey); // for composite
+                anylineScanView.initComposite(json); // for composite
                 scanViewPlugin = anylineScanView.getScanViewPlugin();
             } else {
-                anylineScanView.setScanConfig(json, licenseKey); // for non-composite
+                anylineScanView.setScanConfig(json); // for non-composite
             }
             if (anylineScanView != null) {
                 scanViewPlugin = anylineScanView.getScanViewPlugin();

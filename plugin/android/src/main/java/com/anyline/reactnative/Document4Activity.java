@@ -35,6 +35,7 @@ import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.camera.CameraOpenListener;
 import at.nineyards.anyline.models.AnylineImage;
 import at.nineyards.anyline.util.TempFileUtil;
+import io.anyline.AnylineSDK;
 import io.anyline.plugin.ScanResult;
 import io.anyline.plugin.document.DocumentScanResultListener;
 import io.anyline.plugin.document.DocumentScanViewPlugin;
@@ -107,10 +108,12 @@ public class Document4Activity extends AnylineBaseActivity implements CameraOpen
         documentScanView.setCameraOpenListener(this);
         // the view can be configured via a json file in the assets, and this config is set here
 
+        AnylineSDK.init(licenseKey, this);
+
         JSONObject json = null;
         try {
             json = new JSONObject(configJson);
-            documentScanView.setScanConfig(json, licenseKey);
+            documentScanView.setScanConfig(json);
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(TAG, "**************** Exception: " + e);
