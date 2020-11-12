@@ -11,16 +11,6 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		A7A051D62348F01700833905 /* anyline_capitals.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = A7A051D12348F01600833905 /* anyline_capitals.traineddata */; };
-		A7A051D72348F01700833905 /* deu.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = A7A051D22348F01600833905 /* deu.traineddata */; };
-		A7A051D82348F01700833905 /* eng_no_dict.traineddata in Resources */ = {isa = PBXBuildFile; fileRef = A7A051D32348F01600833905 /* eng_no_dict.traineddata */; };
-		A7A051D92348F01700833905 /* USNr.any in Resources */ = {isa = PBXBuildFile; fileRef = A7A051D42348F01600833905 /* USNr.any */; };
-		A7A051DA2348F01700833905 /* vin.any in Resources */ = {isa = PBXBuildFile; fileRef = A7A051D52348F01600833905 /* vin.any */; };
-		A7A051E12348F02300833905 /* vin.ale in Resources */ = {isa = PBXBuildFile; fileRef = A7A051DC2348F02300833905 /* vin.ale */; };
-		A7A051E22348F02300833905 /* container_scanner_vertical.ale in Resources */ = {isa = PBXBuildFile; fileRef = A7A051DD2348F02300833905 /* container_scanner_vertical.ale */; };
-		A7A051E32348F02300833905 /* cow_tag_scanner.ale in Resources */ = {isa = PBXBuildFile; fileRef = A7A051DE2348F02300833905 /* cow_tag_scanner.ale */; };
-		A7A051E42348F02300833905 /* container_scanner.ale in Resources */ = {isa = PBXBuildFile; fileRef = A7A051DF2348F02300833905 /* container_scanner.ale */; };
-		A7A051E52348F02300833905 /* anyline_austrian_driving_license.ale in Resources */ = {isa = PBXBuildFile; fileRef = A7A051E02348F02300833905 /* anyline_austrian_driving_license.ale */; };
 		A7ED9B1B236344F500960E39 /* EmptySwiftFileToFixLinking.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = A7ED9B1A236344F500960E39 /* EmptySwiftFileToFixLinking.swift .swift */; };
 		CB5AFDA97FFD6EE6C9855F3B /* libPods-RNExampleApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFA47AADA9F8ACCB61B613B /* libPods-RNExampleApp.a */; };
 		DF3316B024BDEBD90018AC5E /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = DF3316AF24BDEBD90018AC5E /* main.jsbundle */; };
@@ -44,16 +34,6 @@
 		630ED0E8DE502A35F662F2A7 /* libPods-RNExampleApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNExampleApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BD9F9BCA1677A4389F93763 /* Pods-RNExampleApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNExampleApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-RNExampleApp-tvOS/Pods-RNExampleApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		8BFA47AADA9F8ACCB61B613B /* libPods-RNExampleApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNExampleApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7A051D12348F01600833905 /* anyline_capitals.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = anyline_capitals.traineddata; sourceTree = "<group>"; };
-		A7A051D22348F01600833905 /* deu.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = deu.traineddata; sourceTree = "<group>"; };
-		A7A051D32348F01600833905 /* eng_no_dict.traineddata */ = {isa = PBXFileReference; lastKnownFileType = file; path = eng_no_dict.traineddata; sourceTree = "<group>"; };
-		A7A051D42348F01600833905 /* USNr.any */ = {isa = PBXFileReference; lastKnownFileType = file; path = USNr.any; sourceTree = "<group>"; };
-		A7A051D52348F01600833905 /* vin.any */ = {isa = PBXFileReference; lastKnownFileType = file; path = vin.any; sourceTree = "<group>"; };
-		A7A051DC2348F02300833905 /* vin.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vin.ale; sourceTree = "<group>"; };
-		A7A051DD2348F02300833905 /* container_scanner_vertical.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = container_scanner_vertical.ale; sourceTree = "<group>"; };
-		A7A051DE2348F02300833905 /* cow_tag_scanner.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cow_tag_scanner.ale; sourceTree = "<group>"; };
-		A7A051DF2348F02300833905 /* container_scanner.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = container_scanner.ale; sourceTree = "<group>"; };
-		A7A051E02348F02300833905 /* anyline_austrian_driving_license.ale */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = anyline_austrian_driving_license.ale; sourceTree = "<group>"; };
 		A7ED9B19236344F400960E39 /* RNExampleApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNExampleApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		A7ED9B1A236344F500960E39 /* EmptySwiftFileToFixLinking.swift .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmptySwiftFileToFixLinking.swift .swift"; sourceTree = "<group>"; };
 		AC8870222FD454D589A2AACF /* Pods-RNExampleAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNExampleAppTests.release.xcconfig"; path = "Target Support Files/Pods-RNExampleAppTests/Pods-RNExampleAppTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -135,8 +115,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				A7A051D02348F01600833905 /* traineddata */,
-				A7A051DB2348F02300833905 /* ale */,
 				13B07FAE1A68108700A75B9A /* RNExampleApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RNExampleAppTests */,
@@ -155,30 +133,6 @@
 				13B07F961A680F5B00A75B9A /* RNExampleApp.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		A7A051D02348F01600833905 /* traineddata */ = {
-			isa = PBXGroup;
-			children = (
-				A7A051D12348F01600833905 /* anyline_capitals.traineddata */,
-				A7A051D22348F01600833905 /* deu.traineddata */,
-				A7A051D32348F01600833905 /* eng_no_dict.traineddata */,
-				A7A051D42348F01600833905 /* USNr.any */,
-				A7A051D52348F01600833905 /* vin.any */,
-			);
-			path = traineddata;
-			sourceTree = "<group>";
-		};
-		A7A051DB2348F02300833905 /* ale */ = {
-			isa = PBXGroup;
-			children = (
-				A7A051DC2348F02300833905 /* vin.ale */,
-				A7A051DD2348F02300833905 /* container_scanner_vertical.ale */,
-				A7A051DE2348F02300833905 /* cow_tag_scanner.ale */,
-				A7A051DF2348F02300833905 /* container_scanner.ale */,
-				A7A051E02348F02300833905 /* anyline_austrian_driving_license.ale */,
-			);
-			path = ale;
 			sourceTree = "<group>";
 		};
 		FE7947828549C734DB5231CD /* Pods */ = {
@@ -231,8 +185,9 @@
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 35RHL53WRE;
+						DevelopmentTeam = 2MSE892CA7;
 						LastSwiftMigration = 1110;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -260,19 +215,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7A051DA2348F01700833905 /* vin.any in Resources */,
-				A7A051E22348F02300833905 /* container_scanner_vertical.ale in Resources */,
-				A7A051E32348F02300833905 /* cow_tag_scanner.ale in Resources */,
-				A7A051D92348F01700833905 /* USNr.any in Resources */,
-				A7A051E42348F02300833905 /* container_scanner.ale in Resources */,
-				A7A051D72348F01700833905 /* deu.traineddata in Resources */,
-				A7A051E52348F02300833905 /* anyline_austrian_driving_license.ale in Resources */,
-				A7A051D82348F01700833905 /* eng_no_dict.traineddata in Resources */,
-				A7A051E12348F02300833905 /* vin.ale in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				DF3316B024BDEBD90018AC5E /* main.jsbundle in Resources */,
-				A7A051D62348F01700833905 /* anyline_capitals.traineddata in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,7 +231,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp-resources.sh",
-				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_24.1/Framework/AnylineResources.bundle",
+				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_25/Framework/AnylineResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -407,9 +352,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RNExampleApp/RNExampleApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 35RHL53WRE;
+				DEVELOPMENT_TEAM = 2MSE892CA7;
 				INFOPLIST_FILE = RNExampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -417,8 +364,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.example.reactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.example.reactnative.beta;
 				PRODUCT_NAME = RNExampleApp;
+				PROVISIONING_PROFILE_SPECIFIER = "Anyline In House Distribution Profile";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNExampleApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -434,8 +382,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RNExampleApp/RNExampleApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 35RHL53WRE;
+				DEVELOPMENT_TEAM = 2MSE892CA7;
 				INFOPLIST_FILE = RNExampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -443,8 +393,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.example.reactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.example.reactnative.beta;
 				PRODUCT_NAME = RNExampleApp;
+				PROVISIONING_PROFILE_SPECIFIER = "Anyline In House Distribution Profile";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNExampleApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "arm64 arm64e armv7 armv7s";
@@ -498,7 +449,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -544,7 +495,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
