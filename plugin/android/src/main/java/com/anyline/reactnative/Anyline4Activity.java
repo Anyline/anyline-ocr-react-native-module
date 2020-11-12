@@ -143,7 +143,11 @@ public class Anyline4Activity extends AnylineBaseActivity {
             // this is used for the OCR Plugin, when languages has to be added
             json = AnylinePluginHelper.setLanguages(json, getApplicationContext());
 
-            AnylineSDK.init(licenseKey, this);
+            try {
+                AnylineSDK.init(licenseKey, this);
+            } catch (Exception e) {
+                finishWithError(getString(getResources().getIdentifier("error_license_init", "string", getPackageName())));
+            }
 
             if (json.has("serialViewPluginComposite") || json.has("parallelViewPluginComposite")) {
                 anylineScanView.initComposite(json); // for composite
