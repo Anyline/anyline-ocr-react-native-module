@@ -16,8 +16,6 @@ export default {
             "scanMode": "LINE",
             "languages": ["USNr.any"],
             "charWhitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
-            "minCharHeight": 25,
-            "maxCharHeight": 65,
             "minConfidence": 70,
             "validationRegex": "^[A-Z]{2}([0-9A-Z]\\s*){13,32}$"
 	  }
