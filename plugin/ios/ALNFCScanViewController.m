@@ -114,12 +114,15 @@ API_AVAILABLE(ios(13.0))
         //Set scanOptions for MRZConfig
         mrzConfig.idFieldScanOptions = scanOptions;
     }
-         
+
     NSError *error = nil;
 
     //Init the anyline sdk with your license key
     [AnylineSDK setupWithLicenseKey:self.licensekey error:&error];
     if (error) {
+        [self.delegate pluginScanViewController:nil
+                                didStopScanning:self
+                                          error:error];
         return;
     }
     //Init the anyline ID ScanPlugin with an ID, Licensekey, the delegate,

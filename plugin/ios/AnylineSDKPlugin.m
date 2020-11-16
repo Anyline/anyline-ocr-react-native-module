@@ -193,6 +193,10 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     [self returnError:(@"Canceled")];
 }
 
+- (void)pluginScanViewController:(ALPluginScanViewController *)pluginScanViewController didStopScanning:(id)sender error:(NSError *)error {
+    [self returnError:error.debugDescription];
+}
+
 - (ALScanMode)energyScanModeFromString:(NSString *)scanMode{
 
     if ([[scanMode uppercaseString] isEqualToString:@"ANALOG_METER"]) {
