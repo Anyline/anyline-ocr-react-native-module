@@ -60,6 +60,9 @@
     
     [AnylineSDK setupWithLicenseKey:self.licensekey error:&error];
     if (error) {
+        [self.delegate pluginScanViewController:self
+                                didStopScanning:self
+                                          error:error];
         return;
     }
     
