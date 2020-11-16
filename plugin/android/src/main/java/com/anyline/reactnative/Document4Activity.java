@@ -33,6 +33,7 @@ import java.util.UUID;
 import androidx.core.content.ContextCompat;
 import at.nineyards.anyline.camera.CameraController;
 import at.nineyards.anyline.camera.CameraOpenListener;
+import at.nineyards.anyline.core.LicenseException;
 import at.nineyards.anyline.models.AnylineImage;
 import at.nineyards.anyline.util.TempFileUtil;
 import io.anyline.AnylineSDK;
@@ -110,7 +111,7 @@ public class Document4Activity extends AnylineBaseActivity implements CameraOpen
 
         try {
             AnylineSDK.init(licenseKey, this);
-        } catch (Exception e) {
+        } catch (LicenseException e) {
             finishWithError(getString(getResources().getIdentifier("error_license_init", "string", getPackageName())));
         }
 

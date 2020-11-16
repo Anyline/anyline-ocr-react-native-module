@@ -25,6 +25,7 @@ import java.util.List;
 
 import at.nineyards.anyline.AnylineDebugListener;
 import at.nineyards.anyline.camera.CameraController;
+import at.nineyards.anyline.core.LicenseException;
 import at.nineyards.anyline.core.RunFailure;
 import at.nineyards.anyline.core.Vector_Contour;
 import at.nineyards.anyline.core.exception_error_codes;
@@ -145,7 +146,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
             try {
                 AnylineSDK.init(licenseKey, this);
-            } catch (Exception e) {
+            } catch (LicenseException e) {
                 finishWithError(getString(getResources().getIdentifier("error_license_init", "string", getPackageName())));
             }
 
