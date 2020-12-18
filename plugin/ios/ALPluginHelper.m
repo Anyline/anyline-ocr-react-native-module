@@ -11,44 +11,8 @@
 
 #pragma mark - String convertions
 
-+ (ALBarcodeFormat)barcodeFormatFromString:(NSString *)barcodeFormat {
-    NSDictionary<NSString *, NSNumber *> *scanModes = [self barcodesFormatDict];
-    
-    return [scanModes[barcodeFormat] integerValue];
-}
-
-+ (NSString *)stringFromBarcodeFormat:(ALBarcodeFormat)barcodeFormat {
-    NSDictionary<NSString *, NSNumber *> *barcodeFormats = [self barcodesFormatDict];
-    return [barcodeFormats allKeysForObject:@(barcodeFormat)][0];
-}
-
-+ (NSDictionary<NSString *, NSNumber *> *)barcodesFormatDict {
-    static NSDictionary<NSString *, NSNumber *> * scanModes = nil;
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        scanModes = @{
-                      @"AZTEC" : @(ALCodeTypeAztec),
-                      @"CODABAR" : @(ALCodeTypeCodabar),
-                      @"CODE_39" : @(ALCodeTypeCode39),
-                      @"CODE_93" : @(ALCodeTypeCode93),
-                      @"CODE_128" : @(ALCodeTypeCode128),
-                      @"DATA_MATRIX" : @(ALCodeTypeDataMatrix),
-                      @"EAN_8" : @(ALCodeTypeEAN8),
-                      @"EAN_13" : @(ALCodeTypeEAN13),
-                      @"ITF" : @(ALCodeTypeITF),
-                      @"PDF_417" : @(ALCodeTypePDF417),
-                      @"QR_CODE" : @(ALCodeTypeQR),
-                      @"RSS_14" : @(ALCodeTypeRSS14),
-                      @"RSS_EXPANDED" : @(ALCodeTypeRSSExpanded),
-                      @"UPC_A" : @(ALCodeTypeUPCA),
-                      @"UPC_E" : @(ALCodeTypeUPCE),
-                      @"UPC_EAN_EXTENSION" : @(ALCodeTypeUPCEANExtension),
-                      @"UNKNOWN" : @(ALHeatMeter6),
-                      };
-    });
-    
-    return scanModes;
++ (NSString *)barcodeFormatFromString:(NSString *)barcodeFormat {
+    return (barcodeFormat == nil && barcodeFormat.length == 0) ? @"unkown" : barcodeFormat;
 }
 
 + (ALScanMode)scanModeFromString:(NSString *)scanMode {
@@ -599,8 +563,8 @@
     
     for(ALBarcode *barcode in scanResult.result) {
         [barcodeArray addObject:@{
-            @"value":barcode.value,
-            @"barcodeFormat": [ALBarcodeResult barcodeStringForFormat:barcode.barcodeFormat]
+            @"value" : barcode.value,
+            @"barcodeFormat" : [ALBarcodeResult barcodeStringForFormat:barcode.barcodeFormat]
         }];
     }
     
