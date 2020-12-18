@@ -564,7 +564,7 @@
     for(ALBarcode *barcode in scanResult.result) {
         [barcodeArray addObject:@{
             @"value" : barcode.value,
-            @"barcodeFormat" : [ALBarcodeResult barcodeStringForFormat:barcode.barcodeFormat]
+            @"barcodeFormat" : [ALBarcodeResult barcodeFormatFromString:barcode.barcodeFormat]
         }];
     }
     
