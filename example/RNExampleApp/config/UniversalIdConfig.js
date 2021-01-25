@@ -17,7 +17,8 @@ export default {
           "allowedLayouts": {
             "mrz": [],
             "drivingLicense": [],
-            "idFront": []
+            "idFront": [],
+            "insuranceCard" : []
           },
           "drivingLicense": {
             "surname": {"scanOption": 0, "minConfidence": 40},
@@ -40,6 +41,16 @@ export default {
             "cardAccessNumber": {"scanOption": 1, "minConfidence": 60},
             "documentNumber": {"scanOption": 0, "minConfidence": 60},
             "nationality": {"scanOption": 1, "minConfidence": 60}
+          },
+          "insuranceCard": {
+            "nationality": {"scanOption": 0, "minConfidence": 50},
+            "surname": {"scanOption": 0, "minConfidence": 50},
+            "givenNames": {"scanOption": 0, "minConfidence": 50},
+            "dateOfBirth": {"scanOption": 0, "minConfidence": 50},
+            "personalNumber": {"scanOption": 0, "minConfidence": 50},
+            "authority": {"scanOption": 0, "minConfidence": 50},
+            "documentNumber": {"scanOption": 0, "minConfidence": 50},
+            "dateOfExpiry": {"scanOption": 0, "minConfidence": 50}
           }
         }
       }
