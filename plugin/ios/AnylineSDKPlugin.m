@@ -5,6 +5,8 @@
 #import "ALPluginHelper.h"
 
 #import "ALNFCScanViewController.h"
+#import <AnylineReact/AnylineReact-Swift.h>
+
 
 @interface AnylineSDKPlugin()<ALPluginScanViewControllerDelegate>
 
@@ -86,8 +88,8 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
         [[UIApplication sharedApplication] keyWindow].rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         
         if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
-            NSString *customCmdFile = [[dictionary objectForKey:@"options"] valueForKeyPath:@"viewPlugin.plugin.nfcPlugin"];
-            if (customCmdFile) {
+            NSString *nfcConfig = [[dictionary objectForKey:@"options"] valueForKeyPath:@"viewPlugin.plugin.nfcPlugin"];
+            if (nfcConfig) {
                if (@available(iOS 13.0, *)) {
                    if ([ALNFCDetector readingAvailable]) {
                        ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:self.appKey
@@ -142,6 +144,10 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                     [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
                 }
             }
+        } else if ([[dictionary objectForKey:@"options"] valueForKeyPath:@"document.UIKit"]) {
+            //TODO: handle document uikit here
+            
+            
         } else {
             ALPluginScanViewController *pluginScanViewController =
             [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey

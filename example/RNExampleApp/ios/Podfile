@@ -3,6 +3,7 @@ platform :ios, '12.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'RNExampleApp' do
+  use_frameworks!
   # Pods for RNExampleApp
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
@@ -36,6 +37,8 @@ target 'RNExampleApp' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   
   pod 'AnylineReact', path: '../node_modules/anyline-ocr-react-native-module/ios'
+  
 
   use_native_modules!
 end
+
