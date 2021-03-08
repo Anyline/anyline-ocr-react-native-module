@@ -5,8 +5,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
 
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
+import com.google.mlkit.vision.barcode.Barcode;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,9 +18,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import at.nineyards.anyline.camera.NativeBarcodeResultListener;
-import at.nineyards.anyline.util.AssetUtil;
-import at.nineyards.anyline.util.TempFileUtil;
+import io.anyline.camera.NativeBarcodeResultListener;
+import io.anyline.util.AssetUtil;
+import io.anyline.util.TempFileUtil;
 import io.anyline.plugin.ScanResult;
 import io.anyline.plugin.barcode.BarcodeFormat;
 import io.anyline.plugin.meter.MeterScanMode;
@@ -33,7 +32,7 @@ public class AnylinePluginHelper {
 
     private static Toast notificationToast;
     private static boolean nativeBarcodeEnabled = false;
-    private static List<FirebaseVisionBarcode> finalBarcodeList;
+    private static List<Barcode> finalBarcodeList;
 
     public static JSONObject setLanguages(JSONObject json, Context context) {
         if (json.has("viewPlugin")) {
@@ -127,7 +126,7 @@ public class AnylinePluginHelper {
     public static JSONArray arrayOfDetectedBarcodes() {
 
         if (nativeBarcodeEnabled) {
-            // List<FirebaseVisionBarcode> finalBarcodeList = new ArrayList<>();
+            // List<Barcode> finalBarcodeList = new ArrayList<>();
             //finalBarcodeList = AnylinePluginHelper.getNativeBarcodeList();
             final JSONArray jsonArray = new JSONArray();
             if (finalBarcodeList!= null) {
@@ -174,7 +173,7 @@ public class AnylinePluginHelper {
         return jsonObject;
     }
 
-    public static JSONObject wrapBarcodeInJson(FirebaseVisionBarcode b) {
+    public static JSONObject wrapBarcodeInJson(Barcode b) {
         JSONObject json = new JSONObject();
 
         try {
@@ -187,8 +186,8 @@ public class AnylinePluginHelper {
         return json;
     }
 
-    private static void setNativeBarcodeList(List<FirebaseVisionBarcode> barcodes) {
-        final List<FirebaseVisionBarcode> barcodeList = new ArrayList<>();
+    private static void setNativeBarcodeList(List<Barcode> barcodes) {
+        final List<Barcode> barcodeList = new ArrayList<>();
         final List<String> barcodesDisplayedVal = new ArrayList<>();
 
         if (barcodeList.size() == 0) {
@@ -210,48 +209,48 @@ public class AnylinePluginHelper {
 
     }
 
-    private static List<FirebaseVisionBarcode> getNativeBarcodeList() {
+    private static List<Barcode> getNativeBarcodeList() {
         return finalBarcodeList;
     }
 
     private static String findValidFormatForReference(int format) {
-        if (format == Barcode.AZTEC) {
+        if (format == Barcode.FORMAT_AZTEC) {
             return BarcodeFormat.AZTEC.toString();
         }
-        if (format == Barcode.CODABAR) {
+        if (format == Barcode.FORMAT_CODABAR) {
             return BarcodeFormat.CODABAR.toString();
         }
-        if (format == Barcode.CODE_39) {
+        if (format == Barcode.FORMAT_CODE_39) {
             return BarcodeFormat.CODE_39.toString();
         }
-        if (format == Barcode.CODE_93) {
+        if (format == Barcode.FORMAT_CODE_93) {
             return BarcodeFormat.CODE_93.toString();
         }
-        if (format == Barcode.CODE_128) {
+        if (format == Barcode.FORMAT_CODE_128) {
             return BarcodeFormat.CODE_128.toString();
         }
-        if (format == Barcode.DATA_MATRIX) {
+        if (format == Barcode.FORMAT_DATA_MATRIX) {
             return BarcodeFormat.DATA_MATRIX.toString();
         }
-        if (format == Barcode.EAN_8) {
+        if (format == Barcode.FORMAT_EAN_8) {
             return BarcodeFormat.EAN_8.toString();
         }
-        if (format == Barcode.EAN_13) {
+        if (format == Barcode.FORMAT_EAN_13) {
             return BarcodeFormat.EAN_13.toString();
         }
-        if (format == Barcode.ITF) {
+        if (format == Barcode.FORMAT_ITF) {
             return BarcodeFormat.ITF.toString();
         }
-        if (format == Barcode.PDF417) {
+        if (format == Barcode.FORMAT_PDF417) {
             return BarcodeFormat.PDF_417.toString();
         }
-        if (format == Barcode.QR_CODE) {
+        if (format == Barcode.FORMAT_QR_CODE) {
             return BarcodeFormat.QR_CODE.toString();
         }
-        if (format == Barcode.UPC_A) {
+        if (format == Barcode.FORMAT_UPC_A) {
             return BarcodeFormat.UPC_A.toString();
         }
-        if (format == Barcode.UPC_E) {
+        if (format == Barcode.FORMAT_UPC_E) {
             return BarcodeFormat.UPC_E.toString();
         }
 
@@ -269,7 +268,7 @@ public class AnylinePluginHelper {
             }
 
             @Override
-            public void onSuccess(List<FirebaseVisionBarcode> barcodes) {
+            public void onSuccess(List<Barcode> barcodes) {
                 setNativeBarcodeList(barcodes);
             }
         }, barcodeFormats);
