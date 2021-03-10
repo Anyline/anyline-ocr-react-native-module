@@ -232,7 +232,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp-resources.sh",
-				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_27/Framework/AnylineResources.bundle",
+				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_29/Framework/AnylineResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -266,7 +266,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp-artifacts.sh",
-				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_27/Framework/Anyline.xcframework",
+				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_29/Framework/Anyline.xcframework",
 			);
 			name = "[CP] Prepare Artifacts";
 			outputPaths = (
