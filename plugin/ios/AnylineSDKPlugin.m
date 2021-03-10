@@ -7,7 +7,6 @@
 #import "ALNFCScanViewController.h"
 #import <AnylineReact/AnylineReact-Swift.h>
 
-
 @interface AnylineSDKPlugin()<ALPluginScanViewControllerDelegate>
 
 @property (nonatomic, strong) ALScanViewPluginConfig *conf;
@@ -119,6 +118,17 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                } else {
                    [self returnError:@"NFC passport reading is only supported on iOS 13 and later."];
                }
+            } else if ([[dictionary objectForKey:@"options"] valueForKeyPath:@"document.UIKit"]) {
+                //TODO: handle document uikit here
+                ALDocumentUIKitViewController *documentUIViewController = [[ALDocumentUIKitViewController alloc] initWithLicenseKey:self.appKey
+                                                                                                                      anylineConfig:[dictionary objectForKey:@"options"]
+                                                                                                         anylineDocumentUIKitConfig:[[dictionary objectForKey:@"options"] valueForKeyPath:@"document.UIKit"]
+                                                                                                                    uiConfiguration:self.jsonUIConf
+                                                                                                                     pluginDelegate:self error:nil];
+                if(documentUIViewController != nil){
+                    [documentUIViewController setModalPresentationStyle: UIModalPresentationFullScreen];
+                    [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:documentUIViewController animated:YES completion:nil];
+                }
             } else {
                 ALPluginScanViewController *pluginScanViewController =
                 [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
@@ -144,10 +154,6 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                     [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
                 }
             }
-        } else if ([[dictionary objectForKey:@"options"] valueForKeyPath:@"document.UIKit"]) {
-            //TODO: handle document uikit here
-            
-            
         } else {
             ALPluginScanViewController *pluginScanViewController =
             [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey

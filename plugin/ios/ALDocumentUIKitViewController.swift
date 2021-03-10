@@ -8,7 +8,7 @@
 import UIKit
 import AnylineUIKit
 
-@objc class ALDocumentUIKitViewController : UIViewController {
+@objc public class ALDocumentUIKitViewController : UIViewController {
     
     var licenseKey: String
     var anylineConfig: NSDictionary

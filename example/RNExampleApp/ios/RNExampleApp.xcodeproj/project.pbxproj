@@ -11,7 +11,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		17661D4E25E3C0890054579B /* EmptySwiftFileToFixLinking.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = 17661D4D25E3C0890054579B /* EmptySwiftFileToFixLinking.swift .swift */; };
+		1752833225E663CC009A32D9 /* EmptySwiftFileToFixLinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17661D4D25E3C0890054579B /* EmptySwiftFileToFixLinking.swift */; };
 		1B22D6C834FAAB7035308CCB /* Pods_RNExampleApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B81A246B957F049A78C7616 /* Pods_RNExampleApp.framework */; };
 		DF3316B024BDEBD90018AC5E /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = DF3316AF24BDEBD90018AC5E /* main.jsbundle */; };
 /* End PBXBuildFile section */
@@ -27,7 +27,8 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = RNExampleApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RNExampleApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RNExampleApp/main.m; sourceTree = "<group>"; };
-		17661D4D25E3C0890054579B /* EmptySwiftFileToFixLinking.swift .swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EmptySwiftFileToFixLinking.swift .swift"; sourceTree = "<group>"; };
+		175281F825E65688009A32D9 /* RNExampleApp-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNExampleApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		17661D4D25E3C0890054579B /* EmptySwiftFileToFixLinking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptySwiftFileToFixLinking.swift; sourceTree = "<group>"; };
 		1797ADC7241CFCF900B339CB /* RNExampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RNExampleApp.entitlements; path = RNExampleApp/RNExampleApp.entitlements; sourceTree = "<group>"; };
 		19F05F1AF281F595FDCF1DB4 /* Pods-RNExampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNExampleApp.release.xcconfig"; path = "Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp.release.xcconfig"; sourceTree = "<group>"; };
 		1A02BC394DCD67A0F744AEAD /* libPods-RNExampleApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNExampleApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -35,7 +36,6 @@
 		3B81A246B957F049A78C7616 /* Pods_RNExampleApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNExampleApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		630ED0E8DE502A35F662F2A7 /* libPods-RNExampleApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNExampleApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BD9F9BCA1677A4389F93763 /* Pods-RNExampleApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNExampleApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-RNExampleApp-tvOS/Pods-RNExampleApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		A7ED9B19236344F400960E39 /* RNExampleApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNExampleApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		AC8870222FD454D589A2AACF /* Pods-RNExampleAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNExampleAppTests.release.xcconfig"; path = "Target Support Files/Pods-RNExampleAppTests/Pods-RNExampleAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		C7BE463B35863C4FF159AF64 /* Pods-RNExampleApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNExampleApp.debug.xcconfig"; path = "Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp.debug.xcconfig"; sourceTree = "<group>"; };
 		D6503512B0087E9293DF3899 /* Pods-RNExampleApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNExampleApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-RNExampleApp-tvOS/Pods-RNExampleApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -86,8 +86,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				A7ED9B19236344F400960E39 /* RNExampleApp-Bridging-Header.h */,
-				17661D4D25E3C0890054579B /* EmptySwiftFileToFixLinking.swift .swift */,
+				175281F825E65688009A32D9 /* RNExampleApp-Bridging-Header.h */,
+				17661D4D25E3C0890054579B /* EmptySwiftFileToFixLinking.swift */,
 			);
 			name = RNExampleApp;
 			sourceTree = "<group>";
@@ -386,7 +386,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				17661D4E25E3C0890054579B /* EmptySwiftFileToFixLinking.swift .swift in Sources */,
+				1752833225E663CC009A32D9 /* EmptySwiftFileToFixLinking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
