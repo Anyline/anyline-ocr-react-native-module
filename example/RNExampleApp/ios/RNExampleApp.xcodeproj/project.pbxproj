@@ -395,7 +395,7 @@
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = RNExampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 29.0.0;
+				MARKETING_VERSION = 29.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -425,7 +425,7 @@
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = RNExampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 29.0.0;
+				MARKETING_VERSION = 29.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
