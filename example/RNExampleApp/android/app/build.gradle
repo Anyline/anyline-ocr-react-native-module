@@ -101,8 +101,8 @@ android {
         applicationId "com.anyline.example.reactnative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "29.1"
         multiDexEnabled true
 
     }

@@ -62,13 +62,13 @@ repositories {
         dirs 'libs'
     }
     maven {
-        url 'https://anylinesdk.blob.core.windows.net/maven'
+        url 'https://anylinesdk.blob.core.windows.net/testing/'
     }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'io.anyline:anylinesdk:29.1'
+    implementation 'io.anyline:anylinesdk:30-RC2'
     implementation "com.facebook.react:react-native:+"  // from node_modules
     implementation("com.google.android.material:material:1.1.0-alpha10")
     implementation 'androidx.multidex:multidex:2.0.1'
