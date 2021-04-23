@@ -22,12 +22,12 @@ The old calls with the old configurations will still work.
 
 ### iOS
 
-Platform >= 10
+Platform >= 12
 
 
 ### Android 
 
-minSDK >= 19
+minSDK >= 21
 
 ## Example
 
