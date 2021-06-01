@@ -20,6 +20,7 @@ import BarcodePDF417Config from '../config/Barcode_PDF417Config';
 import DocumentConfig from '../config/DocumentConfig';
 import MRZConfig from '../config/MRZConfig';
 import UniversalIdConfig from '../config/UniversalIdConfig';
+import ArabicIdConfig from '../config/ArabicIdConfig';
 import NFCAndMRZConfig from '../config/NFCAndMRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
 import AnalogEnergyConfig from '../config/AnalogMeterConfig';
@@ -134,6 +135,9 @@ class Anyline extends Component {
         break; 
       case 'UNIVERSAL_ID':
         config = UniversalIdConfig;
+        break; 
+      case 'ARABIC_ID':
+        config = ArabicIdConfig;
         break; 
       case 'NFC+MRZ':
         config = NFCAndMRZConfig;
