@@ -7,50 +7,27 @@ export default {
   },
   "flash" : {
     "mode": "manual",
-    "alignment": "bottom_right"
+    "alignment": "bottom_right",
+    "imageOn": "flash_on",
+    "imageOff": "flash_off"
   },
   "viewPlugin" : {
     "plugin":{
       "id":"ID",
       "idPlugin": {
-        "universalIdConfig": {
+        "arabicIdConfig": {
+          "faceDetection": true,
           "allowedLayouts": {
             "mrz": [],
-            "drivingLicense": [],
-            "idFront": [],
-            "insuranceCard" : []
-          },
-          "drivingLicense": {
-            "surname": {"scanOption": 0, "minConfidence": 40},
-            "givenNames": {"scanOption": 0, "minConfidence": 40},
-            "dateOfBirth": {"scanOption": 0, "minConfidence": 50},
-            "placeOfBirth": {"scanOption": 1, "minConfidence": 50},
-            "dateOfIssue": {"scanOption": 0, "minConfidence": 50},
-            "dateOfExpiry": {"scanOption": 1, "minConfidence": 50},
-            "authority": {"scanOption": 1, "minConfidence": 30},
-            "documentNumber": {"scanOption": 0, "minConfidence": 40},
-            "categories": {"scanOption": 1, "minConfidence": 30},
-            "address": {"scanOption": 1}
+            "idFront": []
           },
           "idFront": {
-            "surname": {"scanOption": 0, "minConfidence": 60},
-            "givenNames": {"scanOption": 0, "minConfidence": 60},
+            "fullName": {"scanOption": 0, "minConfidence": 60},
             "dateOfBirth": {"scanOption": 0, "minConfidence": 60},
             "placeOfBirth": {"scanOption": 1, "minConfidence": 60},
             "dateOfExpiry": {"scanOption": 1, "minConfidence": 60},
-            "cardAccessNumber": {"scanOption": 1, "minConfidence": 60},
             "documentNumber": {"scanOption": 0, "minConfidence": 60},
             "nationality": {"scanOption": 1, "minConfidence": 60}
-          },
-          "insuranceCard": {
-            "nationality": {"scanOption": 0, "minConfidence": 50},
-            "surname": {"scanOption": 0, "minConfidence": 50},
-            "givenNames": {"scanOption": 0, "minConfidence": 50},
-            "dateOfBirth": {"scanOption": 0, "minConfidence": 50},
-            "personalNumber": {"scanOption": 0, "minConfidence": 50},
-            "authority": {"scanOption": 0, "minConfidence": 50},
-            "documentNumber": {"scanOption": 0, "minConfidence": 50},
-            "dateOfExpiry": {"scanOption": 0, "minConfidence": 50}
           }
         }
       }
@@ -60,7 +37,6 @@ export default {
       "maxWidthPercent": "90%",
       "maxHeightPercent": "90%",
       "alignment": "center",
-      "width": 1080,
       "strokeWidth": 2,
       "cornerRadius": 4,
       "strokeColor": "FFFFFF",
