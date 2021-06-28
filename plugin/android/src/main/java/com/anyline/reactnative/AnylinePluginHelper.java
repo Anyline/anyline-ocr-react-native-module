@@ -2,7 +2,6 @@ package com.anyline.reactnative;
 
 import android.content.Context;
 import android.util.Log;
-import android.util.SparseArray;
 import android.widget.Toast;
 
 import com.google.mlkit.vision.barcode.Barcode;
@@ -19,11 +18,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 import io.anyline.camera.NativeBarcodeResultListener;
-import io.anyline.util.AssetUtil;
-import io.anyline.util.TempFileUtil;
 import io.anyline.plugin.ScanResult;
 import io.anyline.plugin.barcode.BarcodeFormat;
 import io.anyline.plugin.meter.MeterScanMode;
+import io.anyline.util.AssetUtil;
+import io.anyline.util.TempFileUtil;
 import io.anyline.view.ScanView;
 
 public class AnylinePluginHelper {
@@ -63,10 +62,10 @@ public class AnylinePluginHelper {
 
                                     // Check where to copy the training files
                                     File dirToCopy = new File(context.getFilesDir(),
-                                                              "anyline/module_anyline_ocr/tessdata/");
+                                            "anyline/module_anyline_ocr/tessdata/");
                                     if (Objects.equals(fileExtension, "any")) {
                                         dirToCopy = new File(context.getFilesDir(),
-                                                             "anyline/module_anyline_ocr/trained_models/");
+                                                "anyline/module_anyline_ocr/trained_models/");
                                     }
 
                                     int lastFileSeparatorIndex = traineddataFilePath.lastIndexOf(File.separator);
@@ -120,7 +119,7 @@ public class AnylinePluginHelper {
     }
 
     public static void clearFinalBarcodeList() {
-        finalBarcodeList=null;
+        finalBarcodeList = null;
     }
 
     public static JSONArray arrayOfDetectedBarcodes() {
@@ -129,7 +128,7 @@ public class AnylinePluginHelper {
             // List<Barcode> finalBarcodeList = new ArrayList<>();
             //finalBarcodeList = AnylinePluginHelper.getNativeBarcodeList();
             final JSONArray jsonArray = new JSONArray();
-            if (finalBarcodeList!= null) {
+            if (finalBarcodeList != null) {
                 for (int i = 0; i < finalBarcodeList.size(); i++) {
                     jsonArray.put(AnylinePluginHelper.wrapBarcodeInJson(finalBarcodeList.get(i)));
                 }

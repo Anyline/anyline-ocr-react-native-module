@@ -23,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 import io.anyline.camera.CameraConfig;
@@ -38,10 +37,8 @@ import io.anyline.plugin.ocr.OcrScanViewPlugin;
 import io.anyline.view.AbstractBaseScanViewPlugin;
 import io.anyline.view.ParallelScanViewComposite;
 import io.anyline.view.SerialScanViewComposite;
-//import io.anyline.view.ScanViewPlugin;
 
-public abstract class AnylineBaseActivity extends Activity
-        implements CameraOpenListener, Thread.UncaughtExceptionHandler {
+public abstract class AnylineBaseActivity extends Activity implements CameraOpenListener, Thread.UncaughtExceptionHandler {
 
     private static final String TAG = AnylineBaseActivity.class.getSimpleName();
 
@@ -79,11 +76,10 @@ public abstract class AnylineBaseActivity extends Activity
     }
 
     protected void finishWithError(String errorMessage) {
-
         Intent data = new Intent();
         data.putExtra(AnylineSDKPlugin.EXTRA_ERROR_MESSAGE, errorMessage);
         setResult(AnylineSDKPlugin.RESULT_ERROR, data);
-	    ResultReporter.onError(errorMessage);
+        ResultReporter.onError(errorMessage);
         finish();
     }
 
@@ -171,7 +167,7 @@ public abstract class AnylineBaseActivity extends Activity
     }
 
 
-    protected RelativeLayout.LayoutParams getTextLayoutParams (){
+    protected RelativeLayout.LayoutParams getTextLayoutParams() {
         // Defining the RelativeLayout layout parameters.
         // In this case I want to fill its parent
         return new RelativeLayout.LayoutParams(
@@ -179,7 +175,7 @@ public abstract class AnylineBaseActivity extends Activity
                 RelativeLayout.LayoutParams.MATCH_PARENT);
     }
 
-    protected RelativeLayout.LayoutParams getWrapContentLayoutParams (){
+    protected RelativeLayout.LayoutParams getWrapContentLayoutParams() {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -188,7 +184,7 @@ public abstract class AnylineBaseActivity extends Activity
     }
 
 
-    protected void setFocusConfig (JSONObject json, CameraConfig camConfig) throws JSONException {
+    protected void setFocusConfig(JSONObject json, CameraConfig camConfig) throws JSONException {
 
         if (json.has("focus")) {
             JSONObject focusConfig = json.getJSONObject("focus");
@@ -222,25 +218,25 @@ public abstract class AnylineBaseActivity extends Activity
                     break;
             }
             // autofocus is called in this interval (8000 is default)
-            if(focusConfig.has("interval")){
+            if (focusConfig.has("interval")) {
                 camConfig.setAutoFocusInterval(focusConfig.getInt("interval"));
             }
             // call autofocus if view is touched (true is default)
-            if(focusConfig.has("touchEnabled")){
+            if (focusConfig.has("touchEnabled")) {
                 camConfig.setFocusOnTouchEnabled(focusConfig.getBoolean("touchEnabled"));
             }
             // focus where the cutout is (true is default)
-            if(focusConfig.has("regionEnabled")){
+            if (focusConfig.has("regionEnabled")) {
                 camConfig.setFocusRegionEnabled(focusConfig.getBoolean("regionEnabled"));
             }
             // automatic exposure calculation based on where the cutout is (true is default)
-            if(focusConfig.has("autoExposureRegionEnabled")){
+            if (focusConfig.has("autoExposureRegionEnabled")) {
                 camConfig.setAutoExposureRegionEnabled(focusConfig.getBoolean("autoExposureRegionEnabled"));
             }
         }
     }
 
-    protected void setResult(AbstractBaseScanViewPlugin scanViewPlugin, JSONObject jsonResult){
+    protected void setResult(AbstractBaseScanViewPlugin scanViewPlugin, JSONObject jsonResult) {
         Boolean isCancelOnResult = true;
         if (scanViewPlugin instanceof MeterScanViewPlugin) {
             isCancelOnResult = ((MeterScanViewPlugin) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
@@ -258,12 +254,12 @@ public abstract class AnylineBaseActivity extends Activity
             isCancelOnResult = ((ParallelScanViewComposite) scanViewPlugin).getScanViewPluginConfig().isCancelOnResult();
         }
 
-        if(scanViewPlugin != null && isCancelOnResult){
+        if (scanViewPlugin != null && isCancelOnResult) {
 //          if(scanViewPlugin != null && scanViewPlugin.getScanViewPluginConfig().isCancelOnResult()){
             ResultReporter.onResult(jsonResult, true);
             setResult(AnylineSDKPlugin.RESULT_OK);
             finish();
-        }else{
+        } else {
             ResultReporter.onResult(jsonResult, false);
         }
 
