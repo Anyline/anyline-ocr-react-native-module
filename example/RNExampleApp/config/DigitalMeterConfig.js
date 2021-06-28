@@ -10,7 +10,7 @@ export default {
         },
         "viewPlugin": {
             "plugin": {
-                "id": "Meter_ID",
+                "id": "DIGITAL_METER",
                 "meterPlugin": {
                     "scanMode": "DIGITAL_METER"
                 }
@@ -35,15 +35,6 @@ export default {
             },
             "cancelOnResult": true,
         },
-        "nativeBarcodeEnabled": true,
-        "segment": {
-            "titles": ["Analog", "Digital"],
-            "modes": ["ANALOG_METER", "DIGITAL_METER"],
-            "tintColor": "CCCCCC",
-            "offset": {
-                "x": 0,
-                "y": 400
-            }
-        }
+        "nativeBarcodeEnabled": true
     }
 }
