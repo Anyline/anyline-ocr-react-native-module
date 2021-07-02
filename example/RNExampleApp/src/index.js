@@ -71,7 +71,7 @@ class Anyline extends Component {
 
   updateAnyline = async type => {
     let otaConfig = OtaConfig;
-
+    
     AnylineOCR.initSdk(otaConfig.license)
     const onSessionConnect = (event) => {
       console.log(event.progress);  
@@ -203,6 +203,7 @@ class Anyline extends Component {
     }
     this.setState({titles});
     try {
+      console.log(`AnylineOCR.setupPromise`);
       const result = await AnylineOCR.setupPromise(
         JSON.stringify(config),
         'scan',

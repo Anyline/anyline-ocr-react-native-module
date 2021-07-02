@@ -255,7 +255,6 @@ public abstract class AnylineBaseActivity extends Activity implements CameraOpen
         }
 
         if (scanViewPlugin != null && isCancelOnResult) {
-//          if(scanViewPlugin != null && scanViewPlugin.getScanViewPluginConfig().isCancelOnResult()){
             ResultReporter.onResult(jsonResult, true);
             setResult(AnylineSDKPlugin.RESULT_OK);
             finish();

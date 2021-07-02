@@ -6,7 +6,6 @@ package com.anyline.reactnative;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 
 import com.anyline.reactnative.updateAsset.AnylineUpdateDelegateImpl;
 import com.anyline.reactnative.updateAsset.AssetContextJsonParser;
@@ -25,7 +24,6 @@ import io.anyline.AnylineSDK;
 import io.anyline.products.AnylineUpdater;
 import io.anyline.products.IAnylineUpdateDelegate;
 import io.anyline.trainer.AssetContext;
-import io.anyline.trainer.ProjectContext;
 
 class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
 
@@ -238,7 +236,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         reactContext.startActivityForResult(intent, requestCode, intent.getExtras());
-
     }
 
     @Override
