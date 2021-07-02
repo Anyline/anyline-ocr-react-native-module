@@ -51,6 +51,7 @@ import io.anyline.plugin.meter.MeterScanViewPlugin;
 import io.anyline.plugin.ocr.OcrScanResult;
 import io.anyline.plugin.ocr.OcrScanViewPlugin;
 import io.anyline.view.AbstractBaseScanViewPlugin;
+import io.anyline.view.CutoutRect;
 import io.anyline.view.ParallelScanViewComposite;
 import io.anyline.view.ScanView;
 import io.anyline.view.SerialScanViewComposite;
@@ -170,8 +171,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                         public void onResult(ScanResult result) {
                             // only triggered if all plugins reached a result
                             JSONObject jsonResult = new JSONObject();
-                            //String sResult = "";
-
 
                             for (ScanResult subResult : (Collection<ScanResult>) result.getResult()) {
                                 if (subResult instanceof LicensePlateScanResult) {
@@ -439,10 +438,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                     finalObject.put("barcodes", barcodeArray);
                                     jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, barcodeScanResult, finalObject);
                                 }
-                                //else{
-                                //    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, barcodeScanResult, barcodeList.get(0).toJSONObject());
-
-                                // }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -455,8 +450,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     });
 
                 } else if (scanViewPlugin instanceof MeterScanViewPlugin) {
-
-
                     if (json.has("reportingEnabled")) {
                         //scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
                         (((MeterScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
@@ -480,7 +473,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                             } catch (Exception e) {
                                 Log.e(TAG, "EXCEPTION", e);
-
                             }
 
                             setResult(scanViewPlugin, jsonResult);
@@ -511,9 +503,11 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
-                            if (isFirstCameraOpen) {
+                            CutoutRect cutoutRect = ((MeterScanViewPlugin) scanViewPlugin).getCutoutRect();
+
+                            if (isFirstCameraOpen && cutoutRect != null) {
                                 isFirstCameraOpen = false;
-                                Rect rect = ((MeterScanViewPlugin) scanViewPlugin).getCutoutRect().rectOnVisibleView;
+                                Rect rect = cutoutRect.rectOnVisibleView;
 
                                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) radioGroup.getLayoutParams();
                                 lp.setMargins(rect.left + anylineUIConfig.getOffsetX(), rect.top + anylineUIConfig.getOffsetY(), 0, 0);
