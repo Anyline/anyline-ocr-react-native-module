@@ -19,9 +19,10 @@ public class AssetContextJsonParser {
 
         if (jsonObject.has("projectID")) {
             return new ProjectContext(context, jsonObject);
-        } else if (jsonObject.has("product")) {
+        }
+        if (jsonObject.has("product")) {
             return new ProductContext(context, jsonObject);
         }
-        return null;
+        throw new IllegalStateException("Neither 'projectID'  nor 'product' was provided in the configuration JSON!");
     }
 }
