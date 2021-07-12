@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,16 +32,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import androidx.core.content.ContextCompat;
+import at.nineyards.anyline.core.LicenseException;
+import io.anyline.AnylineSDK;
 import io.anyline.camera.CameraController;
 import io.anyline.camera.CameraOpenListener;
-import at.nineyards.anyline.core.LicenseException;
 import io.anyline.models.AnylineImage;
-import io.anyline.util.TempFileUtil;
-import io.anyline.AnylineSDK;
 import io.anyline.plugin.ScanResult;
 import io.anyline.plugin.document.DocumentScanResultListener;
 import io.anyline.plugin.document.DocumentScanViewPlugin;
+import io.anyline.util.TempFileUtil;
 import io.anyline.view.ScanView;
 
 /**
@@ -221,7 +222,7 @@ public class Document4Activity extends AnylineBaseActivity implements CameraOpen
                     // Bitmap bmp = transformedImage.getBitmap();
                     // save the image with quality 100 (only used for jpeg, ignored for png)
                     File imageFile = TempFileUtil.createTempFileCheckCache(Document4Activity.this,
-                                                                           UUID.randomUUID().toString(), ".jpg");
+                            UUID.randomUUID().toString(), ".jpg");
                     transformedImage.save(imageFile, quality);
 //                    showToast(getString(
 //                            getResources().getIdentifier("document_image_saved_to", "string", getPackageName())) + " " + imageFile.getAbsolutePath());
@@ -232,7 +233,7 @@ public class Document4Activity extends AnylineBaseActivity implements CameraOpen
                     // Save the Full Frame Image
                     if (fullFrame != null) {
                         imageFile = TempFileUtil.createTempFileCheckCache(Document4Activity.this,
-                                                                          UUID.randomUUID().toString(), ".jpg");
+                                UUID.randomUUID().toString(), ".jpg");
                         fullFrame.save(imageFile, quality);
                         jsonResult.put("fullImagePath", imageFile.getAbsolutePath());
                     }
@@ -332,9 +333,9 @@ public class Document4Activity extends AnylineBaseActivity implements CameraOpen
 
                 progressDialog = ProgressDialog.show(Document4Activity.this, getString(
                         getResources().getIdentifier("document_processing_picture_header", "string", getPackageName())),
-                                                     getString(
-                                                             getResources().getIdentifier("document_processing_picture", "string", getPackageName())),
-                                                     true);
+                        getString(
+                                getResources().getIdentifier("document_processing_picture", "string", getPackageName())),
+                        true);
 
                 // there is a bug in the sdk that onTakePictureSuccess is called but onResult not.
                 // so implement a workaround: hide the progressDialog after 2 seconds, the phone will continue scanning

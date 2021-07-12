@@ -4,8 +4,11 @@ package com.anyline.reactnative;
  * Created by jonesBoi on 02.12.16.
  */
 
+import android.app.Activity;
 import android.content.Intent;
 
+import com.anyline.reactnative.updateAsset.AnylineUpdateDelegateImpl;
+import com.anyline.reactnative.updateAsset.AssetContextJsonParser;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
@@ -15,6 +18,12 @@ import com.facebook.react.bridge.ReactMethod;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import at.nineyards.anyline.core.LicenseException;
+import io.anyline.AnylineSDK;
+import io.anyline.products.AnylineUpdater;
+import io.anyline.products.IAnylineUpdateDelegate;
+import io.anyline.trainer.AssetContext;
 
 class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
 
@@ -55,10 +64,13 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private ReactInstanceManager mReactInstanceManager;
     private String returnMethod;
     private String config;
+    private IAnylineUpdateDelegate anylineUpdateDelegate;
+    private AssetContextJsonParser assetContextJsonParser;
 
     AnylineSDKPlugin(ReactApplicationContext context) {
         super(context);
         this.reactContext = context;
+        this.assetContextJsonParser = new AssetContextJsonParser();
     }
 
     @Override
@@ -71,16 +83,63 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         promise.resolve(at.nineyards.anyline.BuildConfig.VERSION_NAME);
     }
 
-    // Deprecated
     @ReactMethod
-    public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact,
-                                            Callback onErrorReact) {
+    @Deprecated
+    public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
         onResultCallback = onResultReact;
         onErrorCallback = onErrorReact;
         this.returnMethod = "callback";
         this.config = config;
 
         routeScanMode(scanMode);
+    }
+
+    @ReactMethod
+    public void update(
+            String assetContextJson,
+            Callback onUpdateError,
+            Callback onUpdateFinished
+    ) {
+        try {
+            AssetContext assetContext = assetContextJsonParser.parseJson(reactContext, assetContextJson);
+
+            if (assetContext != null) {
+                AnylineUpdater.update(
+                        reactContext,
+                        assetContext,
+                        new AnylineUpdateDelegateImpl(reactContext, onUpdateError, onUpdateFinished)
+                );
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @ReactMethod
+    public void initSdk(String license) {
+        try {
+            AnylineSDK.init(license, reactContext);
+        } catch (LicenseException e) {
+            finishWithError("error_license_init", "string");
+        }
+    }
+
+    protected void finishWithError(String identifier, String type) {
+        Activity activity = getCurrentActivity();
+
+        if (activity != null) {
+            String errorMessage = activity.getString(activity.getResources().getIdentifier(identifier, type, activity.getPackageName()));
+            Intent data = new Intent();
+            data.putExtra(AnylineSDKPlugin.EXTRA_ERROR_MESSAGE, errorMessage);
+            activity.setResult(AnylineSDKPlugin.RESULT_ERROR, data);
+            ResultReporter.onError(errorMessage);
+            activity.finish();
+        }
+    }
+
+    @ReactMethod
+    public void resetUpdate() {
+        // TODO
     }
 
     @ReactMethod
@@ -177,7 +236,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         reactContext.startActivityForResult(intent, requestCode, intent.getExtras());
-
     }
 
     @Override

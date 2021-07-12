@@ -32,7 +32,9 @@ public class ResultReporter {
 
     public interface OnResultListener {
         void onResult(Object result, boolean isFinalResult);
+
         void onError(String error);
+
         void onCancel();
     }
 }

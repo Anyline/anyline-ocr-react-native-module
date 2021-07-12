@@ -4,14 +4,12 @@ import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.os.Handler;
-
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,14 +20,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import io.anyline.AnylineDebugListener;
-import io.anyline.camera.CameraController;
 import at.nineyards.anyline.core.LicenseException;
 import at.nineyards.anyline.core.RunFailure;
 import at.nineyards.anyline.core.Vector_Contour;
 import at.nineyards.anyline.core.exception_error_codes;
-//import at.nineyards.anyline.modules.mrz.Identification;
+import io.anyline.AnylineDebugListener;
 import io.anyline.AnylineSDK;
+import io.anyline.camera.CameraController;
 import io.anyline.plugin.ScanResult;
 import io.anyline.plugin.ScanResultListener;
 import io.anyline.plugin.barcode.Barcode;
@@ -45,7 +42,6 @@ import io.anyline.plugin.id.IdScanViewPlugin;
 import io.anyline.plugin.id.Identification;
 import io.anyline.plugin.id.MrzConfig;
 import io.anyline.plugin.id.MrzIdentification;
-import io.anyline.plugin.id.TemplateConfig;
 import io.anyline.plugin.id.UniversalIdConfig;
 import io.anyline.plugin.licenseplate.LicensePlateScanResult;
 import io.anyline.plugin.licenseplate.LicensePlateScanViewPlugin;
@@ -59,6 +55,8 @@ import io.anyline.view.CutoutRect;
 import io.anyline.view.ParallelScanViewComposite;
 import io.anyline.view.ScanView;
 import io.anyline.view.SerialScanViewComposite;
+
+//import at.nineyards.anyline.modules.mrz.Identification;
 
 public class Anyline4Activity extends AnylineBaseActivity {
     private static final String TAG = Anyline4Activity.class.getSimpleName();
@@ -74,7 +72,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        isFirstCameraOpen=true;
+        isFirstCameraOpen = true;
 
         // init the scan view
         anylineScanView = new ScanView(this, null);
@@ -173,8 +171,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                         public void onResult(ScanResult result) {
                             // only triggered if all plugins reached a result
                             JSONObject jsonResult = new JSONObject();
-                            //String sResult = "";
-
 
                             for (ScanResult subResult : (Collection<ScanResult>) result.getResult()) {
                                 if (subResult instanceof LicensePlateScanResult) {
@@ -184,7 +180,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                         jsonLPResult.put("country", licensePlateResult.getCountry());
                                         jsonLPResult.put("licensePlate", licensePlateResult.getResult());
                                         jsonLPResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, licensePlateResult,
-                                                                                      jsonLPResult);
+                                                jsonLPResult);
 
                                         jsonResult.put(subResult.getPluginId(), jsonLPResult);
                                     } catch (JSONException e) {
@@ -194,7 +190,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                     JSONObject jsonIdResult = ((MrzIdentification) subResult.getResult()).toJSONObject();
                                     try {
                                         if (jsonIdResult.get("issuingCountryCode").equals("D")
-                                            && jsonIdResult.get("documentType").equals("ID")) {
+                                                && jsonIdResult.get("documentType").equals("ID")) {
                                             if (jsonIdResult.get("issuingCountryCode").equals("D")) {
                                                 jsonIdResult.put("address", jsonResult.get("address"));
                                             } else {
@@ -202,7 +198,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                             }
                                         }
                                         jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                      jsonIdResult);
+                                                jsonIdResult);
 
                                         jsonResult.put(subResult.getPluginId(), jsonIdResult);
                                     } catch (JSONException e) {
@@ -213,7 +209,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                             .toJSONObject();
                                     try {
                                         jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                      jsonIdResult);
+                                                jsonIdResult);
 
                                         jsonResult.put(subResult.getPluginId(), jsonIdResult);
                                     } catch (JSONException e) {
@@ -223,7 +219,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                     JSONObject jsonIdResult = ((GermanIdFrontIdentification) subResult.getResult()).toJSONObject();
                                     try {
                                         jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                      jsonIdResult);
+                                                jsonIdResult);
 
                                         jsonResult.put(subResult.getPluginId(), jsonIdResult);
                                     } catch (JSONException e) {
@@ -234,7 +230,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                     try {
                                         jsonOcrResult.put("text", (((OcrScanResult) subResult).getResult()).trim());
                                         jsonOcrResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                       jsonOcrResult);
+                                                jsonOcrResult);
                                         jsonResult.put(subResult.getPluginId(), jsonOcrResult);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -244,14 +240,14 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                         List<Barcode> barcodeList = (List<Barcode>) subResult.getResult();
 
                                         JSONArray barcodeArray = new JSONArray();
-                                        if(barcodeList.size() > 1) {
+                                        if (barcodeList.size() > 1) {
                                             for (int i = 0; i < barcodeList.size(); i++) {
                                                 barcodeArray.put(barcodeList.get(i).toJSONObject());
                                             }
                                             JSONObject finalObject = new JSONObject();
                                             finalObject.put("multiBarcodes", barcodeArray);
                                             jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult, finalObject);
-                                        }else{
+                                        } else {
                                             jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult, barcodeList.get(0).toJSONObject());
 
                                         }
@@ -265,9 +261,9 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                                 ((MeterScanResult) subResult).getScanMode(), jsonMeterResult);
                                         jsonMeterResult.put("reading", subResult.getResult());
                                         jsonMeterResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                                                         jsonMeterResult);
+                                                jsonMeterResult);
                                         jsonResult.put(subResult.getPluginId(), jsonMeterResult);
-                                        AnylinePluginHelper.clearFinalBarcodeList();	// otherwise result from previous scan could be shown if new scan does not include barcode
+                                        AnylinePluginHelper.clearFinalBarcodeList();    // otherwise result from previous scan could be shown if new scan does not include barcode
 
                                     } catch (Exception e) {
                                         Log.e(TAG, "EXCEPTION", e);
@@ -384,11 +380,11 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                 Identification identification = (Identification) idScanResult.getResult();
                                 HashMap<String, String> data = (HashMap<String, String>) identification.getResultData();
 
-                                JSONObject jsonResult = new JSONObject (data);
+                                JSONObject jsonResult = new JSONObject(data);
 
                                 try {
                                     jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
-                                                                                jsonResult);
+                                            jsonResult);
                                 } catch (Exception e) {
                                     Log.e(TAG, "Exception is: ", e);
 
@@ -430,7 +426,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                 List<Barcode> barcodeList = barcodeScanResult.getResult();
 
                                 JSONArray barcodeArray = new JSONArray();
-                                if(barcodeList!= null && barcodeList.size() > 0) {
+                                if (barcodeList != null && barcodeList.size() > 0) {
                                     for (int i = 0; i < barcodeList.size(); i++) {
                                         JSONObject barcode = new JSONObject();
                                         barcode.put("value", barcodeList.get(i).getValue());
@@ -442,10 +438,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                     finalObject.put("barcodes", barcodeArray);
                                     jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, barcodeScanResult, finalObject);
                                 }
-                                //else{
-                                //    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, barcodeScanResult, barcodeList.get(0).toJSONObject());
-
-                                // }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -458,10 +450,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     });
 
                 } else if (scanViewPlugin instanceof MeterScanViewPlugin) {
-
-
-
-
                     if (json.has("reportingEnabled")) {
                         //scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
                         (((MeterScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
@@ -485,11 +473,10 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                             } catch (Exception e) {
                                 Log.e(TAG, "EXCEPTION", e);
-
                             }
 
                             setResult(scanViewPlugin, jsonResult);
-                            AnylinePluginHelper.clearFinalBarcodeList();	// otherwise result from previous scan could be shown if new scan does not include barcode
+                            AnylinePluginHelper.clearFinalBarcodeList();    // otherwise result from previous scan could be shown if new scan does not include barcode
                         }
                     });
                 }
@@ -516,9 +503,11 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
-                            if (isFirstCameraOpen) {
-                                isFirstCameraOpen=false;
-                                Rect rect = ((MeterScanViewPlugin) scanViewPlugin).getCutoutRect().rectOnVisibleView;
+                            CutoutRect cutoutRect = ((MeterScanViewPlugin) scanViewPlugin).getCutoutRect();
+
+                            if (isFirstCameraOpen && cutoutRect != null) {
+                                isFirstCameraOpen = false;
+                                Rect rect = cutoutRect.rectOnVisibleView;
 
                                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) radioGroup.getLayoutParams();
                                 lp.setMargins(rect.left + anylineUIConfig.getOffsetX(), rect.top + anylineUIConfig.getOffsetY(), 0, 0);

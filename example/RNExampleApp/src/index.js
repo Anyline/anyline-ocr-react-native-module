@@ -41,8 +41,8 @@ import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
 import ParallelScanningConfig from '../config/ParallelScanningConfig';
 import TinConfig from '../config/TINConfig';
-
-
+import OtaConfig from '../config/OtaConfig';
+import { DeviceEventEmitter } from 'react-native';
 
 
 // Disable Warnings
@@ -69,6 +69,26 @@ class Anyline extends Component {
     LayoutAnimation.easeInEaseOut();
   }
 
+  updateAnyline = async type => {
+    let otaConfig = OtaConfig;
+    
+    AnylineOCR.initSdk(otaConfig.license)
+    const onSessionConnect = (event) => {
+      console.log(event.progress);  
+    };
+    DeviceEventEmitter.addListener('ota_progress_update_event', onSessionConnect);
+    AnylineOCR.update(
+        JSON.stringify(otaConfig),
+        (message) => {
+          console.log(`Error: ${message}`);
+        },
+        () => {
+          console.log(`DONE`);
+          this.openAnyline(type)
+        }
+    )
+  }
+
   openAnyline = async type => {
     this.setState({buttonsDisabled: true});
     this.setState({titles: []});
@@ -79,6 +99,7 @@ class Anyline extends Component {
       currentScanMode: type,
       hasMultipleResults: false,
     });
+
     switch (type) {
       case 'AUTO_ANALOG_DIGITAL_METER':
         config = AutoEnergyConfig;
@@ -182,6 +203,7 @@ class Anyline extends Component {
     }
     this.setState({titles});
     try {
+      console.log(`AnylineOCR.setupPromise`);
       const result = await AnylineOCR.setupPromise(
         JSON.stringify(config),
         'scan',
@@ -224,7 +246,7 @@ class Anyline extends Component {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('Camera permission allowed');
-        this.openAnyline(type);
+        this.updateAnyline(type);
       } else {
         console.log('Camera permission denied');
       }
@@ -248,7 +270,7 @@ class Anyline extends Component {
       console.log('hasCameraPermission result is ' + hasCameraPermission);
       if (hasCameraPermission) {
         console.log('Opening OCR directly');
-        this.openAnyline(type);
+        this.updateAnyline(type);
       } else {
         this.requestCameraPermission(type);
       }
@@ -324,7 +346,7 @@ class Anyline extends Component {
         ) : (
           <Overview
             key="OverView"
-            openAnyline={this.openAnyline}
+            updateAnyline={this.updateAnyline}
             checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}
             disabled={buttonsDisabled}
           />

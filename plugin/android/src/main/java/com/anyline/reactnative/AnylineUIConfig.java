@@ -47,7 +47,7 @@ public class AnylineUIConfig {
 
                 titles = new ArrayList<String>();
                 modes = new ArrayList<String>();
-                for (int i=0;i<titlesJson.length();i++){
+                for (int i = 0; i < titlesJson.length(); i++) {
                     titles.add(titlesJson.get(i).toString());
                     modes.add(modesJson.get(i).toString());
                 }
