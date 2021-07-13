@@ -3,7 +3,7 @@ export default {
   options: {
   "camera": {
     "captureResolution": "1080p",
-    "zoomGesture": true
+    "zoomGesture": "true"
   },
   "flash": {
     "mode": "manual",
@@ -37,11 +37,11 @@ export default {
       "visualFeedbackRedrawTimeout": 100,
       "strokeColor": "0099FF",
       "fillColor": "220099FF",
-      "beepOnResult": true,
-      "vibrateOnResult": true,
+      "beepOnResult": "true",
+      "vibrateOnResult": "true",
       "strokeWidth": 2
     },
-    "cancelOnResult": true
+    "cancelOnResult": "true"
   }
 }
 }

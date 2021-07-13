@@ -14,12 +14,7 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
 
       <Text style={styles.text}>METER READING</Text>
       <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Auto Analog/Digital Meter Scanner'}
-          color="#0099FF"
-          disabled={disabled}
-          onPress={() => {
-            platformPermissionCheck('AUTO_ANALOG_DIGITAL_METER')
-          }} />
+        <Button style={styles.buttons} title={'  Auto Analog/Digital Meter Scanner'} color="#0099FF" disabled={disabled} onPress={() => { platformPermissionCheck('AUTO_ANALOG_DIGITAL_METER')}} />
       </View>
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  Analog Meter Scanner'} color="#0099FF"
@@ -57,6 +52,7 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
           }} />
       </View>
       <Text style={styles.text}>ID</Text>
+      
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  Driving License'} color="#0099FF"
           disabled={disabled}
@@ -109,13 +105,12 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
       </View>
 
       <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Japanese janding permit'} color="#0099FF"
+        <Button style={styles.buttons} title={'  Japanese landing permit'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
             platformPermissionCheck('JAPANESE_LANDING_PERMIT')
           }} />
       </View>
-
 
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  Arabic Id'} color="#0099FF"
