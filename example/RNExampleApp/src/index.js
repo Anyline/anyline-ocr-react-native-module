@@ -20,6 +20,7 @@ import BarcodePDF417Config from '../config/Barcode_PDF417Config';
 import DocumentConfig from '../config/DocumentConfig';
 import MRZConfig from '../config/MRZConfig';
 import UniversalIdConfig from '../config/UniversalIdConfig';
+import JapaneseLandingPermitConfig from '../config/JapaneseLandingPermit';
 import ArabicIdConfig from '../config/ArabicIdConfig';
 import NFCAndMRZConfig from '../config/NFCAndMRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
@@ -156,6 +157,9 @@ class Anyline extends Component {
         break; 
       case 'UNIVERSAL_ID':
         config = UniversalIdConfig;
+        break; 
+      case 'JAPANESE_LANDING_PERMIT':
+        config = JapaneseLandingPermitConfig;
         break; 
       case 'ARABIC_ID':
         config = ArabicIdConfig;

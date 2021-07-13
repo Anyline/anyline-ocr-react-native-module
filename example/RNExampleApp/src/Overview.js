@@ -109,6 +109,15 @@ export default function Overview({ openAnyline, checkCameraPermissionAndOpen, di
       </View>
 
       <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Japanese janding permit'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('JAPANESE_LANDING_PERMIT')
+          }} />
+      </View>
+
+
+      <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  Arabic Id'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
