@@ -4,9 +4,9 @@
 import React from 'react';
 import { Button, Platform, StyleSheet, Text, View, ScrollView } from 'react-native';
 
-export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, disabled }) {
+export default function Overview({ openAnyline, checkCameraPermissionAndOpen, disabled }) {
 
-  const platformPermissionCheck = (Platform.OS === 'android') ? checkCameraPermissionAndOpen : updateAnyline;
+  const platformPermissionCheck = (Platform.OS === 'android') ? checkCameraPermissionAndOpen : openAnyline;
   const iOS = Platform.OS === 'ios';
 
   return (
