@@ -92,7 +92,7 @@ class Anyline extends Component {
     } else {
       this.openAnyline(type);
     }
-  }
+  };
 
   openAnyline = async type => {
     this.setState({buttonsDisabled: true});
