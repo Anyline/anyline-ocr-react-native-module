@@ -44,6 +44,7 @@ import ParallelScanningConfig from '../config/ParallelScanningConfig';
 import TinConfig from '../config/TINConfig';
 import OtaConfig from '../config/OtaConfig';
 import { DeviceEventEmitter } from 'react-native';
+import { Platform } from 'react-native';
 
 
 // Disable Warnings
@@ -71,23 +72,27 @@ class Anyline extends Component {
   }
 
   updateAnyline = async type => {
-    let otaConfig = OtaConfig;
-    
-    AnylineOCR.initSdk(otaConfig.license)
-    const onSessionConnect = (event) => {
-      console.log(event.progress);  
-    };
-    DeviceEventEmitter.addListener('ota_progress_update_event', onSessionConnect);
-    AnylineOCR.update(
-        JSON.stringify(otaConfig),
-        (message) => {
-          console.log(`Error: ${message}`);
-        },
-        () => {
-          console.log(`DONE`);
-          this.openAnyline(type)
-        }
-    )
+    if(Platform.OS === 'android') {
+      let otaConfig = OtaConfig;
+      
+      AnylineOCR.initSdk(otaConfig.license)
+      const onSessionConnect = (event) => {
+        console.log(event.progress);  
+      };
+      DeviceEventEmitter.addListener('ota_progress_update_event', onSessionConnect);
+      AnylineOCR.update(
+          JSON.stringify(otaConfig),
+          (message) => {
+            console.log(`Error: ${message}`);
+          },
+          () => {
+            console.log(`DONE`);
+            this.openAnyline(type)
+          }
+      )
+    } else {
+      this.openAnyline(type);
+    }
   }
 
   openAnyline = async type => {
