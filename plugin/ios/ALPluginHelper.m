@@ -562,8 +562,9 @@
     
     
     for(ALBarcode *barcode in scanResult.result) {
+        NSString * value = barcode.value ? barcode.value : barcode.base64;
         [barcodeArray addObject:@{
-            @"value" : barcode.value,
+            @"value" : value ? value : @"",
             @"barcodeFormat" : [ALPluginHelper barcodeFormatFromString:barcode.barcodeFormat]
         }];
     }
