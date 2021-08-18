@@ -69,7 +69,17 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 
 -(void)initView:(NSString *)scanMode {
     NSData *data = [self.config dataUsingEncoding:NSUTF8StringEncoding];
+    if(!data) {
+      [NSException raise:@"Config could not be loaded from disk" format:@"Config could not be loaded from disk"];
+    }
+    
+    NSError * error = nil;
     id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+  
+    if(error) {
+      [NSException raise:@"Config could not be parsed to JSON" format:@"Config could not be parsed to JSON: %@", error.localizedDescription];
+    }
+
     self.jsonConfigDictionary = dictionary;
 
     self.appKey = [dictionary objectForKey:@"license"];
