@@ -23,12 +23,14 @@
 @property (nonatomic, strong) NSString *config;
 @property (nonatomic, strong) NSString *returnMethod;
 
+
 @end
 
 
 @implementation AnylineSDKPlugin {
     RCTPromiseResolveBlock _resolveBlock;
     RCTPromiseRejectBlock _rejectBlock;
+    NSDate * lastResolve_;
 }
 
 RCT_EXPORT_MODULE();
@@ -233,10 +235,19 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 }
 
 - (void)returnSuccess:(NSString *)result{
+  if (lastResolve_ == nil) {
+    lastResolve_ = [NSDate dateWithTimeIntervalSince1970:0];
+  }
     if([self.returnMethod isEqualToString:@"callback"]) {
         self.onResultCallback(@[result]);
     } else if([self.returnMethod isEqualToString:@"promise"]) {
-        _resolveBlock(result);
+      NSTimeInterval timeDiff = [lastResolve_ timeIntervalSinceNow]*-1000;
+      if(timeDiff < 900) {
+        // if there are 2 invocations within this timeframe, skip the second one
+        return;
+      }
+      lastResolve_ = [NSDate date];
+      _resolveBlock(result);
     }
 }
 

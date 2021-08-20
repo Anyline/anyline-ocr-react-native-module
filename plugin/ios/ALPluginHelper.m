@@ -559,14 +559,18 @@
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:2];
     
     NSMutableArray *barcodeArray = [[NSMutableArray alloc] init];
-    
-    
-    for(ALBarcode *barcode in scanResult.result) {
-        [barcodeArray addObject:@{
-            @"value" : barcode.value,
-            @"barcodeFormat" : [ALPluginHelper barcodeFormatFromString:barcode.barcodeFormat]
-        }];
-    }
+  
+  for(ALBarcode *barcode in scanResult.result) {
+          NSString * value = barcode.value ? barcode.value : barcode.base64;
+          NSArray * comps = [value componentsSeparatedByString:@" "];
+          if (comps.count == 10) {
+            value = comps[0];
+          }
+          [barcodeArray addObject:@{
+              @"value" : value ? value : @"",
+              @"barcodeFormat" : [ALPluginHelper barcodeFormatFromString:barcode.barcodeFormat]
+          }];
+      }
     
     [dictResult setValue:barcodeArray forKey:@"barcodes"];
     
