@@ -79,16 +79,16 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     if(error) {
       [NSException raise:@"Config could not be parsed to JSON" format:@"Config could not be parsed to JSON: %@", error.localizedDescription];
     }
-
+    NSDictionary *optionsDictionary = [dictionary objectForKey:@"options"];
     self.jsonConfigDictionary = dictionary;
 
     self.appKey = [dictionary objectForKey:@"license"];
 
-    BOOL nativeBarcodeScanning = [[dictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
+    BOOL nativeBarcodeScanning = [[optionsDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
     self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
 
-    self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
-    self.conf = [[ALScanViewPluginConfig alloc] initWithDictionary:[dictionary objectForKey:@"options"]];
+    self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:optionsDictionary];
+    self.conf = [[ALScanViewPluginConfig alloc] initWithDictionary:optionsDictionary];
     self.conf.cancelOnResult = true;
     self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
@@ -113,7 +113,7 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                            nfcScanViewController.cropAndTransformErrorMessage = str;
                        }
                        
-                       if ([self.jsonConfigDictionary valueForKey:@"nativeBarcodeEnabled"]) {
+                       if ([optionsDictionary valueForKey:@"nativeBarcodeEnabled"]) {
                            nfcScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
                        }
                        
@@ -143,7 +143,7 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                     pluginScanViewController.cropAndTransformErrorMessage = str;
                 }
                 
-                if ([self.jsonConfigDictionary valueForKey:@"nativeBarcodeEnabled"]) {
+                if ([optionsDictionary valueForKey:@"nativeBarcodeEnabled"]) {
                     pluginScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
                 }
                 
@@ -168,7 +168,7 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                 pluginScanViewController.cropAndTransformErrorMessage = str;
             }
             
-            if ([self.jsonConfigDictionary valueForKey:@"nativeBarcodeEnabled"]) {
+            if ([optionsDictionary valueForKey:@"nativeBarcodeEnabled"]) {
                 pluginScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
             }
             
