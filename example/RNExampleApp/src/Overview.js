@@ -218,7 +218,7 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
           }} />
       </View>
       <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Parallel Scanning (Meter / USRN)'} color="#0099FF"
+        <Button style={styles.buttons} title={'  Parallel Scanning (VIN / Barcode)'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
             platformPermissionCheck('PARALLEL_SCANNING')
