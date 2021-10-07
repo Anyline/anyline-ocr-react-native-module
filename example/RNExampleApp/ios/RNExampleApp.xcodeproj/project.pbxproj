@@ -232,7 +232,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp-resources.sh",
-				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_32/Framework/AnylineResources.bundle",
+				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_34/Framework/AnylineResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -315,7 +315,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "yarn run bundleiOS\n";
+			shellScript = "PATH=$PATH:/opt/homebrew/bin\nyarn run bundleiOS\n";
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
