@@ -9,11 +9,12 @@ export default {
       "alignment": "top_right"
     },
     "parallelViewPluginComposite": {
-      "id": "VIN_AND_BARCODE",
+      "id": "OPT_VIN_AND_BARCODE",
       "cancelOnResult": true,
       "viewPlugins": [
         {
           "viewPlugin": {
+            "optional": true,
             "plugin": {
               "id": "VIN_ID",
               "ocrPlugin": {

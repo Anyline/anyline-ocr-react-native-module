@@ -41,6 +41,10 @@ import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
 import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
 import ParallelScanningConfig from '../config/ParallelScanningConfig';
+import ParallelScanningOptVINConfig from '../config/ParallelScanningOptVINConfig';
+import ParallelScanningOptBarcodeConfig from '../config/ParallelScanningOptBarcodeConfig';
+import ParallelScanningOptVINOptBarcodeConfig from '../config/ParallelScanningOptVINOptBarcodeConfig';
+import ParallelScanningConfigOptVINOptBarcodeOptLicensePlate from '../config/ParallelScanningConfigOptVINOptBarcodeOptLicensePlate';
 import TinConfig from '../config/TINConfig';
 import OtaConfig from '../config/OtaConfig';
 import { DeviceEventEmitter } from 'react-native';
@@ -197,9 +201,42 @@ class Anyline extends Component {
           viewPlug => viewPlug.viewPlugin.plugin.id,
         );
         break;
+
       case 'PARALLEL_SCANNING':
         this.setState({hasMultipleResults: true});
         config = ParallelScanningConfig;
+        titles = config.options.parallelViewPluginComposite.viewPlugins.map(
+          viewPlug => viewPlug.viewPlugin.plugin.id,
+        );
+        break;
+
+      case 'PARALLEL_SCANNING_OPT_BARCODE':
+        this.setState({hasMultipleResults: true});
+        config = ParallelScanningOptBarcodeConfig;
+        titles = config.options.parallelViewPluginComposite.viewPlugins.map(
+          viewPlug => viewPlug.viewPlugin.plugin.id,
+        );
+        break;
+
+      case 'PARALLEL_SCANNING_OPT_VIN':
+        this.setState({hasMultipleResults: true});
+        config = ParallelScanningOptVINConfig;
+        titles = config.options.parallelViewPluginComposite.viewPlugins.map(
+          viewPlug => viewPlug.viewPlugin.plugin.id,
+        );
+        break;
+
+      case 'PARALLEL_SCANNING_OPT_VIN_OPT_BARCODE':
+        this.setState({hasMultipleResults: true});
+        config = ParallelScanningOptVINOptBarcodeConfig;
+        titles = config.options.parallelViewPluginComposite.viewPlugins.map(
+          viewPlug => viewPlug.viewPlugin.plugin.id,
+        );
+        break;
+
+      case 'PARALLEL_SCANNING_OPT_VIN_OPT_BARCODE_OPT_LICENSEPLATE':
+        this.setState({hasMultipleResults: true});
+        config = ParallelScanningConfigOptVINOptBarcodeOptLicensePlate;
         titles = config.options.parallelViewPluginComposite.viewPlugins.map(
           viewPlug => viewPlug.viewPlugin.plugin.id,
         );

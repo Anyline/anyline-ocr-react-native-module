@@ -9,7 +9,7 @@ export default {
       "alignment": "top_right"
     },
     "parallelViewPluginComposite": {
-      "id": "VIN_AND_BARCODE",
+      "id": "VIN_AND_OPT_BARCODE",
       "cancelOnResult": true,
       "viewPlugins": [
         {
@@ -54,6 +54,7 @@ export default {
         },
         {
           "viewPlugin": {
+            "optional": true,
             "plugin": {
               "id": "Barcode_ID",
               "barcodePlugin": {

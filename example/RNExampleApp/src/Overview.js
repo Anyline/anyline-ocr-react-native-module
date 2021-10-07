@@ -231,6 +231,39 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
             platformPermissionCheck('PARALLEL_SCANNING')
           }} />
       </View>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Parallel Scanning (VIN* / Barcode)'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('PARALLEL_SCANNING_OPT_VIN')
+          }} />
+      </View>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Parallel Scanning (VIN / Barcode*)'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('PARALLEL_SCANNING_OPT_BARCODE')
+          }} />
+      </View>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Parallel Scanning (VIN* / Barcode*)'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('PARALLEL_SCANNING_OPT_VIN_OPT_BARCODE')
+          }} />
+      </View>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Parallel Scanning (VIN* / Barcode* / License Plate*)'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('PARALLEL_SCANNING_OPT_VIN_OPT_BARCODE_OPT_LICENSEPLATE')
+          }} />
+      </View>
+
     </ScrollView>
   );
 }

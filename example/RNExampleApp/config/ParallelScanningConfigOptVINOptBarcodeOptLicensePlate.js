@@ -9,11 +9,12 @@ export default {
       "alignment": "top_right"
     },
     "parallelViewPluginComposite": {
-      "id": "VIN_AND_BARCODE",
+      "id": "OPT_VIN_OPT_BARCODE_OPT_LICENSEPLATE",
       "cancelOnResult": true,
       "viewPlugins": [
         {
           "viewPlugin": {
+            "optional": true,
             "plugin": {
               "id": "VIN_ID",
               "ocrPlugin": {
@@ -34,7 +35,7 @@ export default {
               "feedbackStrokeColor": "0099FF",
               "ratioFromSize": {
                 "width": 80,
-                "height": 20
+                "height": 30
               },
             },
             "scanFeedback": {
@@ -54,6 +55,7 @@ export default {
         },
         {
           "viewPlugin": {
+            "optional": true,
             "plugin": {
               "id": "Barcode_ID",
               "barcodePlugin": {
@@ -68,7 +70,7 @@ export default {
                 "maxWidthPercent": "100%",
                 "ratioFromSize": {
                   "width": 80,
-                  "height": 16
+                  "height": 30
                 },
                 "strokeWidth": 1,
                 "strokeColor": "FFFFFF",
@@ -87,7 +89,48 @@ export default {
               },
               "cancelOnResult": true
             }
+          },
+          {
+            "viewPlugin": {
+              "plugin": {
+                "id": "LICENSE_PLATE",
+                "licensePlatePlugin": {
+                  "scanMode": "AUTO"
+                }
+              },
+              "cutoutConfig": {
+                "style": "rect",
+                "alignment": "center",
+                "strokeWidth": 1,
+                "cornerRadius": 2,
+                "width": 720,
+                "alignment": "center",
+                "maxWidthPercent": "100%",
+                "ratioFromSize": {
+                  "width": 80,
+                  "height": 30
+                },
+                "strokeColor": "FFFFFF",
+                "outerColor": "000000",
+                "outerAlpha": 0.3,
+                "feedbackStrokeColor": "0099FF"
+              },
+              "scanFeedback": {
+                "style": "CONTOUR_RECT",
+                "strokeColor": "0099FF",
+                "fillColor": "220099FF",
+                "blinkOnResult": true,
+                "beepOnResult": true,
+                "vibrateOnResult": true
+              },
+              "cancelOnResult": true
+            }
           }
+          
+          
+          
+          
+          
         ]
       }
       
