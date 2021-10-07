@@ -192,6 +192,8 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
             platformPermissionCheck('VERTICAL_CONTAINER')
           }} />
       </View>
+
+      <Text style={styles.text}>PARALLEL SCANNING</Text>
       
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  Parallel Scanning (VIN / Barcode)'} color="#0099FF"
