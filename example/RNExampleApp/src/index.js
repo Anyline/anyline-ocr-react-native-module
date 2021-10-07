@@ -45,6 +45,7 @@ import ParallelScanningOptVINConfig from '../config/ParallelScanningOptVINConfig
 import ParallelScanningOptBarcodeConfig from '../config/ParallelScanningOptBarcodeConfig';
 import ParallelScanningOptVINOptBarcodeConfig from '../config/ParallelScanningOptVINOptBarcodeConfig';
 import ParallelScanningConfigOptVINOptBarcodeOptLicensePlate from '../config/ParallelScanningConfigOptVINOptBarcodeOptLicensePlate';
+import ParallelScanningConfigVINOptBarcodeLicensePlate from '../config/ParallelScanningConfigVINOptBarcodeLicensePlate';
 import TinConfig from '../config/TINConfig';
 import OtaConfig from '../config/OtaConfig';
 import { DeviceEventEmitter } from 'react-native';
@@ -241,6 +242,14 @@ class Anyline extends Component {
           viewPlug => viewPlug.viewPlugin.plugin.id,
         );
         break;
+
+        case 'PARALLEL_SCANNING_VIN_OPT_BARCODE_LICENSEPLATE':
+          this.setState({hasMultipleResults: true});
+          config = ParallelScanningConfigVINOptBarcodeLicensePlate;
+          titles = config.options.parallelViewPluginComposite.viewPlugins.map(
+            viewPlug => viewPlug.viewPlugin.plugin.id,
+          );
+          break;
     }
 
     // If Title is not set, set it to Type

@@ -192,38 +192,7 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
             platformPermissionCheck('VERTICAL_CONTAINER')
           }} />
       </View>
-
-      <Text style={styles.text}>OTHER</Text>
-
-      <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Barcode Scanner'} color="#0099FF"
-          disabled={disabled}
-          onPress={() => {
-            platformPermissionCheck('BARCODE')
-          }} />
-      </View>
-      <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Document Scanner'} color="#0099FF"
-          disabled={disabled}
-          onPress={() => {
-            platformPermissionCheck('DOCUMENT')
-          }} />
-      </View>
-      <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Cattle Tag'} color="#0099FF"
-          disabled={disabled}
-          onPress={() => {
-            platformPermissionCheck('CATTLE_TAG')
-          }} />
-      </View>
-
-      <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Serial Scanning (LP > DL > VIN)'} color="#0099FF"
-          disabled={disabled}
-          onPress={() => {
-            platformPermissionCheck('SERIAL_SCANNING')
-          }} />
-      </View>
+      
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  Parallel Scanning (VIN / Barcode)'} color="#0099FF"
           disabled={disabled}
@@ -261,6 +230,46 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
           disabled={disabled}
           onPress={() => {
             platformPermissionCheck('PARALLEL_SCANNING_OPT_VIN_OPT_BARCODE_OPT_LICENSEPLATE')
+          }} />
+      </View>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Parallel Scanning (VIN / Barcode* / License Plate)'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('PARALLEL_SCANNING_VIN_OPT_BARCODE_LICENSEPLATE')
+          }} />
+      </View>
+
+      <Text style={styles.text}>OTHER</Text>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Barcode Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('BARCODE')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Document Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('DOCUMENT')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Cattle Tag'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('CATTLE_TAG')
+          }} />
+      </View>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Serial Scanning (LP > DL > VIN)'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('SERIAL_SCANNING')
           }} />
       </View>
 

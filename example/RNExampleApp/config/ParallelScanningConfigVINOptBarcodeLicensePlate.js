@@ -14,7 +14,6 @@ export default {
       "viewPlugins": [
         {
           "viewPlugin": {
-            "optional": true,
             "plugin": {
               "id": "VIN_ID",
               "ocrPlugin": {
@@ -92,7 +91,6 @@ export default {
           },
           {
             "viewPlugin": {
-              "optional": true,
               "plugin": {
                 "id": "LICENSE_PLATE",
                 "licensePlatePlugin": {
