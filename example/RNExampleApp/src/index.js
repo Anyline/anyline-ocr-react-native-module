@@ -21,6 +21,7 @@ import DocumentConfig from '../config/DocumentConfig';
 import MRZConfig from '../config/MRZConfig';
 import UniversalIdConfig from '../config/UniversalIdConfig';
 import ArabicIdConfig from '../config/ArabicIdConfig';
+import CyrillicIdConfig from '../config/CyrillicIdConfig';
 import NFCAndMRZConfig from '../config/NFCAndMRZConfig';
 import AutoEnergyConfig from '../config/AutoEnergyConfig';
 import AnalogEnergyConfig from '../config/AnalogMeterConfig';
@@ -164,6 +165,9 @@ class Anyline extends Component {
         break; 
       case 'ARABIC_ID':
         config = ArabicIdConfig;
+        break; 
+      case 'CYRILLIC_ID':
+        config = CyrillicIdConfig;
         break; 
       case 'NFC+MRZ':
         config = NFCAndMRZConfig;

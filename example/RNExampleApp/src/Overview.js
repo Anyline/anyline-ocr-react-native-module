@@ -117,6 +117,13 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
           }} />
       </View>
 
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  Cyrillic Id'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('CYRILLIC_ID')
+          }} />
+      </View>
 
       <Text style={styles.text}>VEHICLE</Text>
 

@@ -16,31 +16,47 @@ export default {
         "id":"ID",
         "idPlugin": {
           "universalIdConfig": {
-            "alphabet" : "arabic",
+            "alphabet" : "cyrillic",
             "faceDetection": true,
             "allowedLayouts": {
               "mrz": [],
-              "idFront": [],
-              "drivingLicense": []
-            },
-            "idFront": {
-              "fullName": {"scanOption": 0, "minConfidence": 60},
-              "dateOfBirth": {"scanOption": 0, "minConfidence": 60},
-              "placeOfBirth": {"scanOption": 1, "minConfidence": 60},
-              "dateOfExpiry": {"scanOption": 1, "minConfidence": 60},
-              "documentNumber": {"scanOption": 0, "minConfidence": 60},
-              "nationality": {"scanOption": 1, "minConfidence": 60}
-            },
-            "drivingLicense": {
-              "fullName": {"scanOption": 0, "minConfidence": 60},
-              "dateOfBirth": {"scanOption": 0, "minConfidence": 60},
-              "placeOfBirth": {"scanOption": 1, "minConfidence": 60},
-              "dateOfExpiry": {"scanOption": 1, "minConfidence": 60},
-              "documentNumber": {"scanOption": 0, "minConfidence": 60},
-              "nationality": {"scanOption": 0, "minConfidence": 60}
+              "drivingLicense": [],
+              "idFront": []
+             },
+             "drivingLicense": {
+               "lastName": {"scanOption": 0, "minConfidence": 40},
+               "lastName@cyr": {"scanOption": 0, "minConfidence": 40},
+               "firstName": {"scanOption": 0, "minConfidence": 40},
+               "firstName@cyr": {"scanOption": 0, "minConfidence": 40},
+               "dateOfBirth": {"scanOption": 0, "minConfidence": 50},
+               "placeOfBirth": {"scanOption": 1, "minConfidence": 50},
+               "dateOfIssue": {"scanOption": 0, "minConfidence": 50},
+               "dateOfExpiry": {"scanOption": 1, "minConfidence": 50},
+               "authority": {"scanOption": 1, "minConfidence": 30},
+               "documentNumber": {"scanOption": 0, "minConfidence": 40},
+               "address": {"scanOption": 1},
+               "address@cyr": {"scanOption": 1},
+               "nationality": {"scanOption": 1},
+               "nationality@cyr": {"scanOption": 1}
+              },
+              "idFront": {
+                "lastName": {"scanOption": 0, "minConfidence": 40},
+                "lastName@cyr": {"scanOption": 0, "minConfidence": 40},
+                "firstName": {"scanOption": 0, "minConfidence": 40},
+                "firstName@cyr": {"scanOption": 0, "minConfidence": 40},
+                "dateOfBirth": {"scanOption": 0, "minConfidence": 50},
+                "placeOfBirth": {"scanOption": 1, "minConfidence": 50},
+                "dateOfIssue": {"scanOption": 0, "minConfidence": 50},
+                "dateOfExpiry": {"scanOption": 1, "minConfidence": 50},
+                "authority": {"scanOption": 1, "minConfidence": 30},
+                "documentNumber": {"scanOption": 0, "minConfidence": 40},
+                "address": {"scanOption": 1},
+                "address@cyr": {"scanOption": 1},
+                "nationality": {"scanOption": 1},
+                "nationality@cyr": {"scanOption": 1}
+              }
             }
           }
-        }
       },
       "cutoutConfig" : {
         "style": "animated_rect",
