@@ -24,8 +24,8 @@ export default {
             },
             "cutoutConfig": {
               "style": "rect",
-              "width": 1000,
-              "alignment": "top_half",
+              "width": 720,
+              "alignment": "center",
               "maxWidthPercent": "100%",
               "strokeWidth": 1,
               "strokeColor": "FFFFFF",
@@ -33,9 +33,9 @@ export default {
               "outerColor": "000000",
               "outerAlpha": 0.3,
               "feedbackStrokeColor": "0099FF",
-              "cropOffset": {
-                "x": 0,
-                "y": 120
+              "ratioFromSize": {
+                "width": 80,
+                "height": 20
               },
             },
             "scanFeedback": {
@@ -66,11 +66,11 @@ export default {
               "cutoutConfig": {
                 "style": "rect",
                 "width": 720,
-                "alignment": "top_half",
-                "maxWidthPercent": "70%",
+                "alignment": "center",
+                "maxWidthPercent": "100%",
                 "ratioFromSize": {
-                  "width": 62,
-                  "height": 9
+                  "width": 80,
+                  "height": 16
                 },
                 "strokeWidth": 1,
                 "strokeColor": "FFFFFF",
