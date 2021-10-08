@@ -68,15 +68,12 @@ export default {
                 "width": 720,
                 "alignment": "center",
                 "maxWidthPercent": "100%",
-                "ratioFromSize": {
-                  "width": 80,
-                  "height": 30
-                },
-                "strokeWidth": 1,
+                "maxHeightPercent": "100%",
+                "strokeWidth": 0,
                 "strokeColor": "FFFFFF",
-                "cornerRadius": 2,
+                "cornerRadius": 0,
                 "outerColor": "000000",
-                "outerAlpha": 0.3,
+                "outerAlpha": 0,
                 "feedbackStrokeColor": "0099FF"
               },
               "scanFeedback": {
@@ -102,15 +99,11 @@ export default {
               "cutoutConfig": {
                 "style": "rect",
                 "alignment": "center",
-                "strokeWidth": 1,
+                "strokeWidth": 0,
                 "cornerRadius": 2,
-                "width": 720,
                 "alignment": "center",
                 "maxWidthPercent": "100%",
-                "ratioFromSize": {
-                  "width": 80,
-                  "height": 30
-                },
+                "maxHeightPercent": "100%",
                 "strokeColor": "FFFFFF",
                 "outerColor": "000000",
                 "outerAlpha": 0.3,
@@ -127,14 +120,8 @@ export default {
               "cancelOnResult": true
             }
           }
-          
-          
-          
-          
-          
         ]
-      }
-      
+      }      
     }
   }
   

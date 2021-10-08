@@ -66,15 +66,12 @@ export default {
                 "width": 720,
                 "alignment": "center",
                 "maxWidthPercent": "100%",
-                "ratioFromSize": {
-                  "width": 80,
-                  "height": 16
-                },
-                "strokeWidth": 1,
+                "maxHeightPercent": "100%",
+                "strokeWidth": 0,
                 "strokeColor": "FFFFFF",
-                "cornerRadius": 2,
+                "cornerRadius": 0,
                 "outerColor": "000000",
-                "outerAlpha": 0.3,
+                "outerAlpha": 0,
                 "feedbackStrokeColor": "0099FF"
               },
               "scanFeedback": {
@@ -89,8 +86,7 @@ export default {
             }
           }
         ]
-      }
-      
+      }      
     }
   }
   
