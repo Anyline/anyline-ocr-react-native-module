@@ -11,6 +11,7 @@ export default {
     "parallelViewPluginComposite": {
       "id": "OPT_VIN_OPT_BARCODE_OPT_LICENSEPLATE",
       "cancelOnResult": true,
+      "optionalTimeout": 10.0,
       "viewPlugins": [
         {
           "viewPlugin": {
