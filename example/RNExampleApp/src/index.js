@@ -41,7 +41,7 @@ import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
 import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
 import ParallelScanningConfig from '../config/ParallelScanningConfig';
-import ParallelScanningOptVINConfig from '../config/ParallelScanningOptVINConfig';
+import ParallelScanningOptVINBarcodeConfig from '../config/ParallelScanningOptVINBarcodeConfig';
 import ParallelScanningOptBarcodeConfig from '../config/ParallelScanningOptBarcodeConfig';
 import ParallelScanningOptVINOptBarcodeConfig from '../config/ParallelScanningOptVINOptBarcodeConfig';
 import ParallelScanningConfigOptVINOptBarcodeOptLicensePlate from '../config/ParallelScanningConfigOptVINOptBarcodeOptLicensePlate';
@@ -221,7 +221,7 @@ class Anyline extends Component {
 
       case 'PARALLEL_SCANNING_OPT_VIN':
         this.setState({hasMultipleResults: true});
-        config = ParallelScanningOptVINConfig;
+        config = ParallelScanningOptVINBarcodeConfig;
         titles = config.options.parallelViewPluginComposite.viewPlugins.map(
           viewPlug => viewPlug.viewPlugin.plugin.id,
         );
