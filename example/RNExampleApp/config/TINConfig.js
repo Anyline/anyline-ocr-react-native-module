@@ -25,15 +25,11 @@ export default {
                   "width": 720,
                   "height": 144
               },
-              "offset": {
-                  x: 0,
-                  y: -200
-              },
               "outerColor": "000000",
               "outerAlpha": 0.3,
               "strokeWidth": 2,
               "strokeColor": "FFFFFF",
-              "cornerRadius": 20,
+              "cornerRadius": 2,
               "feedbackStrokeColor": "0099FF"
           },
           "scanFeedback" : {
