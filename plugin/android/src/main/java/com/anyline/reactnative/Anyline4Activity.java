@@ -1,5 +1,6 @@
 package com.anyline.reactnative;
 
+import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.Build;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -56,7 +58,6 @@ import io.anyline.view.ParallelScanViewComposite;
 import io.anyline.view.ScanView;
 import io.anyline.view.SerialScanViewComposite;
 
-//import at.nineyards.anyline.modules.mrz.Identification;
 
 public class Anyline4Activity extends AnylineBaseActivity {
     private static final String TAG = Anyline4Activity.class.getSimpleName();
@@ -67,6 +68,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
     private AnylineUIConfig anylineUIConfig;
     private String cropAndTransformError;
     private Boolean isFirstCameraOpen; // only if camera is opened the first time get coordinates of the cutout to avoid flickering when switching between analog and digital
+    private RelativeLayout parentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,13 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
         // init the scan view
         anylineScanView = new ScanView(this, null);
+        parentLayout = new RelativeLayout(this);
+
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        parentLayout.addView(anylineScanView, layoutParams);
+        setContentView(parentLayout, layoutParams);
 
         try {
             // start initialize anyline
@@ -157,13 +166,14 @@ public class Anyline4Activity extends AnylineBaseActivity {
                 scanViewPlugin = anylineScanView.getScanViewPlugin();
             }
 
+            if (shouldShowRotateButton(json)) {
+                RotateButtonConfig rotateButtonConfig = new RotateButtonConfig(json.getJSONObject("rotateButton"));
+                addRotateButtonToView(rotateButtonConfig);
+            }
+
             if (scanViewPlugin != null) {
                 //set nativeBarcodeMode
                 AnylinePluginHelper.setNativeBarcodeMode(json, anylineScanView);
-
-                if (!(scanViewPlugin instanceof MeterScanViewPlugin)) {
-                    setContentView(anylineScanView);
-                }
 
                 if (scanViewPlugin instanceof SerialScanViewComposite || scanViewPlugin instanceof ParallelScanViewComposite) {
                     scanViewPlugin.addScanResultListener(new ScanResultListener() {
@@ -276,7 +286,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     });
                 } else if (scanViewPlugin instanceof LicensePlateScanViewPlugin) {
                     if (json.has("reportingEnabled")) {
-                        //(IdScanViewPlugin) scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
                         (((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
                     }
                     scanViewPlugin.addScanResultListener(new ScanResultListener<LicensePlateScanResult>() {
@@ -336,13 +345,11 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             }
 
                         });
-                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin())
-                            .getIdConfig() instanceof DrivingLicenseConfig) {
+                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof DrivingLicenseConfig) {
                         scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
                             @Override
                             public void onResult(ScanResult<ID> idScanResult) {
-                                JSONObject jsonResult = ((DrivingLicenseIdentification) idScanResult.getResult())
-                                        .toJSONObject();
+                                JSONObject jsonResult = ((DrivingLicenseIdentification) idScanResult.getResult()).toJSONObject();
 
                                 try {
                                     jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
@@ -395,7 +402,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     }
                 } else if (scanViewPlugin instanceof OcrScanViewPlugin) {
                     if (json.has("reportingEnabled")) {
-                        //scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
                         (((OcrScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
                     }
 
@@ -451,12 +457,11 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                 } else if (scanViewPlugin instanceof MeterScanViewPlugin) {
                     if (json.has("reportingEnabled")) {
-                        //scanViewPlugin.setReportingEnabled(json.optBoolean("reportingEnabled", true));
                         (((MeterScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
 
                     }
                     // create the radio button for the UI
-                    createSegmentRadioButtonUI(json);
+                    addSegmentRadioButtonUI(json);
 
                     anylineScanView.setCameraOpenListener(this);
                     scanViewPlugin.addScanResultListener(new ScanResultListener<MeterScanResult>() {
@@ -523,20 +528,21 @@ public class Anyline4Activity extends AnylineBaseActivity {
         });
     }
 
-    private void createSegmentRadioButtonUI(JSONObject json) {
-
+    private void addSegmentRadioButtonUI(JSONObject json) {
         final String scanModeString = ((MeterScanViewPlugin) scanViewPlugin).getScanMode().toString();
         anylineUIConfig = new AnylineUIConfig(this, json);
 
-        // Creating a new RelativeLayout
-        final RelativeLayout relativeLayout = new RelativeLayout(this);
+        RadioGroup radioGroup = createRadioGroup(anylineUIConfig, scanModeString);
 
-        // Defining the RelativeLayout layout parameters.
-        // In this case I want to fill its parent
-        RelativeLayout.LayoutParams matchParentParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        relativeLayout.addView(anylineScanView, matchParentParams);
+        if (radioGroup != null) {
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            parentLayout.addView(radioGroup, lp);
+        }
+    }
 
+    private RadioGroup createRadioGroup(AnylineUIConfig anylineUIConfig, String scanModeString) {
         ArrayList<String> titles = anylineUIConfig.getTitles();
         final ArrayList<String> modes = anylineUIConfig.getModes();
 
@@ -573,7 +579,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     View button = group.findViewById(checkedId);
                     String mode = modes.get(group.indexOfChild(button));
                     ((MeterScanViewPlugin) scanViewPlugin).setScanMode(MeterScanMode.valueOf(mode));
-                    //anylineScanView.releaseCameraInBackground();
                     anylineScanView.stop();
                     try {
                         Thread.sleep(100);
@@ -584,16 +589,44 @@ public class Anyline4Activity extends AnylineBaseActivity {
                 }
             });
 
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-
             radioGroup.setVisibility(View.INVISIBLE);
-
-            relativeLayout.addView(radioGroup, lp);
+            return radioGroup;
         }
-        setContentView(relativeLayout, matchParentParams);
-
+        return null;
     }
 
+    private void addRotateButtonToView(RotateButtonConfig rotateButtonConfig) {
+        Button button = new Button(this);
+        button.setText("Rotate");
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                }
+            }
+        });
+
+        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        if (rotateButtonConfig.hasOffset()) {
+            Offset offset = rotateButtonConfig.getOffset();
+            buttonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            buttonLayoutParams.setMargins(offset.getX(), offset.getY(), 0, 0);
+        } else {
+            buttonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            buttonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        }
+
+        parentLayout.addView(button, buttonLayoutParams);
+    }
+
+    private boolean shouldShowRotateButton(JSONObject jsonObject) {
+        return jsonObject.has("rotateButton");
+    }
 }
