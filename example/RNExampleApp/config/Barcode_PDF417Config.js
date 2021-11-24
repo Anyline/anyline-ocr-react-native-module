@@ -12,7 +12,8 @@ export default {
         "plugin": {
           "id": "Barcode_ID",
           "barcodePlugin": {
-            "barcodeFormatOptions": ["PDF_417"]
+            "barcodeFormatOptions": ["PDF_417"],
+            "enablePDF417Parsing": true
           }
         },
         "cutoutConfig": {
