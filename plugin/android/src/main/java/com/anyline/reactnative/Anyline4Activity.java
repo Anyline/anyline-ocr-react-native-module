@@ -32,8 +32,10 @@ import io.anyline.camera.CameraController;
 import io.anyline.plugin.ScanResult;
 import io.anyline.plugin.ScanResultListener;
 import io.anyline.plugin.barcode.Barcode;
+import io.anyline.plugin.barcode.BarcodeScanPlugin;
 import io.anyline.plugin.barcode.BarcodeScanResult;
 import io.anyline.plugin.barcode.BarcodeScanViewPlugin;
+import io.anyline.plugin.barcode.PDF417;
 import io.anyline.plugin.id.DrivingLicenseConfig;
 import io.anyline.plugin.id.DrivingLicenseIdentification;
 import io.anyline.plugin.id.GermanIdFrontConfig;
@@ -246,24 +248,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                         e.printStackTrace();
                                     }
                                 } else if (subResult instanceof BarcodeScanResult) {
-                                    try {
-                                        List<Barcode> barcodeList = (List<Barcode>) subResult.getResult();
-
-                                        JSONArray barcodeArray = new JSONArray();
-                                        if (barcodeList.size() > 1) {
-                                            for (int i = 0; i < barcodeList.size(); i++) {
-                                                barcodeArray.put(barcodeList.get(i).toJSONObject());
-                                            }
-                                            JSONObject finalObject = new JSONObject();
-                                            finalObject.put("multiBarcodes", barcodeArray);
-                                            jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult, finalObject);
-                                        } else {
-                                            jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult, barcodeList.get(0).toJSONObject());
-
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                    jsonResult = extractBarcodeResult(jsonResult, subResult);
                                 } else if (subResult instanceof MeterScanResult) {
                                     JSONObject jsonMeterResult = new JSONObject();
                                     try {
@@ -424,6 +409,9 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                 } else if (scanViewPlugin instanceof BarcodeScanViewPlugin) {
 
+                    if (shouldEnablePDF417(json)) {
+                        ((BarcodeScanPlugin) ((BarcodeScanViewPlugin) scanViewPlugin).getScanPlugin()).enablePDF417Parsing();
+                    }
                     scanViewPlugin.addScanResultListener(new ScanResultListener<BarcodeScanResult>() {
                         @Override
                         public void onResult(BarcodeScanResult barcodeScanResult) {
@@ -438,6 +426,11 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                         barcode.put("value", barcodeList.get(i).getValue());
                                         barcode.put("barcodeFormat", barcodeList.get(i).getBarcodeFormat());
 
+                                        PDF417 pdf417 = barcodeList.get(i).getParsedPDF417();
+
+                                        if(pdf417 != null) {
+                                            barcode.put("parsedPDF417", pdf417.toJSONObject());
+                                        }
                                         barcodeArray.put(barcode);
                                     }
                                     JSONObject finalObject = new JSONObject();
@@ -495,6 +488,42 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             + "\n" + e.getLocalizedMessage());
         }
 
+    }
+
+    private boolean shouldEnablePDF417(JSONObject jsonObject) {
+        JSONObject viewPlugin = jsonObject.optJSONObject("viewPlugin");
+
+        if (viewPlugin != null) {
+            JSONObject plugin = viewPlugin.optJSONObject("plugin");
+
+            if (plugin != null) {
+                JSONObject barcodePlugin = plugin.optJSONObject("barcodePlugin");
+                return barcodePlugin != null && barcodePlugin.optBoolean("enablePDF417Parsing");
+            }
+        }
+        return false;
+    }
+
+    private JSONObject extractBarcodeResult(JSONObject jsonResult, ScanResult subResult) {
+        try {
+            List<Barcode> barcodeList = (List<Barcode>) subResult.getResult();
+
+            JSONArray barcodeArray = new JSONArray();
+            if (barcodeList.size() > 1) {
+                for (int i = 0; i < barcodeList.size(); i++) {
+                    barcodeArray.put(barcodeList.get(i).toJSONObject());
+                }
+                JSONObject finalObject = new JSONObject();
+                finalObject.put("multiBarcodes", barcodeArray);
+                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult, finalObject);
+            } else {
+                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult, barcodeList.get(0).toJSONObject());
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonResult;
     }
 
     // this method is used only for the meter scanning which contains radio buttons
