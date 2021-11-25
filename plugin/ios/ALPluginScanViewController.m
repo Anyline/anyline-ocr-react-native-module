@@ -83,6 +83,10 @@
         
         self.scanView.cameraConfig = [ALCameraConfig defaultCameraConfig];
     }
+
+    if ([self.scanView.scanViewPlugin isKindOfClass:[ALBarcodeScanViewPlugin class]] && self.anylineConfig[@"viewPlugin"][@"plugin"][@"barcodePlugin"][@"enablePDF417Parsing"]) {
+        ((ALBarcodeScanViewPlugin*)self.scanView.scanViewPlugin).barcodeScanPlugin.parsePDF417 = YES;
+    }
     
     if(!self.scanView) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not start scanning" message:error.localizedDescription delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
