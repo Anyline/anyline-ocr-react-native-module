@@ -13,6 +13,7 @@ export default {
             "id": "TIN",
             "ocrPlugin": {
               "tinConfig":{
+                  "scanMode" : "UNIVERSAL"
               }
             }
           },
