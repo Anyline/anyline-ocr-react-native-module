@@ -597,6 +597,7 @@
     //Create the result Object
     NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:5];
     [dictResult setValue:scanResult.country forKey:@"country"];
+    [dictResult setValue:scanResult.area forKey:@"area"];
     [dictResult setValue:scanResult.result forKey:@"licensePlate"];
     [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
     [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];

@@ -135,6 +135,13 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
           }} />
       </View>
       <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'  US License Plate Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('LICENSE_PLATE_US')
+          }} />
+      </View>
+      <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  TIN Scanner'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
