@@ -56,8 +56,22 @@ export default {
           "plugin": {
             "id": "DRIVING_LICENSE",
             "idPlugin": {
-              "drivingLicenseConfig": {
-                "scanMode": "AUTO"
+              "universalIdConfig": {
+                "allowedLayouts": {
+                  "drivingLicense": []
+                },
+                "drivingLicense": {
+                  "surname": {"scanOption": 0, "minConfidence": 40},
+                  "givenNames": {"scanOption": 0, "minConfidence": 40},
+                  "dateOfBirth": {"scanOption": 0, "minConfidence": 50},
+                  "placeOfBirth": {"scanOption": 1, "minConfidence": 50},
+                  "dateOfIssue": {"scanOption": 0, "minConfidence": 50},
+                  "dateOfExpiry": {"scanOption": 1, "minConfidence": 50},
+                  "authority": {"scanOption": 1, "minConfidence": 30},
+                  "documentNumber": {"scanOption": 0, "minConfidence": 40},
+                  "categories": {"scanOption": 1, "minConfidence": 30},
+                  "address": {"scanOption": 1}
+                }
               }
             }
           },
