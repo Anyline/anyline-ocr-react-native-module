@@ -32,6 +32,7 @@ import IBANConfig from '../config/IbanConfig';
 import VoucherConfig from '../config/VoucherConfig';
 import DrivingLicenseConfig from '../config/DrivingLicenseConfig';
 import LicensePlateConfig from '../config/LicensePlateConfig';
+import LicensePlateUSConfig from '../config/LicensePlateUSConfig';
 import SerialNumberConfig from '../config/SerialNumber';
 import VinConfig from '../config/VINConfig';
 import USNRConfig from '../config/USNRConfig';
@@ -177,6 +178,9 @@ class Anyline extends Component {
         break;
       case 'LICENSE_PLATE':
         config = LicensePlateConfig;
+        break;
+      case 'LICENSE_PLATE_US':
+        config = LicensePlateUSConfig;
         break;
       case 'DOCUMENT':
         config = DocumentConfig;
