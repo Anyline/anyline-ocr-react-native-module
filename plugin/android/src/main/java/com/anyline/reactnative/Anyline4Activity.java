@@ -71,11 +71,12 @@ public class Anyline4Activity extends AnylineBaseActivity {
     private String cropAndTransformError;
     private Boolean isFirstCameraOpen; // only if camera is opened the first time get coordinates of the cutout to avoid flickering when switching between analog and digital
     private RelativeLayout parentLayout;
+    private boolean defaultOrientationApplied;
+    private static final String KEY_DEFAULT_ORIENTATION_APPLIED = "default_orientation_applied";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         isFirstCameraOpen = true;
 
         // init the scan view
@@ -88,6 +89,10 @@ public class Anyline4Activity extends AnylineBaseActivity {
         parentLayout.addView(anylineScanView, layoutParams);
         setContentView(parentLayout, layoutParams);
 
+        if (savedInstanceState != null) {
+            defaultOrientationApplied = savedInstanceState.getBoolean(KEY_DEFAULT_ORIENTATION_APPLIED);
+        }
+
         try {
             // start initialize anyline
             initAnyline();
@@ -96,6 +101,12 @@ public class Anyline4Activity extends AnylineBaseActivity {
         }
 
         setDebugListener();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_DEFAULT_ORIENTATION_APPLIED, defaultOrientationApplied);
     }
 
     @Override
@@ -172,6 +183,8 @@ public class Anyline4Activity extends AnylineBaseActivity {
                 RotateButtonConfig rotateButtonConfig = new RotateButtonConfig(json.getJSONObject("rotateButton"));
                 addRotateButtonToView(rotateButtonConfig);
             }
+
+            setDefaultOrientation(json);
 
             if (scanViewPlugin != null) {
                 //set nativeBarcodeMode
@@ -428,7 +441,7 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                                         PDF417 pdf417 = barcodeList.get(i).getParsedPDF417();
 
-                                        if(pdf417 != null) {
+                                        if (pdf417 != null) {
                                             barcode.put("parsedPDF417", pdf417.toJSONObject());
                                         }
                                         barcodeArray.put(barcode);
@@ -487,7 +500,17 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     getString(getResources().getIdentifier("error_invalid_json_data", "string", getPackageName()))
                             + "\n" + e.getLocalizedMessage());
         }
+    }
 
+    private void setDefaultOrientation(JSONObject jsonObject) {
+        if (defaultOrientationApplied) return;
+
+        if (jsonObject.has("defaultOrientation")
+                && jsonObject.optString("defaultOrientation").equals("landscape")
+                && getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+        defaultOrientationApplied = true;
     }
 
     private boolean shouldEnablePDF417(JSONObject jsonObject) {
