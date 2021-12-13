@@ -305,41 +305,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             }
 
                         });
-                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof DrivingLicenseConfig) {
-                        scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
-                            @Override
-                            public void onResult(ScanResult<ID> idScanResult) {
-                                JSONObject jsonResult = ((DrivingLicenseIdentification) idScanResult.getResult()).toJSONObject();
-
-                                try {
-                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
-                                            jsonResult);
-                                } catch (Exception e) {
-                                    Log.e(TAG, "Exception is: ", e);
-
-                                }
-
-                                setResult(scanViewPlugin, jsonResult);
-
-                            }
-
-                        });
-                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof GermanIdFrontConfig) {
-                        scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
-                            @Override
-                            public void onResult(ScanResult<ID> idScanResult) {
-                                JSONObject jsonResult = ((GermanIdFrontIdentification) idScanResult.getResult()).toJSONObject();
-
-                                try {
-                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
-                                            jsonResult);
-                                } catch (Exception e) {
-                                    Log.e(TAG, "Exception is: ", e);
-
-                                }
-                                setResult(scanViewPlugin, jsonResult);
-                            }
-                        });
                     } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof UniversalIdConfig) {
                         scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
                             @Override
