@@ -37,7 +37,6 @@ import VinConfig from '../config/VINConfig';
 import USNRConfig from '../config/USNRConfig';
 import ShipConConfig from '../config/ContainerShipConfig';
 import CattleTagConfig from '../config/CattleTagConfig';
-import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
 import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
 import ParallelScanningConfig from '../config/ParallelScanningConfig';
