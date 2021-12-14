@@ -5,7 +5,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 target 'RNExampleApp' do
   # Pods for RNExampleApp
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
-  pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
+  pod 'FBReactNativeSpec', :path => "../node_modules/react-native/React/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
   pod 'RCTTypeSafety', :path => "../node_modules/react-native/Libraries/TypeSafety"
   pod 'React', :path => '../node_modules/react-native/'
@@ -33,7 +33,10 @@ target 'RNExampleApp' do
 
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
-  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  #pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  pod 'RCT-Folly', :podspec => '../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec'
+  pod 'React-perflogger', :path => '../node_modules/react-native/ReactCommon/reactperflogger'
+  pod 'React-runtimeexecutor', :path => '../node_modules/react-native/ReactCommon/runtimeexecutor'
   
   pod 'AnylineReact', path: '../node_modules/anyline-ocr-react-native-module/ios'
 
