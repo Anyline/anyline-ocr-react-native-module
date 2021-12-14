@@ -36,10 +36,6 @@ import io.anyline.plugin.barcode.BarcodeScanPlugin;
 import io.anyline.plugin.barcode.BarcodeScanResult;
 import io.anyline.plugin.barcode.BarcodeScanViewPlugin;
 import io.anyline.plugin.barcode.PDF417;
-import io.anyline.plugin.id.DrivingLicenseConfig;
-import io.anyline.plugin.id.DrivingLicenseIdentification;
-import io.anyline.plugin.id.GermanIdFrontConfig;
-import io.anyline.plugin.id.GermanIdFrontIdentification;
 import io.anyline.plugin.id.ID;
 import io.anyline.plugin.id.IdScanPlugin;
 import io.anyline.plugin.id.IdScanViewPlugin;
@@ -229,27 +225,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                } else if (subResult.getResult() instanceof DrivingLicenseIdentification) {
-                                    JSONObject jsonIdResult = ((DrivingLicenseIdentification) subResult.getResult())
-                                            .toJSONObject();
-                                    try {
-                                        jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                jsonIdResult);
-
-                                        jsonResult.put(subResult.getPluginId(), jsonIdResult);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                } else if (subResult.getResult() instanceof GermanIdFrontIdentification) {
-                                    JSONObject jsonIdResult = ((GermanIdFrontIdentification) subResult.getResult()).toJSONObject();
-                                    try {
-                                        jsonIdResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                jsonIdResult);
-
-                                        jsonResult.put(subResult.getPluginId(), jsonIdResult);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
                                 } else if (subResult instanceof OcrScanResult) {
                                     JSONObject jsonOcrResult = new JSONObject();
                                     try {
@@ -342,41 +317,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
 
                             }
 
-                        });
-                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof DrivingLicenseConfig) {
-                        scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
-                            @Override
-                            public void onResult(ScanResult<ID> idScanResult) {
-                                JSONObject jsonResult = ((DrivingLicenseIdentification) idScanResult.getResult()).toJSONObject();
-
-                                try {
-                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
-                                            jsonResult);
-                                } catch (Exception e) {
-                                    Log.e(TAG, "Exception is: ", e);
-
-                                }
-
-                                setResult(scanViewPlugin, jsonResult);
-
-                            }
-
-                        });
-                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof GermanIdFrontConfig) {
-                        scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
-                            @Override
-                            public void onResult(ScanResult<ID> idScanResult) {
-                                JSONObject jsonResult = ((GermanIdFrontIdentification) idScanResult.getResult()).toJSONObject();
-
-                                try {
-                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
-                                            jsonResult);
-                                } catch (Exception e) {
-                                    Log.e(TAG, "Exception is: ", e);
-
-                                }
-                                setResult(scanViewPlugin, jsonResult);
-                            }
                         });
                     } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof UniversalIdConfig) {
                         scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {

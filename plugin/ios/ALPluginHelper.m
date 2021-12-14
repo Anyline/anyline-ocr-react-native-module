@@ -423,46 +423,6 @@
         [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
         [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfExpiryObject]] forKey:@"dateOfExpiryObject"];
         [dictResult setValue:confidences forKey:@"fieldConfidences"];
-    } else if ([scanResult.result isKindOfClass:[ALDrivingLicenseIdentification class]]) {
-        NSMutableArray<NSString *> *keys=[@[
-                                            @"surname",
-                                            @"givenNames",
-                                            @"dateOfBirth",
-                                            @"placeOfBirth",
-                                            @"dateOfIssue",
-                                            @"dateOfExpiry",
-                                            @"authority",
-                                            @"documentNumber",
-                                            @"categories",
-                                            @"drivingLicenseString"
-                                            ] mutableCopy];
-        dictResult = [[scanResult.result dictionaryWithValuesForKeys:keys] mutableCopy];
-        //we have field confidences for everything but drivingLicenseString
-        [keys removeObject:@"drivingLicenseString"];
-        [dictResult setValue:[[scanResult.result fieldConfidences] dictionaryWithValuesForKeys:keys] forKey:@"fieldConfidences"];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfBirthObject]] forKey:@"dateOfBirthObject"];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfIssueObject]] forKey:@"dateOfIssueObject"];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfExpiryObject]] forKey:@"dateOfExpiryObject"];
-        
-    } else if ([scanResult.result isKindOfClass:[ALGermanIDFrontIdentification class]]) {
-        ALGermanIDFrontIdentification *germanIDFrontIdentification = (ALGermanIDFrontIdentification *)scanResult.result;
-        NSMutableArray<NSString *> *keys=[@[
-                                            @"surname",
-                                            @"givenNames",
-                                            @"dateOfBirth",
-                                            @"nationality",
-                                            @"placeOfBirth",
-                                            @"dateOfExpiry",
-                                            @"documentNumber",
-                                            @"cardAccessNumber",
-                                            @"germanIdFrontString"
-                                            ] mutableCopy];
-        dictResult = [[germanIDFrontIdentification dictionaryWithValuesForKeys:keys] mutableCopy];
-        //we have field confidences for everything but germanIdFrontString
-        [keys removeObject:@"germanIdFrontString"];
-        [dictResult setValue:[[scanResult.result fieldConfidences] dictionaryWithValuesForKeys:keys] forKey:@"fieldConfidences"];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfBirthObject]] forKey:@"dateOfBirthObject"];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfExpiryObject]] forKey:@"dateOfExpiryObject"];
     }
     
     [dictResult setValue:imagePath forKey:@"imagePath"];
