@@ -59,15 +59,6 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
       </View>
       <Text style={styles.text}>ID</Text>
       <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  Driving License'} color="#0099FF"
-          disabled={disabled}
-          onPress={() => {
-            platformPermissionCheck('DRIVING_LICENSE')
-          }} />
-
-      </View>
-
-      <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  MRZ Scanner'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
@@ -84,14 +75,6 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
           }} />
       </View>
       }
-
-      <View style={styles.buttons}>
-        <Button style={styles.buttons} title={'  German ID Front'} color="#0099FF"
-          disabled={disabled}
-          onPress={() => {
-            platformPermissionCheck('GERMAN_ID_FRONT')
-          }} />
-      </View>
 
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  Barcode PDF417'} color="#0099FF"

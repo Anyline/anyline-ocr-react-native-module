@@ -30,7 +30,6 @@ import DotMatrixConfig from '../config/DotMatrixConfig';
 import DialEnergyConfig from '../config/DialMeterConfig';
 import IBANConfig from '../config/IbanConfig';
 import VoucherConfig from '../config/VoucherConfig';
-import DrivingLicenseConfig from '../config/DrivingLicenseConfig';
 import LicensePlateConfig from '../config/LicensePlateConfig';
 import LicensePlateUSConfig from '../config/LicensePlateUSConfig';
 import SerialNumberConfig from '../config/SerialNumber';
@@ -38,7 +37,6 @@ import VinConfig from '../config/VINConfig';
 import USNRConfig from '../config/USNRConfig';
 import ShipConConfig from '../config/ContainerShipConfig';
 import CattleTagConfig from '../config/CattleTagConfig';
-import GermanIDFrontConfig from '../config/GermanIDFrontConfig';
 import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
 import ParallelScanningConfig from '../config/ParallelScanningConfig';
@@ -134,10 +132,6 @@ class Anyline extends Component {
         type = 'ANYLINE_OCR';
         config = VoucherConfig;
         break;
-      case 'DRIVING_LICENSE':
-        type = 'ANYLINE_OCR';
-        config = DrivingLicenseConfig;
-        break;
       case 'VIN':
         type = 'ANYLINE_OCR';
         config = VinConfig;
@@ -172,9 +166,6 @@ class Anyline extends Component {
         break; 
       case 'NFC+MRZ':
         config = NFCAndMRZConfig;
-        break;
-      case 'GERMAN_ID_FRONT':
-        config = GermanIDFrontConfig;
         break;
       case 'LICENSE_PLATE':
         config = LicensePlateConfig;
