@@ -15,8 +15,8 @@
     "anyline-ocr-react-native-module": "../../plugin",
     "hermes-engine": "^0.7.2",
     "jsc-android": "^241213.1.0",
-    "react": "17.0.1",
-    "react-native": "0.64.2"
+    "react": "17.0.2",
+    "react-native": "0.67.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
