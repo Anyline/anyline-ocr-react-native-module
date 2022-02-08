@@ -41,6 +41,7 @@ import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
 import ParallelScanningConfig from '../config/ParallelScanningConfig';
 import TinConfig from '../config/TINConfig';
+import TireSizeConfig from '../config/TireSizeConfig'; 
 import OtaConfig from '../config/OtaConfig';
 import { DeviceEventEmitter } from 'react-native';
 import { Platform } from 'react-native';
@@ -140,6 +141,10 @@ class Anyline extends Component {
         type = 'ANYLINE_OCR';
         config = TinConfig;
         break;
+      case 'TIRE_SIZE':
+        type = 'ANYLINE_TIRE';
+        config = TireSizeConfig;
+        break;  
       case 'USNR':
         type = 'ANYLINE_OCR';
         config = USNRConfig;
