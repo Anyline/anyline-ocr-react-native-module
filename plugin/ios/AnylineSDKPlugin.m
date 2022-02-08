@@ -235,7 +235,7 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 
 - (BOOL)scanModeIndex:(NSString *)scanMode{
 
-    NSArray *possibleScanModes = @[@"DOCUMENT", @"MRZ", @"BARCODE", @"LICENSE_PLATE", @"LICENSE_PLATE_US", @"ANYLINE_OCR", @"ANYLINE_TIRE", @"ANALOG_METER", @"DIGITAL_METER", @"AUTO_ANALOG_DIGITAL_METER",
+    NSArray *possibleScanModes = @[@"DOCUMENT", @"MRZ", @"BARCODE", @"LICENSE_PLATE", @"LICENSE_PLATE_US", @"ANYLINE_OCR", @"TIRE_SIZE", @"COMMERCIAL_TIRE_ID", @"ANALOG_METER", @"DIGITAL_METER", @"AUTO_ANALOG_DIGITAL_METER",
                                    @"DIAL_METER", @"SERIAL_NUMBER", @"HEAT_METER_4", @"HEAT_METER_5", @"HEAT_METER_6", @"DOT_MATRIX_METER"];
 
     return [possibleScanModes containsObject: [scanMode uppercaseString]];

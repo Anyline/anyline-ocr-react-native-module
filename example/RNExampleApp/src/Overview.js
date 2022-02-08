@@ -133,12 +133,19 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
           }} />
       </View>
 
-      <Text style={styles.text}>Tire Size</Text>
+      <Text style={styles.text}>Tire</Text>
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={' Tire Size Scanner'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
             platformPermissionCheck('TIRE_SIZE')
+          }} />
+      </View>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={' Commercial Tire ID'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('COMMERCIAL_TIRE_ID')
           }} />
       </View>
 
