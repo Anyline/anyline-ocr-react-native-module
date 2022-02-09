@@ -132,8 +132,17 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
             platformPermissionCheck('TIN')
           }} />
       </View>
-      <Text style={styles.text}>OCR</Text>
 
+      <Text style={styles.text}>Tire Size</Text>
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={' Tire Size Scanner'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('TIRE_SIZE')
+          }} />
+      </View>
+
+      <Text style={styles.text}>OCR</Text>
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'  IBAN Scanner'} color="#0099FF"
           disabled={disabled}
