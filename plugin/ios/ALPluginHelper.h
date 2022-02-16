@@ -85,6 +85,9 @@ NS_ASSUME_NONNULL_BEGIN
                               detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
                                        quality:(NSInteger)quality;
 
++ (NSDictionary *)dictionaryForTireResult:(ALTireResult *)scanResult
+                                  quality:(NSInteger)quality;
+
 @end
 
 NS_ASSUME_NONNULL_END

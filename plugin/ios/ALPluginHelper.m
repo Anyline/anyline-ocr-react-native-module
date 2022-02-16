@@ -616,6 +616,23 @@
     return dictResult;
 }
 
++ (NSDictionary *)dictionaryForTireResult:(ALTireResult *)scanResult
+                                  quality:(NSInteger)quality {
+    CGFloat dividedCompRate = (CGFloat)quality/100;
+    
+    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
+    
+    [dictResult setObject:scanResult.result forKey:@"text"];
+    
+    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
+    
+    [dictResult setValue:imagePath forKey:@"imagePath"];
+    
+    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+    
+    return dictResult;
+}
 
 + (NSDictionary *)dictForResult:(ALScanResult *)result
                detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
