@@ -630,7 +630,8 @@
     
     NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
     [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
-    
+    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
+    [dictResult setValue:scanResult.pluginID forKey:@"pluginId"];
     return dictResult;
 }
 
