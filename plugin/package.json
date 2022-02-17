@@ -11,9 +11,9 @@
     "raw": "anyline-ocr-react-native-module@^37.0.0",
     "name": "anyline-ocr-react-native-module",
     "escapedName": "anyline-ocr-react-native-module",
-    "rawSpec": "^36.0.0",
+    "rawSpec": "^37.0.0",
     "saveSpec": null,
-    "fetchSpec": "^36.0.0"
+    "fetchSpec": "^37.0.0"
   },
   "_requiredBy": [
     "/"
