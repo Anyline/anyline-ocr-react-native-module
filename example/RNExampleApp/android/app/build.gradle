@@ -104,7 +104,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 3
-        versionName "35.0.0"
+        versionName "37.0.0"
         multiDexEnabled true
 
     }
