@@ -50,6 +50,9 @@ import io.anyline.plugin.meter.MeterScanResult;
 import io.anyline.plugin.meter.MeterScanViewPlugin;
 import io.anyline.plugin.ocr.OcrScanResult;
 import io.anyline.plugin.ocr.OcrScanViewPlugin;
+import io.anyline.plugin.tire.TireScanResult;
+import io.anyline.plugin.tire.TireScanPlugin;
+import io.anyline.plugin.tire.TireScanViewPlugin;
 import io.anyline.view.AbstractBaseScanViewPlugin;
 import io.anyline.view.CutoutRect;
 import io.anyline.view.ParallelScanViewComposite;
@@ -258,9 +261,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                         }
                     });
                 } else if (scanViewPlugin instanceof LicensePlateScanViewPlugin) {
-                    if (json.has("reportingEnabled")) {
-                        (((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
-                    }
                     scanViewPlugin.addScanResultListener(new ScanResultListener<LicensePlateScanResult>() {
                         @Override
                         public void onResult(LicensePlateScanResult licensePlateResult) {
@@ -339,10 +339,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                         });
                     }
                 } else if (scanViewPlugin instanceof OcrScanViewPlugin) {
-                    if (json.has("reportingEnabled")) {
-                        (((OcrScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
-                    }
-
                     scanViewPlugin.addScanResultListener(new ScanResultListener<OcrScanResult>() {
                         @Override
                         public void onResult(OcrScanResult ocrScanResult) {
@@ -350,6 +346,24 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             try {
                                 jsonResult.put("text", ocrScanResult.getResult().trim());
                                 jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, ocrScanResult,
+                                        jsonResult);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            setResult(scanViewPlugin, jsonResult);
+
+                        }
+
+                    });
+
+                } else if (scanViewPlugin instanceof TireScanViewPlugin) {
+                    scanViewPlugin.addScanResultListener(new ScanResultListener<TireScanResult>() {
+                        @Override
+                        public void onResult(TireScanResult tireScanResult) {
+                            JSONObject jsonResult = new JSONObject();
+                            try {
+                                jsonResult.put("text", tireScanResult.getResult().trim());
+                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, tireScanResult,
                                         jsonResult);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -402,10 +416,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     });
 
                 } else if (scanViewPlugin instanceof MeterScanViewPlugin) {
-                    if (json.has("reportingEnabled")) {
-                        (((MeterScanViewPlugin) scanViewPlugin).getScanPlugin()).setReportingEnabled(json.optBoolean("reportingEnabled", true));
-
-                    }
                     // create the radio button for the UI
                     addSegmentRadioButtonUI(json);
 

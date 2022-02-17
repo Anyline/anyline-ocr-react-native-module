@@ -10,10 +10,9 @@ export default {
         },
         "viewPlugin" : {
             "plugin": {
-                "id": "TIN",
+                "id": "TIRE_SIZE",
                 "tirePlugin": {
-                    "tinConfig":{
-                        "scanMode" : "UNIVERSAL"
+                    "tireSizeConfig":{
                     }
                 }
             },

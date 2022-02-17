@@ -261,6 +261,14 @@
     
 }
 
+- (void)anylineTireScanPlugin:(ALTireScanPlugin * _Nonnull)anylineTireScanPlugin
+                didFindResult:(ALTireResult * _Nonnull)scanResult {
+    NSDictionary *dictResult = [ALPluginHelper dictionaryForTireResult:scanResult
+                                                               quality:self.quality];
+    
+    [self handleResult:dictResult result:scanResult];
+}
+
 - (void)anylineCaptureDeviceManager:(ALCaptureDeviceManager * _Nonnull)captureDeviceManager
                didFindBarcodeResult:(NSString * _Nonnull)scanResult
                                type:(NSString * _Nonnull)barcodeType {
