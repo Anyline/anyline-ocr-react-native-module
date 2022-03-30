@@ -59,7 +59,7 @@ repositories {
         dirs 'libs'
     }
     maven {
-        url 'https://anylinesdk.blob.core.windows.net/testing/'
+        url 'https://anylinesdk.blob.core.windows.net/maven/'
     }
 }
 
