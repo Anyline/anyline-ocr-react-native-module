@@ -1,6 +1,6 @@
 {
-  "_from": "anyline-ocr-react-native-module@^39.0.0-rc3",
-  "_id": "anyline-ocr-react-native-module@39.0.0-rc3",
+  "_from": "anyline-ocr-react-native-module@^39.0.0",
+  "_id": "anyline-ocr-react-native-module@39.0.0",
   "_inBundle": false,
   "_integrity": "sha512-BGi9zNkSsoxXywDBIqzgBRvKUBniQOJHDKBrozZubKthZNRBAj8Ry5tW0Me0yLXt/fauME//hbC0wsenfPJZqw==",
   "_location": "/anyline-ocr-react-native-module",
@@ -8,19 +8,19 @@
   "_requested": {
     "type": "range",
     "registry": true,
-    "raw": "anyline-ocr-react-native-module@^39.0.0-rc3",
+    "raw": "anyline-ocr-react-native-module@^39.0.0",
     "name": "anyline-ocr-react-native-module",
     "escapedName": "anyline-ocr-react-native-module",
-    "rawSpec": "^38.0.1",
+    "rawSpec": "^39.0.0",
     "saveSpec": null,
-    "fetchSpec": "^38.0.1"
+    "fetchSpec": "^39.0.0"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/anyline-ocr-react-native-module/-/anyline-ocr-react-native-module-39.0.0-rc3.tgz",
+  "_resolved": "https://registry.npmjs.org/anyline-ocr-react-native-module/-/anyline-ocr-react-native-module-39.0.0.tgz",
   "_shasum": "bacbcd260cc662244f59393ed81a6edba009b52c",
-  "_spec": "anyline-ocr-react-native-module@^39.0.0-rc3",
+  "_spec": "anyline-ocr-react-native-module@^39.0.0",
   "_where": "/Users/amiransari/Projects/anyline-ocr-react-native-module1/example/RNExampleApp",
   "bugs": {
     "url": "https://github.com/Anyline/anyline-ocr-react-native-module/issues"
@@ -47,5 +47,5 @@
     "type": "git",
     "url": "git+https://github.com/Anyline/anyline-ocr-react-native-module.git"
   },
-  "version": "39.0.0-rc3"
+  "version": "39.0.0"
 }
