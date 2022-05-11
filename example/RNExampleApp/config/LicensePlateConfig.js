@@ -13,8 +13,7 @@ export default {
       "plugin": {
         "id": "LicensePlate_ID",
         "licensePlatePlugin": {
-        },
-        "delayStartScanTime": 1000
+        }
       },
       "cutoutConfig": {
         "style": "rect",
@@ -42,8 +41,7 @@ export default {
         "beepOnResult": true,
         "vibrateOnResult": true
       },
-      "cancelOnResult": true,
-      "delayStartScanTime": 2000
+      "cancelOnResult": true
     }
   },
 }

@@ -14,8 +14,7 @@ export default {
         "id": "LICENSE_PLATE_US",
         "licensePlatePlugin": {
           "scanMode": "unitedStates"
-        },
-        "delayStartScanTime": 1000
+        }
       },
       "cutoutConfig": {
         "style": "rect",
@@ -43,8 +42,7 @@ export default {
         "beepOnResult": true,
         "vibrateOnResult": true
       },
-      "cancelOnResult": true,
-      "delayStartScanTime": 2000
+      "cancelOnResult": true
     }
   },
 }

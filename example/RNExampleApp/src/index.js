@@ -52,6 +52,8 @@ import { Platform } from 'react-native';
 console.disableYellowBox = true;
 
 class Anyline extends Component {
+  overTheAirUpdateIsEnabled = false;
+
   state = {
     hasScanned: false,
     result: '',
@@ -73,7 +75,7 @@ class Anyline extends Component {
   }
 
   updateAnyline = async type => {
-    if(Platform.OS === 'android') {
+    if(Platform.OS === 'android' && this.overTheAirUpdateIsEnabled == true) {
       let otaConfig = OtaConfig;
       
       AnylineOCR.initSdk(otaConfig.license)
