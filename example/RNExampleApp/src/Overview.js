@@ -124,7 +124,7 @@
              platformPermissionCheck('LICENSE_PLATE_US')
            }} />
        </View>
- 
+       <Text style={styles.text}>Tire</Text>
        <View style={styles.buttons}>
          <Button style={styles.buttons} title={' Universal TIN Scanner'} color="#0099FF"
            disabled={disabled}
@@ -132,8 +132,7 @@
              platformPermissionCheck('TIN')
            }} />
        </View>
- 
-       <Text style={styles.text}>Tire</Text>
+       
        <View style={styles.buttons}>
          <Button style={styles.buttons} title={' Tire Size Scanner'} color="#0099FF"
            disabled={disabled}
