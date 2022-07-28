@@ -1,6 +1,6 @@
 {
   "name": "RNExampleApp",
-  "version": "40.0.0",
+  "version": "41.0.0-rc1",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
