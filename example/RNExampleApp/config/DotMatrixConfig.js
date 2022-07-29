@@ -12,7 +12,7 @@ export default {
             "plugin": {
                 "id": "Meter_ID",
                 "meterPlugin": {
-                    "scanMode": "DOT_MATRIX_METER"
+                    "scanMode": "AUTO_ANALOG_DIGITAL_METER"
                 }
             },
             "cutoutConfig": {
