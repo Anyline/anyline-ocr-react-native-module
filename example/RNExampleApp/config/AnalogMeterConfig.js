@@ -12,7 +12,7 @@ export default {
             "plugin": {
                 "id": "Meter_ID",
                 "meterPlugin": {
-                    "scanMode": "ANALOG_METER"
+                    "scanMode": "AUTO_ANALOG_DIGITAL_METER"
                 }
             },
             "cutoutConfig": {
