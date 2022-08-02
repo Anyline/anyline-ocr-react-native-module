@@ -35,15 +35,6 @@ export default {
             },
             "cancelOnResult": true
         },
-        "nativeBarcodeEnabled": true,
-        "segment": {
-            "titles": ["Analog", "Digital"],
-            "modes": ["ANALOG_METER", "DIGITAL_METER"],
-            "tintColor": "CCCCCC",
-            "offset": {
-                "x": 0,
-                "y": 400
-            }
-        }
+        "nativeBarcodeEnabled": true
     }
 }
