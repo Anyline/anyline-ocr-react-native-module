@@ -47,5 +47,5 @@
     "type": "git",
     "url": "git+https://github.com/Anyline/anyline-ocr-react-native-module.git"
   },
-  "version": "41.0.0-rc1"
+  "version": "41.0.0"
 }
