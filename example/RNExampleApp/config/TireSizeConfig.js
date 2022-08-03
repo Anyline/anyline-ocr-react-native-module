@@ -35,7 +35,7 @@ export default {
             "scanFeedback" : {
                 "animation": "traverse_multi",
                 "animationDuration" : 250,
-                "style": "contour_rect",
+                "style": "rect",
                 "strokeWidth": 2,
                 "strokeColor": "0099FF",
                 "beepOnResult": true,
