@@ -239,15 +239,20 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                         e.printStackTrace();
                                     }
                                 } else if (subResult instanceof BarcodeScanResult) {
-                                    jsonResult = extractBarcodeResult(jsonResult, subResult);
+                                    try {
+                                        jsonResult.put(
+                                            subResult.getPluginId(), 
+                                            extractBarcodeResult(jsonResult, subResult)
+                                        );
+                                    } catch (Exception e) {
+                                        Log.e(TAG, "EXCEPTION", e);
+                                    }
                                 } else if (subResult instanceof MeterScanResult) {
                                     JSONObject jsonMeterResult = new JSONObject();
                                     try {
-                                        jsonMeterResult = AnylinePluginHelper.setMeterScanMode(
-                                                ((MeterScanResult) subResult).getScanMode(), jsonMeterResult);
+                                        jsonMeterResult = AnylinePluginHelper.setMeterScanMode(((MeterScanResult) subResult).getScanMode(), jsonMeterResult);
                                         jsonMeterResult.put("reading", subResult.getResult());
-                                        jsonMeterResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult,
-                                                jsonMeterResult);
+                                        jsonMeterResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, subResult, jsonMeterResult);
                                         jsonResult.put(subResult.getPluginId(), jsonMeterResult);
                                     } catch (Exception e) {
                                         Log.e(TAG, "EXCEPTION", e);
