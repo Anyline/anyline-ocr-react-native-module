@@ -1,6 +1,6 @@
 {
   "_from": "anyline-ocr-react-native-module@^41.0.2",
-  "_id": "anyline-ocr-react-native-module@41.0.2",
+  "_id": "anyline-ocr-react-native-module@^41.0.2",
   "_inBundle": false,
   "_integrity": "sha512-BGi9zNkSsoxXywDBIqzgBRvKUBniQOJHDKBrozZubKthZNRBAj8Ry5tW0Me0yLXt/fauME//hbC0wsenfPJZqw==",
   "_location": "/anyline-ocr-react-native-module",
@@ -47,5 +47,5 @@
     "type": "git",
     "url": "git+https://github.com/Anyline/anyline-ocr-react-native-module.git"
   },
-  "version": "2"
+  "version": "41.0.2"
 }
