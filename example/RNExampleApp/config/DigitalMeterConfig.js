@@ -5,7 +5,7 @@ export default {
             "captureResolution": "720p"
         },
         "flash": {
-            "mode": "manual",
+            "mode": "auto",
             "alignment": "bottom_right",
         },
         "viewPlugin": {
