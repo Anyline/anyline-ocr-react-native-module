@@ -19,6 +19,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/Anyline/anyline-ocr-react-native-module.git", :tag => "#{s.version}" }
 
   s.source_files  = "*.{h,m}"
-  s.dependency "Anyline", "~> 41.0.1"
+  s.dependency "Anyline", "~> 42.0.0"
   s.dependency "React"
 end
