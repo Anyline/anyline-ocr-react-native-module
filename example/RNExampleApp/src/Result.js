@@ -34,28 +34,38 @@ export default function Result({
 
   let onReportCorrectedResultResponseHandler = function(response) {
     /* 
-        The response is a JSON object with the following style:
+        The response is a JSON object with the following style if it's an error:
         {
-          "code": <Success or Error code>,
+          "code": <Error code>,
           "message": {
-            "code": <Success or Error code>,
+            "code": <Error code>,
             "timestamp": <Timestamp>,
             "path": <Endpoint URL of our Api>,
             "method": <POST, GET etc.>,
-            "message": <Error/Success message>
+            "message": <Error message>
+          }
+        }
+
+        If the response is successful it looks like this:
+        {
+          "code" : 201,
+          "message" : {
+            "message": "ok"
           }
         }
     */
-    console.log(correctedResult);
-    console.log(response);
+    var parsedResponse = JSON.parse(response);
+    if(parsedResponse["code"] === 201){
+      setResponseText("Sending corrected result was successful.");
+    } else {
+      setResponseText("Error while sending corrected result: " + parsedResponse["message"]);
+    }
   }
 
   let onReportCorrectedResultPressed = function() {
-    console.log(result);
-
     if(correctedResult !== "") { 
       setResponseText("Waiting for response...");
-      AnylineOCR.reportCorrectedResult('blobKey', correctedResult, onReportCorrectedResultResponseHandler);
+      AnylineOCR.reportCorrectedResult(result["blobKey"], correctedResult, onReportCorrectedResultResponseHandler);
     }
   };
 

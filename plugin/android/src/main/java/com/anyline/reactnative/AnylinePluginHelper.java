@@ -144,10 +144,8 @@ public class AnylinePluginHelper {
             scanResult.getCutoutImage().save(imageFile, 90);
             jsonObject.put("imagePath", imageFile.getAbsolutePath());
 
-            Log.e("yyyy", "add blobkey");
             if (scanResult.getBlobKey() != null) {
                 jsonObject.put("blobKey", scanResult.getBlobKey());
-                Log.e("yyyy", "blobkey added");
             }
 
             File imageFileFull = TempFileUtil.createTempFileCheckCache(activity, UUID.randomUUID().toString(), ".jpg");
