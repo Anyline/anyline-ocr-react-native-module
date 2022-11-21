@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {
+  Component,
+  useState
+} from 'react';
 import {
   Button,
   Image,
@@ -8,8 +11,10 @@ import {
   View,
   Dimensions,
   TouchableWithoutFeedback,
+  TextInput,
 } from 'react-native';
 import {flattenObject} from './utils/utils';
+import AnylineOCR from 'anyline-ocr-react-native-module';
 
 const withoutImagePaths = value =>
   value !== 'imagePath' && value !== 'fullImagePath';
@@ -23,6 +28,50 @@ export default function Result({
   hasBackButton,
   title = false,
 }) {
+
+  const [correctedResult, setCorrectedResult] = useState('');
+  const [responseText, setResponseText] = useState('');
+
+  let onReportCorrectedResultResponseHandler = function(response) {
+    /* 
+        The response is a JSON object with the following style:
+        {
+          "code": <Success or Error code>,
+          "message": {
+            "code": <Success or Error code>,
+            "timestamp": <Timestamp>,
+            "path": <Endpoint URL of our Api>,
+            "method": <POST, GET etc.>,
+            "message": <Error/Success message>
+          }
+        }
+    */
+    console.log(correctedResult);
+    console.log(response);
+  }
+
+  let onReportCorrectedResultPressed = function() {
+    console.log(result);
+
+    if(correctedResult !== "") { 
+      setResponseText("Waiting for response...");
+      AnylineOCR.reportCorrectedResult('blobKey', correctedResult, onReportCorrectedResultResponseHandler);
+    }
+  };
+
+  let reportCorrectedResultButton = (
+    <View style={styles.reportCorrectedResultButtonStyle}>
+      <TextInput 
+        placeholder='Enter corrected result' 
+        backgroundColor='white' 
+        marginBottom={16}
+        onChangeText={ newCorrectedResult => setCorrectedResult(newCorrectedResult) }
+      />
+      <Button title={'Report corrected result'} onPress={onReportCorrectedResultPressed} />
+      <Text style={styles.text}>{responseText}</Text>
+    </View>
+  );
+
   let fullImage = <View />;
   let fullImageText = <View />;
   if (fullImagePath && fullImagePath !== '') {
@@ -90,6 +139,7 @@ export default function Result({
               </View>
             );
           })}
+          {reportCorrectedResultButton}
         {BackButton}
       </ScrollView>
     </View>
@@ -161,6 +211,14 @@ const styles = StyleSheet.create({
     marginTop: 25,
     width: Dimensions.get('window').width/4,
     alignSelf: 'center',
+  },
+
+  reportCorrectedResultButtonStyle: {
+    marginTop: 25,
+    width: Dimensions.get('window').width,
+    alignSelf: 'center',
+    paddingLeft: 24,
+    paddingRight: 24,
   },
 
   titleText: {
