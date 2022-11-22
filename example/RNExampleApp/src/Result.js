@@ -35,7 +35,7 @@ export default function Result({
 
   let onReportCorrectedResultResponseHandler = function(response) {
     /* 
-        The response is a JSON object with the following style if it's an error:
+        The response is a string with the following style if it's an error:
         {
           "code": <Error code>,
           "message": {
