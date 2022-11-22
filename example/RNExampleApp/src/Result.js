@@ -64,7 +64,11 @@ export default function Result({
   }
 
   let onReportCorrectedResultPressed = function() {
-    if(correctedResult !== "") { 
+    let blobKey = result["blobKey"];
+    
+    if(typeof blobKey === 'undefined' || blobKey === '' || blobKey === null){
+      setResponseText("Only licenses with 'debugReporting' set to 'on' allow user corrected results.");
+    } else if(correctedResult !== "") { 
       setResponseText("Waiting for response...");
       AnylineOCR.reportCorrectedResult(result["blobKey"], correctedResult, onReportCorrectedResultResponseHandler);
     }
