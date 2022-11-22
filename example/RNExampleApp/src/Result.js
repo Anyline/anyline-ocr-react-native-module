@@ -10,6 +10,7 @@ import {
   Text,
   View,
   Dimensions,
+  Platform,
   TouchableWithoutFeedback,
   TextInput,
 } from 'react-native';
@@ -70,7 +71,9 @@ export default function Result({
   };
 
   let reportCorrectedResultButton = (
-    <View style={styles.reportCorrectedResultButtonStyle}>
+    <View 
+      style={styles.reportCorrectedResultButtonStyle}
+      >
       <TextInput 
         placeholder='Enter corrected result' 
         backgroundColor='white' 
@@ -149,7 +152,7 @@ export default function Result({
               </View>
             );
           })}
-          {reportCorrectedResultButton}
+          { Platform.OS === 'android' && reportCorrectedResultButton }
         {BackButton}
       </ScrollView>
     </View>
@@ -228,7 +231,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     alignSelf: 'center',
     paddingLeft: 24,
-    paddingRight: 24,
+    paddingRight: 24
   },
 
   titleText: {
