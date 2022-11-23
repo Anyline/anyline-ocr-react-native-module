@@ -144,6 +144,10 @@ public class AnylinePluginHelper {
             scanResult.getCutoutImage().save(imageFile, 90);
             jsonObject.put("imagePath", imageFile.getAbsolutePath());
 
+            if (scanResult.getBlobKey() != null) {
+                jsonObject.put("blobKey", scanResult.getBlobKey());
+            }
+
             File imageFileFull = TempFileUtil.createTempFileCheckCache(activity, UUID.randomUUID().toString(), ".jpg");
             scanResult.getFullImage().save(imageFileFull, 90);
             jsonObject.put("fullImagePath", imageFileFull.getAbsolutePath());
@@ -185,6 +189,10 @@ public class AnylinePluginHelper {
         return json;
     }
 
+    private static List<Barcode> getNativeBarcodeList() {
+        return finalBarcodeList;
+    }
+
     private static void setNativeBarcodeList(List<Barcode> barcodes) {
         final List<Barcode> barcodeList = new ArrayList<>();
         final List<String> barcodesDisplayedVal = new ArrayList<>();
@@ -206,10 +214,6 @@ public class AnylinePluginHelper {
 
         finalBarcodeList = barcodeList;
 
-    }
-
-    private static List<Barcode> getNativeBarcodeList() {
-        return finalBarcodeList;
     }
 
     private static String findValidFormatForReference(int format) {

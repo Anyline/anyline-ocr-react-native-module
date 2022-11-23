@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {
+  Component,
+  useState
+} from 'react';
 import {
   Button,
   Image,
@@ -7,9 +10,12 @@ import {
   Text,
   View,
   Dimensions,
+  Platform,
   TouchableWithoutFeedback,
+  TextInput,
 } from 'react-native';
 import {flattenObject} from './utils/utils';
+import AnylineOCR from 'anyline-ocr-react-native-module';
 
 const withoutImagePaths = value =>
   value !== 'imagePath' && value !== 'fullImagePath';
@@ -23,6 +29,66 @@ export default function Result({
   hasBackButton,
   title = false,
 }) {
+
+  const [correctedResult, setCorrectedResult] = useState('');
+  const [responseText, setResponseText] = useState('');
+
+  let onReportCorrectedResultResponseHandler = function(response) {
+    /* 
+        The response is a string with the following style if it's an error:
+        {
+          "code": <Error code>,
+          "message": {
+            "code": <Error code>,
+            "timestamp": <Timestamp>,
+            "path": <Endpoint URL of our Api>,
+            "method": <POST, GET etc.>,
+            "message": <Error message>
+          }
+        }
+
+        If the response is successful it looks like this:
+        {
+          "code" : 201,
+          "message" : {
+            "message": "ok"
+          }
+        }
+    */
+    var parsedResponse = JSON.parse(response);
+    if(parsedResponse["code"] === 201){
+      setResponseText("Sending corrected result was successful.");
+    } else {
+      setResponseText("Error while sending corrected result: " + parsedResponse["message"]);
+    }
+  }
+
+  let onReportCorrectedResultPressed = function() {
+    let blobKey = result["blobKey"];
+    
+    if(typeof blobKey === 'undefined' || blobKey === '' || blobKey === null){
+      setResponseText("Only licenses with 'debugReporting' set to 'on' allow user corrected results.");
+    } else if(correctedResult !== "") { 
+      setResponseText("Waiting for response...");
+      AnylineOCR.reportCorrectedResult(result["blobKey"], correctedResult, onReportCorrectedResultResponseHandler);
+    }
+  };
+
+  let reportCorrectedResultButton = (
+    <View 
+      style={styles.reportCorrectedResultButtonStyle}
+      >
+      <TextInput 
+        placeholder='Enter corrected result' 
+        backgroundColor='white' 
+        marginBottom={16}
+        onChangeText={ newCorrectedResult => setCorrectedResult(newCorrectedResult) }
+      />
+      <Button title={'Report corrected result'} onPress={onReportCorrectedResultPressed} />
+      <Text style={styles.text}>{responseText}</Text>
+    </View>
+  );
+
   let fullImage = <View />;
   let fullImageText = <View />;
   if (fullImagePath && fullImagePath !== '') {
@@ -90,6 +156,7 @@ export default function Result({
               </View>
             );
           })}
+          { Platform.OS === 'android' && reportCorrectedResultButton }
         {BackButton}
       </ScrollView>
     </View>
@@ -161,6 +228,14 @@ const styles = StyleSheet.create({
     marginTop: 25,
     width: Dimensions.get('window').width/4,
     alignSelf: 'center',
+  },
+
+  reportCorrectedResultButtonStyle: {
+    marginTop: 25,
+    width: Dimensions.get('window').width,
+    alignSelf: 'center',
+    paddingLeft: 24,
+    paddingRight: 24
   },
 
   titleText: {
