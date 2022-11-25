@@ -51,9 +51,9 @@ import io.anyline.plugin.meter.MeterScanViewPlugin;
 import io.anyline.plugin.ocr.OcrScanResult;
 import io.anyline.plugin.ocr.OcrScanViewPlugin;
 import io.anyline.plugin.tire.TireScanResult;
-import io.anyline.plugin.tire.TireScanPlugin;
 import io.anyline.plugin.tire.TireScanViewPlugin;
 import io.anyline.view.AbstractBaseScanViewPlugin;
+import io.anyline.plugin.tire.TireSizeScanResult;
 import io.anyline.view.CutoutRect;
 import io.anyline.view.ParallelScanViewComposite;
 import io.anyline.view.ScanView;
@@ -62,7 +62,7 @@ import io.anyline.view.SerialScanViewComposite;
 
 public class Anyline4Activity extends AnylineBaseActivity {
     private static final String TAG = Anyline4Activity.class.getSimpleName();
-
+    private static final String KEY_DEFAULT_ORIENTATION_APPLIED = "default_orientation_applied";
     private ScanView anylineScanView;
     private AbstractBaseScanViewPlugin scanViewPlugin;
     private RadioGroup radioGroup;
@@ -71,7 +71,6 @@ public class Anyline4Activity extends AnylineBaseActivity {
     private Boolean isFirstCameraOpen; // only if camera is opened the first time get coordinates of the cutout to avoid flickering when switching between analog and digital
     private RelativeLayout parentLayout;
     private boolean defaultOrientationApplied;
-    private static final String KEY_DEFAULT_ORIENTATION_APPLIED = "default_orientation_applied";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,8 +240,8 @@ public class Anyline4Activity extends AnylineBaseActivity {
                                 } else if (subResult instanceof BarcodeScanResult) {
                                     try {
                                         jsonResult.put(
-                                            subResult.getPluginId(), 
-                                            extractBarcodeResult(jsonResult, subResult)
+                                                subResult.getPluginId(),
+                                                extractBarcodeResult(jsonResult, subResult)
                                         );
                                     } catch (Exception e) {
                                         Log.e(TAG, "EXCEPTION", e);
@@ -264,23 +263,19 @@ public class Anyline4Activity extends AnylineBaseActivity {
                         }
                     });
                 } else if (scanViewPlugin instanceof LicensePlateScanViewPlugin) {
-                    scanViewPlugin.addScanResultListener(new ScanResultListener<LicensePlateScanResult>() {
-                        @Override
-                        public void onResult(LicensePlateScanResult licensePlateResult) {
-                            JSONObject jsonResult = new JSONObject();
-                            try {
-                                jsonResult.put("country", licensePlateResult.getCountry());
-                                jsonResult.put("licensePlate", licensePlateResult.getResult());
+                    scanViewPlugin.addScanResultListener((ScanResultListener<LicensePlateScanResult>) licensePlateResult -> {
+                        JSONObject jsonResult = new JSONObject();
+                        try {
+                            jsonResult.put("country", licensePlateResult.getCountry());
+                            jsonResult.put("licensePlate", licensePlateResult.getResult());
 
-                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, licensePlateResult,
-                                        jsonResult);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            setResult(scanViewPlugin, jsonResult);
+                            jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, licensePlateResult,
+                                    jsonResult);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
+                        setResult(scanViewPlugin, jsonResult);
                     });
                 } else if (scanViewPlugin instanceof IdScanViewPlugin) {
                     if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof MrzConfig) {
@@ -290,90 +285,79 @@ public class Anyline4Activity extends AnylineBaseActivity {
                             cropAndTransformError = json.getString("cropAndTransformErrorMessage");
                         }
 
-                        scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
-                            @Override
-                            public void onResult(ScanResult<ID> idScanResult) {
-                                JSONObject jsonResult = ((MrzIdentification) idScanResult.getResult()).toJSONObject();
-                                try {
-                                    if (jsonResult.get("issuingCountryCode").equals("D")
-                                            && jsonResult.get("documentType").equals("ID")) {
-                                        if (jsonResult.get("issuingCountryCode").equals("D")) {
-                                            jsonResult.put("address", jsonResult.get("address"));
-                                        } else {
-                                            jsonResult.remove("address");
-                                        }
-
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                                try {
-                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
-                                            jsonResult);
-                                } catch (Exception e) {
-                                    Log.e(TAG, "Exception is: ", e);
-
-                                }
-
-                                setResult(scanViewPlugin, jsonResult);
-
-                            }
-
-                        });
-                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof UniversalIdConfig) {
-                        scanViewPlugin.addScanResultListener(new ScanResultListener<ScanResult<ID>>() {
-                            @Override
-                            public void onResult(ScanResult<ID> idScanResult) {
-                                Identification identification = (Identification) idScanResult.getResult();
-                                HashMap<String, String> data = (HashMap<String, String>) identification.getResultData();
-
-                                JSONObject jsonResult = new JSONObject(data);
-
-                                try {
-                                    jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
-                                            jsonResult);
-                                } catch (Exception e) {
-                                    Log.e(TAG, "Exception is: ", e);
-
-                                }
-                                setResult(scanViewPlugin, jsonResult);
-                            }
-                        });
-                    }
-                } else if (scanViewPlugin instanceof OcrScanViewPlugin) {
-                    scanViewPlugin.addScanResultListener(new ScanResultListener<OcrScanResult>() {
-                        @Override
-                        public void onResult(OcrScanResult ocrScanResult) {
-                            JSONObject jsonResult = new JSONObject();
+                        scanViewPlugin.addScanResultListener((ScanResultListener<ScanResult<ID>>) idScanResult -> {
+                            JSONObject jsonResult = ((MrzIdentification) idScanResult.getResult()).toJSONObject();
                             try {
-                                jsonResult.put("text", ocrScanResult.getResult().trim());
-                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, ocrScanResult,
-                                        jsonResult);
+                                if (jsonResult.get("issuingCountryCode").equals("D")
+                                        && jsonResult.get("documentType").equals("ID")) {
+                                    if (jsonResult.get("issuingCountryCode").equals("D")) {
+                                        jsonResult.put("address", jsonResult.get("address"));
+                                    } else {
+                                        jsonResult.remove("address");
+                                    }
+
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+
+                            try {
+                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
+                                        jsonResult);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Exception is: ", e);
+
+                            }
+
                             setResult(scanViewPlugin, jsonResult);
 
+                        });
+                    } else if (((IdScanPlugin) ((IdScanViewPlugin) scanViewPlugin).getScanPlugin()).getIdConfig() instanceof UniversalIdConfig) {
+                        scanViewPlugin.addScanResultListener((ScanResultListener<ScanResult<ID>>) idScanResult -> {
+                            Identification identification = (Identification) idScanResult.getResult();
+                            HashMap<String, String> data = (HashMap<String, String>) identification.getResultData();
+
+                            JSONObject jsonResult = new JSONObject(data);
+
+                            try {
+                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, idScanResult,
+                                        jsonResult);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Exception is: ", e);
+
+                            }
+                            setResult(scanViewPlugin, jsonResult);
+                        });
+                    }
+                } else if (scanViewPlugin instanceof OcrScanViewPlugin) {
+                    scanViewPlugin.addScanResultListener((ScanResultListener<OcrScanResult>) ocrScanResult -> {
+                        JSONObject jsonResult = new JSONObject();
+                        try {
+                            jsonResult.put("text", ocrScanResult.getResult().trim());
+                            jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, ocrScanResult,
+                                    jsonResult);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+                        setResult(scanViewPlugin, jsonResult);
 
                     });
 
                 } else if (scanViewPlugin instanceof TireScanViewPlugin) {
-                    scanViewPlugin.addScanResultListener(new ScanResultListener<TireScanResult>() {
-                        @Override
-                        public void onResult(TireScanResult tireScanResult) {
-                            JSONObject jsonResult = new JSONObject();
-                            try {
-                                jsonResult.put("text", tireScanResult.getResult().trim());
-                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, tireScanResult,
-                                        jsonResult);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                    scanViewPlugin.addScanResultListener((ScanResultListener<TireScanResult>) tireScanResult -> {
+                        JSONObject jsonResult = new JSONObject();
+                        try {
+                            jsonResult.put("text", tireScanResult.getResult().trim());
+                            jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, tireScanResult,
+                                    jsonResult);
+                            if (tireScanResult instanceof TireSizeScanResult) {
+                                String tireScanDetailedResult = ((TireSizeScanResult) tireScanResult).getResult().toJson();
+                                jsonResult.put("tireScanDetailedResult", tireScanDetailedResult);
                             }
-                            setResult(scanViewPlugin, jsonResult);
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+                        setResult(scanViewPlugin, jsonResult);
 
                     });
 
@@ -423,24 +407,21 @@ public class Anyline4Activity extends AnylineBaseActivity {
                     addSegmentRadioButtonUI(json);
 
                     anylineScanView.setCameraOpenListener(this);
-                    scanViewPlugin.addScanResultListener(new ScanResultListener<MeterScanResult>() {
-                        @Override
-                        public void onResult(MeterScanResult meterScanResult) {
-                            JSONObject jsonResult = new JSONObject();
-                            try {
-                                jsonResult = AnylinePluginHelper.setMeterScanMode(meterScanResult.getScanMode(),
-                                        jsonResult);
-                                jsonResult.put("reading", meterScanResult.getResult());
+                    scanViewPlugin.addScanResultListener((ScanResultListener<MeterScanResult>) meterScanResult -> {
+                        JSONObject jsonResult = new JSONObject();
+                        try {
+                            jsonResult = AnylinePluginHelper.setMeterScanMode(meterScanResult.getScanMode(),
+                                    jsonResult);
+                            jsonResult.put("reading", meterScanResult.getResult());
 
-                                jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, meterScanResult,
-                                        jsonResult);
+                            jsonResult = AnylinePluginHelper.jsonHelper(Anyline4Activity.this, meterScanResult,
+                                    jsonResult);
 
-                            } catch (Exception e) {
-                                Log.e(TAG, "EXCEPTION", e);
-                            }
-
-                            setResult(scanViewPlugin, jsonResult);
+                        } catch (Exception e) {
+                            Log.e(TAG, "EXCEPTION", e);
                         }
+
+                        setResult(scanViewPlugin, jsonResult);
                     });
                 }
 

@@ -21,9 +21,11 @@ import org.json.JSONObject;
 
 import at.nineyards.anyline.core.LicenseException;
 import io.anyline.AnylineSDK;
+import io.anyline.plugin.ScanResult;
 import io.anyline.products.AnylineUpdater;
 import io.anyline.products.IAnylineUpdateDelegate;
 import io.anyline.trainer.AssetContext;
+import io.anyline.trainer.TrainerUtils;
 
 class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
 
@@ -38,9 +40,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     public static final int RESULT_CANCELED = 0;
     public static final int RESULT_OK = 1;
     public static final int RESULT_ERROR = 2;
-
-    private static final String E_ERROR = "E_ERROR";
-
     public static final int DIGITAL_METER = 3;
     public static final int ANALOG_METER = 4;
     public static final int AUTO_ANALOG_DIGITAL_METER = 5;
@@ -53,7 +52,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     public static final int SERIAL_NUMBER = 12;
     public static final int DOT_MATRIX_METER = 13;
     public static final int REQUEST_ANYLINE_4 = 14;
-
+    private static final String E_ERROR = "E_ERROR";
     private JSONObject configObject;
     private ReactApplicationContext reactContext;
     private String license;
@@ -150,6 +149,23 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         this.config = config;
 
         routeScanMode(scanMode);
+    }
+
+    @ReactMethod
+    public void reportCorrectedResult(String blobKey, String correctedResult, Callback onResponseCallback) {
+        ScanResult.reportCorrectedResult(
+                this.reactContext,
+                blobKey,
+                correctedResult,
+                "",
+                new TrainerUtils.ReportCorrectedResultHandler() {
+
+                    @Override
+                    public void onReportCorrectedResult(String s) {
+                        onResponseCallback.invoke(s);
+                    }
+                }
+        );
     }
 
     @ReactMethod
