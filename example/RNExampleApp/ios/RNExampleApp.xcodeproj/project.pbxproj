@@ -232,7 +232,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNExampleApp/Pods-RNExampleApp-resources.sh",
-				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_36/Framework/AnylineResources.bundle",
+				"${PODS_ROOT}/Anyline/AnylineSDK_iOS_42.0.0/Framework/AnylineResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -379,13 +379,13 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RNExampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 29.1.0;
+				MARKETING_VERSION = 42.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.example.reactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.examples.reactnative;
 				PRODUCT_NAME = RNExampleApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNExampleApp-Bridging-Header.h";
@@ -406,17 +406,17 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2MSE892CA7;
+				DEVELOPMENT_TEAM = 35RHL53WRE;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RNExampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 29.1.0;
+				MARKETING_VERSION = 42.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.example.reactnative.beta;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.examples.reactnative;
 				PRODUCT_NAME = RNExampleApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNExampleApp-Bridging-Header.h";
