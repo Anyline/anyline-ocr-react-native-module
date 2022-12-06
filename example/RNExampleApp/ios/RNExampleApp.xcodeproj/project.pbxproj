@@ -385,7 +385,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.example.reactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.examples.reactnative;
 				PRODUCT_NAME = RNExampleApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNExampleApp-Bridging-Header.h";
@@ -416,7 +416,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.example.reactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anyline.examples.reactnative;
 				PRODUCT_NAME = RNExampleApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNExampleApp-Bridging-Header.h";
