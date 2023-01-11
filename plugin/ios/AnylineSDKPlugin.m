@@ -1,5 +1,5 @@
-#import "AnylineSDKPlugin.h"
 #import <Anyline/Anyline.h>
+#import "AnylineSDKPlugin.h"
 #import "ALJsonUIConfiguration.h"
 #import "ALPluginScanViewController.h"
 #import "ALPluginHelper.h"
@@ -99,15 +99,10 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
             if (customCmdFile) {
                if (@available(iOS 13.0, *)) {
                    if ([ALNFCDetector readingAvailable]) {
-                       ALPluginScanViewController *nfcScanViewController = [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
-                                                                                                                 configuration:dictionary
-                                                                                                               uiConfiguration:self.jsonUIConf finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
-                           
-                       }];
-//                                                                         initWithLicensekey:self.appKey
-//                                                                                                              configuration:[dictionary objectForKey:@"options"]
-//                                                                                                       uiConfig:self.jsonUIConf
-//                                                                                                                   delegate:self];
+                       ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:self.appKey
+                                                                                                              configuration:[dictionary objectForKey:@"options"]
+                                                                                                                   uiConfig:self.jsonUIConf
+                                                                                                                   finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {}];
                        if([self.jsonConfigDictionary valueForKey:@"quality"]){
                            nfcScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
                        }
