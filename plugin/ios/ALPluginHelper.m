@@ -1,86 +1,155 @@
-//
-//  ALPluginHelper.m
-//  Anyline React-Native Example
-//
-//  Created by Daniel Albertini on 30.10.18.
-//
-
 #import "ALPluginHelper.h"
+#import <Anyline/Anyline.h>
+#import "ALNFCScanViewController.h" // because NFC-specific code is there
 
 @implementation ALPluginHelper
 
+#pragma mark - Launch Anyline
+
++ (void)startScan:(NSDictionary *)config finished:(ALPluginCallback)callback {
+    ALJSONUIConfiguration *jsonUIConf = [[ALJSONUIConfiguration alloc] initWithDictionary:[config objectForKey:@"options"]];
+    
+    NSDictionary *pluginConf = config;
+    
+    NSString *licenseKey = [config objectForKey:@"license"];
+    
+    [[UIApplication sharedApplication] keyWindow].rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+    
+    NSDictionary *nfcPlugin = [pluginConf valueForKeyPath:@"viewPlugin.plugin.nfcPlugin"];
+    if (nfcPlugin) {
+        if (@available(iOS 13.0, *)) {
+            if (![ALNFCDetector readingAvailable]) {
+                callback(nil, @"NFC passport reading is not supported on this device or app.");
+                return;
+            }
+            
+            ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:licenseKey
+                                                                                                   configuration:pluginConf
+                                                                                                        uiConfig:jsonUIConf
+                                                                                                        finished:callback];
+            if ([pluginConf valueForKey:@"quality"]){
+                nfcScanViewController.quality = [[pluginConf valueForKey:@"quality"] integerValue];
+            }
+
+            if ([pluginConf valueForKey:@"cropAndTransformErrorMessage"]){
+                NSString *str = [pluginConf objectForKey:@"cropAndTransformErrorMessage"];
+                nfcScanViewController.cropAndTransformErrorMessage = str;
+            }
+
+            if ([pluginConf valueForKey:@"nativeBarcodeEnabled"]) {
+                nfcScanViewController.nativeBarcodeEnabled = [[pluginConf objectForKey:@"nativeBarcodeEnabled"] boolValue];
+            }
+
+            if (nfcScanViewController != nil){
+                [nfcScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
+                [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:nfcScanViewController
+                                                                                               animated:YES
+                                                                                             completion:nil];
+            }
+        } else {
+            callback(nil, @"NFC passport reading is only supported on iOS 13 and later.");
+            return;
+        }
+    } else {
+        ALPluginScanViewController *pluginScanViewController = [[ALPluginScanViewController alloc] initWithLicensekey:licenseKey
+                                                                                                        configuration:pluginConf
+                                                                                                      uiConfiguration:jsonUIConf
+                                                                                                             finished:callback];
+
+        // TODO: should remove these extras
+        if ([pluginConf valueForKey:@"quality"]){
+            pluginScanViewController.quality = [[pluginConf valueForKey:@"quality"] integerValue];
+        }
+
+        if ([pluginConf valueForKey:@"cropAndTransformErrorMessage"]){
+            NSString *str = [pluginConf objectForKey:@"cropAndTransformErrorMessage"];
+            pluginScanViewController.cropAndTransformErrorMessage = str;
+        }
+
+        if ([pluginConf valueForKey:@"nativeBarcodeEnabled"]) {
+            pluginScanViewController.nativeBarcodeEnabled = [[pluginConf objectForKey:@"nativeBarcodeEnabled"] boolValue];
+        }
+
+        if (pluginScanViewController) {
+            [pluginScanViewController setModalPresentationStyle:UIModalPresentationFullScreen];
+            [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController
+                                                                                           animated:YES
+                                                                                         completion:nil];
+        }
+    }
+}
 #pragma mark - String convertions
 
 + (NSString *)barcodeFormatFromString:(NSString *)barcodeFormat {
     return (barcodeFormat == nil && barcodeFormat.length == 0) ? @"unkown" : barcodeFormat;
 }
 
-+ (ALScanMode)scanModeFromString:(NSString *)scanMode {
-    NSDictionary<NSString *, NSNumber *> *scanModes = [ALPluginHelper scanModesDict];
-    
-    return [scanModes[scanMode] integerValue];
-}
+//+ (ALScanMode)scanModeFromString:(NSString *)scanMode {
+//    NSDictionary<NSString *, NSNumber *> *scanModes = [ALPluginHelper scanModesDict];
+//
+//    return [scanModes[scanMode] integerValue];
+//}
+//
+//+ (NSString *)stringFromScanMode:(ALScanMode)scanMode {
+//    NSDictionary<NSString *, NSNumber *> *scanModes = [ALPluginHelper scanModesDict];
+//
+//    return [scanModes allKeysForObject:@(scanMode)][0];
+//}
+//
+//+ (NSString *)stringForOutline:(ALSquare *)square {
+//    return [NSString stringWithFormat:@"outline : { upLeft : { x : %f, y : %f }, upRight : { x : %f, y : %f }, downRight : { x : %f, y : %f }, downLeft : { x : %f, y : %f } }",square.upLeft.x,square.upLeft.y,square.upRight.x,square.upRight.y,square.downRight.x,square.downRight.y,square.downLeft.x,square.downLeft.y];
+//}
 
-+ (NSString *)stringFromScanMode:(ALScanMode)scanMode {
-    NSDictionary<NSString *, NSNumber *> *scanModes = [ALPluginHelper scanModesDict];
-    
-    return [scanModes allKeysForObject:@(scanMode)][0];
-}
+//+ (NSDictionary<NSString *, NSNumber *> *)scanModesDict {
+//    static NSDictionary<NSString *, NSNumber *> * scanModes = nil;
+//
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        scanModes = @{
+//                      @"AUTO_ANALOG_DIGITAL_METER" : @(ALAutoAnalogDigitalMeter),
+//                      @"DIAL_METER" : @(ALDialMeter),
+//                      @"ANALOG_METER" : @(ALAnalogMeter),
+//                      @"BARCODE" : @(ALMeterBarcode),
+//                      @"SERIAL_NUMBER" : @(ALSerialNumber),
+//                      @"DOT_MATRIX_METER" : @(ALDotMatrixMeter),
+//                      @"DIGITAL_METER" : @(ALDigitalMeter),
+//                      @"HEAT_METER_4" : @(ALHeatMeter4),
+//                      @"HEAT_METER_5" : @(ALHeatMeter5),
+//                      @"HEAT_METER_6" : @(ALHeatMeter6),
+//                      };
+//    });
+//
+//    return scanModes;
+//}
 
-+ (NSString *)stringForOutline:(ALSquare *)square {
-    return [NSString stringWithFormat:@"outline : { upLeft : { x : %f, y : %f }, upRight : { x : %f, y : %f }, downRight : { x : %f, y : %f }, downLeft : { x : %f, y : %f } }",square.upLeft.x,square.upLeft.y,square.upRight.x,square.upRight.y,square.downRight.x,square.downRight.y,square.downLeft.x,square.downLeft.y];
-}
-
-+ (NSDictionary<NSString *, NSNumber *> *)scanModesDict {
-    static NSDictionary<NSString *, NSNumber *> * scanModes = nil;
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        scanModes = @{
-                      @"AUTO_ANALOG_DIGITAL_METER" : @(ALAutoAnalogDigitalMeter),
-                      @"DIAL_METER" : @(ALDialMeter),
-                      @"ANALOG_METER" : @(ALAnalogMeter),
-                      @"BARCODE" : @(ALMeterBarcode),
-                      @"SERIAL_NUMBER" : @(ALSerialNumber),
-                      @"DOT_MATRIX_METER" : @(ALDotMatrixMeter),
-                      @"DIGITAL_METER" : @(ALDigitalMeter),
-                      @"HEAT_METER_4" : @(ALHeatMeter4),
-                      @"HEAT_METER_5" : @(ALHeatMeter5),
-                      @"HEAT_METER_6" : @(ALHeatMeter6),
-                      };
-    });
-    
-    return scanModes;
-}
-
-+ (NSString *)barcodeFormatForNativeString:(NSString *)barcodeType {
-    
-    static NSDictionary<NSString *, NSString *> * barcodeFormats = nil;
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        barcodeFormats = @{
-                           @"AVMetadataObjectTypeUPCECode" : kCodeTypeUPCE,
-                           @"AVMetadataObjectTypeCode39Code" : kCodeTypeCode39,
-                           @"AVMetadataObjectTypeCode39Mod43Code" : kCodeTypeCode39,
-                           @"AVMetadataObjectTypeEAN13Code" : kCodeTypeEAN13,
-                           @"AVMetadataObjectTypeEAN8Code" : kCodeTypeEAN8,
-                           @"AVMetadataObjectTypeCode93Code" : kCodeTypeCode93,
-                           @"AVMetadataObjectTypeCode128Code" : kCodeTypeCode128,
-                           @"AVMetadataObjectTypePDF417Code" : kCodeTypePDF417,
-                           @"AVMetadataObjectTypeQRCode" : kCodeTypeQR,
-                           @"AVMetadataObjectTypeAztecCode" : kCodeTypeAztec,
-                           @"AVMetadataObjectTypeInterleaved2of5Code" : kCodeTypeITF,
-                           @"AVMetadataObjectTypeITF14Code" : kCodeTypeITF,
-                           @"AVMetadataObjectTypeDataMatrixCode" : kCodeTypeDataMatrix,
-                           };
-#pragma clang diagnostic pop
-    });
-    
-    return barcodeFormats[barcodeType];
-}
+//+ (NSString *)barcodeFormatForNativeString:(NSString *)barcodeType {
+//
+//    static NSDictionary<NSString *, NSString *> * barcodeFormats = nil;
+//
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//        barcodeFormats = @{
+//                           @"AVMetadataObjectTypeUPCECode" : kCodeTypeUPCE,
+//                           @"AVMetadataObjectTypeCode39Code" : kCodeTypeCode39,
+//                           @"AVMetadataObjectTypeCode39Mod43Code" : kCodeTypeCode39,
+//                           @"AVMetadataObjectTypeEAN13Code" : kCodeTypeEAN13,
+//                           @"AVMetadataObjectTypeEAN8Code" : kCodeTypeEAN8,
+//                           @"AVMetadataObjectTypeCode93Code" : kCodeTypeCode93,
+//                           @"AVMetadataObjectTypeCode128Code" : kCodeTypeCode128,
+//                           @"AVMetadataObjectTypePDF417Code" : kCodeTypePDF417,
+//                           @"AVMetadataObjectTypeQRCode" : kCodeTypeQR,
+//                           @"AVMetadataObjectTypeAztecCode" : kCodeTypeAztec,
+//                           @"AVMetadataObjectTypeInterleaved2of5Code" : kCodeTypeITF,
+//                           @"AVMetadataObjectTypeITF14Code" : kCodeTypeITF,
+//                           @"AVMetadataObjectTypeDataMatrixCode" : kCodeTypeDataMatrix,
+//                           };
+//#pragma clang diagnostic pop
+//    });
+//
+//    return barcodeFormats[barcodeType];
+//}
 
 #pragma mark - Filesystem handling
 
@@ -91,7 +160,6 @@
 + (NSString *)saveImageToFileSystem:(UIImage *)image compressionQuality:(CGFloat)compressionQuality {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    
     
     NSData *binaryImageData = UIImageJPEGRepresentation(image, compressionQuality);
     NSString *uuid = [NSUUID UUID].UUIDString;
@@ -120,32 +188,35 @@
     return scannedLabel;
 }
 
-+ (UISegmentedControl *)createSegmentForViewController:(UIViewController *)viewController
-                                                config:(ALJsonUIConfiguration *)config
-                                              scanMode:(ALScanMode)scanMode {
-    UISegmentedControl *segment = [[UISegmentedControl alloc] initWithItems:config.segmentTitles];
-    
-    segment.tintColor = config.segmentTintColor;
-    segment.hidden = YES;
-    
-    NSInteger index = [config.segmentModes indexOfObject:[ALPluginHelper stringFromScanMode:scanMode]];
-    [segment setSelectedSegmentIndex:index];
-    
-    [segment addTarget:viewController action:@selector(segmentChange:) forControlEvents:UIControlEventValueChanged];
-    
-    [viewController.view addSubview:segment];
-    
-    return segment;
-}
+//+ (UISegmentedControl *)createSegmentForViewController:(UIViewController *)viewController
+//                                                config:(ALJsonUIConfiguration *)config
+//                                              scanMode:(ALScanMode)scanMode {
+//    UISegmentedControl *segment = [[UISegmentedControl alloc] initWithItems:config.segmentTitles];
+//
+//    segment.tintColor = config.segmentTintColor;
+//    segment.hidden = YES;
+//
+//    NSInteger index = [config.segmentModes indexOfObject:[ALPluginHelper stringFromScanMode:scanMode]];
+//    [segment setSelectedSegmentIndex:index];
+//
+//    [segment addTarget:viewController action:@selector(segmentChange:) forControlEvents:UIControlEventValueChanged];
+//
+//    [viewController.view addSubview:segment];
+//
+//    return segment;
+//}
 
 + (UIButton *)createButtonForViewController:(UIViewController *)viewController
-                                     config:(ALJsonUIConfiguration *)config {
+                                     config:(ALJSONUIConfiguration *)config {
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton setTitle:config.buttonDoneTitle
                 forState:UIControlStateNormal];
     
-    [doneButton addTarget:viewController action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [doneButton addTarget:viewController
+                   action:@selector(doneButtonPressed:)
+         forControlEvents:UIControlEventTouchUpInside];
+
     [viewController.view addSubview:doneButton];
     
     [ALPluginHelper updateButtonPosition:doneButton
@@ -166,7 +237,7 @@
 }
 
 + (void)updateButtonPosition:(UIButton *)button
-           withConfiguration:(ALJsonUIConfiguration *)conf
+           withConfiguration:(ALJSONUIConfiguration *)conf
                       onView:(UIView *)view {
     
     button.titleLabel.font = [UIFont fontWithName:conf.buttonDoneFontName size:conf.buttonDoneFontSize];
@@ -270,413 +341,413 @@
 
 #pragma mark - Create Result Dictionaries
 
-+ (NSDictionary *)dictionaryForBarcodeResults:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                  barcodeType:(NSString *)barcodeType
-                                   scanResult:(NSString *)scanResult {
-    for (NSMutableDictionary<NSString *, NSString *> *barcode in detectedBarcodes) {
-        if ([[barcode objectForKey:@"value"] isEqualToString:scanResult]) {
-            return nil;
-        }
-    }
-    
-    NSMutableDictionary *barcode = [NSMutableDictionary dictionaryWithCapacity:2];
-    
-    barcode[@"value"] = scanResult;
-    barcode[@"format"] = [ALPluginHelper barcodeFormatForNativeString:barcodeType];
-    
-    return barcode;
-}
+//+ (NSDictionary *)dictionaryForBarcodeResults:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                  barcodeType:(NSString *)barcodeType
+//                                   scanResult:(NSString *)scanResult {
+//    for (NSMutableDictionary<NSString *, NSString *> *barcode in detectedBarcodes) {
+//        if ([[barcode objectForKey:@"value"] isEqualToString:scanResult]) {
+//            return nil;
+//        }
+//    }
+//    
+//    NSMutableDictionary *barcode = [NSMutableDictionary dictionaryWithCapacity:2];
+//
+//    barcode[@"value"] = scanResult;
+//    barcode[@"format"] = [ALPluginHelper barcodeFormatForNativeString:barcodeType];
+//
+//    return barcode;
+//}
 
-+ (NSDictionary *)dictionaryForMeterResult:(ALMeterResult *)scanResult
-                          detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                   outline:(ALSquare *)outline
-                                   quality:(NSInteger)quality {
-    CGFloat dividedCompRate = (CGFloat)quality/100;
-    
-    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
-    
-    switch (scanResult.scanMode) {
-        case ALDigitalMeter:
-            [dictResult setObject:@"Digital Meter" forKey:@"meterType"];
-            break;
-        case ALDialMeter:
-            [dictResult setObject:@"Dial Meter" forKey:@"meterType"];
-            break;
-        case ALHeatMeter4:
-        case ALHeatMeter5:
-        case ALHeatMeter6:
-            [dictResult setObject:@"Heat Meter" forKey:@"meterType"];
-            break;
-        case ALSerialNumber:
-            [dictResult setObject:@"Serial Number" forKey:@"meterType"];
-            break;
-        default:
-            [dictResult setObject:@"Electric Meter" forKey:@"meterType"];
-            break;
-    }
-    
-    [dictResult setObject:[ALPluginHelper stringFromScanMode:scanResult.scanMode] forKey:@"scanMode"];
-    
-    [dictResult setObject:scanResult.result forKey:@"reading"];
-    
-    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
-    
-    [dictResult setValue:imagePath forKey:@"imagePath"];
-    
-    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
-    
-    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
-    
-    if (detectedBarcodes && detectedBarcodes.count != 0) {
-        [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
-    }
-    
-    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
-    [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
-    
-    return dictResult;
-}
-
-+ (NSDictionary *)dictionaryForIDResult:(ALIDResult *)scanResult
-                       detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                outline:(ALSquare *)outline
-                                quality:(NSInteger)quality {
-    CGFloat dividedCompRate = (CGFloat)quality/100;
-    
-    NSMutableDictionary *dictResult = [[NSMutableDictionary alloc] init];
-    
-    NSString *imagePath = [self saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
-    
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy.MM.dd"];
-    
-    if ([scanResult.result isKindOfClass:[ALUniversalIDIdentification class]]) {
-        ALUniversalIDIdentification *identification = (ALUniversalIDIdentification *)scanResult.result;
-        
-        [[identification fieldNames] enumerateObjectsUsingBlock:^(NSString *fieldName, NSUInteger idx, BOOL *stop) {
-            [dictResult setValue:[identification valueForField:fieldName] forKey:fieldName];
-        }];
-    }
-    
-    if ([scanResult.result isKindOfClass:[ALMRZIdentification class]]) {
-        ALMRZIdentification *mrzIdentification = (ALMRZIdentification *)scanResult.result;
-        NSMutableArray<NSString *> *keys=[@[
-                                            @"surname",
-                                            @"givenNames",
-                                            @"dateOfBirth",
-                                            @"dateOfExpiry",
-                                            @"documentNumber",
-                                            @"documentType",
-                                            @"issuingCountryCode",
-                                            @"nationalityCountryCode",
-                                            @"sex",
-                                            @"personalNumber",
-                                            @"optionalData",
-                                            @"mrzString",
-                                            @"checkDigitDateOfExpiry",
-                                            @"checkDigitDocumentNumber",
-                                            @"checkDigitDateOfBirth",
-                                            @"checkDigitFinal",
-                                            @"checkDigitPersonalNumber",
-                                            @"allCheckDigitsValid"
-                                            ] mutableCopy];
-        dictResult = [[scanResult.result dictionaryWithValuesForKeys:keys] mutableCopy];
-        //there's no confidence for allCheckDigitsValid
-        [keys removeObject:@"allCheckDigitsValid"];
-        NSMutableDictionary *confidences=[[[scanResult.result fieldConfidences]
-                                           dictionaryWithValuesForKeys:keys] mutableCopy];
-        
-        //VIZ Fields
-        if ([mrzIdentification vizGivenNames] && [mrzIdentification vizGivenNames].length > 0) {
-            [dictResult setValue:mrzIdentification.vizGivenNames forKey:@"vizGivenNames"];
-        }
-        [confidences setValue:@(mrzIdentification.fieldConfidences.vizGivenNames) forKey:@"vizGivenNames"];
-        
-        if ([mrzIdentification vizSurname] && [mrzIdentification vizSurname].length > 0) {
-            [dictResult setValue:mrzIdentification.vizSurname forKey:@"vizSurname"];
-        }
-        [confidences setValue:@(mrzIdentification.fieldConfidences.vizSurname) forKey:@"vizSurname"];
-        
-        if ([mrzIdentification vizAddress] && [mrzIdentification vizAddress].length > 0) {
-            [dictResult setValue:mrzIdentification.vizAddress forKey:@"vizAddress"];
-        }
-        [confidences setValue:@(mrzIdentification.fieldConfidences.vizAddress) forKey:@"vizAddress"];
-        
-        if ([mrzIdentification vizDateOfBirth] && [mrzIdentification vizDateOfBirth].length > 0) {
-            [dictResult setValue:mrzIdentification.vizDateOfBirth forKey:@"vizDateOfBirth"];
-            [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfBirthObject] forKey:@"vizDateOfBirthObject"];
-        }
-        [confidences setValue:@(mrzIdentification.fieldConfidences.vizDateOfBirth) forKey:@"vizDateOfBirth"];
-        
-        if ([mrzIdentification vizDateOfExpiry] && [mrzIdentification vizDateOfExpiry].length > 0) {
-            [dictResult setValue:mrzIdentification.vizDateOfExpiry forKey:@"vizDateOfExpiry"];
-            [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfExpiryObject] forKey:@"vizDateOfExpiryObject"];
-        }
-        [confidences setValue:@(mrzIdentification.fieldConfidences.vizDateOfExpiry) forKey:@"vizDateOfExpiry"];
-        
-        if ([mrzIdentification vizDateOfIssue] && [mrzIdentification vizDateOfIssue].length > 0) {
-            [dictResult setValue:mrzIdentification.vizDateOfIssue forKey:@"vizDateOfIssue"];
-            [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfIssueObject] forKey:@"vizDateOfIssueObject"];
-        }
-        [confidences setValue:@(mrzIdentification.fieldConfidences.vizDateOfIssue) forKey:@"vizDateOfIssue"];
-        
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
-        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfExpiryObject]] forKey:@"dateOfExpiryObject"];
-        [dictResult setValue:confidences forKey:@"fieldConfidences"];
-    }
-    
-    [dictResult setValue:imagePath forKey:@"imagePath"];
-    
-    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
-    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
-    
-    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
-    [dictResult setValue:[self stringForOutline:outline] forKey:@"outline"];
-    
-    return dictResult;
-}
-
-
-+ (NSDictionary *)dictionaryForNFCResult:(ALNFCResult *)scanResult
-                                 quality:(NSInteger)quality API_AVAILABLE(ios(13)) {
-    CGFloat dividedCompRate = (CGFloat)quality/100;
-    
-    NSMutableDictionary *dictResult = [[NSMutableDictionary alloc] init];
-    
-    
-    //DataGroup1
-    NSMutableDictionary *dictResultDataGroup1 = [[NSMutableDictionary alloc] init];
-    
-    [dictResultDataGroup1 setValue:[ALPluginHelper stringForDate:scanResult.dataGroup1.dateOfBirth] forKey:@"dateOfBirth"];
-    [dictResultDataGroup1 setValue:[ALPluginHelper stringForDate:scanResult.dataGroup1.dateOfExpiry] forKey:@"dateOfExpiry"];
-    [dictResultDataGroup1 setValue:scanResult.dataGroup1.documentNumber forKey:@"documentNumber"];
-    [dictResultDataGroup1 setValue:scanResult.dataGroup1.documentType forKey:@"documentType"];
-    [dictResultDataGroup1 setValue:scanResult.dataGroup1.firstName forKey:@"firstName"];
-    [dictResultDataGroup1 setValue:scanResult.dataGroup1.gender forKey:@"gender"];
-    [dictResultDataGroup1 setValue:scanResult.dataGroup1.issuingStateCode forKey:@"issuingStateCode"];
-    [dictResultDataGroup1 setValue:scanResult.dataGroup1.lastName forKey:@"lastName"];
-    [dictResultDataGroup1 setValue:scanResult.dataGroup1.nationality forKey:@"nationality"];
-    
-    [dictResult setObject:dictResultDataGroup1 forKey:@"dataGroup1"];
-    
-    
-    //DataGroup2 (= Image)
-    NSMutableDictionary *dictResultDataGroup2 = [[NSMutableDictionary alloc] initWithCapacity:1];
-    NSString *imagePath = [self saveImageToFileSystem:scanResult.dataGroup2.faceImage compressionQuality:dividedCompRate];
-    [dictResultDataGroup2 setValue:imagePath forKey:@"imagePath"];
-    
-    [dictResult setObject:dictResultDataGroup2 forKey:@"dataGroup2"];
-    
-    //SOB
-    NSMutableDictionary *dictResultSOB = [[NSMutableDictionary alloc] init];
-    
-    [dictResultSOB setValue:scanResult.sod.issuerCertificationAuthority forKey:@"issuerCertificationAuthority"];
-    [dictResultSOB setValue:scanResult.sod.issuerCountry forKey:@"issuerCountry"];
-    [dictResultSOB setValue:scanResult.sod.issuerOrganization forKey:@"issuerOrganization"];
-    [dictResultSOB setValue:scanResult.sod.issuerOrganizationalUnit forKey:@"issuerOrganizationalUnit"];
-    [dictResultSOB setValue:scanResult.sod.ldsHashAlgorithm forKey:@"ldsHashAlgorithm"];
-    [dictResultSOB setValue:scanResult.sod.signatureAlgorithm forKey:@"signatureAlgorithm"];
-    [dictResultSOB setValue:scanResult.sod.validFromString forKey:@"validFromString"];
-    [dictResultSOB setValue:scanResult.sod.validUntilString forKey:@"validUntilString"];
-    
-    [dictResult setObject:dictResultSOB forKey:@"sob"];
-    
-    return dictResult;
-}
-
-
-+ (NSDictionary *)dictionaryForOCRResult:(ALOCRResult *)scanResult
-                        detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                 outline:(ALSquare *)outline
-                                 quality:(NSInteger)quality {
-    CGFloat dividedCompRate = (CGFloat)quality/100;
-    
-    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
-    
-    [dictResult setObject:scanResult.result forKey:@"text"];
-    
-    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
-    
-    [dictResult setValue:imagePath forKey:@"imagePath"];
-    
-    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
-    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
-    
-    [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
-    
-    if (detectedBarcodes && detectedBarcodes.count != 0) {
-        [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
-    }
-    
-    return dictResult;
-}
-
-+ (NSDictionary *)dictionaryForBarcodeResult:(ALBarcodeResult *)scanResult
-                                     outline:(ALSquare *)outline
-                                     quality:(NSInteger)quality {
-    CGFloat dividedCompRate = (CGFloat)quality/100;
-    
-    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:2];
-    
-    NSMutableArray *barcodeArray = [[NSMutableArray alloc] init];
-    
-    
-    for(ALBarcode *barcode in scanResult.result) {
-        NSMutableDictionary *barcodeDictionary = @{ @"value":barcode.value,
-                                                    @"barcodeFormat": [ALPluginHelper barcodeFormatFromString:barcode.barcodeFormat]}.mutableCopy;
-        if (barcode.parsedPDF417 != nil) {
-            NSString *newValueWithPDF417 = [NSString stringWithFormat:@"{\"rawPDF417\" : \"%@\", \"parsedPDF417\" : \"%@\"}", barcode.value, [barcode.parsedPDF417[kPDF417ParsedBody] description]];
-            [barcodeDictionary setValue:newValueWithPDF417 forKey:@"value"];
-        }
-        [barcodeArray addObject:barcodeDictionary];
-    }
-    
-    [dictResult setValue:barcodeArray forKey:@"barcodes"];
-    
-    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
-    
-    [dictResult setValue:imagePath forKey:@"imagePath"];
-    
-    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
-    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
-    
-    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
-    [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
-    
-    return dictResult;
-}
-
-+ (NSDictionary *)dictionaryForLicensePlateResult:(ALLicensePlateResult *)scanResult
-                                 detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                          outline:(ALSquare *)outline
-                                          quality:(NSInteger)quality {
-    CGFloat dividedCompRate = (CGFloat)quality/100;
-    // Get the imagepath from result
-    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
-    
-    //Create the result Object
-    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:5];
-    [dictResult setValue:scanResult.country forKey:@"country"];
-    [dictResult setValue:scanResult.area forKey:@"area"];
-    [dictResult setValue:scanResult.result forKey:@"licensePlate"];
-    [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
-    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
-    [dictResult setValue:imagePath forKey:@"imagePath"];
-    
-    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
-    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
-    
-    if (detectedBarcodes && detectedBarcodes.count != 0) {
-        [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
-    }
-    
-    return dictResult;
-}
-
-+ (NSDictionary *)dictionaryForTransformedImage:(UIImage *)transformedImage
-                                      fullFrame:(UIImage *)fullFrame
-                                        quality:(NSInteger)quality
-                               detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                        outline:(ALSquare *)outline {
-    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
-    
-    CGFloat dividedCompRate = (CGFloat)quality/100;
-    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:transformedImage compressionQuality:dividedCompRate];
-    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:fullFrame compressionQuality:dividedCompRate];
-    NSString *outlineString = [ALPluginHelper stringForOutline:outline];
-    
-    
-    [dictResult setValue:imagePath forKey:@"imagePath"];
-    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
-    [dictResult setValue:outlineString forKey:@"outline"];
-    
-    if (detectedBarcodes && detectedBarcodes.count != 0) {
-        [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
-    }
-    
-    return dictResult;
-}
-
-+ (NSDictionary *)dictionaryForCompositeResult:(ALCompositeResult *)scanResult
-                              detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                       quality:(NSInteger)quality {
-    
-    
-    NSMutableDictionary *dictResult = [[NSMutableDictionary alloc] init];
-    
-    for (NSString *pluginID in [scanResult.result allKeys]) {
-        
-        NSDictionary *singleResultDict = [ALPluginHelper dictForResult:[scanResult.result objectForKey:pluginID]
-                                                      detectedBarcodes:detectedBarcodes
-                                                               quality:quality];
-        
-        [dictResult setObject:singleResultDict forKey:pluginID];
-        
-    }
-    return dictResult;
-}
-
-+ (NSDictionary *)dictionaryForTireResult:(ALTireResult *)scanResult
-                                  quality:(NSInteger)quality {
-    CGFloat dividedCompRate = (CGFloat)quality/100;
-    
-    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
-    
-    [dictResult setObject:scanResult.result forKey:@"text"];
-    
-    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
-    
-    [dictResult setValue:imagePath forKey:@"imagePath"];
-    
-    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
-    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
-    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
-    [dictResult setValue:scanResult.pluginID forKey:@"pluginID"];
-    return dictResult;
-}
-
-+ (NSDictionary *)dictForResult:(ALScanResult *)result
-               detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                        quality:(NSInteger)quality {
-    if ([result isKindOfClass:[ALMeterResult class]]) {
-        return [ALPluginHelper dictionaryForMeterResult:(ALMeterResult *)result
-                                       detectedBarcodes:detectedBarcodes
-                                                outline:[[ALSquare alloc] init]
-                                                quality:quality];
-        
-    } else if ([result isKindOfClass:[ALLicensePlateResult class]]) {
-        return [ALPluginHelper dictionaryForLicensePlateResult:(ALLicensePlateResult *)result
-                                              detectedBarcodes:detectedBarcodes
-                                                       outline:[[ALSquare alloc] init]
-                                                       quality:quality];
-    } else if ([result isKindOfClass:[ALIDResult class]]) {
-        return [ALPluginHelper dictionaryForIDResult:(ALIDResult *)result
-                                    detectedBarcodes:detectedBarcodes
-                                             outline:[[ALSquare alloc] init]
-                                             quality:quality];
-        
-    } else if ([result isKindOfClass:[ALBarcodeResult class]]) {
-        return [ALPluginHelper dictionaryForBarcodeResult:(ALBarcodeResult *)result
-                                                  outline:[[ALSquare alloc] init]
-                                                  quality:quality];
-        
-    } else if ([result isKindOfClass:[ALOCRResult class]]) {
-        return [ALPluginHelper dictionaryForOCRResult:(ALOCRResult *)result
-                                     detectedBarcodes:detectedBarcodes
-                                              outline:[[ALSquare alloc] init]
-                                              quality:quality];
-        
-    } else if ([result.result isKindOfClass:[UIImage class]]) {
-        return [ALPluginHelper dictionaryForTransformedImage:(UIImage *)result.result
-                                                   fullFrame:result.fullImage
-                                                     quality:quality
-                                            detectedBarcodes:detectedBarcodes
-                                                     outline:[[ALSquare alloc] init]];
-        
-    }
-    
-    return nil;
-}
+//+ (NSDictionary *)dictionaryForMeterResult:(ALMeterResult *)scanResult
+//                          detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                   outline:(ALSquare *)outline
+//                                   quality:(NSInteger)quality {
+//    CGFloat dividedCompRate = (CGFloat)quality/100;
+//
+//    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
+//
+//    switch (scanResult.scanMode) {
+//        case ALDigitalMeter:
+//            [dictResult setObject:@"Digital Meter" forKey:@"meterType"];
+//            break;
+//        case ALDialMeter:
+//            [dictResult setObject:@"Dial Meter" forKey:@"meterType"];
+//            break;
+//        case ALHeatMeter4:
+//        case ALHeatMeter5:
+//        case ALHeatMeter6:
+//            [dictResult setObject:@"Heat Meter" forKey:@"meterType"];
+//            break;
+//        case ALSerialNumber:
+//            [dictResult setObject:@"Serial Number" forKey:@"meterType"];
+//            break;
+//        default:
+//            [dictResult setObject:@"Electric Meter" forKey:@"meterType"];
+//            break;
+//    }
+//
+//    [dictResult setObject:[ALPluginHelper stringFromScanMode:scanResult.scanMode] forKey:@"scanMode"];
+//
+//    [dictResult setObject:scanResult.result forKey:@"reading"];
+//
+//    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
+//
+//    [dictResult setValue:imagePath forKey:@"imagePath"];
+//
+//    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+//
+//    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+//
+//    if (detectedBarcodes && detectedBarcodes.count != 0) {
+//        [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
+//    }
+//
+//    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
+//    [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
+//
+//    return dictResult;
+//}
+//
+//+ (NSDictionary *)dictionaryForIDResult:(ALIDResult *)scanResult
+//                       detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                outline:(ALSquare *)outline
+//                                quality:(NSInteger)quality {
+//    CGFloat dividedCompRate = (CGFloat)quality/100;
+//
+//    NSMutableDictionary *dictResult = [[NSMutableDictionary alloc] init];
+//
+//    NSString *imagePath = [self saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
+//
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    [formatter setDateFormat:@"yyyy.MM.dd"];
+//
+//    if ([scanResult.result isKindOfClass:[ALUniversalIDIdentification class]]) {
+//        ALUniversalIDIdentification *identification = (ALUniversalIDIdentification *)scanResult.result;
+//
+//        [[identification fieldNames] enumerateObjectsUsingBlock:^(NSString *fieldName, NSUInteger idx, BOOL *stop) {
+//            [dictResult setValue:[identification valueForField:fieldName] forKey:fieldName];
+//        }];
+//    }
+//
+//    if ([scanResult.result isKindOfClass:[ALMRZIdentification class]]) {
+//        ALMRZIdentification *mrzIdentification = (ALMRZIdentification *)scanResult.result;
+//        NSMutableArray<NSString *> *keys=[@[
+//                                            @"surname",
+//                                            @"givenNames",
+//                                            @"dateOfBirth",
+//                                            @"dateOfExpiry",
+//                                            @"documentNumber",
+//                                            @"documentType",
+//                                            @"issuingCountryCode",
+//                                            @"nationalityCountryCode",
+//                                            @"sex",
+//                                            @"personalNumber",
+//                                            @"optionalData",
+//                                            @"mrzString",
+//                                            @"checkDigitDateOfExpiry",
+//                                            @"checkDigitDocumentNumber",
+//                                            @"checkDigitDateOfBirth",
+//                                            @"checkDigitFinal",
+//                                            @"checkDigitPersonalNumber",
+//                                            @"allCheckDigitsValid"
+//                                            ] mutableCopy];
+//        dictResult = [[scanResult.result dictionaryWithValuesForKeys:keys] mutableCopy];
+//        //there's no confidence for allCheckDigitsValid
+//        [keys removeObject:@"allCheckDigitsValid"];
+//        NSMutableDictionary *confidences=[[[scanResult.result fieldConfidences]
+//                                           dictionaryWithValuesForKeys:keys] mutableCopy];
+//
+//        //VIZ Fields
+//        if ([mrzIdentification vizGivenNames] && [mrzIdentification vizGivenNames].length > 0) {
+//            [dictResult setValue:mrzIdentification.vizGivenNames forKey:@"vizGivenNames"];
+//        }
+//        [confidences setValue:@(mrzIdentification.fieldConfidences.vizGivenNames) forKey:@"vizGivenNames"];
+//
+//        if ([mrzIdentification vizSurname] && [mrzIdentification vizSurname].length > 0) {
+//            [dictResult setValue:mrzIdentification.vizSurname forKey:@"vizSurname"];
+//        }
+//        [confidences setValue:@(mrzIdentification.fieldConfidences.vizSurname) forKey:@"vizSurname"];
+//
+//        if ([mrzIdentification vizAddress] && [mrzIdentification vizAddress].length > 0) {
+//            [dictResult setValue:mrzIdentification.vizAddress forKey:@"vizAddress"];
+//        }
+//        [confidences setValue:@(mrzIdentification.fieldConfidences.vizAddress) forKey:@"vizAddress"];
+//
+//        if ([mrzIdentification vizDateOfBirth] && [mrzIdentification vizDateOfBirth].length > 0) {
+//            [dictResult setValue:mrzIdentification.vizDateOfBirth forKey:@"vizDateOfBirth"];
+//            [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfBirthObject] forKey:@"vizDateOfBirthObject"];
+//        }
+//        [confidences setValue:@(mrzIdentification.fieldConfidences.vizDateOfBirth) forKey:@"vizDateOfBirth"];
+//
+//        if ([mrzIdentification vizDateOfExpiry] && [mrzIdentification vizDateOfExpiry].length > 0) {
+//            [dictResult setValue:mrzIdentification.vizDateOfExpiry forKey:@"vizDateOfExpiry"];
+//            [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfExpiryObject] forKey:@"vizDateOfExpiryObject"];
+//        }
+//        [confidences setValue:@(mrzIdentification.fieldConfidences.vizDateOfExpiry) forKey:@"vizDateOfExpiry"];
+//
+//        if ([mrzIdentification vizDateOfIssue] && [mrzIdentification vizDateOfIssue].length > 0) {
+//            [dictResult setValue:mrzIdentification.vizDateOfIssue forKey:@"vizDateOfIssue"];
+//            [dictResult setValue:[ALPluginHelper stringForDate:mrzIdentification.vizDateOfIssueObject] forKey:@"vizDateOfIssueObject"];
+//        }
+//        [confidences setValue:@(mrzIdentification.fieldConfidences.vizDateOfIssue) forKey:@"vizDateOfIssue"];
+//
+//        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dayOfBirthDateObject]] forKey:@"dateOfBirthObject"];
+//        [dictResult setValue:[ALPluginHelper stringForDate:[scanResult.result dateOfExpiryObject]] forKey:@"dateOfExpiryObject"];
+//        [dictResult setValue:confidences forKey:@"fieldConfidences"];
+//    }
+//
+//    [dictResult setValue:imagePath forKey:@"imagePath"];
+//
+//    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+//    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+//
+//    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
+//    [dictResult setValue:[self stringForOutline:outline] forKey:@"outline"];
+//
+//    return dictResult;
+//}
+//
+//
+//+ (NSDictionary *)dictionaryForNFCResult:(ALNFCResult *)scanResult
+//                                 quality:(NSInteger)quality API_AVAILABLE(ios(13)) {
+//    CGFloat dividedCompRate = (CGFloat)quality/100;
+//
+//    NSMutableDictionary *dictResult = [[NSMutableDictionary alloc] init];
+//
+//
+//    //DataGroup1
+//    NSMutableDictionary *dictResultDataGroup1 = [[NSMutableDictionary alloc] init];
+//
+//    [dictResultDataGroup1 setValue:[ALPluginHelper stringForDate:scanResult.dataGroup1.dateOfBirth] forKey:@"dateOfBirth"];
+//    [dictResultDataGroup1 setValue:[ALPluginHelper stringForDate:scanResult.dataGroup1.dateOfExpiry] forKey:@"dateOfExpiry"];
+//    [dictResultDataGroup1 setValue:scanResult.dataGroup1.documentNumber forKey:@"documentNumber"];
+//    [dictResultDataGroup1 setValue:scanResult.dataGroup1.documentType forKey:@"documentType"];
+//    [dictResultDataGroup1 setValue:scanResult.dataGroup1.firstName forKey:@"firstName"];
+//    [dictResultDataGroup1 setValue:scanResult.dataGroup1.gender forKey:@"gender"];
+//    [dictResultDataGroup1 setValue:scanResult.dataGroup1.issuingStateCode forKey:@"issuingStateCode"];
+//    [dictResultDataGroup1 setValue:scanResult.dataGroup1.lastName forKey:@"lastName"];
+//    [dictResultDataGroup1 setValue:scanResult.dataGroup1.nationality forKey:@"nationality"];
+//
+//    [dictResult setObject:dictResultDataGroup1 forKey:@"dataGroup1"];
+//
+//
+//    //DataGroup2 (= Image)
+//    NSMutableDictionary *dictResultDataGroup2 = [[NSMutableDictionary alloc] initWithCapacity:1];
+//    NSString *imagePath = [self saveImageToFileSystem:scanResult.dataGroup2.faceImage compressionQuality:dividedCompRate];
+//    [dictResultDataGroup2 setValue:imagePath forKey:@"imagePath"];
+//
+//    [dictResult setObject:dictResultDataGroup2 forKey:@"dataGroup2"];
+//
+//    //SOB
+//    NSMutableDictionary *dictResultSOB = [[NSMutableDictionary alloc] init];
+//
+//    [dictResultSOB setValue:scanResult.sod.issuerCertificationAuthority forKey:@"issuerCertificationAuthority"];
+//    [dictResultSOB setValue:scanResult.sod.issuerCountry forKey:@"issuerCountry"];
+//    [dictResultSOB setValue:scanResult.sod.issuerOrganization forKey:@"issuerOrganization"];
+//    [dictResultSOB setValue:scanResult.sod.issuerOrganizationalUnit forKey:@"issuerOrganizationalUnit"];
+//    [dictResultSOB setValue:scanResult.sod.ldsHashAlgorithm forKey:@"ldsHashAlgorithm"];
+//    [dictResultSOB setValue:scanResult.sod.signatureAlgorithm forKey:@"signatureAlgorithm"];
+//    [dictResultSOB setValue:scanResult.sod.validFromString forKey:@"validFromString"];
+//    [dictResultSOB setValue:scanResult.sod.validUntilString forKey:@"validUntilString"];
+//
+//    [dictResult setObject:dictResultSOB forKey:@"sob"];
+//
+//    return dictResult;
+//}
+//
+//
+//+ (NSDictionary *)dictionaryForOCRResult:(ALOCRResult *)scanResult
+//                        detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                 outline:(ALSquare *)outline
+//                                 quality:(NSInteger)quality {
+//    CGFloat dividedCompRate = (CGFloat)quality/100;
+//
+//    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
+//
+//    [dictResult setObject:scanResult.result forKey:@"text"];
+//
+//    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
+//
+//    [dictResult setValue:imagePath forKey:@"imagePath"];
+//
+//    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+//    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+//
+//    [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
+//
+//    if (detectedBarcodes && detectedBarcodes.count != 0) {
+//        [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
+//    }
+//
+//    return dictResult;
+//}
+//
+//+ (NSDictionary *)dictionaryForBarcodeResult:(ALBarcodeResult *)scanResult
+//                                     outline:(ALSquare *)outline
+//                                     quality:(NSInteger)quality {
+//    CGFloat dividedCompRate = (CGFloat)quality/100;
+//
+//    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:2];
+//
+//    NSMutableArray *barcodeArray = [[NSMutableArray alloc] init];
+//
+//
+//    for(ALBarcode *barcode in scanResult.result) {
+//        NSMutableDictionary *barcodeDictionary = @{ @"value":barcode.value,
+//                                                    @"barcodeFormat": [ALPluginHelper barcodeFormatFromString:barcode.barcodeFormat]}.mutableCopy;
+//        if (barcode.parsedPDF417 != nil) {
+//            NSString *newValueWithPDF417 = [NSString stringWithFormat:@"{\"rawPDF417\" : \"%@\", \"parsedPDF417\" : \"%@\"}", barcode.value, [barcode.parsedPDF417[kPDF417ParsedBody] description]];
+//            [barcodeDictionary setValue:newValueWithPDF417 forKey:@"value"];
+//        }
+//        [barcodeArray addObject:barcodeDictionary];
+//    }
+//
+//    [dictResult setValue:barcodeArray forKey:@"barcodes"];
+//
+//    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
+//
+//    [dictResult setValue:imagePath forKey:@"imagePath"];
+//
+//    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+//    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+//
+//    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
+//    [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
+//
+//    return dictResult;
+//}
+//
+//+ (NSDictionary *)dictionaryForLicensePlateResult:(ALLicensePlateResult *)scanResult
+//                                 detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                          outline:(ALSquare *)outline
+//                                          quality:(NSInteger)quality {
+//    CGFloat dividedCompRate = (CGFloat)quality/100;
+//    // Get the imagepath from result
+//    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
+//
+//    //Create the result Object
+//    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:5];
+//    [dictResult setValue:scanResult.country forKey:@"country"];
+//    [dictResult setValue:scanResult.area forKey:@"area"];
+//    [dictResult setValue:scanResult.result forKey:@"licensePlate"];
+//    [dictResult setValue:[ALPluginHelper stringForOutline:outline] forKey:@"outline"];
+//    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
+//    [dictResult setValue:imagePath forKey:@"imagePath"];
+//
+//    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+//    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+//
+//    if (detectedBarcodes && detectedBarcodes.count != 0) {
+//        [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
+//    }
+//
+//    return dictResult;
+//}
+//
+//+ (NSDictionary *)dictionaryForTransformedImage:(UIImage *)transformedImage
+//                                      fullFrame:(UIImage *)fullFrame
+//                                        quality:(NSInteger)quality
+//                               detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                        outline:(ALSquare *)outline {
+//    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
+//
+//    CGFloat dividedCompRate = (CGFloat)quality/100;
+//    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:transformedImage compressionQuality:dividedCompRate];
+//    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:fullFrame compressionQuality:dividedCompRate];
+//    NSString *outlineString = [ALPluginHelper stringForOutline:outline];
+//
+//
+//    [dictResult setValue:imagePath forKey:@"imagePath"];
+//    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+//    [dictResult setValue:outlineString forKey:@"outline"];
+//
+//    if (detectedBarcodes && detectedBarcodes.count != 0) {
+//        [dictResult setObject:detectedBarcodes forKey:@"detectedBarcodes"];
+//    }
+//
+//    return dictResult;
+//}
+//
+//+ (NSDictionary *)dictionaryForCompositeResult:(ALCompositeResult *)scanResult
+//                              detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                       quality:(NSInteger)quality {
+//
+//
+//    NSMutableDictionary *dictResult = [[NSMutableDictionary alloc] init];
+//
+//    for (NSString *pluginID in [scanResult.result allKeys]) {
+//
+//        NSDictionary *singleResultDict = [ALPluginHelper dictForResult:[scanResult.result objectForKey:pluginID]
+//                                                      detectedBarcodes:detectedBarcodes
+//                                                               quality:quality];
+//
+//        [dictResult setObject:singleResultDict forKey:pluginID];
+//
+//    }
+//    return dictResult;
+//}
+//
+//+ (NSDictionary *)dictionaryForTireResult:(ALTireResult *)scanResult
+//                                  quality:(NSInteger)quality {
+//    CGFloat dividedCompRate = (CGFloat)quality/100;
+//
+//    NSMutableDictionary *dictResult = [NSMutableDictionary dictionaryWithCapacity:4];
+//
+//    [dictResult setObject:scanResult.result forKey:@"text"];
+//
+//    NSString *imagePath = [ALPluginHelper saveImageToFileSystem:scanResult.image compressionQuality:dividedCompRate];
+//
+//    [dictResult setValue:imagePath forKey:@"imagePath"];
+//
+//    NSString *fullImagePath = [ALPluginHelper saveImageToFileSystem:scanResult.fullImage compressionQuality:dividedCompRate];
+//    [dictResult setValue:fullImagePath forKey:@"fullImagePath"];
+//    [dictResult setValue:@(scanResult.confidence) forKey:@"confidence"];
+//    [dictResult setValue:scanResult.pluginID forKey:@"pluginID"];
+//    return dictResult;
+//}
+//
+//+ (NSDictionary *)dictForResult:(ALScanResult *)result
+//               detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                        quality:(NSInteger)quality {
+//    if ([result isKindOfClass:[ALMeterResult class]]) {
+//        return [ALPluginHelper dictionaryForMeterResult:(ALMeterResult *)result
+//                                       detectedBarcodes:detectedBarcodes
+//                                                outline:[[ALSquare alloc] init]
+//                                                quality:quality];
+//
+//    } else if ([result isKindOfClass:[ALLicensePlateResult class]]) {
+//        return [ALPluginHelper dictionaryForLicensePlateResult:(ALLicensePlateResult *)result
+//                                              detectedBarcodes:detectedBarcodes
+//                                                       outline:[[ALSquare alloc] init]
+//                                                       quality:quality];
+//    } else if ([result isKindOfClass:[ALIDResult class]]) {
+//        return [ALPluginHelper dictionaryForIDResult:(ALIDResult *)result
+//                                    detectedBarcodes:detectedBarcodes
+//                                             outline:[[ALSquare alloc] init]
+//                                             quality:quality];
+//
+//    } else if ([result isKindOfClass:[ALBarcodeResult class]]) {
+//        return [ALPluginHelper dictionaryForBarcodeResult:(ALBarcodeResult *)result
+//                                                  outline:[[ALSquare alloc] init]
+//                                                  quality:quality];
+//
+//    } else if ([result isKindOfClass:[ALOCRResult class]]) {
+//        return [ALPluginHelper dictionaryForOCRResult:(ALOCRResult *)result
+//                                     detectedBarcodes:detectedBarcodes
+//                                              outline:[[ALSquare alloc] init]
+//                                              quality:quality];
+//
+//    } else if ([result.result isKindOfClass:[UIImage class]]) {
+//        return [ALPluginHelper dictionaryForTransformedImage:(UIImage *)result.result
+//                                                   fullFrame:result.fullImage
+//                                                     quality:quality
+//                                            detectedBarcodes:detectedBarcodes
+//                                                     outline:[[ALSquare alloc] init]];
+//
+//    }
+//
+//    return nil;
+//}
 
 #pragma mark - Date Parsing Utils
 

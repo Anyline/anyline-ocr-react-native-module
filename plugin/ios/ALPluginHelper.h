@@ -1,29 +1,14 @@
-//
-//  ALPluginHelper.h
-//  Anyline React-Native Example
-//
-//  Created by Daniel Albertini on 30.10.18.
-//
-
-#import <Foundation/Foundation.h>
-#import <Anyline/Anyline.h>
-#import <UIKit/UIKit.h>
-#import "ALJsonUIConfiguration.h"
+#import "ALJSONUIConfiguration.h"
 #import "ALRoundedView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^ALPluginCallback)(id _Nullable callbackObj, NSString * _Nullable errorString);
+
+
 @interface ALPluginHelper : NSObject
 
-+ (NSString *)barcodeFormatFromString:(NSString *)barcodeFormat;
-
-+ (ALScanMode)scanModeFromString:(NSString *)scanMode;
-
-+ (NSString *)stringFromScanMode:(ALScanMode)scanMode;
-
-+ (NSString *)stringForOutline:(ALSquare *)square;
-
-+ (NSDictionary<NSString *, NSNumber *> *)scanModesDict;
++ (void)startScan:(NSDictionary *)config finished:(ALPluginCallback)callback;
 
 + (NSString *)saveImageToFileSystem:(UIImage *)image;
 
@@ -32,61 +17,69 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UILabel *)createLabelForView:(UIView *)view;
 
-+ (UISegmentedControl *)createSegmentForViewController:(UIViewController *)viewController
-                                                config:(ALJsonUIConfiguration *)config
-                                              scanMode:(ALScanMode)scanMode;
-
-+ (NSString *)barcodeFormatForNativeString:(NSString *)barcodeType;
-
 + (UIButton *)createButtonForViewController:(UIViewController *)viewController
-                                     config:(ALJsonUIConfiguration *)config;
+                                     config:(ALJSONUIConfiguration *)config;
 
 + (ALRoundedView *)createRoundedViewForViewController:(UIViewController *)viewController;
 
-+ (NSDictionary *)dictionaryForMeterResult:(ALMeterResult *)scanResult
-                          detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                   outline:(ALSquare *)outline
-                                   quality:(NSInteger)quality;
+//+ (ALScanMode)scanModeFromString:(NSString *)scanMode;
+//
+//+ (NSString *)stringFromScanMode:(ALScanMode)scanMode;
+//
+//+ (NSString *)stringForOutline:(ALSquare *)square;
 
-+ (NSDictionary *)dictionaryForIDResult:(ALIDResult *)scanResult
-                       detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                outline:(ALSquare *)outline
-                                quality:(NSInteger)quality;
+//+ (NSDictionary<NSString *, NSNumber *> *)scanModesDict;
 
-+ (NSDictionary *)dictionaryForNFCResult:(ALNFCResult *)scanResult
-                                 quality:(NSInteger)quality API_AVAILABLE(ios(13));
+//+ (UISegmentedControl *)createSegmentForViewController:(UIViewController *)viewController
+//                                                config:(ALJsonUIConfiguration *)config
+//                                              scanMode:(ALScanMode)scanMode;
 
-+ (NSDictionary *)dictionaryForBarcodeResults:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                  barcodeType:(NSString *)barcodeType
-                                   scanResult:(NSString *)scanResult;
+//+ (NSString *)barcodeFormatForNativeString:(NSString *)barcodeType;
 
-+ (NSDictionary *)dictionaryForOCRResult:(ALOCRResult *)scanResult
-                        detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                 outline:(ALSquare *)outline
-                                 quality:(NSInteger)quality;
-
-+ (NSDictionary *)dictionaryForBarcodeResult:(ALBarcodeResult *)scanResult
-                                     outline:(ALSquare *)outline
-                                     quality:(NSInteger)quality;
-
-+ (NSDictionary *)dictionaryForLicensePlateResult:(ALLicensePlateResult *)scanResult
-                                 detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                          outline:(ALSquare *)outline
-                                          quality:(NSInteger)quality;
-
-+ (NSDictionary *)dictionaryForTransformedImage:(UIImage *)transformedImage
-                                      fullFrame:(UIImage *)fullFrame
-                                        quality:(NSInteger)quality
-                               detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                        outline:(ALSquare *)outline;
-
-
-+ (NSDictionary *)dictionaryForCompositeResult:(ALCompositeResult *)scanResult
-                              detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
-                                       quality:(NSInteger)quality;
-
-+ (NSDictionary *)dictionaryForTireResult:(ALTireResult *)scanResult
-                                  quality:(NSInteger)quality;
+//+ (NSDictionary *)dictionaryForMeterResult:(ALMeterResult *)scanResult
+//                          detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                   outline:(ALSquare *)outline
+//                                   quality:(NSInteger)quality;
+//
+//+ (NSDictionary *)dictionaryForIDResult:(ALIDResult *)scanResult
+//                       detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                outline:(ALSquare *)outline
+//                                quality:(NSInteger)quality;
+//
+//+ (NSDictionary *)dictionaryForNFCResult:(ALNFCResult *)scanResult
+//                                 quality:(NSInteger)quality API_AVAILABLE(ios(13));
+//
+//+ (NSDictionary *)dictionaryForBarcodeResults:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                  barcodeType:(NSString *)barcodeType
+//                                   scanResult:(NSString *)scanResult;
+//
+//+ (NSDictionary *)dictionaryForOCRResult:(ALOCRResult *)scanResult
+//                        detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                 outline:(ALSquare *)outline
+//                                 quality:(NSInteger)quality;
+//
+//+ (NSDictionary *)dictionaryForBarcodeResult:(ALBarcodeResult *)scanResult
+//                                     outline:(ALSquare *)outline
+//                                     quality:(NSInteger)quality;
+//
+//+ (NSDictionary *)dictionaryForLicensePlateResult:(ALLicensePlateResult *)scanResult
+//                                 detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                          outline:(ALSquare *)outline
+//                                          quality:(NSInteger)quality;
+//
+//+ (NSDictionary *)dictionaryForTransformedImage:(UIImage *)transformedImage
+//                                      fullFrame:(UIImage *)fullFrame
+//                                        quality:(NSInteger)quality
+//                               detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                        outline:(ALSquare *)outline;
+//
+//
+//+ (NSDictionary *)dictionaryForCompositeResult:(ALCompositeResult *)scanResult
+//                              detectedBarcodes:(NSMutableArray<NSDictionary *> *)detectedBarcodes
+//                                       quality:(NSInteger)quality;
+//
+//+ (NSDictionary *)dictionaryForTireResult:(ALTireResult *)scanResult
+//                                  quality:(NSInteger)quality;
 
 @end
 

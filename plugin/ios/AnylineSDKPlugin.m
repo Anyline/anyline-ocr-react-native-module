@@ -6,7 +6,7 @@
 
 #import "ALNFCScanViewController.h"
 
-@interface AnylineSDKPlugin()<ALPluginScanViewControllerDelegate>
+@interface AnylineSDKPlugin()
 
 @property (nonatomic, strong) ALScanViewPluginConfig *conf;
 
@@ -15,7 +15,7 @@
 @property (nonatomic, assign) BOOL nativeBarcodeScanning;
 @property (nonatomic, strong) NSDictionary *jsonConfigDictionary;
 @property (nonatomic, strong) NSDictionary *ocrConfigDict;
-@property (nonatomic, strong) ALJsonUIConfiguration *jsonUIConf;
+@property (nonatomic, strong) ALJSONUIConfiguration *jsonUIConf;
 
 @property (nonatomic, strong) RCTResponseSenderBlock onResultCallback;
 @property (nonatomic, strong) RCTResponseSenderBlock onErrorCallback;
@@ -63,7 +63,7 @@ RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode 
 }
 
 RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-   resolve(ALCoreController.versionNumber);
+   resolve(AnylineSDK.versionNumber);
 }
 
 
@@ -87,9 +87,8 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     BOOL nativeBarcodeScanning = [[optionsDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
     self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
 
-    self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:optionsDictionary];
-    self.conf = [[ALScanViewPluginConfig alloc] initWithDictionary:optionsDictionary];
-    self.conf.cancelOnResult = true;
+    self.jsonUIConf = [[ALJSONUIConfiguration alloc] initWithDictionary:optionsDictionary];
+    self.conf = [[ALScanViewPluginConfig alloc] initWithJSONDictionary:optionsDictionary error:&error];
     self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -100,10 +99,15 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
             if (customCmdFile) {
                if (@available(iOS 13.0, *)) {
                    if ([ALNFCDetector readingAvailable]) {
-                       ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:self.appKey
-                                                                                                              configuration:[dictionary objectForKey:@"options"]
-                                                                                                       uiConfig:self.jsonUIConf
-                                                                                                                   delegate:self];
+                       ALPluginScanViewController *nfcScanViewController = [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
+                                                                                                                 configuration:dictionary
+                                                                                                               uiConfiguration:self.jsonUIConf finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
+                           
+                       }];
+//                                                                         initWithLicensekey:self.appKey
+//                                                                                                              configuration:[dictionary objectForKey:@"options"]
+//                                                                                                       uiConfig:self.jsonUIConf
+//                                                                                                                   delegate:self];
                        if([self.jsonConfigDictionary valueForKey:@"quality"]){
                            nfcScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
                        }
@@ -130,9 +134,10 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
             } else {
                 ALPluginScanViewController *pluginScanViewController =
                 [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
-                                                         configuration:[dictionary objectForKey:@"options"]
-                                                  uiConfiguration:self.jsonUIConf
-                                                              delegate:self];
+                                                         configuration:dictionary
+                                                       uiConfiguration:self.jsonUIConf finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
+
+}];
                 
                 if([self.jsonConfigDictionary valueForKey:@"quality"]){
                     pluginScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
@@ -155,9 +160,10 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
         } else {
             ALPluginScanViewController *pluginScanViewController =
             [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
-                                                     configuration:[dictionary objectForKey:@"options"]
-                                              uiConfiguration:self.jsonUIConf
-                                                          delegate:self];
+                                                     configuration:dictionary
+                                                   uiConfiguration:self.jsonUIConf finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
+
+}];
             
             if([self.jsonConfigDictionary valueForKey:@"quality"]){
                 pluginScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
@@ -205,32 +211,6 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 
 - (void)pluginScanViewController:(ALPluginScanViewController *)pluginScanViewController didStopScanning:(id)sender error:(NSError *)error {
     [self returnError:error.debugDescription];
-}
-
-- (ALScanMode)energyScanModeFromString:(NSString *)scanMode{
-
-    if ([[scanMode uppercaseString] isEqualToString:@"ANALOG_METER"]) {
-        return ALAnalogMeter;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"DIGITAL_METER"]){
-        return ALDigitalMeter;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"AUTO_ANALOG_DIGITAL_METER"]){
-        return ALAutoAnalogDigitalMeter;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"DIAL_METER"]){
-        return ALDialMeter;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"SERIAL_NUMBER"]){
-        return ALSerialNumber;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"HEAT_METER_4"]){
-        return ALHeatMeter4;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"HEAT_METER_5"]){
-        return ALHeatMeter5;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"HEAT_METER_6"]){
-        return ALHeatMeter6;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"DOT_MATRIX_METER"]){
-            return ALDotMatrixMeter;
-    } else {
-        return ALAutoAnalogDigitalMeter;
-    }
-
 }
 
 - (BOOL)scanModeIndex:(NSString *)scanMode{

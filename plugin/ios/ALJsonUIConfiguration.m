@@ -1,12 +1,4 @@
-//
-//  ALJsonUIConfiguration.m
-//  FoodNotifyBussines
-//
-//  Created by Matthias Gasser on 12/11/15.
-//
-//
-
-#import "ALJsonUIConfiguration.h"
+#import "ALJSONUIConfiguration.h"
 
 NSString * const DONE_BUTTON = @"doneButton";
 NSString * const DONE_BUTTON_TITLE = @"title";
@@ -38,7 +30,7 @@ NSString * const LABEL_OFFSET = @"labelOffset";
 NSString * const LABEL_OFFSET_X = @"offset.x";
 NSString * const LABEL_OFFSET_Y = @"offset.y";
 
-@implementation ALJsonUIConfiguration
+@implementation ALJSONUIConfiguration
 
 -(instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
@@ -63,30 +55,30 @@ NSString * const LABEL_OFFSET_Y = @"offset.y";
                 _buttonDoneFontName = [btnDict valueForKeyPath:DONE_BUTTON_FONT_NAME];
             
             if([btnDict valueForKey:DONE_BUTTON_COLOR])
-                _buttonDoneTextColor = [ALJsonUIConfiguration colorFromHexString:[btnDict valueForKeyPath:DONE_BUTTON_COLOR]];
+                _buttonDoneTextColor = [ALJSONUIConfiguration colorFromHexString:[btnDict valueForKeyPath:DONE_BUTTON_COLOR]];
             
             if([btnDict valueForKey:DONE_BUTTON_COLOR_HIGHLIGHTED])
-            _buttonDoneTextColorHighlighted = [ALJsonUIConfiguration colorFromHexString:[btnDict valueForKeyPath:DONE_BUTTON_COLOR_HIGHLIGHTED]];
+                _buttonDoneTextColorHighlighted = [ALJSONUIConfiguration colorFromHexString:[btnDict valueForKeyPath:DONE_BUTTON_COLOR_HIGHLIGHTED]];
             
             
             if([btnDict valueForKey:DONE_BUTTON_FONT_SIZE])
                 _buttonDoneFontSize = [[btnDict valueForKeyPath:DONE_BUTTON_FONT_SIZE] floatValue];
             
             if([btnDict valueForKey:DONE_BUTTON_TYPE])
-                _buttonType =  [ALJsonUIConfiguration stringToButtonType:[btnDict valueForKeyPath:DONE_BUTTON_TYPE]];
+                _buttonType =  [ALJSONUIConfiguration stringToButtonType:[btnDict valueForKeyPath:DONE_BUTTON_TYPE]];
             
             if([btnDict valueForKey:DONE_BUTTON_BACKGROUND_COLOR])
-                _buttonDoneBackgroundColor = [ALJsonUIConfiguration colorFromHexString:[btnDict valueForKey:DONE_BUTTON_BACKGROUND_COLOR]];
+                _buttonDoneBackgroundColor = [ALJSONUIConfiguration colorFromHexString:[btnDict valueForKey:DONE_BUTTON_BACKGROUND_COLOR]];
             
             if([btnDict valueForKey:DONE_BUTTON_TITLE])
                 _buttonDoneTitle = [btnDict valueForKeyPath:DONE_BUTTON_TITLE];
             
             if([btnDict valueForKey:DONE_BUTTON_X_ALIGNMENT]) {
-                _buttonDoneXAlignment = [ALJsonUIConfiguration stringToButtonXAlignment:[btnDict valueForKeyPath:DONE_BUTTON_X_ALIGNMENT]];
+                _buttonDoneXAlignment = [ALJSONUIConfiguration stringToButtonXAlignment:[btnDict valueForKeyPath:DONE_BUTTON_X_ALIGNMENT]];
             }
             
             if([btnDict valueForKey:DONE_BUTTON_Y_ALIGNMENT]) {
-                _buttonDoneYAlignment = [ALJsonUIConfiguration stringToButtonYAlignment:[btnDict valueForKeyPath:DONE_BUTTON_Y_ALIGNMENT]];
+                _buttonDoneYAlignment = [ALJSONUIConfiguration stringToButtonYAlignment:[btnDict valueForKeyPath:DONE_BUTTON_Y_ALIGNMENT]];
             }
             
             
@@ -111,7 +103,7 @@ NSString * const LABEL_OFFSET_Y = @"offset.y";
                 _segmentModes = [segDict valueForKey:SEGMENT_MODES];
             
             if([segDict valueForKey:SEGMENT_TINT_COLOR])
-                _segmentTintColor = [ALJsonUIConfiguration colorFromHexString:[segDict valueForKey:SEGMENT_TINT_COLOR]];
+                _segmentTintColor = [ALJSONUIConfiguration colorFromHexString:[segDict valueForKey:SEGMENT_TINT_COLOR]];
             
             if([segDict valueForKeyPath:OFFSET_X])
                 _segmentXPositionOffset = [[segDict valueForKeyPath:OFFSET_X] floatValue];
@@ -124,19 +116,19 @@ NSString * const LABEL_OFFSET_Y = @"offset.y";
             NSDictionary *labDict = [dictionary valueForKey:LABEL];
             
             if([labDict valueForKey:LABEL_TEXT])
-            _labelText = [labDict valueForKey:LABEL_TEXT];
+                _labelText = [labDict valueForKey:LABEL_TEXT];
             
             if([labDict valueForKey:LABEL_SIZE])
-            _labelSize = [[labDict valueForKeyPath:LABEL_SIZE] floatValue];
+                _labelSize = [[labDict valueForKeyPath:LABEL_SIZE] floatValue];
             
             if([labDict valueForKey:LABEL_COLOR])
-            _labelColor = [ALJsonUIConfiguration colorFromHexString:[labDict valueForKey:LABEL_COLOR]];
+                _labelColor = [ALJSONUIConfiguration colorFromHexString:[labDict valueForKey:LABEL_COLOR]];
             
             if([labDict valueForKeyPath:LABEL_OFFSET_X])
-            _labelXPositionOffset = [[labDict valueForKeyPath:LABEL_OFFSET_X] floatValue];
+                _labelXPositionOffset = [[labDict valueForKeyPath:LABEL_OFFSET_X] floatValue];
             
             if([labDict valueForKeyPath:LABEL_OFFSET_Y])
-            _labelYPositionOffset = [[labDict valueForKeyPath:LABEL_OFFSET_Y] floatValue];
+                _labelYPositionOffset = [[labDict valueForKeyPath:LABEL_OFFSET_Y] floatValue];
         }
 
     }
@@ -145,20 +137,20 @@ NSString * const LABEL_OFFSET_Y = @"offset.y";
 
 +(ALButtonXAlignment) stringToButtonXAlignment:(NSString*) str {
     NSDictionary *map = @{
-                          @"LEFT":@(ALButtonXAlignmentLeft),
-                          @"CENTER":@(ALButtonXAlignmentCenter),
-                          @"RIGHT":@(ALButtonXAlignmentRight),
-                          };
+        @"LEFT":@(ALButtonXAlignmentLeft),
+        @"CENTER":@(ALButtonXAlignmentCenter),
+        @"RIGHT":@(ALButtonXAlignmentRight),
+    };
     
     return [[map valueForKey:str.uppercaseString] integerValue];
 }
 
 +(ALButtonYAlignment) stringToButtonYAlignment:(NSString*) str {
     NSDictionary *map = @{
-                          @"TOP":@(ALButtonYAlignmentTop),
-                          @"CENTER":@(ALButtonYAlignmentCenter),
-                          @"BOTTOM":@(ALButtonYAlignmentBottom),
-                          };
+        @"TOP":@(ALButtonYAlignmentTop),
+        @"CENTER":@(ALButtonYAlignmentCenter),
+        @"BOTTOM":@(ALButtonYAlignmentBottom),
+    };
     
     return [[map valueForKey:str.uppercaseString] integerValue];
 }
@@ -166,9 +158,9 @@ NSString * const LABEL_OFFSET_Y = @"offset.y";
 
 +(ALButtonType) stringToButtonType:(NSString*) str {
     NSDictionary *map = @{
-                          @"FULLWIDTH":@(ALButtonTypeFullWidth),
-                          @"RECT":@(ALButtonTypeRect)
-                          };
+        @"FULLWIDTH":@(ALButtonTypeFullWidth),
+        @"RECT":@(ALButtonTypeRect)
+    };
     
     return [[map valueForKey:str.uppercaseString] integerValue];
 }

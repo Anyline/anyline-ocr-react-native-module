@@ -1,12 +1,5 @@
-//
-//  ALNFCScanViewController.h
-//  AnylineExamples
-//
-//  Created by Angela Brett on 08.10.19.
-//
-
 #import "ALPluginScanViewController.h"
-#import "ALJsonUIConfiguration.h"
+#import "ALJSONUIConfiguration.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,8 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithLicensekey:(NSString *)licensekey
                      configuration:(NSDictionary *)anylineConfig
-                          uiConfig:(ALJsonUIConfiguration *)uiConfig
-                          delegate:(id<ALPluginScanViewControllerDelegate>)delegate;
+                          uiConfig:(ALJSONUIConfiguration *)uiConfig
+                          finished:(ALPluginCallback)callback;
 @end
 
 NS_ASSUME_NONNULL_END

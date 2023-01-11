@@ -1,16 +1,7 @@
-//
-//  ALPluginScanViewController.h
-//  Anyline React-Native Example
-//
-//  Created by Daniel Albertini on 30.10.18.
-//
-
 #import <UIKit/UIKit.h>
-#import "ALJsonUIConfiguration.h"
+#import "ALPluginHelper.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@protocol ALPluginScanViewControllerDelegate;
 
 @interface ALPluginScanViewController : UIViewController
 
@@ -20,27 +11,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) NSUInteger quality;
 
-- (instancetype)initWithLicensekey:(NSString*)licensekey
-                     configuration:(NSDictionary *)anylineConfig
-              uiConfiguration:(ALJsonUIConfiguration*)jsonUIConfig
-                          delegate:(id<ALPluginScanViewControllerDelegate>)delegate;
+- (instancetype)initWithLicensekey:(NSString *)licenseKey
+                     configuration:(NSDictionary *)config
+                   uiConfiguration:(ALJSONUIConfiguration *)JSONUIConfig
+                          finished:(ALPluginCallback)callback;
 
-@end
-
-@protocol ALPluginScanViewControllerDelegate <NSObject>
-
-@required
-
-- (void)pluginScanViewController:(ALPluginScanViewController *)pluginScanViewController
-                         didScan:(id)scanResult
-                continueScanning:(BOOL)continueScanning;
-
-- (void)pluginScanViewController:(ALPluginScanViewController *)pluginScanViewController
-                 didStopScanning:(id)sender;
-
-- (void)pluginScanViewController:(ALPluginScanViewController *)pluginScanViewController
-                 didStopScanning:(id)sender
-                           error:(NSError *)error;
 @end
 
 NS_ASSUME_NONNULL_END

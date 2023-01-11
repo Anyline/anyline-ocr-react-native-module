@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>RNExampleApp</name>
+	<name>anyline-react-native-example-app</name>
 	<comment>Project RNExampleApp created by Buildship.</comment>
 	<projects>
 	</projects>
@@ -16,7 +16,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1669021212230</id>
+			<id>0</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
