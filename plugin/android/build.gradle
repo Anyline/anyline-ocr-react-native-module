@@ -3,7 +3,7 @@ apply plugin: "com.android.library"
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.3'
@@ -13,7 +13,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -52,6 +52,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
 }
 
 repositories {
@@ -65,7 +69,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'io.anyline:anylinesdk:42.2.0'
+    implementation 'io.anyline:anylinesdk:43.1.0'
     implementation "com.facebook.react:react-native:+"  // from node_modules
     implementation("com.google.android.material:material:1.4.0-rc01")
     implementation 'androidx.multidex:multidex:2.0.1'

@@ -1,96 +1,105 @@
 export default {
-  license: 'ewogICJsaWNlbnNlS2V5VmVyc2lvbiI6ICIzLjAiLAogICJkZWJ1Z1JlcG9ydGluZyI6ICJwaW5nIiwKICAibWFqb3JWZXJzaW9uIjogIjM3IiwKICAic2NvcGUiOiBbCiAgICAiQUxMIgogIF0sCiAgIm1heERheXNOb3RSZXBvcnRlZCI6IDUsCiAgImFkdmFuY2VkQmFyY29kZSI6IHRydWUsCiAgIm11bHRpQmFyY29kZSI6IHRydWUsCiAgInN1cHBvcnRlZEJhcmNvZGVGb3JtYXRzIjogWwogICAgIkFMTCIKICBdLAogICJwbGF0Zm9ybSI6IFsKICAgICJpT1MiLAogICAgIkFuZHJvaWQiCiAgXSwKICAic2hvd1dhdGVybWFyayI6IHRydWUsCiAgInRvbGVyYW5jZURheXMiOiAzMCwKICAidmFsaWQiOiAiMjAyMi0xMi0zMSIsCiAgImlvc0lkZW50aWZpZXIiOiBbCiAgICAiY29tLmFueWxpbmUuZXhhbXBsZS5yZWFjdG5hdGl2ZSIsCiAgICAiY29tLmFueWxpbmUuZXhhbXBsZS5yZWFjdG5hdGl2ZS5iZXRhIgogIF0sCiAgImFuZHJvaWRJZGVudGlmaWVyIjogWwogICAgImNvbS5hbnlsaW5lLmV4YW1wbGUucmVhY3RuYXRpdmUiCiAgXQp9CklibmlieWFiVTRmWFNwRDZiYU1CUlRiUUQvQUxHTzI0cWdWUHM4Q3FWdThET0dQQnBlRGs4UjhYNTF6WWMvOW95TWZjbWFtakpKSktvMmM2ZVpJWGticzkzNkdqM1M2STBIS2UycEVPd1FNdGZQYVBWY3hKOWJHT25venF6UFk1bWUwNGtJYk9TYVhka3A0SUcwOGM0ZWpqTitsS0N6Qnd6ekhVSkUyNDJ1dnFvKy9tZmFWS2E3T0trOUdWaWYvQzBzamFPNHhhRTFlcHRQT2lKYkJlSCtpK1RCWnFJZDQxamZIdTl1NHEwOHozM0ZuaG5yU0hpMFQwL3VCakFLYStsRGpzbXJPbFBiaG5tU0V6K3RBUVE5NEhPcHA2OTd6b2hCak85WENDZE81aWJwR3pMekhoYWZ3T3VVVy9OQ1NDWFNsNjAzVDE0QitOVjUydWZ4eFlxQT09',
-  options: {
-  "camera": {
-    "captureResolution": "1080p"
+  license: 'ew0KICAibGljZW5zZUtleVZlcnNpb24iOiAiMy4wIiwNCiAgImRlYnVnUmVwb3J0aW5nIjogInBpbmciLA0KICAibWFqb3JWZXJzaW9uIjogIjM3IiwNCiAgInNjb3BlIjogWw0KICAgICJBTEwiLA0KICAgICJORkMiDQogIF0sDQogICJtYXhEYXlzTm90UmVwb3J0ZWQiOiA1LA0KICAiYWR2YW5jZWRCYXJjb2RlIjogdHJ1ZSwNCiAgIm11bHRpQmFyY29kZSI6IHRydWUsDQogICJzdXBwb3J0ZWRCYXJjb2RlRm9ybWF0cyI6IFsNCiAgICAiQUxMIg0KICBdLA0KICAicGxhdGZvcm0iOiBbDQogICAgImlPUyIsDQogICAgIkFuZHJvaWQiDQogIF0sDQogICJzaG93V2F0ZXJtYXJrIjogdHJ1ZSwNCiAgInRvbGVyYW5jZURheXMiOiAzMCwNCiAgInZhbGlkIjogIjIwMjMtMTItMzEiLA0KICAiaW9zSWRlbnRpZmllciI6IFsNCiAgICAiY29tLmFueWxpbmUuZXhhbXBsZXMucmVhY3RuYXRpdmUiDQogIF0sDQogICJhbmRyb2lkSWRlbnRpZmllciI6IFsNCiAgICAiY29tLmFueWxpbmUuZXhhbXBsZXMucmVhY3RuYXRpdmUiDQogIF0NCn0KSlhUTzVRSmZKa2FtUnR2VDc4QTFadGVhTXVzbmJlTW5HSHl0alZmczlxbUtIeDhCT3ltSGVXc2M2aXpjRExIenhtbklnU0JzS1RRNEdhSENsWCtvMEo2R3VtaFNUWHQrNVVuc1hVQVJ6aGhUdEhTa0l1ZVlRQ0p3dTI3bE9kWlBhNVoxSFNxN24weE9tek1jTjM3R1dsajVzVm9SY2pqaUswYVVnY0M5cDFRT0svK29ZejAvWlR2dXFGVjZUeHdiUHkyc3RqaDhLdS9NaXhtcFZFVmh0eWVzMEU2ZzhNVkdBNmNPU1h4NDVXVzgvR0NUWEpqdFJ6NnM2UFBDYzdYSXhQalFjOVAxdzBtblpFYTdjUHpMS3M0Y3hoYjQwSmluSU5qZXp6MDl1em9kbnZUR3VlSEIwcXIzUWNlVmdkS1JVQzhDc24zNmJLM2NLVmVpOVdTUlVRPT0=',
+  "options": {
+    "doneButtonConfig": {
+      "offset.y": -88
+    }
   },
-  "flash": {
-    "mode": "manual",
-    "alignment": "top_right"
-  },
-  "parallelViewPluginComposite": {
-    "id": "DOUBLE_TARIFF_SEQUENTIAL",
-    "cancelOnResult": true,
+  "viewPluginCompositeConfig": {
+    "id": "meter_barcode_parallel_scan",
+    "processingMode": "parallel",
     "viewPlugins": [
       {
-        "viewPlugin": {
-          "plugin": {
-            "id": "METER_PLUGIN",
-            "meterPlugin": {
-              "scanMode": "AUTO_ANALOG_DIGITAL_METER"
-            }
+        "viewPluginConfig": {
+          "pluginConfig": {
+            "id": "meter",
+            "meterConfig": {
+              "scanMode": "auto_analog_digital_meter"
+            },
+            "cancelOnResult": true,
+            "startScanDelay": 0
           },
           "cutoutConfig": {
             "style": "rect",
-            "alignment": "top",
-            "strokeWidth": 2,
-            "strokeColor": "FFFFFF",
-            "cornerRadius": 4,
-            "outerColor": "000000",
-            "outerAlpha": 0.5,
-            "feedbackStrokeColor": "0099FF",
+            "maxWidthPercent": "100%",
+            "width": 768,
+            "alignment": "top_half",
+            "ratioFromSize": {
+              "width": 9,
+              "height": 4
+            },
             "offset": {
               "x": 0,
-              "y": 120
-            }
-          },
-          "scanFeedback": {
-            "style": "CONTOUR_RECT",
-            "strokeColor": "0099FF",
+              "y": 80
+            },
             "strokeWidth": 2,
+            "cornerRadius": 4,
+            "strokeColor": "0099FF",
+            "outerColor": "000000",
+            "outerAlpha": 0.3
+          },
+          "scanFeedbackConfig": {
+            "style": "contour_rect",
+            "strokeWidth": 2,
+            "strokeColor": "0099FF",
             "fillColor": "220099FF",
             "cornerRadius": 2,
-            "redrawTimeout": 200,
-            "animationDuration": 75,
-            "blinkOnResult": true,
             "beepOnResult": true,
-            "vibrateOnResult": true
-          },
-          "cancelOnResult": true
+            "vibrateOnResult": true,
+            "blinkAnimationOnResult": true,
+            "redrawTimeout": 200,
+            "animationDuration": 75
+          }
         }
       },
       {
-        "viewPlugin": {
-          "plugin": {
-            "id": "USNR_ID",
-            "ocrPlugin": {
-              "ocrConfig": {}
+        "viewPluginConfig": {
+          "pluginConfig": {
+            "id": "com.anyline.configs.plugin.universal-serial-number",
+            "ocrConfig": {
+              "scanMode": "auto"
             },
-            "delayStartScanTime": 1000
+            "cancelOnResult": true
           },
           "cutoutConfig": {
-            "style": "rect",
-            "width": 720,
-            "alignment": "center",
+            "animation": "none",
             "maxWidthPercent": "80%",
+            "alignment": "center",
             "ratioFromSize": {
-              "width": 720,
-              "height": 144
+              "width": 5,
+              "height": 1
             },
-            "strokeWidth": 2,
-            "strokeColor": "FFFFFF",
-            "cornerRadius": 4,
-            "outerColor": "000000",
-            "outerAlpha": 0.5,
-            "feedbackStrokeColor": "0099FF",
             "offset": {
               "x": 0,
               "y": 0
-            }
+            },
+            "cropOffset": {
+              "x": 0,
+              "y": 0
+            },
+            "cropPadding": {
+              "x": 0,
+              "y": 0
+            },
+            "cornerRadius": 4,
+            "strokeColor": "0099ff",
+            "strokeWidth": 2,
+            "outerColor": "000000",
+            "feedbackStrokeColor": "0099FF",
+            "outerAlpha": 0.3
           },
-          "scanFeedback": {
-            "style": "CONTOUR_RECT",
+          "scanFeedbackConfig": {
+            "style": "rect",
+            "strokeWidth": 2,
+            "cornerRadius": 2,
             "strokeColor": "0099FF",
-            "fillColor": "220099FF",
+            "fillColor": "330099FF",
             "beepOnResult": true,
             "vibrateOnResult": true,
-            "blinkAnimationOnResult": true
-          },
-          "cancelOnResult": true
+            "blinkAnimationOnResult": false
+          }
         }
       }
     ]
   }
-
-}
 }

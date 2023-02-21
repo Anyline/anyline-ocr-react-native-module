@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
 import {
-  AppRegistry,
   BackHandler,
   LayoutAnimation,
   PermissionsAndroid,
   ScrollView,
   StyleSheet,
   Text,
-  View,
 } from 'react-native';
 
 import AnylineOCR from 'anyline-ocr-react-native-module';
@@ -17,36 +17,27 @@ import Overview from './Overview';
 
 import BarcodeConfig from '../config/BarcodeConfig';
 import BarcodePDF417Config from '../config/Barcode_PDF417Config';
-import DocumentConfig from '../config/DocumentConfig';
 import MRZConfig from '../config/MRZConfig';
+import NFCMRZConfig from '../config/NFCMRZConfig';
 import UniversalIdConfig from '../config/UniversalIdConfig';
 import ArabicIdConfig from '../config/ArabicIdConfig';
 import CyrillicIdConfig from '../config/CyrillicIdConfig';
-import NFCAndMRZConfig from '../config/NFCAndMRZConfig';
-import AutoEnergyConfig from '../config/AutoEnergyConfig';
-import AnalogEnergyConfig from '../config/AnalogMeterConfig';
-import DigitalEnergyConfig from '../config/DigitalMeterConfig';
-import DotMatrixConfig from '../config/DotMatrixConfig';
-import DialEnergyConfig from '../config/DialMeterConfig';
-import IBANConfig from '../config/IbanConfig';
-import VoucherConfig from '../config/VoucherConfig';
+import AnalogDigitalMeterConfig from '../config/AnalogDigitalMeterConfig';
 import LicensePlateConfig from '../config/LicensePlateConfig';
-import LicensePlateUSConfig from '../config/LicensePlateUSConfig';
 import SerialNumberConfig from '../config/SerialNumber';
 import VinConfig from '../config/VINConfig';
 import USNRConfig from '../config/USNRConfig';
 import ShipConConfig from '../config/ContainerShipConfig';
-import CattleTagConfig from '../config/CattleTagConfig';
 import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
 import ParallelScanningConfig from '../config/ParallelScanningConfig';
 import TinConfig from '../config/TINConfig';
-import TireSizeConfig from '../config/TireSizeConfig'; 
+import TireSizeConfig from '../config/TireSizeConfig';
 import CommercialTireIdConfig from '../config/CommercialTireIdConfig';
 import OtaConfig from '../config/OtaConfig';
 import { DeviceEventEmitter } from 'react-native';
 import { Platform } from 'react-native';
-
+import VRCConfig from '../config/VRCConfig';
 
 // Disable Warnings
 console.disableYellowBox = true;
@@ -67,7 +58,7 @@ class Anyline extends Component {
   };
   componentDidMount = async () => {
     const SDKVersion = await AnylineOCR.getSDKVersion();
-    this.setState({SDKVersion: SDKVersion});
+    this.setState({ SDKVersion: SDKVersion });
   };
 
   componentWillUpdate() {
@@ -75,34 +66,34 @@ class Anyline extends Component {
   }
 
   updateAnyline = async type => {
-    if(Platform.OS === 'android' && this.overTheAirUpdateIsEnabled == true) {
+    if (Platform.OS === 'android' && this.overTheAirUpdateIsEnabled == true) {
       let otaConfig = OtaConfig;
-      
-      AnylineOCR.initSdk(otaConfig.license)
+
+      AnylineOCR.initSdk(otaConfig.license);
       const onSessionConnect = (event) => {
-        console.log(event.progress);  
+        console.log(event.progress);
       };
       DeviceEventEmitter.addListener('ota_progress_update_event', onSessionConnect);
       AnylineOCR.update(
-          JSON.stringify(otaConfig),
-          (message) => {
-            console.log(`Error: ${message}`);
-          },
-          () => {
-            console.log(`DONE`);
-            this.openAnyline(type)
-          }
+        JSON.stringify(otaConfig),
+        (message) => {
+          console.log(`Error: ${message}`);
+        },
+        () => {
+          console.log(`DONE`);
+          this.openAnyline(type)
+        }
       )
-  } else {
-    this.openAnyline(type);
-  }
-};
+    } else {
+      this.openAnyline(type);
+    }
+  };
 
   openAnyline = async type => {
-    this.setState({buttonsDisabled: true});
-    this.setState({titles: []});
+    this.setState({ buttonsDisabled: true });
+    this.setState({ titles: [] });
     let config;
-    let {titles} = this.state;
+    let { titles } = this.state;
 
     this.setState({
       currentScanMode: type,
@@ -111,30 +102,16 @@ class Anyline extends Component {
 
     switch (type) {
       case 'AUTO_ANALOG_DIGITAL_METER':
-        config = AutoEnergyConfig;
-        break;
-      case 'DIAL_METER':
-        config = DialEnergyConfig;
+        config = AnalogDigitalMeterConfig;
         break;
       case 'SERIAL_NUMBER':
         config = SerialNumberConfig;
-        break;
-      case 'DOT_MATRIX_METER':
-        config = DotMatrixConfig;
         break;
       case 'BARCODE':
         config = BarcodeConfig;
         break;
       case 'BARCODE_PDF417':
         config = BarcodePDF417Config;
-        break;
-      case 'IBAN':
-        type = 'ANYLINE_OCR';
-        config = IBANConfig;
-        break;
-      case 'VOUCHER':
-        type = 'ANYLINE_OCR';
-        config = VoucherConfig;
         break;
       case 'VIN':
         type = 'ANYLINE_OCR';
@@ -151,7 +128,7 @@ class Anyline extends Component {
       case 'COMMERCIAL_TIRE_ID':
         type = 'TIRE';
         config = CommercialTireIdConfig;
-        break;  
+        break;
       case 'USNR':
         type = 'ANYLINE_OCR';
         config = USNRConfig;
@@ -160,55 +137,42 @@ class Anyline extends Component {
         type = 'ANYLINE_OCR';
         config = ShipConConfig;
         break;
-      case 'CATTLE_TAG':
-        type = 'ANYLINE_OCR';
-        config = CattleTagConfig;
-        break;
       case 'MRZ':
         config = MRZConfig;
-        break; 
+        break;
       case 'UNIVERSAL_ID':
         config = UniversalIdConfig;
-        break; 
+        break;
       case 'ARABIC_ID':
         config = ArabicIdConfig;
-        break; 
+        break;
       case 'CYRILLIC_ID':
         config = CyrillicIdConfig;
-        break; 
+        break;
       case 'NFC+MRZ':
-        config = NFCAndMRZConfig;
+        config = NFCMRZConfig;
+        break;
+      case 'VRC':
+        config = VRCConfig;
         break;
       case 'LICENSE_PLATE':
         config = LicensePlateConfig;
-        break;
-      case 'LICENSE_PLATE_US':
-        config = LicensePlateUSConfig;
-        break;
-      case 'DOCUMENT':
-        config = DocumentConfig;
-        break;
-      case 'ANALOG_METER':
-        config = AnalogEnergyConfig;
-        break;
-      case 'DIGITAL_METER':
-        config = DigitalEnergyConfig;
         break;
       case 'VERTICAL_CONTAINER':
         config = VerticalContainerConfig;
         break;
       case 'SERIAL_SCANNING':
-        this.setState({hasMultipleResults: true});
+        this.setState({ hasMultipleResults: true });
         config = SerialScanningConfig;
-        titles = config.options.serialViewPluginComposite.viewPlugins.map(
-          viewPlug => viewPlug.viewPlugin.plugin.id,
+        titles = config.viewPluginCompositeConfig.viewPlugins.map(
+          viewPlug => viewPlug.viewPluginConfig.pluginConfig.id,
         );
         break;
       case 'PARALLEL_SCANNING':
-        this.setState({hasMultipleResults: true});
+        this.setState({ hasMultipleResults: true });
         config = ParallelScanningConfig;
-        titles = config.options.parallelViewPluginComposite.viewPlugins.map(
-          viewPlug => viewPlug.viewPlugin.plugin.id,
+        titles = config.viewPluginCompositeConfig.viewPlugins.map(
+          viewPlug => viewPlug.viewPluginConfig.pluginConfig.id,
         );
         break;
     }
@@ -217,7 +181,7 @@ class Anyline extends Component {
     if (titles.length === 0) {
       titles = [type];
     }
-    this.setState({titles});
+    this.setState({ titles });
     try {
       console.log(`AnylineOCR.setupPromise`);
       const result = await AnylineOCR.setupPromise(
@@ -227,7 +191,7 @@ class Anyline extends Component {
 
       console.log(result);
 
-      this.setState({buttonsDisabled: false});
+      this.setState({ buttonsDisabled: false });
 
       const data = JSON.parse(result);
       LayoutAnimation.easeInEaseOut();
@@ -248,7 +212,7 @@ class Anyline extends Component {
         alert(error)
       }
     }
-    this.setState({buttonsDisabled: false});
+    this.setState({ buttonsDisabled: false });
   };
 
   requestCameraPermission = async type => {
@@ -299,7 +263,7 @@ class Anyline extends Component {
       result: {},
       imagePath: '',
       fullImagePath: '',
-	  titles: [],
+      titles: [],
     });
   };
 
@@ -325,51 +289,55 @@ class Anyline extends Component {
       }
     });
     return (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.ContainerContent}>
-        <Text style={styles.headline}>Anyline React-Native Example</Text>
-        {hasScanned ? (
-          hasMultipleResults ? (
-            Object.keys(result).map((key, index) => {
-              return (
+      // <SafeAreaProvider>
+      //   <SafeAreaView style={{ flex: 1, backgroundColor: styles.container.backgroundColor }}>
+          <ScrollView
+            style={styles.container}
+            contentContainerStyle={styles.ContainerContent}>
+            <Text style={styles.headline}>Anyline React-Native Example</Text>
+            {hasScanned ? (
+              hasMultipleResults ? (
+                Object.keys(result).map((key, index) => {
+                  return (
+                    <Result
+                      key={`ResultView_${index}`}
+                      currentScanMode={currentScanMode}
+                      result={result[key]}
+                      imagePath={result[key].imagePath}
+                      fullImagePath={result[key].fullImagePath}
+                      data={result}
+                      emptyResult={this.emptyResult}
+                      hasBackButton={Object.keys(result).length - 1 === index}
+                      title={key}
+                    />
+                  );
+                })
+              ) : (
                 <Result
-                  key={`ResultView_${index}`}
+                  key="ResultView"
                   currentScanMode={currentScanMode}
-                  result={result[key]}
-                  imagePath={result[key].imagePath}
-                  fullImagePath={result[key].fullImagePath}
+                  result={result}
+                  imagePath={imagePath}
+                  fullImagePath={fullImagePath}
                   data={result}
                   emptyResult={this.emptyResult}
-                  hasBackButton={Object.keys(result).length - 1 === index}
-                  title={key}
+                  hasBackButton
+                  title={titles[0]}
                 />
-              );
-            })
-          ) : (
-            <Result
-              key="ResultView"
-              currentScanMode={currentScanMode}
-              result={result}
-              imagePath={imagePath}
-              fullImagePath={fullImagePath}
-              data={result}
-              emptyResult={this.emptyResult}
-              hasBackButton
-              title={titles[0]}
-            />
-          )
-        ) : (
-          <Overview
-            key="OverView"
-            updateAnyline={this.updateAnyline}
-            checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}
-            disabled={buttonsDisabled}
-          />
-        )}
-        <Text style={styles.versions}>SDK Version: {SDKVersion}</Text>
-        <Text style={styles.versions}>RN-Build Number: 1</Text>
-      </ScrollView>
+              )
+            ) : (
+              <Overview
+                key="OverView"
+                updateAnyline={this.updateAnyline}
+                checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}
+                disabled={buttonsDisabled}
+              />
+            )}
+            <Text style={styles.versions}>SDK Version: {SDKVersion}</Text>
+            <Text style={styles.versions}>RN-Build Number: 1</Text>
+          </ScrollView>
+      //   </SafeAreaView>
+      // </SafeAreaProvider>
     );
   }
 }

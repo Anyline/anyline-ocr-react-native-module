@@ -1,0 +1,27 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <io.anyline2.view.ScanView
+        android:id="@+id/scan_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:api_2_enabled="false" />
+
+    <LinearLayout
+        android:id="@+id/layout_change_orientation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:gravity="center"
+        android:padding="40px">
+        <ImageView
+            android:id="@+id/imageview_change_orientation"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitStart"
+            android:background="@drawable/rotate_screen_background"
+            android:src="@drawable/rotate_screen_white" />
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
