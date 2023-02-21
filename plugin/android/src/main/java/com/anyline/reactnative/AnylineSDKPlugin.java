@@ -4,12 +4,10 @@ package com.anyline.reactnative;
  * Created by jonesBoi on 02.12.16.
  */
 
-import android.app.Activity;
 import android.content.Intent;
 
 import com.anyline.reactnative.updateAsset.AnylineUpdateDelegateImpl;
 import com.anyline.reactnative.updateAsset.AssetContextJsonParser;
-import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -19,13 +17,12 @@ import com.facebook.react.bridge.ReactMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import at.nineyards.anyline.core.LicenseException;
-import io.anyline.AnylineSDK;
 import io.anyline.plugin.ScanResult;
 import io.anyline.products.AnylineUpdater;
-import io.anyline.products.IAnylineUpdateDelegate;
 import io.anyline.trainer.AssetContext;
 import io.anyline.trainer.TrainerUtils;
+import io.anyline2.AnylineSdk;
+import io.anyline2.core.LicenseException;
 
 class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
 
@@ -40,18 +37,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     public static final int RESULT_CANCELED = 0;
     public static final int RESULT_OK = 1;
     public static final int RESULT_ERROR = 2;
-    public static final int DIGITAL_METER = 3;
-    public static final int ANALOG_METER = 4;
-    public static final int AUTO_ANALOG_DIGITAL_METER = 5;
-    public static final int ANYLINE_OCR = 6;
-    public static final int BARCODE = 7;
-    public static final int ANYLINE_MRZ = 8;
-    public static final int ANYLINE_DOCUMENT = 9;
-    public static final int DIAL_METER = 10;
-    public static final int LICENSE_PLATE = 11;
-    public static final int SERIAL_NUMBER = 12;
-    public static final int DOT_MATRIX_METER = 13;
-    public static final int REQUEST_ANYLINE_4 = 14;
     private static final String E_ERROR = "E_ERROR";
     private JSONObject configObject;
     private ReactApplicationContext reactContext;
@@ -60,10 +45,8 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private Callback onResultCallback;
     private Callback onErrorCallback;
     private Promise promise;
-    private ReactInstanceManager mReactInstanceManager;
     private String returnMethod;
     private String config;
-    private IAnylineUpdateDelegate anylineUpdateDelegate;
     private AssetContextJsonParser assetContextJsonParser;
 
     AnylineSDKPlugin(ReactApplicationContext context) {
@@ -117,22 +100,9 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     @ReactMethod
     public void initSdk(String license) {
         try {
-            AnylineSDK.init(license, reactContext);
+            AnylineSdk.init(license, reactContext);
         } catch (LicenseException e) {
-            finishWithError("error_license_init", "string");
-        }
-    }
-
-    protected void finishWithError(String identifier, String type) {
-        Activity activity = getCurrentActivity();
-
-        if (activity != null) {
-            String errorMessage = activity.getString(activity.getResources().getIdentifier(identifier, type, activity.getPackageName()));
-            Intent data = new Intent();
-            data.putExtra(AnylineSDKPlugin.EXTRA_ERROR_MESSAGE, errorMessage);
-            activity.setResult(AnylineSDKPlugin.RESULT_ERROR, data);
-            ResultReporter.onError(errorMessage);
-            activity.finish();
+            e.printStackTrace();
         }
     }
 
@@ -190,21 +160,9 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private void scanAnyline4() {
         try {
             configObject = new JSONObject(this.config);
-            JSONObject options = configObject.getJSONObject("options");
-            if (options.has("viewPlugin")) {
-                JSONObject viewPlugin = options.getJSONObject("viewPlugin");
-                if (viewPlugin != null && viewPlugin.has("plugin")) {
-                    JSONObject plugin = viewPlugin.getJSONObject("plugin");
-                    if (plugin != null && plugin.has("documentPlugin")) {
-                        scan(Document4Activity.class, null, REQUEST_ANYLINE_4);
-                    } else {
-                        scan(Anyline4Activity.class, null, REQUEST_ANYLINE_4);
-                    }
-                } else {
-                    returnError("No Plugin in config. Please check your configuration.");
-                }
-            } else if (options.has("serialViewPluginComposite") || options.has("parallelViewPluginComposite")) {
-                scan(Anyline4Activity.class, null, REQUEST_ANYLINE_4);
+//            JSONObject options = configObject;
+            if (configObject != null) {
+                scan();
             } else {
                 returnError("No ViewPlugin in config. Please check your configuration.");
             }
@@ -213,20 +171,21 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         }
     }
 
-    private void scan(Class<?> activityToStart, String scanMode, int requestCode) {
+    private void scan() {
 
-        Intent intent = new Intent(getCurrentActivity(), activityToStart);
+        Intent intent = new Intent(getCurrentActivity(), ScanActivity.class);
 
         try {
             configObject = new JSONObject(this.config);
 
-            // Hacky -> force cancelOnResult = true
-            options = configObject.getJSONObject("options");
-            options.put("cancelOnResult", true);
-
             license = configObject.get("license").toString();
-            if (configObject.has("nativeBarcodeEnabled")) {
-                intent.putExtra(EXTRA_ENABLE_BARCODE_SCANNING, configObject.getBoolean("nativeBarcodeEnabled"));
+            JSONObject optionsJSONObject = configObject.optJSONObject("options");
+
+            if (optionsJSONObject != null) {
+                intent.putExtra(
+                        EXTRA_ENABLE_BARCODE_SCANNING,
+                        optionsJSONObject.optBoolean("nativeBarcodeEnabled", false)
+                );
             }
 
         } catch (JSONException e) {
@@ -234,24 +193,19 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         }
 
         intent.putExtra(EXTRA_LICENSE_KEY, license);
-        intent.putExtra(EXTRA_CONFIG_JSON, options.toString());
+        intent.putExtra(EXTRA_CONFIG_JSON, configObject.toString());
 
-        // Check if OCR
-        if (configObject.has("ocr")) {
-            try {
-                intent.putExtra(EXTRA_OCR_CONFIG_JSON, configObject.get("ocr").toString());
-            } catch (JSONException e) {
-                returnError(e.getMessage());
-            }
-        }
-
-        if (scanMode != null) {
-            intent.putExtra(EXTRA_SCAN_MODE, scanMode);
-        }
         ResultReporter.setListener(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        reactContext.startActivityForResult(intent, requestCode, intent.getExtras());
+        try {
+            AnylineSdk.init(configObject.getString("license"), reactContext);
+        } catch (LicenseException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        reactContext.startActivityForResult(intent, 1111, intent.getExtras());
     }
 
     @Override

@@ -7,8 +7,8 @@ Pod::Spec.new do |s|
   s.version      = package["version"]
   s.summary      = "anyline-ocr-react-native-module"
   s.authors      = {
-    'Jonas Laux' => 'jonas@anyline.com',
-    'Mike Chudziak' => 'mike.chudziak@callstack.io',
+    'Aldrich Co' => 'aldrich.co@anyline.com',
+    'Renato Neves' => 'renato.neves@anyline.com',
   }
 
   s.homepage     = "https://github.com/Anyline/anyline-ocr-react-native-module"
@@ -19,6 +19,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/Anyline/anyline-ocr-react-native-module.git", :tag => "#{s.version}" }
 
   s.source_files  = "*.{h,m}"
-  s.dependency "Anyline", "~> 42.0.0"
+  s.dependency "Anyline", "~> 43.0.0"
   s.dependency "React"
+
 end

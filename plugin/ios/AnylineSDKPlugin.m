@@ -1,12 +1,12 @@
-#import "AnylineSDKPlugin.h"
 #import <Anyline/Anyline.h>
+#import "AnylineSDKPlugin.h"
 #import "ALJsonUIConfiguration.h"
 #import "ALPluginScanViewController.h"
 #import "ALPluginHelper.h"
 
 #import "ALNFCScanViewController.h"
 
-@interface AnylineSDKPlugin()<ALPluginScanViewControllerDelegate>
+@interface AnylineSDKPlugin()
 
 @property (nonatomic, strong) ALScanViewPluginConfig *conf;
 
@@ -15,7 +15,7 @@
 @property (nonatomic, assign) BOOL nativeBarcodeScanning;
 @property (nonatomic, strong) NSDictionary *jsonConfigDictionary;
 @property (nonatomic, strong) NSDictionary *ocrConfigDict;
-@property (nonatomic, strong) ALJsonUIConfiguration *jsonUIConf;
+@property (nonatomic, strong) ALJSONUIConfiguration *jsonUIConf;
 
 @property (nonatomic, strong) RCTResponseSenderBlock onResultCallback;
 @property (nonatomic, strong) RCTResponseSenderBlock onErrorCallback;
@@ -63,7 +63,7 @@ RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode 
 }
 
 RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-   resolve(ALCoreController.versionNumber);
+   resolve(AnylineSDK.versionNumber);
 }
 
 
@@ -87,35 +87,24 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     BOOL nativeBarcodeScanning = [[optionsDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
     self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
 
-    self.jsonUIConf = [[ALJsonUIConfiguration alloc] initWithDictionary:optionsDictionary];
-    self.conf = [[ALScanViewPluginConfig alloc] initWithDictionary:optionsDictionary];
-    self.conf.cancelOnResult = true;
+    self.jsonUIConf = [[ALJSONUIConfiguration alloc] initWithDictionary:optionsDictionary];
+    self.conf = [[ALScanViewPluginConfig alloc] initWithJSONDictionary:optionsDictionary error:&error];
     self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication] keyWindow].rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         
         if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
-            NSString *customCmdFile = [[dictionary objectForKey:@"options"] valueForKeyPath:@"viewPlugin.plugin.nfcPlugin"];
-            if (customCmdFile) {
+            BOOL isNFC = [optionsDictionary objectForKey:@"enableNFCWithMRZ"];
+            if (isNFC) {
                if (@available(iOS 13.0, *)) {
                    if ([ALNFCDetector readingAvailable]) {
                        ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:self.appKey
-                                                                                                              configuration:[dictionary objectForKey:@"options"]
-                                                                                                       uiConfig:self.jsonUIConf
-                                                                                                                   delegate:self];
-                       if([self.jsonConfigDictionary valueForKey:@"quality"]){
-                           nfcScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
-                       }
-                       
-                       if([self.jsonConfigDictionary valueForKey:@"cropAndTransformErrorMessage"]){
-                           NSString *str = [self.jsonConfigDictionary objectForKey:@"cropAndTransformErrorMessage"];
-                           nfcScanViewController.cropAndTransformErrorMessage = str;
-                       }
-                       
-                       if ([optionsDictionary valueForKey:@"nativeBarcodeEnabled"]) {
-                           nfcScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
-                       }
+                                                                                                              configuration:dictionary
+                                                                                                                   uiConfig:self.jsonUIConf
+                                                                                                                   finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
+                           [self returnCallback:callbackObj andErrorString:errorString];
+                       }];
                        
                        if(nfcScanViewController != nil){
                            [nfcScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
@@ -130,22 +119,10 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
             } else {
                 ALPluginScanViewController *pluginScanViewController =
                 [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
-                                                         configuration:[dictionary objectForKey:@"options"]
-                                                  uiConfiguration:self.jsonUIConf
-                                                              delegate:self];
-                
-                if([self.jsonConfigDictionary valueForKey:@"quality"]){
-                    pluginScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
-                }
-                
-                if([self.jsonConfigDictionary valueForKey:@"cropAndTransformErrorMessage"]){
-                    NSString *str = [self.jsonConfigDictionary objectForKey:@"cropAndTransformErrorMessage"];
-                    pluginScanViewController.cropAndTransformErrorMessage = str;
-                }
-                
-                if ([optionsDictionary valueForKey:@"nativeBarcodeEnabled"]) {
-                    pluginScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
-                }
+                                                         configuration:dictionary
+                                                       uiConfiguration:self.jsonUIConf finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
+                    [self returnCallback:callbackObj andErrorString:errorString];
+                }];
                 
                 if(pluginScanViewController != nil){
                     [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
@@ -155,22 +132,10 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
         } else {
             ALPluginScanViewController *pluginScanViewController =
             [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
-                                                     configuration:[dictionary objectForKey:@"options"]
-                                              uiConfiguration:self.jsonUIConf
-                                                          delegate:self];
-            
-            if([self.jsonConfigDictionary valueForKey:@"quality"]){
-                pluginScanViewController.quality = [[self.jsonConfigDictionary valueForKey:@"quality"] integerValue];
-            }
-            
-            if([self.jsonConfigDictionary valueForKey:@"cropAndTransformErrorMessage"]){
-                NSString *str = [self.jsonConfigDictionary objectForKey:@"cropAndTransformErrorMessage"];
-                pluginScanViewController.cropAndTransformErrorMessage = str;
-            }
-            
-            if ([optionsDictionary valueForKey:@"nativeBarcodeEnabled"]) {
-                pluginScanViewController.nativeBarcodeEnabled = [[self.jsonConfigDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
-            }
+                                                     configuration:dictionary
+                                                   uiConfiguration:self.jsonUIConf finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
+                [self returnCallback:callbackObj andErrorString:errorString];
+            }];
             
             if(pluginScanViewController != nil){
                 [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
@@ -207,32 +172,6 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     [self returnError:error.debugDescription];
 }
 
-- (ALScanMode)energyScanModeFromString:(NSString *)scanMode{
-
-    if ([[scanMode uppercaseString] isEqualToString:@"ANALOG_METER"]) {
-        return ALAnalogMeter;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"DIGITAL_METER"]){
-        return ALDigitalMeter;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"AUTO_ANALOG_DIGITAL_METER"]){
-        return ALAutoAnalogDigitalMeter;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"DIAL_METER"]){
-        return ALDialMeter;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"SERIAL_NUMBER"]){
-        return ALSerialNumber;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"HEAT_METER_4"]){
-        return ALHeatMeter4;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"HEAT_METER_5"]){
-        return ALHeatMeter5;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"HEAT_METER_6"]){
-        return ALHeatMeter6;
-    } else if ([[scanMode uppercaseString] isEqualToString:@"DOT_MATRIX_METER"]){
-            return ALDotMatrixMeter;
-    } else {
-        return ALAutoAnalogDigitalMeter;
-    }
-
-}
-
 - (BOOL)scanModeIndex:(NSString *)scanMode{
 
     NSArray *possibleScanModes = @[@"DOCUMENT", @"MRZ", @"BARCODE", @"LICENSE_PLATE", @"LICENSE_PLATE_US", @"ANYLINE_OCR", @"TIRE", @"ANALOG_METER", @"DIGITAL_METER", @"AUTO_ANALOG_DIGITAL_METER",
@@ -240,6 +179,24 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 
     return [possibleScanModes containsObject: [scanMode uppercaseString]];
 
+}
+
+//(id  _Nullable callbackObj, NSString * _Nullable errorString)
+- (void)returnCallback:(id _Nullable)callbackObj andErrorString:(NSString * _Nullable)errorString {
+    NSString *resultStr;
+    NSError *error;
+    if (errorString) {
+        [self returnError:errorString];
+    } else if ([NSJSONSerialization isValidJSONObject:callbackObj]) {
+        resultStr = [(NSDictionary *)callbackObj toJSONStringPretty:YES error:&error];
+        if (error) {
+            [self returnError:error.debugDescription];
+        }
+        [self returnSuccess:resultStr];
+    } else {
+        resultStr = @"callback object should be of JSON type";
+        [self returnError:resultStr];
+    }
 }
 
 - (void)returnSuccess:(NSString *)result{

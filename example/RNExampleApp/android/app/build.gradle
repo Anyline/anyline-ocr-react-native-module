@@ -100,11 +100,11 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.anyline.example.reactnative"
+        applicationId "com.anyline.examples.reactnative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5
-        versionName "42.2.0"
+        versionName "43.0.0"
         multiDexEnabled true
 
     }
