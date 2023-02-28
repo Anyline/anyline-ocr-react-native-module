@@ -94,6 +94,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            returnError(e.getMessage());
         }
     }
 
@@ -103,6 +104,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             AnylineSdk.init(license, reactContext);
         } catch (LicenseException e) {
             e.printStackTrace();
+            returnError(e.getMessage());
         }
     }
 
@@ -160,36 +162,34 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private void scanAnyline4() {
         try {
             configObject = new JSONObject(this.config);
-//            JSONObject options = configObject;
             if (configObject != null) {
                 scan();
             } else {
                 returnError("No ViewPlugin in config. Please check your configuration.");
             }
+        } catch (LicenseException e) {
+            e.printStackTrace();
+            returnError("LICENSE ERROR: " + e.getMessage());
         } catch (JSONException e) {
             e.printStackTrace();
+            returnError("JSON ERROR: " + e.getMessage());
         }
     }
 
-    private void scan() {
+    private void scan() throws LicenseException, JSONException {
 
         Intent intent = new Intent(getCurrentActivity(), ScanActivity.class);
 
-        try {
-            configObject = new JSONObject(this.config);
+        configObject = new JSONObject(this.config);
 
-            license = configObject.get("license").toString();
-            JSONObject optionsJSONObject = configObject.optJSONObject("options");
+        license = configObject.get("license").toString();
+        JSONObject optionsJSONObject = configObject.optJSONObject("options");
 
-            if (optionsJSONObject != null) {
-                intent.putExtra(
-                        EXTRA_ENABLE_BARCODE_SCANNING,
-                        optionsJSONObject.optBoolean("nativeBarcodeEnabled", false)
-                );
-            }
-
-        } catch (JSONException e) {
-            returnError("JSON ERROR: " + e.getMessage());
+        if (optionsJSONObject != null) {
+            intent.putExtra(
+                    EXTRA_ENABLE_BARCODE_SCANNING,
+                    optionsJSONObject.optBoolean("nativeBarcodeEnabled", false)
+            );
         }
 
         intent.putExtra(EXTRA_LICENSE_KEY, license);
@@ -198,13 +198,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         ResultReporter.setListener(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        try {
-            AnylineSdk.init(configObject.getString("license"), reactContext);
-        } catch (LicenseException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        AnylineSdk.init(configObject.getString("license"), reactContext);
         reactContext.startActivityForResult(intent, 1111, intent.getExtras());
     }
 
