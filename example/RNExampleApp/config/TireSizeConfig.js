@@ -15,7 +15,7 @@ export default {
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "TIRE",
+            "id": "tire-size",
             "cancelOnResult": true,
             "tireSizeConfig": {
                 "upsideDownMode": "AUTO"

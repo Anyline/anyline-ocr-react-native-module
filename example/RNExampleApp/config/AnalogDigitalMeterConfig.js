@@ -4,11 +4,6 @@ export default {
         "doneButtonConfig": {
             "offset.y": -88
         },
-        "segmentConfig": {
-            "titles": ["Auto", "Dial"],
-            "modes": ["auto_analog_digital_meter", "dial_meter"],
-            "offset.y": -24
-        },
         "nativeBarcodeScanningFormats": [
             "CODE_128",
             "CODE_39",
@@ -26,7 +21,7 @@ export default {
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "com.anyline.configs.plugin.auto-meter",
+            "id": "auto-meter",
             "meterConfig": {
                 "scanMode": "auto_analog_digital_meter"
             },

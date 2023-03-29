@@ -19,11 +19,11 @@ The plugin enables the connection to the SDK via React-Native.
 
 ## Getting Started
 
-Check out our getting-started section here: https://documentation-preview.anyline.com/react-native-plugin-component/43.0.1/getting-started.html
+Check out our getting-started section here: https://documentation-preview.anyline.com/react-native-plugin-component/latest/getting-started.html
 
 ## Documentation
 
-Check out our developer guide here: https://documentation-preview.anyline.com/react-native-plugin-component/43.0.1/index.html
+Check out our developer guide here: https://documentation-preview.anyline.com/react-native-plugin-component/latest/index.html
 
 ## License
 

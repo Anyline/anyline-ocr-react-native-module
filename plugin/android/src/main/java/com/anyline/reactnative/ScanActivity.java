@@ -6,9 +6,16 @@ import static com.anyline.reactnative.AnylineSDKPlugin.RESULT_ERROR;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Pair;
 import android.view.View;
+import android.view.Gravity;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,20 +28,42 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import io.anyline2.ScanResult;
+import io.anyline2.view.BrightnessHelper;
 import io.anyline2.view.ScanView;
+import io.anyline2.viewplugin.ScanViewPlugin;
 import io.anyline2.viewplugin.ViewPluginBase;
 
 public class ScanActivity extends AppCompatActivity {
 
     private static final String KEY_DEFAULT_ORIENTATION_APPLIED = "default_orientation_applied";
 
+    private Handler handler = new Handler(Looper.getMainLooper());
     private ActivityScanBinding binding;
     private ScanView scanView;
 
     private float dpFactor = 0;
     private boolean defaultOrientationApplied;
     private int orientation;
+
+    private InstructionConfig instructionConfig = null;
+    private ImageTextConfig imageCutoutConfig = null;
+    private FeedbackConfig feedbackConfig = null;
+
+    private long cleanUIFeedbackIntervalMills = 2000L;
+    private Timer cleanUIFeedbackTimer = null;
+
+    private static final String FEEDBACK_SCANINFO_LIGHTINGCONDITION = "$lightingCondition";
+    private static final String FEEDBACK_SCANINFO_LIGHTINGCONDITION_TOODARK = "TOODARK";
+    private static final String FEEDBACK_SCANINFO_LIGHTINGCONDITION_TOOBRIGHT = "TOOBRIGHT";
+    private static final int FEEDBACK_RUNSKIPPED_WRONGFORMAT = 5006;
+    private static final int FEEDBACK_RUNSKIPPED_WRONGDATE = 5027;
+    private static final int FEEDBACK_RUNSKIPPED_TOOCLOSE = 5023;
+    private static final int FEEDBACK_RUNSKIPPED_TOOFAR = 5024;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,10 +88,46 @@ public class ScanActivity extends AppCompatActivity {
 
                 applyDefaultOrientation(configJSON);
                 setupChangeOrientationButton(configJSON);
+                setupCustomUIFeedback(configJSON);
 
                 scanView.init(configJSON);
 
                 ViewPluginBase viewPluginBase = scanView.getScanViewPlugin();
+
+                viewPluginBase.scanInfoReceived = jsonObject -> {
+                    if (jsonObject.optString("name", "").equals(FEEDBACK_SCANINFO_LIGHTINGCONDITION)) {
+                        String lightingConditionValue = jsonObject.optString("value", "");
+                        if (feedbackConfig != null) {
+                            if (lightingConditionValue.equalsIgnoreCase(FEEDBACK_SCANINFO_LIGHTINGCONDITION_TOODARK)) {
+                                if (feedbackConfig.brightnessTooLow != null) {
+                                    updateUIFeedback(feedbackConfig.brightnessTooLow);
+                                }
+                            }
+                            else if (lightingConditionValue.equalsIgnoreCase(FEEDBACK_SCANINFO_LIGHTINGCONDITION_TOOBRIGHT)) {
+                                if (feedbackConfig.brightnessTooHigh != null) {
+                                    updateUIFeedback(feedbackConfig.brightnessTooHigh);
+                                }
+                            }
+                        }
+                    }
+                };
+
+                viewPluginBase.runSkippedReceived = jsonObject -> {
+                    if (feedbackConfig != null) {
+                        if (jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_WRONGFORMAT
+                                || jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_WRONGDATE) {
+                            if (feedbackConfig.wrongFormat != null) {
+                                updateUIFeedback(feedbackConfig.wrongFormat);
+                            }
+                        }
+                        if (jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_TOOCLOSE
+                                || jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_TOOFAR) {
+                            if (feedbackConfig.distance != null) {
+                                updateUIFeedback(feedbackConfig.distance);
+                            }
+                        }
+                    }
+                };
 
                 viewPluginBase.resultReceived = scanResult -> {
                     setResult(AnylineSDKPlugin.RESULT_OK);
@@ -155,6 +220,120 @@ public class ScanActivity extends AppCompatActivity {
                 });
             }
         }
+    }
+
+    private void setupCustomUIFeedback(JSONObject configJSON) {
+        JSONObject optionsJsonObject = configJSON.optJSONObject("options");
+        if (optionsJsonObject != null) {
+            try {
+                if (optionsJsonObject.has("instruction")) {
+                    instructionConfig = new InstructionConfig(optionsJsonObject.getJSONObject("instruction"));
+                }
+                if (optionsJsonObject.has("imageCutout")) {
+                    imageCutoutConfig = new ImageTextConfig(this, optionsJsonObject.getJSONObject("imageCutout"));
+                }
+                if (optionsJsonObject.has("feedback")) {
+                    feedbackConfig = new FeedbackConfig(this, optionsJsonObject.getJSONObject("feedback"));
+                }
+            }
+            catch (JSONException e) {
+                finishWithError("Error setting up UI Feedback: " + e.getMessage());
+                return;
+            }
+
+            if (instructionConfig != null) {
+                if (instructionConfig.text != null) {
+                    binding.textviewInstruction.setText(instructionConfig.text);
+                }
+                if (instructionConfig.textColor != null) {
+                    binding.textviewInstruction.setTextColor(Color.parseColor("#" + instructionConfig.textColor));
+                }
+                if (instructionConfig.backgroundColor != null) {
+                    binding.textviewInstruction.setBackgroundColor(Color.parseColor("#" + instructionConfig.backgroundColor));
+                }
+            }
+
+            if (imageCutoutConfig != null) {
+                if (imageCutoutConfig.hasImage) {
+                    binding.imageviewCutoutOverlay.setImageResource(imageCutoutConfig.imageResId);
+                }
+            }
+
+        }
+
+        scanView.onCutoutChanged = cutouts -> {
+            Pair<ScanViewPlugin, android.graphics.Rect> firstCutout = cutouts.get(0);
+
+            ScanViewPlugin scanViewPlugin = firstCutout.first;
+            if (scanViewPlugin != null) {
+                Rect rect = firstCutout.second;
+                if (rect != null) {
+                    if (instructionConfig != null) {
+                        CoordinatorLayout.LayoutParams instructionLayoutParams =
+                                new CoordinatorLayout.LayoutParams(rect.width(), rect.top);
+                        instructionLayoutParams.setMargins(rect.left, 0, rect.right, rect.top);
+                        binding.layoutInstruction.setVisibility(View.VISIBLE);
+                        binding.layoutInstruction.setLayoutParams(instructionLayoutParams);
+                        binding.layoutInstruction.requestLayout();
+                    }
+
+                    if (imageCutoutConfig != null) {
+                        CoordinatorLayout.LayoutParams imageCutoutLayoutParams =
+                                new CoordinatorLayout.LayoutParams(rect.width(), rect.height());
+                        imageCutoutLayoutParams.setMargins(rect.left, rect.top, rect.right, rect.bottom);
+                        binding.imageviewCutoutOverlay.setVisibility(View.VISIBLE);
+                        binding.imageviewCutoutOverlay.setLayoutParams(imageCutoutLayoutParams);
+                        binding.imageviewCutoutOverlay.requestLayout();
+                    }
+
+                    if (feedbackConfig != null) {
+                        CoordinatorLayout.LayoutParams feedbackLayoutParams =
+                                new CoordinatorLayout.LayoutParams(rect.width(), scanView.getHeight());
+                        feedbackLayoutParams.setMargins(rect.left, rect.bottom, rect.right, scanView.getBottom());
+                        binding.layoutBrightDistanceFeedback.setVisibility(View.VISIBLE);
+                        binding.layoutBrightDistanceFeedback.setLayoutParams(feedbackLayoutParams);
+                        binding.layoutBrightDistanceFeedback.requestLayout();
+                    }
+                }
+            }
+        };
+    }
+
+    private void updateUIFeedback(ImageTextConfig imageTextFeedback) {
+        if (imageTextFeedback.text != null) {
+            if (binding.textviewBrightDistanceFeedback.getText().equals(imageTextFeedback.text)) {
+                return;
+            }
+        }
+
+        handler.post(() -> {
+            if (imageTextFeedback.text != null) {
+                binding.textviewBrightDistanceFeedback.setText(imageTextFeedback.text);
+            }
+            if (imageTextFeedback.hasImage) {
+                binding.imageviewBrightDistanceFeedback.setImageResource(imageTextFeedback.imageResId);
+            }
+
+            if (feedbackConfig != null) {
+                if (feedbackConfig.sound != null) {
+                    feedbackConfig.playBeepSound();
+                }
+            }
+
+            if (cleanUIFeedbackTimer != null) {
+                cleanUIFeedbackTimer.cancel();
+            }
+            cleanUIFeedbackTimer = new Timer();
+            cleanUIFeedbackTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(() -> {
+                        binding.textviewBrightDistanceFeedback.setText("");
+                        binding.imageviewBrightDistanceFeedback.setImageBitmap(null);
+                    });
+                }
+            }, cleanUIFeedbackIntervalMills);
+        });
     }
 
     @NonNull

@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import React, { Component, useRef } from 'react';
 
 import {
   BackHandler,
   LayoutAnimation,
+  LogBox,
   PermissionsAndroid,
   ScrollView,
   StyleSheet,
   Text,
+  View,
 } from 'react-native';
 
 import AnylineOCR from 'anyline-ocr-react-native-module';
@@ -23,7 +24,6 @@ import UniversalIdConfig from '../config/UniversalIdConfig';
 import ArabicIdConfig from '../config/ArabicIdConfig';
 import CyrillicIdConfig from '../config/CyrillicIdConfig';
 import AnalogDigitalMeterConfig from '../config/AnalogDigitalMeterConfig';
-import LicensePlateConfig from '../config/LicensePlateConfig';
 import SerialNumberConfig from '../config/SerialNumber';
 import VinConfig from '../config/VINConfig';
 import USNRConfig from '../config/USNRConfig';
@@ -31,16 +31,24 @@ import ShipConConfig from '../config/ContainerShipConfig';
 import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
 import ParallelScanningConfig from '../config/ParallelScanningConfig';
-import TinConfig from '../config/TINConfig';
+import ParallelFirstScanningConfig from '../config/ParallelFirstScanningConfig';
 import TireSizeConfig from '../config/TireSizeConfig';
 import CommercialTireIdConfig from '../config/CommercialTireIdConfig';
 import OtaConfig from '../config/OtaConfig';
 import { DeviceEventEmitter } from 'react-native';
 import { Platform } from 'react-native';
 import VRCConfig from '../config/VRCConfig';
+import DialMeterConfig from '../config/DialMeterConfig';
+import LicensePlateConfigEU from '../config/LicensePlateConfigEU';
+import LicensePlateConfigUS from '../config/LicensePlateConfigUS';
+import LicensePlateConfigAF from '../config/LicensePlateConfigAF';
+import TINUniversalConfig from '../config/TINUniversalConfig';
+import TINDOTConfig from '../config/TINDOTConfig';
 
 // Disable Warnings
-console.disableYellowBox = true;
+LogBox.ignoreAllLogs(true);
+
+const scrollRef = React.createRef();
 
 class Anyline extends Component {
   overTheAirUpdateIsEnabled = false;
@@ -56,12 +64,13 @@ class Anyline extends Component {
     hasMultipleResults: false,
     titles: [],
   };
+
   componentDidMount = async () => {
     const SDKVersion = await AnylineOCR.getSDKVersion();
     this.setState({ SDKVersion: SDKVersion });
   };
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     LayoutAnimation.easeInEaseOut();
   }
 
@@ -89,7 +98,7 @@ class Anyline extends Component {
     }
   };
 
-  openAnyline = async type => {
+  _openAnyline = async (type) => {
     this.setState({ buttonsDisabled: true });
     this.setState({ titles: [] });
     let config;
@@ -104,6 +113,9 @@ class Anyline extends Component {
       case 'AUTO_ANALOG_DIGITAL_METER':
         config = AnalogDigitalMeterConfig;
         break;
+      case 'DIAL_METER':
+        config = DialMeterConfig;
+        break;
       case 'SERIAL_NUMBER':
         config = SerialNumberConfig;
         break;
@@ -117,11 +129,15 @@ class Anyline extends Component {
         type = 'ANYLINE_OCR';
         config = VinConfig;
         break;
-      case 'TIN':
+      case 'TIN_UNIVERSAL':
         type = 'TIRE';
-        config = TinConfig;
+        config = TINUniversalConfig;
         break;
-      case 'TIRE_SIZE':
+      case 'TIN_DOT':
+        type = 'TIRE';
+        config = TINDOTConfig;
+        break;
+        case 'TIRE_SIZE':
         type = 'TIRE';
         config = TireSizeConfig;
         break;
@@ -155,8 +171,14 @@ class Anyline extends Component {
       case 'VRC':
         config = VRCConfig;
         break;
-      case 'LICENSE_PLATE':
-        config = LicensePlateConfig;
+      case 'LICENSE_PLATE_EU':
+        config = LicensePlateConfigEU;
+        break;
+      case 'LICENSE_PLATE_US':
+        config = LicensePlateConfigUS;
+        break;
+      case 'LICENSE_PLATE_AF':
+        config = LicensePlateConfigAF;
         break;
       case 'VERTICAL_CONTAINER':
         config = VerticalContainerConfig;
@@ -165,14 +187,21 @@ class Anyline extends Component {
         this.setState({ hasMultipleResults: true });
         config = SerialScanningConfig;
         titles = config.viewPluginCompositeConfig.viewPlugins.map(
-          viewPlug => viewPlug.viewPluginConfig.pluginConfig.id,
+          viewPlug => viewPlug.viewPluginConfig.pluginConfig.id
         );
         break;
       case 'PARALLEL_SCANNING':
         this.setState({ hasMultipleResults: true });
         config = ParallelScanningConfig;
         titles = config.viewPluginCompositeConfig.viewPlugins.map(
-          viewPlug => viewPlug.viewPluginConfig.pluginConfig.id,
+          viewPlug => viewPlug.viewPluginConfig.pluginConfig.id
+        );
+        break;
+      case 'PARALLEL_FIRST_SCANNING':
+        this.setState({ hasMultipleResults: true });
+        config = ParallelFirstScanningConfig;
+        titles = config.viewPluginCompositeConfig.viewPlugins.map(
+          viewPlug => viewPlug.viewPluginConfig.pluginConfig.id
         );
         break;
     }
@@ -186,17 +215,23 @@ class Anyline extends Component {
       console.log(`AnylineOCR.setupPromise`);
       const result = await AnylineOCR.setupPromise(
         JSON.stringify(config),
-        'scan',
+        'scan'
       );
 
-      console.log(result);
+      console.log('scan result: ' + result);
 
       this.setState({ buttonsDisabled: false });
 
       const data = JSON.parse(result);
+
       LayoutAnimation.easeInEaseOut();
+
+      // If `hasMultipleResults` is not true, data.fullImagePath and data.imagePath
+      // will be null. But it's OK - the image results for these will be shown through
+      // a different way
       const fullImagePath = data.fullImagePath;
       const imagePath = data.imagePath;
+
       delete data.fullImagePath;
       delete data.imagePath;
 
@@ -209,11 +244,24 @@ class Anyline extends Component {
     } catch (error) {
       if (error.message !== 'Canceled') {
         console.log(error.message);
-        alert(error)
+        alert(error);
       }
     }
     this.setState({ buttonsDisabled: false });
+
+    // scroll the page to top.
+    scrollRef.current.scrollTo({
+      y: 0, animated: false
+    });
   };
+
+  get openAnyline() {
+    return this._openAnyline;
+  }
+
+  set openAnyline(value) {
+    this._openAnyline = value;
+  }
 
   requestCameraPermission = async type => {
     try {
@@ -289,55 +337,56 @@ class Anyline extends Component {
       }
     });
     return (
-      // <SafeAreaProvider>
-      //   <SafeAreaView style={{ flex: 1, backgroundColor: styles.container.backgroundColor }}>
-          <ScrollView
-            style={styles.container}
-            contentContainerStyle={styles.ContainerContent}>
-            <Text style={styles.headline}>Anyline React-Native Example</Text>
-            {hasScanned ? (
-              hasMultipleResults ? (
-                Object.keys(result).map((key, index) => {
-                  return (
-                    <Result
-                      key={`ResultView_${index}`}
-                      currentScanMode={currentScanMode}
-                      result={result[key]}
-                      imagePath={result[key].imagePath}
-                      fullImagePath={result[key].fullImagePath}
-                      data={result}
-                      emptyResult={this.emptyResult}
-                      hasBackButton={Object.keys(result).length - 1 === index}
-                      title={key}
-                    />
-                  );
-                })
-              ) : (
+      <ScrollView
+        ref={scrollRef}
+        style={styles.container}
+        contentContainerStyle={styles.ContainerContent}>
+        <Text style={styles.headline}>Anyline React-Native Example</Text>
+        {hasScanned ? (
+          hasMultipleResults ? (
+            Object.keys(result).map((key, index) => {
+              return (
                 <Result
-                  key="ResultView"
+                  key={`ResultView_${index}`}
                   currentScanMode={currentScanMode}
-                  result={result}
-                  imagePath={imagePath}
-                  fullImagePath={fullImagePath}
+                  result={result[key]}
+                  imagePath={result[key].imagePath}
+                  fullImagePath={result[key].fullImagePath}
                   data={result}
                   emptyResult={this.emptyResult}
-                  hasBackButton
-                  title={titles[0]}
+                  hasBackButton={Object.keys(result).length - 1 === index}
+                  title={key}
                 />
-              )
-            ) : (
-              <Overview
-                key="OverView"
-                updateAnyline={this.updateAnyline}
-                checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}
-                disabled={buttonsDisabled}
-              />
-            )}
-            <Text style={styles.versions}>SDK Version: {SDKVersion}</Text>
-            <Text style={styles.versions}>RN-Build Number: 1</Text>
-          </ScrollView>
-      //   </SafeAreaView>
-      // </SafeAreaProvider>
+              );
+            })
+
+          ) : (
+            <Result
+              key="ResultView"
+              currentScanMode={currentScanMode}
+              result={result}
+              imagePath={imagePath}
+              fullImagePath={fullImagePath}
+              data={result}
+              emptyResult={this.emptyResult}
+              hasBackButton
+              title={titles[0]}
+            />
+          )
+        ) : (
+          <Overview
+            key="OverView"
+            updateAnyline={this.updateAnyline}
+            checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}
+            disabled={buttonsDisabled}
+          />
+        )}
+
+        <View style={styles.footer}>
+          <Text style={styles.versions}>SDK: {SDKVersion}</Text>
+        </View>
+
+      </ScrollView>
     );
   }
 }
@@ -360,8 +409,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
-    marginTop: 50,
+    marginTop: 80,
   },
+  footer: {
+    marginBottom: 40,
+    alignItems: 'center'
+  }
 });
 
 export default Anyline;

@@ -7,7 +7,7 @@ export default {
   },
   "viewPluginConfig": {
     "pluginConfig": {
-      "id": "com.anyline.configs.plugin.mrz",
+      "id": "mrz",
       "mrzConfig": {
         "strictMode": false,
         "cropAndTransformID": false

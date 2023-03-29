@@ -1,5 +1,4 @@
 import React, {
-  Component,
   useState
 } from 'react';
 import {
@@ -11,10 +10,8 @@ import {
   View,
   Dimensions,
   Platform,
-  TouchableWithoutFeedback,
   TextInput,
 } from 'react-native';
-import {flattenObject} from './utils/utils';
 import AnylineOCR from 'anyline-ocr-react-native-module';
 
 const withoutImagePaths = value =>
@@ -25,7 +22,6 @@ export default function Result({
   imagePath,
   fullImagePath,
   emptyResult,
-  currentScanMode,
   hasBackButton,
   title = false,
 }) {
@@ -33,7 +29,7 @@ export default function Result({
   const [correctedResult, setCorrectedResult] = useState('');
   const [responseText, setResponseText] = useState('');
 
-  let onReportCorrectedResultResponseHandler = function(response) {
+  let onReportCorrectedResultResponseHandler = function (response) {
     /* 
         The response is a string with the following style if it's an error:
         {
@@ -56,33 +52,33 @@ export default function Result({
         }
     */
     var parsedResponse = JSON.parse(response);
-    if(parsedResponse["code"] === 201){
+    if (parsedResponse["code"] === 201) {
       setResponseText("Sending corrected result was successful.");
     } else {
       setResponseText("Error while sending corrected result: " + parsedResponse["message"]);
     }
   }
 
-  let onReportCorrectedResultPressed = function() {
+  let onReportCorrectedResultPressed = function () {
     let blobKey = result["blobKey"];
-    
-    if(typeof blobKey === 'undefined' || blobKey === '' || blobKey === null){
+
+    if (typeof blobKey === 'undefined' || blobKey === '' || blobKey === null) {
       setResponseText("Only licenses with 'debugReporting' set to 'on' allow user corrected results.");
-    } else if(correctedResult !== "") { 
+    } else if (correctedResult !== "") {
       setResponseText("Waiting for response...");
       AnylineOCR.reportCorrectedResult(result["blobKey"], correctedResult, onReportCorrectedResultResponseHandler);
     }
   };
 
   let reportCorrectedResultButton = (
-    <View 
+    <View
       style={styles.reportCorrectedResultButtonStyle}
-      >
-      <TextInput 
-        placeholder='Enter corrected result' 
-        backgroundColor='white' 
+    >
+      <TextInput
+        placeholder='Enter corrected result'
+        backgroundColor='white'
         marginBottom={16}
-        onChangeText={ newCorrectedResult => setCorrectedResult(newCorrectedResult) }
+        onChangeText={newCorrectedResult => setCorrectedResult(newCorrectedResult)}
       />
       <Button title={'Report corrected result'} onPress={onReportCorrectedResultPressed} />
       <Text style={styles.text}>{responseText}</Text>
@@ -96,12 +92,18 @@ export default function Result({
       <Image
         style={styles.image}
         resizeMode={'contain'}
-        source={{uri: `file://${fullImagePath}`}}
+        source={{ uri: `file://${fullImagePath}` }}
       />
     );
     fullImageText = <Text style={styles.text}>Full Image:</Text>;
   }
-  const flattenResult = flattenObject(result);
+
+  // cloned version of result.
+  const resultWithoutImagePaths = JSON.parse(JSON.stringify(result));
+  delete resultWithoutImagePaths.imagePath;
+  delete resultWithoutImagePaths.fullImagePath;
+
+  const stringifiedResult = JSON.stringify(resultWithoutImagePaths, ' ', 2);
 
   let BackButton = <View />;
   if (hasBackButton) {
@@ -111,7 +113,7 @@ export default function Result({
       </View>
     );
   }
-  console.log(title);
+
   let Title = <View />;
   if (title) {
     Title = <Text style={styles.titleText}>{title}</Text>;
@@ -119,53 +121,33 @@ export default function Result({
 
   return (
     <View style={styles.container}>
-      {Title}
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {fullImageText}
-        {fullImage}
 
-        <Text style={styles.text}>Cutout:</Text>
-        <Image
-          style={styles.image}
-          resizeMode={'contain'}
-          source={{uri: `file://${imagePath}`}}
-        />
-        {Object.keys(flattenResult)
-          .filter(withoutImagePaths)
-          .map((value, key) => {
-            return value === 'detectedBarcodes' ? (
-              <View>
-                <Text style={styles.headline}>Detected Barcodes</Text>
-                {flattenResult[value].map((valueBar, keyBar) => (
-                  <View key={`Result_Text_${keyBar}`}>
-                    <Text style={styles.text}>Format: {valueBar.format}</Text>
-                    <Text style={styles.text}>Value: {valueBar.value}</Text>
-                  </View>
-                ))}
-              </View>
-            ) : (
-              <View style={styles.resultContainer}>
-                <Text
-                  style={styles.textResultLabel}
-                  key={`Result_Label_${key}`}>
-                  {value}:
-                </Text>
-                <Text style={styles.textResult} key={`Result_Text_${key}`}>
-                  {flattenResult[value]}
-                </Text>
-              </View>
-            );
-          })}
-          { Platform.OS === 'android' && reportCorrectedResultButton }
-        {BackButton}
-      </ScrollView>
+      {Title}
+
+      {<ScrollView style={styles.scrollViewInner} nestedScrollEnabled showsVerticalScrollIndicator>
+        <Text style={styles.textResultScrollable}>{stringifiedResult}</Text>
+      </ScrollView>}
+
+      {fullImageText}
+
+      {fullImage}
+
+      <Text style={styles.text}>Cutout:</Text>
+
+      <Image
+        style={styles.image}
+        resizeMode={'contain'}
+        source={{ uri: `file://${imagePath}` }}
+      />
+
+      {Platform.OS === 'android' && reportCorrectedResultButton}
+      {BackButton}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   image: {
-    // flex: 1,
     height: 300,
     width: Dimensions.get('window').width,
     alignSelf: 'stretch',
@@ -176,7 +158,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#303030',
     marginBottom: 20,
-    marginTop: 50,
+    marginTop: 20,
   },
   resultContainer: {
     display: 'flex',
@@ -214,22 +196,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
     marginRight: 20,
-
+  },
+  textResultScrollable: {
+    color: 'white',
+    fontWeight: 'normal',
+    fontFamily: 'courier',
+    marginVertical: 20
   },
   scrollContainer: {
     display: 'flex',
-    alignItems: 'flex-start',
     justifyContent: 'center',
     width: '100%',
     flexDirection: 'column',
   },
-
   backButton: {
     marginTop: 25,
-    width: Dimensions.get('window').width/4,
+    width: Dimensions.get('window').width / 4,
     alignSelf: 'center',
   },
-
   reportCorrectedResultButtonStyle: {
     marginTop: 25,
     width: Dimensions.get('window').width,
@@ -237,9 +221,18 @@ const styles = StyleSheet.create({
     paddingLeft: 24,
     paddingRight: 24
   },
-
+  scrollViewInner: {
+    margin: 25,
+    paddingHorizontal: 20,
+    maxHeight: 300,
+    borderRadius: 7,
+    borderColor: 'rgba(255,255,255,0.1)',
+    borderWidth: 1
+  },
   titleText: {
     color: '#0099FF',
-    fontSize: 20
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginTop: 0,
   },
 });

@@ -15,7 +15,7 @@ export default {
   },
   "viewPluginConfig": {
     "pluginConfig": {
-      "id": "com.anyline.configs.plugin.id_mrz_dl_arabic",
+      "id": "id-mrz-dl-arabic",
       "universalIdConfig": {
         "allowedLayouts": {
           "mrz": [],

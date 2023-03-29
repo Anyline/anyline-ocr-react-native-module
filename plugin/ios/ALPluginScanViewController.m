@@ -55,7 +55,6 @@
         _uiConfig = JSONUIConfig;
         
         self.quality = 100;
-        self.cropAndTransformErrorMessage = @"";
     }
     return self;
 }

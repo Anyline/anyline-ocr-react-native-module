@@ -4,7 +4,7 @@
 #import <objc/runtime.h>
 
 // Predefined domain for errors from most AppKit and Foundation APIs.
-NSErrorDomain const ALFlutterDomain = @"ALFlutterDomain";
+NSErrorDomain const ALDefaultDomain = @"ALDefaultErrorDomain";
 
 @implementation ALPluginHelper
 
@@ -51,16 +51,10 @@ NSErrorDomain const ALFlutterDomain = @"ALFlutterDomain";
                                                                                                       uiConfiguration:jsonUIConf
                                                                                                              finished:callback];
         
-        // TODO: should remove these extras
         if ([pluginConf valueForKey:@"quality"]){
             pluginScanViewController.quality = [[pluginConf valueForKey:@"quality"] integerValue];
         }
         
-        if ([pluginConf valueForKey:@"cropAndTransformErrorMessage"]) {
-            NSString *str = [pluginConf objectForKey:@"cropAndTransformErrorMessage"];
-            pluginScanViewController.cropAndTransformErrorMessage = str;
-        }
-
         if (pluginScanViewController) {
             [pluginScanViewController setModalPresentationStyle:UIModalPresentationFullScreen];
             [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController
@@ -264,21 +258,6 @@ NSErrorDomain const ALFlutterDomain = @"ALFlutterDomain";
 }
 
 #pragma mark - Date Parsing Utils
-//
-//+ (NSString *)stringForDate:(NSDate *)date {
-//    if (!date) {
-//        return nil;
-//    }
-//    
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC+0:00"]];
-//    [dateFormatter setDateFormat:@"EEE MMM d hh:mm:ss ZZZZ yyyy"];
-//    
-//    //Date will be formatted to string - e.g.: "Fri Jan 11 12:00:00 GMT+0:00 1980"
-//    NSString *dateString = [dateFormatter stringFromDate:date];
-//    
-//    return dateString;
-//}
 
 // MARK: Utilities
 
@@ -321,7 +300,7 @@ NSErrorDomain const ALFlutterDomain = @"ALFlutterDomain";
 }
 
 + (NSError *)errorWithMessage:(NSString *)message {
-    return [NSError errorWithDomain:ALFlutterDomain code:1000 userInfo:@{ NSLocalizedDescriptionKey: message }];
+    return [NSError errorWithDomain:ALDefaultDomain code:1000 userInfo:@{ NSLocalizedDescriptionKey: message }];
 }
 
 // MARK: - Date Utils
@@ -372,6 +351,13 @@ NSErrorDomain const ALFlutterDomain = @"ALFlutterDomain";
     free(ivars);
     return nil;
 }
+
+// MARK: - Miscellaneous
+
+// actual implementation are in the view controllers
+- (void)segmentChange:(id)segment {}
+
+- (void)doneButtonPressed:(id)doneButton {}
 
 
 @end
