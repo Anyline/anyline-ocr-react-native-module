@@ -21,7 +21,7 @@ export default {
   },
   "viewPluginConfig": {
     "pluginConfig": {
-      "id": "ID_NFC",
+      "id": "id-nfc",
       "mrzConfig": {
         "strictMode": false,
         "cropAndTransformID": false

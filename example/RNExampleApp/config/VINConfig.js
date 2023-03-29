@@ -15,7 +15,7 @@ export default {
   },
   "viewPluginConfig": {
     "pluginConfig": {
-      "id": "VIN",
+      "id": "vin",
       "cancelOnResult": true,
       "vinConfig": {}
     },

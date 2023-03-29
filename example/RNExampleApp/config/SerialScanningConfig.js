@@ -13,7 +13,7 @@ export default {
     "alignment": "top_left"
   },
   "viewPluginCompositeConfig": {
-    "id": "energy_process",
+    "id": "serial-lpt-dl-vin",
     "processingMode": "sequential",
     "viewPlugins": [
       {

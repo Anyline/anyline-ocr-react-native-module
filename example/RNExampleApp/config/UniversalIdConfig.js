@@ -19,7 +19,7 @@ export default {
   },
   "viewPluginConfig": {
     "pluginConfig": {
-      "id": "com.anyline.configs.plugin.id",
+      "id": "universal-id",
       "universalIdConfig": {
         "allowedLayouts": {
           "mrz": [],

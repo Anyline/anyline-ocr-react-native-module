@@ -1,11 +1,11 @@
 {
-  "name": "RNExampleApp",
-  "version": "43.0.0",
+  "name": "react-native-example-app",
+  "version": "44.1.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "reinstall": "yarn remove anyline-ocr-react-native-module && yarn add ../../plugin && yarn react-native link",
-    "reinstall-pods": "cd ios/ && rm -rf Pods Podfile.lock && pod update --verbose && cd .. && yarn react-native link",
+    "reinstall": "yarn remove anyline-ocr-react-native-module && yarn add ../../plugin",
+    "reinstall-pods": "rm -rf ios/Pods ios/Podfile.lock && pod install --project-directory=ios",
     "test": "jest",
     "bundleAndroid": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
     "bundleiOS": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios"
@@ -13,11 +13,10 @@
   "dependencies": {
     "android": "^0.0.8",
     "anyline-ocr-react-native-module": "../../plugin",
-    "hermes-engine": "^0.7.2",
+    "hermes-engine": "^0.11.0",
     "jsc-android": "^241213.1.0",
     "react": "17.0.2",
-    "react-native": "0.67.5",
-    "react-native-safe-area-context": "^4.5.0"
+    "react-native": "0.67.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

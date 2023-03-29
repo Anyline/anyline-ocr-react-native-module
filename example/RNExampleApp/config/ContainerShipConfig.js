@@ -16,7 +16,7 @@ export default {
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "com.anyline.configs.plugin.horizontal-container",
+            "id": "horizontal-container",
             "containerConfig": {
                 "scanMode": "HORIZONTAL"
             },

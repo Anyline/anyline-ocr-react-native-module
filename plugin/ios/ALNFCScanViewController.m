@@ -21,11 +21,6 @@ API_AVAILABLE(ios(13.0))
 // the result from NFC scanning is retained while NFC reading is initiated, and the results aggregated later
 @property (nonatomic, strong) NSMutableDictionary *resultDict;
 
-// TODO: make sure the following use the `options` group in the uiConfig
-// BOOL showingLabel
-// UILabel scannedLabel
-// ALRoundedView
-// Segment
 @property (nonatomic, strong) ALJSONUIConfiguration *uiConfig;
 
 @property (nonatomic, strong) UIView *hintView;
@@ -48,9 +43,6 @@ API_AVAILABLE(ios(13.0))
 
 @property (nonatomic, strong) NSMutableArray<NSDictionary *> *detectedBarcodes;
 
-// not used
-@property (nonatomic, strong) NSString *cropAndTransformErrorMessage;
-
 // JPEG compression quality 0-100
 @property (nonatomic, assign) NSUInteger quality;
 
@@ -71,7 +63,6 @@ API_AVAILABLE(ios(13.0))
         _uiConfig = uiConfig;
         
         self.quality = 90;
-        self.cropAndTransformErrorMessage = @"";
     }
     return self;
 }
@@ -245,7 +236,6 @@ API_AVAILABLE(ios(13.0))
     }
 
     NSObject<ALScanViewPluginBase> *scanViewPluginBase = self.scanView.scanViewPlugin;
-    // TODO: handle this for composites: cancelOnResult = true? dismiss
     if ([scanViewPluginBase isKindOfClass:ALScanViewPlugin.class]) {
         ALScanViewPlugin *scanViewPlugin = (ALScanViewPlugin *)scanViewPluginBase;
         BOOL cancelOnResult = scanViewPlugin.scanPlugin.scanPluginConfig.cancelOnResult;

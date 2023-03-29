@@ -57,7 +57,9 @@ NSString * const ENABLE_NATIVE_BARCODE = @"nativeBarcodeScanningFormats";
         _labelXPositionOffset = 0.0f;
         _labelYPositionOffset = 0.0f;
 
-        _nativeBarcodeFormats = @[];
+        // (ACO) 20230313
+        // nativeBarcodeFormats = [] would be interpreted as ['ALL']
+        _nativeBarcodeFormats = nil;
 
         if ([dictionary valueForKey:ENABLE_NATIVE_BARCODE]) {
             NSArray<NSString *> *formats = [dictionary valueForKey:ENABLE_NATIVE_BARCODE];

@@ -16,7 +16,7 @@ export default {
   },
   "viewPluginConfig": {
     "pluginConfig": {
-      "id": "com.anyline.configs.plugin.universal-serial-number",
+      "id": "universal-serial-number",
       "ocrConfig": {
         "scanMode": "auto"
       },

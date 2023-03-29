@@ -6,7 +6,7 @@ export default {
     }
   },
   "viewPluginCompositeConfig": {
-    "id": "meter_barcode_parallel_scan",
+    "id": "parallel-meter-barcode",
     "processingMode": "parallel",
     "viewPlugins": [
       {
@@ -55,7 +55,7 @@ export default {
       {
         "viewPluginConfig": {
           "pluginConfig": {
-            "id": "com.anyline.configs.plugin.universal-serial-number",
+            "id": "serial-number",
             "ocrConfig": {
               "scanMode": "auto"
             },

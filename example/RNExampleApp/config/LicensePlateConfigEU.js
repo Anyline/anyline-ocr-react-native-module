@@ -3,11 +3,6 @@ export default {
   "options": {
     "doneButtonConfig": {
       "offset.y": -88
-    },
-    "segmentConfig": {
-      "titles": ["Auto", "US", "Africa"],
-      "modes": ["auto", "unitedstates", "africa"],
-      "offset.y": -24
     }
   },
   "cameraConfig": {

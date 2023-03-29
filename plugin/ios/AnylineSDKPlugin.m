@@ -66,8 +66,7 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
    resolve(AnylineSDK.versionNumber);
 }
 
-
--(void)initView:(NSString *)scanMode {
+- (void)initView:(NSString *)scanMode {
     NSData *data = [self.config dataUsingEncoding:NSUTF8StringEncoding];
     if(!data) {
       [NSException raise:@"Config could not be loaded from disk" format:@"Config could not be loaded from disk"];

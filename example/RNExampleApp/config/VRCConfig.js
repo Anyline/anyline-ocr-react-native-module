@@ -11,7 +11,7 @@ export default {
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "com.anyline.configs.plugin.vrc",
+            "id": "vrc",
             "vehicleRegistrationCertificateConfig": {
                 "vehicleRegistrationCertificate": {
                     "documentNumber": {
