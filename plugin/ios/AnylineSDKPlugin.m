@@ -10,8 +10,8 @@
 
 @property (nonatomic, strong) ALScanViewPluginConfig *conf;
 
-@property (nonatomic, strong) NSString *callbackId;
-@property (nonatomic, strong) NSString *appKey;
+@property (nonatomic, copy) NSString *callbackId;
+@property (nonatomic, copy) NSString *appKey;
 @property (nonatomic, assign) BOOL nativeBarcodeScanning;
 @property (nonatomic, strong) NSDictionary *jsonConfigDictionary;
 @property (nonatomic, strong) NSDictionary *ocrConfigDict;
@@ -20,8 +20,10 @@
 @property (nonatomic, strong) RCTResponseSenderBlock onResultCallback;
 @property (nonatomic, strong) RCTResponseSenderBlock onErrorCallback;
 
-@property (nonatomic, strong) NSString *config;
-@property (nonatomic, strong) NSString *returnMethod;
+@property (nonatomic, copy) NSString *config;
+@property (nonatomic, copy) NSString *licenseKey;
+
+@property (nonatomic, copy) NSString *returnMethod;
 
 @end
 
@@ -32,8 +34,7 @@
 }
 
 RCT_EXPORT_MODULE();
-- (UIView *)view
-{
+- (UIView *)view {
     return [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
 }
 
@@ -54,6 +55,32 @@ RCT_EXPORT_METHOD(setup:(NSString *)config scanMode:(NSString *)scanMode onResul
     [self initView:scanMode];
 }
 
+RCT_EXPORT_METHOD(setupAnylineSDK:(NSString *)licenseKey
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+
+    _resolveBlock = resolve;
+    _rejectBlock = reject;
+    self.returnMethod = @"promise";
+    self.licenseKey = licenseKey;
+
+    NSError *error;
+    BOOL success = [AnylineSDK setupWithLicenseKey:licenseKey error:&error];
+
+    NSString *errorString = nil;
+    NSDictionary *successObj = nil;
+
+    if (!success) {
+        NSLog(@"error: %@", error.localizedDescription);
+        errorString = @"Unable to initialize the Anyline SDK. Please check your license key.";
+        [self returnError:errorString];
+        return;
+    }
+
+    successObj = @{ @"success": @(true) };
+    [self returnSuccess:@"success"];
+}
+
 RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     _resolveBlock = resolve;
     _rejectBlock = reject;
@@ -63,25 +90,38 @@ RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode 
 }
 
 RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-   resolve(AnylineSDK.versionNumber);
+    resolve(AnylineSDK.versionNumber);
+}
+
+RCT_EXPORT_METHOD(licenseKeyExpiryDate:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    BOOL isInitialized = [[ALLicenseUtil sharedInstance] isLicenseValid];
+    if (!isInitialized) {
+        // not `reject`, as this will require the method to be used in a try-catch
+        resolve(nil);
+        return;
+    }
+    resolve([AnylineSDK licenseExpirationDate]);
 }
 
 - (void)initView:(NSString *)scanMode {
     NSData *data = [self.config dataUsingEncoding:NSUTF8StringEncoding];
-    if(!data) {
-      [NSException raise:@"Config could not be loaded from disk" format:@"Config could not be loaded from disk"];
+    if (!data) {
+        [NSException raise:@"Config could not be loaded from disk" format:@"Config could not be loaded from disk"];
     }
     
-    NSError * error = nil;
+    NSError *error = nil;
     id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-  
-    if(error) {
-      [NSException raise:@"Config could not be parsed to JSON" format:@"Config could not be parsed to JSON: %@", error.localizedDescription];
+
+    if (error) {
+        [NSException raise:@"Config could not be parsed to JSON" format:@"Config could not be parsed to JSON: %@", error.localizedDescription];
     }
     NSDictionary *optionsDictionary = [dictionary objectForKey:@"options"];
     self.jsonConfigDictionary = dictionary;
 
     self.appKey = [dictionary objectForKey:@"license"];
+    if (!self.appKey) {
+        self.appKey = [dictionary objectForKey:@"licenseKey"];
+    }
 
     BOOL nativeBarcodeScanning = [[optionsDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
     self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
@@ -96,25 +136,25 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
         if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
             BOOL isNFC = [optionsDictionary objectForKey:@"enableNFCWithMRZ"];
             if (isNFC) {
-               if (@available(iOS 13.0, *)) {
-                   if ([ALNFCDetector readingAvailable]) {
-                       ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:self.appKey
-                                                                                                              configuration:dictionary
-                                                                                                                   uiConfig:self.jsonUIConf
-                                                                                                                   finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
-                           [self returnCallback:callbackObj andErrorString:errorString];
-                       }];
-                       
-                       if(nfcScanViewController != nil){
-                           [nfcScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
-                           [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:nfcScanViewController animated:YES completion:nil];
-                       }
-                   } else {
-                       [self returnError:@"NFC passport reading is not supported on this device or app."];
-                   }
-               } else {
-                   [self returnError:@"NFC passport reading is only supported on iOS 13 and later."];
-               }
+                if (@available(iOS 13.0, *)) {
+                    if ([ALNFCDetector readingAvailable]) {
+                        ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:self.appKey
+                                                                                                               configuration:dictionary
+                                                                                                                    uiConfig:self.jsonUIConf
+                                                                                                                    finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
+                            [self returnCallback:callbackObj andErrorString:errorString];
+                        }];
+
+                        if (nfcScanViewController != nil){
+                            [nfcScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
+                            [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:nfcScanViewController animated:YES completion:nil];
+                        }
+                    } else {
+                        [self returnError:@"NFC passport reading is not supported on this device or app."];
+                    }
+                } else {
+                    [self returnError:@"NFC passport reading is only supported on iOS 13 and later."];
+                }
             } else {
                 ALPluginScanViewController *pluginScanViewController =
                 [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
@@ -123,7 +163,7 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                     [self returnCallback:callbackObj andErrorString:errorString];
                 }];
                 
-                if(pluginScanViewController != nil){
+                if (pluginScanViewController != nil){
                     [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
                     [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
                 }
@@ -136,7 +176,7 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
                 [self returnCallback:callbackObj andErrorString:errorString];
             }];
             
-            if(pluginScanViewController != nil){
+            if (pluginScanViewController != nil){
                 [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
                 [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
             }
@@ -180,7 +220,6 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 
 }
 
-//(id  _Nullable callbackObj, NSString * _Nullable errorString)
 - (void)returnCallback:(id _Nullable)callbackObj andErrorString:(NSString * _Nullable)errorString {
     NSString *resultStr;
     NSError *error;
@@ -198,18 +237,18 @@ RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     }
 }
 
-- (void)returnSuccess:(NSString *)result{
-    if([self.returnMethod isEqualToString:@"callback"]) {
+- (void)returnSuccess:(NSString *)result {
+    if ([self.returnMethod isEqualToString:@"callback"]) {
         self.onResultCallback(@[result]);
-    } else if([self.returnMethod isEqualToString:@"promise"]) {
+    } else if ([self.returnMethod isEqualToString:@"promise"]) {
         _resolveBlock(result);
     }
 }
 
-- (void)returnError:(NSString *)error{
-    if([self.returnMethod isEqualToString:@"callback"]) {
+- (void)returnError:(NSString *)error {
+    if ([self.returnMethod isEqualToString:@"callback"]) {
         self.onErrorCallback(@[error]);
-    } else if([self.returnMethod isEqualToString:@"promise"]) {
+    } else if ([self.returnMethod isEqualToString:@"promise"]) {
         _rejectBlock(@"ANYLINE_ERROR", error, nil);
     }
 }

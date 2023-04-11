@@ -66,11 +66,14 @@
 
     self.view.backgroundColor = [UIColor blackColor];
 
-    // ACO is there an equivalent place to that of an AppDelegate on which this could be added?
-    [AnylineSDK setupWithLicenseKey:self.licenseKey error:&error];
-
-    if ([self showErrorAlertIfNeeded:error]) {
-        return;
+    // Make an isInitialized check. If already initialized, happily move along.
+    // Otherwise, make a license key check here.
+    BOOL isInitialized = [ALLicenseUtil sharedInstance].isLicenseValid;
+    if (!isInitialized) {
+        [AnylineSDK setupWithLicenseKey:self.licenseKey error:&error];
+        if ([self showErrorAlertIfNeeded:error]) {
+            return;
+        }
     }
 
     self.scanView = [ALScanViewFactory withJSONDictionary:self.config

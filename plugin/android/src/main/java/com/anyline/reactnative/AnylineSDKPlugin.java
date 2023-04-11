@@ -66,6 +66,16 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     }
 
     @ReactMethod
+    public void licenseKeyExpiryDate(final Promise promise) {
+        try {
+            promise.resolve(String.valueOf(AnylineSdk.getExpiryDate()));
+        } catch (LicenseException e) {
+            e.printStackTrace();
+            promise.reject(E_ERROR, e.getMessage());
+        }
+    }
+
+    @ReactMethod
     @Deprecated
     public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
         onResultCallback = onResultReact;
@@ -95,6 +105,22 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         } catch (JSONException e) {
             e.printStackTrace();
             returnError(e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void setupAnylineSDK(String license, final Promise promise) {
+        try {
+            AnylineSdk.init(license, reactContext);
+            this.license = license;
+            if (promise != null) {
+                promise.resolve(true);
+            }
+        } catch (LicenseException e) {
+            e.printStackTrace();
+            if (promise != null) {
+                promise.reject(E_ERROR, e.getMessage());
+            }
         }
     }
 
@@ -182,7 +208,18 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
         configObject = new JSONObject(this.config);
 
-        license = configObject.get("license").toString();
+        if (this.license == null || this.license.isEmpty()) {
+            if (configObject.has("license")) {
+                //if there is a license on JSON config then this license will be
+                //used to init or re-init the SDK
+                AnylineSdk.init(configObject.getString("license"), reactContext);
+                license = configObject.get("license").toString();
+            }
+            else {
+                throw new JSONException("No License in config. Please check your configuration.");
+            }
+        }
+
         JSONObject optionsJSONObject = configObject.optJSONObject("options");
 
         if (optionsJSONObject != null) {
@@ -198,7 +235,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         ResultReporter.setListener(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        AnylineSdk.init(configObject.getString("license"), reactContext);
         reactContext.startActivityForResult(intent, 1111, intent.getExtras());
     }
 
