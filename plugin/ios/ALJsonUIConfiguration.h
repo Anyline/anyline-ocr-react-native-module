@@ -41,7 +41,7 @@ typedef NS_ENUM(NSUInteger, ALButtonType) {
 @property (nonatomic, assign) CGFloat segmentXPositionOffset;
 @property (nonatomic, assign) CGFloat segmentYPositionOffset;
 
-@property (nonatomic, strong) NSString *labelText;
+@property (nonatomic, copy) NSString *labelText;
 @property (nonatomic, assign) CGFloat labelSize;
 @property (nonatomic, strong) UIColor *labelColor;
 @property (nonatomic, assign) CGFloat labelXPositionOffset;

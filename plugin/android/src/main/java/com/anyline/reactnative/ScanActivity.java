@@ -288,7 +288,7 @@ public class ScanActivity extends AppCompatActivity {
 
                     if (feedbackConfig != null) {
                         CoordinatorLayout.LayoutParams feedbackLayoutParams =
-                                new CoordinatorLayout.LayoutParams(rect.width(), scanView.getHeight());
+                                new CoordinatorLayout.LayoutParams(rect.width(), scanView.getHeight() - rect.bottom);
                         feedbackLayoutParams.setMargins(rect.left, rect.bottom, rect.right, scanView.getBottom());
                         binding.layoutBrightDistanceFeedback.setVisibility(View.VISIBLE);
                         binding.layoutBrightDistanceFeedback.setLayoutParams(feedbackLayoutParams);

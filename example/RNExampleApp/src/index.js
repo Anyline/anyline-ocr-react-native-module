@@ -50,6 +50,8 @@ LogBox.ignoreAllLogs(true);
 
 const scrollRef = React.createRef();
 
+const demoAppLicenseKey = 'ew0KICAibGljZW5zZUtleVZlcnNpb24iOiAiMy4wIiwNCiAgImRlYnVnUmVwb3J0aW5nIjogInBpbmciLA0KICAibWFqb3JWZXJzaW9uIjogIjM3IiwNCiAgInNjb3BlIjogWw0KICAgICJBTEwiLA0KICAgICJORkMiDQogIF0sDQogICJtYXhEYXlzTm90UmVwb3J0ZWQiOiA1LA0KICAiYWR2YW5jZWRCYXJjb2RlIjogdHJ1ZSwNCiAgIm11bHRpQmFyY29kZSI6IHRydWUsDQogICJzdXBwb3J0ZWRCYXJjb2RlRm9ybWF0cyI6IFsNCiAgICAiQUxMIg0KICBdLA0KICAicGxhdGZvcm0iOiBbDQogICAgImlPUyIsDQogICAgIkFuZHJvaWQiDQogIF0sDQogICJzaG93V2F0ZXJtYXJrIjogdHJ1ZSwNCiAgInRvbGVyYW5jZURheXMiOiAzMCwNCiAgInZhbGlkIjogIjIwMjMtMTItMzEiLA0KICAiaW9zSWRlbnRpZmllciI6IFsNCiAgICAiY29tLmFueWxpbmUuZXhhbXBsZXMucmVhY3RuYXRpdmUiDQogIF0sDQogICJhbmRyb2lkSWRlbnRpZmllciI6IFsNCiAgICAiY29tLmFueWxpbmUuZXhhbXBsZXMucmVhY3RuYXRpdmUiDQogIF0NCn0KSlhUTzVRSmZKa2FtUnR2VDc4QTFadGVhTXVzbmJlTW5HSHl0alZmczlxbUtIeDhCT3ltSGVXc2M2aXpjRExIenhtbklnU0JzS1RRNEdhSENsWCtvMEo2R3VtaFNUWHQrNVVuc1hVQVJ6aGhUdEhTa0l1ZVlRQ0p3dTI3bE9kWlBhNVoxSFNxN24weE9tek1jTjM3R1dsajVzVm9SY2pqaUswYVVnY0M5cDFRT0svK29ZejAvWlR2dXFGVjZUeHdiUHkyc3RqaDhLdS9NaXhtcFZFVmh0eWVzMEU2ZzhNVkdBNmNPU1h4NDVXVzgvR0NUWEpqdFJ6NnM2UFBDYzdYSXhQalFjOVAxdzBtblpFYTdjUHpMS3M0Y3hoYjQwSmluSU5qZXp6MDl1em9kbnZUR3VlSEIwcXIzUWNlVmdkS1JVQzhDc24zNmJLM2NLVmVpOVdTUlVRPT0=';
+
 class Anyline extends Component {
   overTheAirUpdateIsEnabled = false;
 
@@ -62,12 +64,28 @@ class Anyline extends Component {
     buttonsDisabled: false,
     SDKVersion: '',
     hasMultipleResults: false,
+    licenseMessage: '',
     titles: [],
   };
 
   componentDidMount = async () => {
+        
+    console.log(`AnylineOCR.setupAnylineSDK`);
+    var licenseMessage = ``;
+    try {
+      await AnylineOCR.setupAnylineSDK(demoAppLicenseKey);
+      console.log(`AnylineOCR.initialized`);
+      var expiry = await AnylineOCR.licenseKeyExpiryDate();
+      console.log('expiry: ' + expiry);
+      licenseMessage = 'License expires on: ' + expiry;
+    } catch (error) {
+      licenseMessage = 'Error: ' + error.message;
+      console.log('error initializing Anyline SDK: ' + error);
+    }
+
     const SDKVersion = await AnylineOCR.getSDKVersion();
-    this.setState({ SDKVersion: SDKVersion });
+
+    this.setState({ SDKVersion: SDKVersion, licenseMessage: licenseMessage });
   };
 
   componentDidUpdate() {
@@ -324,6 +342,7 @@ class Anyline extends Component {
       currentScanMode,
       buttonsDisabled,
       SDKVersion,
+      licenseMessage,
       hasMultipleResults,
       titles,
     } = this.state;
@@ -384,6 +403,15 @@ class Anyline extends Component {
 
         <View style={styles.footer}>
           <Text style={styles.versions}>SDK: {SDKVersion}</Text>
+          {
+            (licenseMessage && licenseMessage.length > 0) ?
+              <Text key='licenseMessage' style={styles.versions}>
+                {licenseMessage}
+              </Text>
+              : <Text key='licenseMessage' style={styles.versions}>
+              </Text>
+          }
+
         </View>
 
       </ScrollView>
@@ -394,7 +422,8 @@ class Anyline extends Component {
 const styles = StyleSheet.create({
   versions: {
     color: 'white',
-    marginTop: 10,
+    marginVertical: 5,
+    marginHorizontal: 40,
   },
   container: {
     flex: 1,
