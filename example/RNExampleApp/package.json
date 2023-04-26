@@ -1,6 +1,6 @@
 {
   "name": "react-native-example-app",
-  "version": "44.1.2",
+  "version": "46.1.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -15,8 +15,8 @@
     "anyline-ocr-react-native-module": "../../plugin",
     "hermes-engine": "^0.11.0",
     "jsc-android": "^241213.1.0",
-    "react": "17.0.2",
-    "react-native": "0.67.5"
+    "react": "18.0.0",
+    "react-native": "0.69.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

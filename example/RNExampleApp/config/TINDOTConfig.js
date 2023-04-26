@@ -4,11 +4,6 @@ export default {
         "doneButtonConfig": {
             "offset.y": -88
         },
-        "segmentConfig": {
-            "titles": ["DOT", "DOT-Strict"],
-            "modes": ["DOT", "DOT_STRICT"],
-            "offset.y": -120
-        },
         "rotateButton": {
             "alignment": "top_right",
             "offset": {
