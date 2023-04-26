@@ -25,6 +25,7 @@ export default {
             "meterConfig": {
                 "scanMode": "dial_meter"
             },
+            "startScanDelay": 1000,
             "cancelOnResult": true
         },
         "cutoutConfig": {

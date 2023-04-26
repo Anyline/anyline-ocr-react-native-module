@@ -32,6 +32,7 @@ import VerticalContainerConfig from '../config/VerticalContainerConfig';
 import SerialScanningConfig from '../config/SerialScanningConfig';
 import ParallelScanningConfig from '../config/ParallelScanningConfig';
 import ParallelFirstScanningConfig from '../config/ParallelFirstScanningConfig';
+import TireMakeConfig from '../config/TireMakeConfig';
 import TireSizeConfig from '../config/TireSizeConfig';
 import CommercialTireIdConfig from '../config/CommercialTireIdConfig';
 import OtaConfig from '../config/OtaConfig';
@@ -155,7 +156,11 @@ class Anyline extends Component {
         type = 'TIRE';
         config = TINDOTConfig;
         break;
-        case 'TIRE_SIZE':
+      case 'TIRE_MAKE':
+        type = 'TIRE';
+        config = TireMakeConfig;
+        break;
+      case 'TIRE_SIZE':
         type = 'TIRE';
         config = TireSizeConfig;
         break;

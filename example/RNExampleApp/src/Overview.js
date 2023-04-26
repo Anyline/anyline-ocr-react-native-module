@@ -154,6 +154,14 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
       </View>
 
       <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'Tire Make'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('TIRE_MAKE')
+          }} />
+      </View>
+
+      <View style={styles.buttons}>
         <Button style={styles.buttons} title={'Tire Size'} color="#0099FF"
           disabled={disabled}
           onPress={() => {
