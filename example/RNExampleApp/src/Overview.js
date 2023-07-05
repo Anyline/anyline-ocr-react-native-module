@@ -178,6 +178,14 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
       </View>
 
       <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'Odometer'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('ODOMETER')
+          }} />
+      </View>
+
+      <View style={styles.buttons}>
         <Button style={styles.buttons} title={'Vehicle Registration Certificate'} color="#0099FF"
           disabled={disabled}
           onPress={() => {

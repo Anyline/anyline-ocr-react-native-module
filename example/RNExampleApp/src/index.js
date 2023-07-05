@@ -35,6 +35,7 @@ import ParallelFirstScanningConfig from '../config/ParallelFirstScanningConfig';
 import TireMakeConfig from '../config/TireMakeConfig';
 import TireSizeConfig from '../config/TireSizeConfig';
 import CommercialTireIdConfig from '../config/CommercialTireIdConfig';
+import OdometerConfig from '../config/OdometerConfig';
 import OtaConfig from '../config/OtaConfig';
 import { DeviceEventEmitter } from 'react-native';
 import { Platform } from 'react-native';
@@ -167,6 +168,10 @@ class Anyline extends Component {
       case 'COMMERCIAL_TIRE_ID':
         type = 'TIRE';
         config = CommercialTireIdConfig;
+        break;
+      case 'ODOMETER':
+        type = 'ODOMETER';
+        config = OdometerConfig;
         break;
       case 'USNR':
         type = 'ANYLINE_OCR';
