@@ -77,7 +77,6 @@ export default {
             "cancelOnResult": true
           },
           "cutoutConfig": {
-            "style": "animated_rect",
             "maxWidthPercent": "90%",
             "maxHeightPercent": "90%",
             "alignment": "center",

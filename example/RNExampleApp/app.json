@@ -1,4 +1,10 @@
 {
   "name": "RNExampleApp",
-  "displayName": "RNExampleApp"
+  "displayName": "RNExampleApp",
+  "android": {
+    "package": "com.anyline.examples.reactnative"
+  },
+  "ios": {
+    "bundleIdentifier": "com.anyline.examples.reactnative"
+  }
 }

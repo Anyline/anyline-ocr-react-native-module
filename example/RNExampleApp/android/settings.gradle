@@ -1,5 +1,17 @@
-rootProject.name = 'anyline-react-native-example-app'
-include ':anyline-ocr-react-native-module'
-project(':anyline-ocr-react-native-module').projectDir = new File(rootProject.projectDir, '../node_modules/anyline-ocr-react-native-module/android')
+rootProject.name = 'RNExampleApp'
+
+apply from: new File(["node", "--print", "require.resolve('expo/package.json')"].execute(null, rootDir).text.trim(), "../scripts/autolinking.gradle");
+useExpoModules()
+
+apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json')"].execute(null, rootDir).text.trim(), "../native_modules.gradle");
+applyNativeModulesSettingsGradle(settings)
+
+includeBuild('../node_modules/@react-native/gradle-plugin')
+
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+
+
+
 
 include ':app'
+includeBuild(new File(["node", "--print", "require.resolve('@react-native/gradle-plugin/package.json')"].execute(null, rootDir).text.trim()).getParentFile())

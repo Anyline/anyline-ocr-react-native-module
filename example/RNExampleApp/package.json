@@ -1,34 +1,30 @@
 {
   "name": "react-native-example-app",
-  "version": "48.0.1",
+  "version": "50.0.0",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "initProject": "yarn add expo && yarn add ../../plugin",
     "reinstall": "yarn remove anyline-ocr-react-native-module && yarn add ../../plugin",
-    "reinstall-pods": "rm -rf ios/Pods ios/Podfile.lock && pod install --project-directory=ios",
-    "test": "jest",
-    "bundleAndroid": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
-    "bundleiOS": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios"
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios --device",
+    "web": "expo start --web"
   },
   "dependencies": {
-    "android": "^0.0.8",
+    "@babel/core": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
     "anyline-ocr-react-native-module": "../../plugin",
+    "expo": "^49.0.6",
+    "expo-dev-client": "~2.4.6",
+    "expo-modules-autolinking": "0.8.1",
+    "expo-splash-screen": "~0.20.4",
+    "expo-status-bar": "~1.6.0",
     "hermes-engine": "^0.11.0",
     "jsc-android": "^241213.1.0",
-    "react": "18.0.0",
-    "react-native": "0.69.9"
+    "react": "18.2.0",
+    "react-native": "0.72.3"
   },
-  "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@babel/runtime": "^7.12.5",
-    "@react-native-community/eslint-config": "^2.0.0",
-    "babel-jest": "^26.6.3",
-    "eslint": "7.14.0",
-    "jest": "^26.6.3",
-    "metro-react-native-babel-preset": "^0.66.2",
-    "react-test-renderer": "17.0.2"
-  },
-  "jest": {
-    "preset": "react-native"
-  }
+  "description": "React Native example app",
+  "main": "index.js",
+  "license": "MIT"
 }

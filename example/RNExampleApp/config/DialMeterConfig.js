@@ -29,7 +29,6 @@ export default {
             "cancelOnResult": true
         },
         "cutoutConfig": {
-            "style": "rect",
             "maxWidthPercent": "100%",
             "width": 768,
             "alignment": "top_half",

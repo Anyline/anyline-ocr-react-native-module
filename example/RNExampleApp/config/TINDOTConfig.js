@@ -61,7 +61,6 @@ export default {
             }
         },
         "cutoutConfig": {
-            "style": "animated_rect",
             "maxWidthPercent": "80%",
             "maxHeightPercent": "80%",
             "alignment": "center",

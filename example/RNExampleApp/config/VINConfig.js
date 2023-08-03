@@ -19,7 +19,6 @@ export default {
       "vinConfig": {}
     },
     "cutoutConfig": {
-      "style": "animated_rect",
       "maxWidthPercent": "70%",
       "maxHeightPercent": "70%",
       "alignment": "top_half",

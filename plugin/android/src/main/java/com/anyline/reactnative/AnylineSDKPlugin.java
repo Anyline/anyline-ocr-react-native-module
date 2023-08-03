@@ -17,11 +17,12 @@ import com.facebook.react.bridge.ReactMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import io.anyline.plugin.ScanResult;
+import java.util.HashMap;
+
 import io.anyline.products.AnylineUpdater;
 import io.anyline.trainer.AssetContext;
-import io.anyline.trainer.TrainerUtils;
 import io.anyline2.AnylineSdk;
+import io.anyline2.CorrectedResultReporting;
 import io.anyline2.core.LicenseException;
 
 class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
@@ -151,19 +152,17 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     @ReactMethod
     public void reportCorrectedResult(String blobKey, String correctedResult, Callback onResponseCallback) {
-        ScanResult.reportCorrectedResult(
-                this.reactContext,
-                blobKey,
-                correctedResult,
-                "",
-                new TrainerUtils.ReportCorrectedResultHandler() {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("result", correctedResult);
 
-                    @Override
-                    public void onReportCorrectedResult(String s) {
-                        onResponseCallback.invoke(s);
-                    }
-                }
-        );
+        CorrectedResultReporting
+                .Factory
+                .getInstance()
+                .reportCorrectedResult(
+                        blobKey,
+                        hashMap
+                );
+        onResponseCallback.invoke("Success");
     }
 
     @ReactMethod
@@ -214,8 +213,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
                 //used to init or re-init the SDK
                 AnylineSdk.init(configObject.getString("license"), reactContext);
                 license = configObject.get("license").toString();
-            }
-            else {
+            } else {
                 throw new JSONException("No License in config. Please check your configuration.");
             }
         }
