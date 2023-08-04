@@ -19,7 +19,6 @@ export default {
             "startScanDelay": 0
           },
           "cutoutConfig": {
-            "style": "rect",
             "maxWidthPercent": "100%",
             "width": 768,
             "alignment": "top_half",

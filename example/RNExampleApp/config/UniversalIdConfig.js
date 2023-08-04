@@ -29,85 +29,85 @@ export default {
         "alphabet": "latin",
         "insuranceCard": {
           "lastName": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 50
           },
           "firstName": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 50
           },
           "dateOfBirth": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 50
           },
           "personalNumber": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 50
           },
           "authority": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 50
           },
           "documentNumber": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 50
           },
           "dateOfExpiry": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 50
           },
           "nationality": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 50
           }
         },
         "idFront": {
           "lastName": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 60
           },
           "firstName": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 60
           },
           "fullName": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 60
           },
           "dateOfBirth": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 60
           },
           "placeOfBirth": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 60
           },
           "dateOfIssue": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 60
           },
           "dateOfExpiry": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 60
           },
           "cardAccessNumber": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 60
           },
           "documentNumber": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 60
           },
           "nationality": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 60
           },
           "sex": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 60
           },
           "personalNumber": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 60
           }
         }
@@ -115,7 +115,6 @@ export default {
       "cancelOnResult": true
     },
     "cutoutConfig": {
-      "style": "animated_rect",
       "maxWidthPercent": "90%",
       "maxHeightPercent": "90%",
       "alignment": "center",

@@ -27,76 +27,76 @@ export default {
         "alphabet": "cyrillic",
         "drivingLicense": {
           "surname": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 40
           },
           "givenNames": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 40
           },
           "dateOfBirth": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 50
           },
           "placeOfBirth": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 50
           },
           "dateOfIssue": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 50
           },
           "dateOfExpiry": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 50
           },
           "authority": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 30
           },
           "documentNumber": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 40
           },
           "categories": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 30
           },
           "address": {
-            "scanOption": 1
+            "scanOption": "optional"
           }
         },
         "idFront": {
           "surname": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 60
           },
           "givenNames": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 60
           },
           "dateOfBirth": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 60
           },
           "placeOfBirth": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 60
           },
           "dateOfExpiry": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 60
           },
           "cardAccessNumber": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 60
           },
           "documentNumber": {
-            "scanOption": 0,
+            "scanOption": "mandatory",
             "minConfidence": 60
           },
           "nationality": {
-            "scanOption": 1,
+            "scanOption": "optional",
             "minConfidence": 60
           }
         }

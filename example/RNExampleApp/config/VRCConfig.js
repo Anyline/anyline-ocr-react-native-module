@@ -14,55 +14,55 @@ export default {
             "vehicleRegistrationCertificateConfig": {
                 "vehicleRegistrationCertificate": {
                     "documentNumber": {
-                        "scanOption": 1,
+                        "scanOption": "optional",
                         "minConfidence": 40
                     },
                     "licensePlate": {
-                        "scanOption": 0,
+                        "scanOption": "mandatory",
                         "minConfidence": 40
                     },
                     "lastName": {
-                        "scanOption": 0,
+                        "scanOption": "mandatory",
                         "minConfidence": 60
                     },
                     "firstName": {
-                        "scanOption": 1,
+                        "scanOption": "optional",
                         "minConfidence": 40
                     },
                     "address": {
-                        "scanOption": 0,
+                        "scanOption": "mandatory",
                         "minConfidence": 50
                     },
                     "firstIssued": {
-                        "scanOption": 0,
+                        "scanOption": "mandatory",
                         "minConfidence": 60
                     },
                     "manufacturerCode": {
-                        "scanOption": 0,
+                        "scanOption": "mandatory",
                         "minConfidence": 50
                     },
                     "vehicleTypeCode": {
-                        "scanOption": 0,
+                        "scanOption": "mandatory",
                         "minConfidence": 50
                     },
                     "vehicleIdentificationNumber": {
-                        "scanOption": 0,
+                        "scanOption": "mandatory",
                         "minConfidence": 60
                     },
                     "brand": {
-                        "scanOption": 1,
+                        "scanOption": "optional",
                         "minConfidence": 40
                     },
                     "vehicleType": {
-                        "scanOption": 1,
+                        "scanOption": "optional",
                         "minConfidence": 40
                     },
                     "displacement": {
-                        "scanOption": 1,
+                        "scanOption": "optional",
                         "minConfidence": 40
                     },
                     "tire": {
-                        "scanOption": 1,
+                        "scanOption": "optional",
                         "minConfidence": 50
                     }
                 }

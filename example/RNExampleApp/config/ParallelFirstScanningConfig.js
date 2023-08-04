@@ -35,7 +35,6 @@ export default {
             "vinConfig": {}
           },
           "cutoutConfig": {
-            "style": "rect",
             "maxWidthPercent": "85%",
             "alignment": "top_half",
             "ratioFromSize": { "width": 62, "height": 9 },

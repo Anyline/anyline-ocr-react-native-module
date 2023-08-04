@@ -18,7 +18,6 @@
       "cancelOnResult": false
     },
     "cutoutConfig": {
-      "style": "rect",
       "maxWidthPercent": "80%",
       "maxHeightPercent": "80%",
       "alignment": "center",
