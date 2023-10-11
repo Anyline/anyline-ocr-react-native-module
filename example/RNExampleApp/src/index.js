@@ -74,6 +74,7 @@ class Anyline extends Component {
         
     console.log(`AnylineOCR.setupAnylineSDK`);
     var licenseMessage = ``;
+    var licenseInitSuccess = false;
     try {
       await AnylineOCR.setupAnylineSDK(demoAppLicenseKey);
       console.log(`AnylineOCR.initialized`);
