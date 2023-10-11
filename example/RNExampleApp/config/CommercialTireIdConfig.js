@@ -19,18 +19,17 @@ export default {
             "commercialTireIdConfig": {}
         },
         "cutoutConfig": {
-            "maxWidthPercent": "80%",
-            "maxHeightPercent": "80%",
+            "maxWidthPercent": "60%",
+            "maxHeightPercent": "60%",
             "alignment": "center",
             "strokeWidth": 2,
             "cornerRadius": 4,
             "strokeColor": "0099FF",
             "outerColor": "000000",
             "outerAlpha": 0.3,
-            "width": 720,
             "ratioFromSize": {
-                "width": 720,
-                "height": 144
+                "width": 5,
+                "height": 1
             },
             "feedbackStrokeColor": "0099FF"
         },

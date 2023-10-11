@@ -80,14 +80,16 @@ class Anyline extends Component {
       var expiry = await AnylineOCR.licenseKeyExpiryDate();
       console.log('expiry: ' + expiry);
       licenseMessage = 'License expires on: ' + expiry;
+      licenseInitSuccess = true;
     } catch (error) {
       licenseMessage = 'Error: ' + error.message;
       console.log('error initializing Anyline SDK: ' + error);
+      alert(licenseMessage);
     }
 
     const SDKVersion = await AnylineOCR.getSDKVersion();
 
-    this.setState({ SDKVersion: SDKVersion, licenseMessage: licenseMessage });
+    this.setState({ SDKVersion: SDKVersion, licenseMessage: licenseMessage, buttonsDisabled: !licenseInitSuccess });
   };
 
   componentDidUpdate() {

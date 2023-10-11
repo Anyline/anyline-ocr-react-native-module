@@ -26,12 +26,12 @@ export default {
       "maxWidthPercent": "10%",
       "alignment": "center",
       "ratioFromSize": {
-        "width": 9,
-        "height": 62
+        "width": 15,
+        "height": 100
       },
       "offset": {
         "x": 0,
-        "y": 0
+        "y": -15
       },
       "cropOffset": {
         "x": 0,

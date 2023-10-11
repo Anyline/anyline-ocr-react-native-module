@@ -32,30 +32,15 @@ export default function Result({
   let onReportCorrectedResultResponseHandler = function (response) {
     /* 
         The response is a string with the following style if it's an error:
-        {
-          "code": <Error code>,
-          "message": {
-            "code": <Error code>,
-            "timestamp": <Timestamp>,
-            "path": <Endpoint URL of our Api>,
-            "method": <POST, GET etc.>,
-            "message": <Error message>
-          }
-        }
+        "Error: Full error message"
 
         If the response is successful it looks like this:
-        {
-          "code" : 201,
-          "message" : {
-            "message": "ok"
-          }
-        }
+        "Success"
     */
-    var parsedResponse = JSON.parse(response);
-    if (parsedResponse["code"] === 201) {
-      setResponseText("Sending corrected result was successful.");
+    if (response.startsWith("Success")) {
+        setResponseText("Sending corrected result was successful.");
     } else {
-      setResponseText("Error while sending corrected result: " + parsedResponse["message"]);
+        setResponseText(response);
     }
   }
 

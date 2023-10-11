@@ -17,11 +17,13 @@ import com.facebook.react.bridge.ReactMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import io.anyline.products.AnylineUpdater;
 import io.anyline.trainer.AssetContext;
 import io.anyline2.AnylineSdk;
+import io.anyline2.CacheConfig;
 import io.anyline2.CorrectedResultReporting;
 import io.anyline2.core.LicenseException;
 
@@ -111,8 +113,17 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     @ReactMethod
     public void setupAnylineSDK(String license, final Promise promise) {
+        setupAnylineSDKWithCacheConfig(license, false, promise);
+    }
+
+    @ReactMethod
+    public void setupAnylineSDKWithCacheConfig(String license, boolean enableOfflineCache, final Promise promise) {
+        CacheConfig.Preset cacheConfig = CacheConfig.Preset.Default.INSTANCE;
+        if (enableOfflineCache) {
+            cacheConfig = CacheConfig.Preset.OfflineLicenseEventCachingEnabled.INSTANCE;
+        }
         try {
-            AnylineSdk.init(license, reactContext);
+            AnylineSdk.init(license, reactContext, "", cacheConfig);
             this.license = license;
             if (promise != null) {
                 promise.resolve(true);
@@ -127,8 +138,17 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     @ReactMethod
     public void initSdk(String license) {
+        initSdk(license, false);
+    }
+
+    @ReactMethod
+    public void initSdk(String license, boolean enableOfflineCache) {
+        CacheConfig.Preset cacheConfig = CacheConfig.Preset.Default.INSTANCE;
+        if (enableOfflineCache) {
+            cacheConfig = CacheConfig.Preset.OfflineLicenseEventCachingEnabled.INSTANCE;
+        }
         try {
-            AnylineSdk.init(license, reactContext);
+            AnylineSdk.init(license, reactContext, "", cacheConfig);
         } catch (LicenseException e) {
             e.printStackTrace();
             returnError(e.getMessage());
@@ -155,14 +175,40 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("result", correctedResult);
 
-        CorrectedResultReporting
-                .Factory
-                .getInstance()
-                .reportCorrectedResult(
-                        blobKey,
-                        hashMap
-                );
-        onResponseCallback.invoke("Success");
+        try {
+            CorrectedResultReporting
+                    .Factory
+                    .getInstance()
+                    .reportCorrectedResult(
+                            blobKey,
+                            hashMap
+                    );
+            onResponseCallback.invoke("Success");
+        }
+        catch (IllegalArgumentException e) {
+            onResponseCallback.invoke("Error: " + e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void exportCachedEvents(final Promise promise) {
+        try {
+            String exportedFile = AnylineSdk.exportCachedEvents();
+            if (exportedFile != null) {
+                if (promise != null) {
+                    promise.resolve(String.valueOf(exportedFile));
+                }
+            }
+            else {
+                if (promise != null) {
+                    promise.reject(E_ERROR, "Event cache is empty.");
+                }
+            }
+        } catch (IOException e) {
+            if (promise != null) {
+                promise.reject(E_ERROR, e.getMessage());
+            }
+        }
     }
 
     @ReactMethod

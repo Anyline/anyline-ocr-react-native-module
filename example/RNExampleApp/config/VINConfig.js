@@ -23,8 +23,8 @@ export default {
       "maxHeightPercent": "70%",
       "alignment": "top_half",
       "ratioFromSize": {
-        "width": 62,
-        "height": 9
+        "width": 69,
+        "height": 10
       },
       "outerColor": "000000",
       "outerAlpha": 0.3,
