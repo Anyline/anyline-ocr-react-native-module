@@ -27,16 +27,15 @@ export default {
             "cancelOnResult": true
         },
         "cutoutConfig": {
-            "maxWidthPercent": "100%",
-            "width": 768,
-            "alignment": "top_half",
+            "maxWidthPercent": "85%",
+            "alignment": "top",
             "ratioFromSize": {
-                "width": 9,
+                "width": 8,
                 "height": 4
             },
             "offset": {
                 "x": 0,
-                "y": 80
+                "y": 160
             },
             "strokeWidth": 2,
             "cornerRadius": 4,

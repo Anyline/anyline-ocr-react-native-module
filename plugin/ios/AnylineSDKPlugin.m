@@ -56,6 +56,13 @@ RCT_EXPORT_METHOD(setup:(NSString *)config scanMode:(NSString *)scanMode onResul
 }
 
 RCT_EXPORT_METHOD(setupAnylineSDK:(NSString *)licenseKey
+        resolver:(RCTPromiseResolveBlock)resolve
+        rejecter:(RCTPromiseRejectBlock)reject) {
+    [self setupAnylineSDKWithCacheConfig:licenseKey enableOfflineCache:NO resolver:resolve rejecter:reject];
+}
+
+RCT_EXPORT_METHOD(setupAnylineSDKWithCacheConfig:(NSString *)licenseKey
+                  enableOfflineCache:(BOOL)enableOfflineCache
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
 
@@ -102,6 +109,23 @@ RCT_EXPORT_METHOD(licenseKeyExpiryDate:(RCTPromiseResolveBlock)resolve rejecter:
     }
     resolve([AnylineSDK licenseExpirationDate]);
 }
+
+RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    _resolveBlock = resolve;
+    _rejectBlock = reject;
+    self.returnMethod = @"promise";
+
+    NSError *error;
+    NSString *exportPath = [AnylineSDK exportCachedEvents:&error];
+
+    if (!exportPath) {
+        NSString *errorString = @"Event cache is empty.";
+        [self returnError:errorString];
+    } else {
+        [self returnSuccess:exportPath];
+    }
+}
+
 
 - (void)initView:(NSString *)scanMode {
     NSData *data = [self.config dataUsingEncoding:NSUTF8StringEncoding];

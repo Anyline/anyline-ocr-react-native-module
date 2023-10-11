@@ -107,11 +107,10 @@ export default {
       "animation": "fade",
       "maxWidthPercent": "90%",
       "maxHeightPercent": "90%",
-      "width": 0,
-      "alignment": "top_half",
+      "alignment": "center",
       "ratioFromSize": {
-        "width": 86,
-        "height": 54
+        "width": 161,
+        "height": 100
       },
       "offset": {
         "x": 0,

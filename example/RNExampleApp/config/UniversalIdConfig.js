@@ -124,12 +124,12 @@ export default {
       "outerColor": "000000",
       "outerAlpha": 0.3,
       "ratioFromSize": {
-        "width": 50,
-        "height": 31
+        "width": 161,
+        "height": 100
       },
       "cropPadding": {
-        "x": 25,
-        "y": 25
+        "x": 0,
+        "y": 0
       },
       "cropOffset": {
         "x": 0,

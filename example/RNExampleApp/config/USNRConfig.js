@@ -26,12 +26,12 @@ export default {
       "maxWidthPercent": "80%",
       "alignment": "top_half",
       "ratioFromSize": {
-        "width": 5,
+        "width": 2,
         "height": 1
       },
       "offset": {
         "x": 0,
-        "y": 0
+        "y": -15
       },
       "cropOffset": {
         "x": 0,

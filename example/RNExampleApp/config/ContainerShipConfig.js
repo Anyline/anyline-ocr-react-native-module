@@ -23,15 +23,15 @@ export default {
         },
         "cutoutConfig": {
             "animation": "none",
-            "maxWidthPercent": "70%",
+            "maxWidthPercent": "80%",
             "alignment": "top_half",
             "ratioFromSize": {
-                "width": 62,
-                "height": 9
+                "width": 5,
+                "height": 1
             },
             "offset": {
                 "x": 0,
-                "y": 0
+                "y": -15
             },
             "cropOffset": {
                 "x": 0,

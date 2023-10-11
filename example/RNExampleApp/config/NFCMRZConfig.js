@@ -28,21 +28,20 @@ export default {
     },
     "cutoutConfig": {
       "animation": "none",
-      "maxWidthPercent": "85%",
-      "maxHeightPercent": "70%",
-      "width": 0,
-      "alignment": "top_half",
+      "maxWidthPercent": "90%",
+      "maxHeightPercent": "90%",
+      "alignment": "center",
       "ratioFromSize": {
-        "width": 86,
-        "height": 54
+        "width": 161,
+        "height": 100
       },
       "offset": {
         "x": 0,
-        "y": 20
+        "y": 90
       },
       "cropPadding": {
-        "x": 25,
-        "y": 25
+        "x": 0,
+        "y": 0
       },
       "outerColor": "000000",
       "outerAlpha": 0.3,

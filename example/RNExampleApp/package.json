@@ -1,6 +1,6 @@
 {
   "name": "react-native-example-app",
-  "version": "50.0.0",
+  "version": "51.1.0",
   "private": true,
   "scripts": {
     "initProject": "yarn add expo && yarn add ../../plugin",
@@ -14,7 +14,7 @@
     "@babel/core": "^7.22.9",
     "@babel/preset-env": "^7.22.9",
     "anyline-ocr-react-native-module": "../../plugin",
-    "expo": "^49.0.6",
+    "expo": "^49.0.13",
     "expo-dev-client": "~2.4.6",
     "expo-modules-autolinking": "0.8.1",
     "expo-splash-screen": "~0.20.4",

@@ -19,19 +19,17 @@ export default {
       "cancelOnResult" : true
     },
     "cutoutConfig" : {
-      "style" : "rect",
-      "alignment" : "top_half",
+      "alignment" : "top",
       "strokeWidth" : 2,
       "strokeColor" : "FFFFFF",
       "cornerRadius" : 4,
       "outerColor" : "000000",
       "outerAlpha" : 0.5,
       "feedbackStrokeColor" : "0099FF",
-      "width": 550,
-      "maxWidthPercent": "90%",
-      "maxHeightPercent": "90%",
+      "maxWidthPercent": "85%",
+      "maxHeightPercent": "85%",
       "ratioFromSize": {
-        "width": 3.75,
+        "width": 2.75,
         "height": 1
       },
       "offset": {

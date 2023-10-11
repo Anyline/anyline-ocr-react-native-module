@@ -72,11 +72,11 @@ export default {
         "cutoutConfig": {
             "animation": "none",
             "maxWidthPercent": "90%",
-            "maxHeightPercent": "80%",
+            "maxHeightPercent": "90%",
             "alignment": "center",
             "ratioFromSize": {
-                "width": 90,
-                "height": 46
+                "width": 2,
+                "height": 1
             },
             "offset": {
                 "x": 0,
@@ -87,8 +87,8 @@ export default {
                 "y": 0
             },
             "cropPadding": {
-                "x": 50,
-                "y": 50
+                "x": 0,
+                "y": 0
             },
             "cornerRadius": 4,
             "strokeColor": "0099FF",
