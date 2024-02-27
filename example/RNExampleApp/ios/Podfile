@@ -4,9 +4,7 @@ platform :ios, '12.4'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 
-use_react_native!(
-  :flipper_configuration => FlipperConfiguration.enabled(["Debug"], {  'Flipper' => '0.203.0' }),
-)
+use_react_native!
 target 'RNExampleApp' do
  
   # originally '../node_modules/anyline-ocr-react-native-module/ios'

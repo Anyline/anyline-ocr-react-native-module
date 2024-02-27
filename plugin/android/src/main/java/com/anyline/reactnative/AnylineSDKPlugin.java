@@ -20,8 +20,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 
-import io.anyline.products.AnylineUpdater;
-import io.anyline.trainer.AssetContext;
+import io.anyline2.core.ScanController;
+import io.anyline2.legacy.products.AnylineUpdater;
+import io.anyline2.legacy.trainer.AssetContext;
 import io.anyline2.AnylineSdk;
 import io.anyline2.CacheConfig;
 import io.anyline2.CorrectedResultReporting;
@@ -100,9 +101,10 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
             if (assetContext != null) {
                 AnylineUpdater.update(
-                        reactContext,
-                        assetContext,
-                        new AnylineUpdateDelegateImpl(reactContext, onUpdateError, onUpdateFinished)
+                    reactContext,
+                    assetContext,
+                    new AnylineUpdateDelegateImpl(reactContext, onUpdateError, onUpdateFinished),
+                    ScanController.PluginType.OCR
                 );
             }
         } catch (JSONException e) {

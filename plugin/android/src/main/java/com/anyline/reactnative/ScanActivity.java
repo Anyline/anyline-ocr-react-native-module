@@ -6,7 +6,6 @@ import static com.anyline.reactnative.AnylineSDKPlugin.RESULT_ERROR;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.os.Looper;
 import android.util.Pair;
 import android.view.View;
 import android.view.Gravity;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,12 +26,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import io.anyline2.ScanResult;
-import io.anyline2.view.BrightnessHelper;
 import io.anyline2.view.ScanView;
 import io.anyline2.viewplugin.ScanViewPlugin;
 import io.anyline2.viewplugin.ViewPluginBase;

@@ -6,7 +6,7 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import io.anyline.products.IAnylineUpdateDelegate;
+import io.anyline2.legacy.products.IAnylineUpdateDelegate;
 
 public class AnylineUpdateDelegateImpl implements IAnylineUpdateDelegate {
 
