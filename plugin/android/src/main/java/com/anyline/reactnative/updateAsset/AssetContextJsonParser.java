@@ -7,9 +7,9 @@ import org.json.JSONObject;
 
 import javax.annotation.Nullable;
 
-import io.anyline.products.ProductContext;
-import io.anyline.trainer.AssetContext;
-import io.anyline.trainer.ProjectContext;
+import io.anyline2.legacy.products.ProductContext;
+import io.anyline2.legacy.trainer.AssetContext;
+import io.anyline2.legacy.trainer.ProjectContext;
 
 public class AssetContextJsonParser {
 

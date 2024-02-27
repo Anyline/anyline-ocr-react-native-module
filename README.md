@@ -17,13 +17,15 @@ The plugin enables the connection to the SDK via React-Native.
 * `README.md` - This readme.
 * `LICENSE.md` - The license file.
 
-## Getting Started
+## Documentation Resources
 
-Check out our getting-started section here: https://documentation.anyline.com/react-native-plugin-component/latest/getting-started.html
+- [Getting Started](https://documentation.anyline.com/react-native-plugin-component/latest/getting-started.html)
+- [Release Notes](https://documentation.anyline.com/react-native-plugin-component/latest/release-notes.html)
 
-## Documentation
+## Get Help (Support)
 
-Check out our developer guide here: https://documentation.anyline.com/react-native-plugin-component/latest/index.html
+We don't actively monitor issues raised on Github, instead please open a support request
+using the [Anyline Helpdesk](https://support.anyline.com).
 
 ## License
 
