@@ -1,6 +1,6 @@
 {
   "name": "react-native-example-app",
-  "version": "51.3.1",
+  "version": "51.4.0",
   "private": true,
   "scripts": {
     "initProject": "yarn add expo && yarn add ../../plugin",

@@ -6,6 +6,8 @@
 
 #import "ALNFCScanViewController.h"
 
+ALWrapperConfig *wrapperConfig = nil;
+
 @interface AnylineSDKPlugin()
 
 @property (nonatomic, strong) ALScanViewPluginConfig *conf;
@@ -71,8 +73,9 @@ RCT_EXPORT_METHOD(setupAnylineSDKWithCacheConfig:(NSString *)licenseKey
     self.returnMethod = @"promise";
     self.licenseKey = licenseKey;
 
+    ALCacheConfig *cacheConfig = enableOfflineCache ? [ALCacheConfig offlineLicenseCachingEnabled] : nil;
     NSError *error;
-    BOOL success = [AnylineSDK setupWithLicenseKey:licenseKey error:&error];
+    BOOL success = [AnylineSDK setupWithLicenseKey:licenseKey cacheConfig:cacheConfig wrapperConfig:wrapperConfig error:&error];
 
     NSString *errorString = nil;
     NSDictionary *successObj = nil;
@@ -98,6 +101,10 @@ RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode 
 
 RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     resolve(AnylineSDK.versionNumber);
+}
+
+RCT_EXPORT_METHOD(setPluginVersion:(NSString *)pluginVersion) {
+    wrapperConfig = [ALWrapperConfig reactNative:pluginVersion];
 }
 
 RCT_EXPORT_METHOD(licenseKeyExpiryDate:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {

@@ -20,6 +20,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 
+import io.anyline2.WrapperConfig;
+import io.anyline2.WrapperInfo;
 import io.anyline2.core.ScanController;
 import io.anyline2.legacy.products.AnylineUpdater;
 import io.anyline2.legacy.trainer.AssetContext;
@@ -53,6 +55,8 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private String config;
     private AssetContextJsonParser assetContextJsonParser;
 
+    private static WrapperConfig wrapperConfig;
+
     AnylineSDKPlugin(ReactApplicationContext context) {
         super(context);
         this.reactContext = context;
@@ -67,6 +71,13 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     @ReactMethod
     public void getSDKVersion(final Promise promise) {
         promise.resolve(at.nineyards.anyline.BuildConfig.VERSION_NAME);
+    }
+
+    @ReactMethod
+    protected void setPluginVersion(final String pluginVersion) {
+        wrapperConfig = new WrapperConfig.Wrapper(
+            new WrapperInfo(WrapperInfo.WrapperType.ReactNative, pluginVersion)
+        );
     }
 
     @ReactMethod
@@ -125,7 +136,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             cacheConfig = CacheConfig.Preset.OfflineLicenseEventCachingEnabled.INSTANCE;
         }
         try {
-            AnylineSdk.init(license, reactContext, "", cacheConfig);
+            AnylineSdk.init(license, reactContext, "", cacheConfig, wrapperConfig);
             this.license = license;
             if (promise != null) {
                 promise.resolve(true);
@@ -150,7 +161,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             cacheConfig = CacheConfig.Preset.OfflineLicenseEventCachingEnabled.INSTANCE;
         }
         try {
-            AnylineSdk.init(license, reactContext, "", cacheConfig);
+            AnylineSdk.init(license, reactContext, "", cacheConfig, wrapperConfig);
         } catch (LicenseException e) {
             e.printStackTrace();
             returnError(e.getMessage());
@@ -259,7 +270,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             if (configObject.has("license")) {
                 //if there is a license on JSON config then this license will be
                 //used to init or re-init the SDK
-                AnylineSdk.init(configObject.getString("license"), reactContext);
+                AnylineSdk.init(configObject.getString("license"), reactContext, "", CacheConfig.Preset.Default.INSTANCE, wrapperConfig);
                 license = configObject.get("license").toString();
             } else {
                 throw new JSONException("No License in config. Please check your configuration.");

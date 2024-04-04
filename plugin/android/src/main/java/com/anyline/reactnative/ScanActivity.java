@@ -46,19 +46,31 @@ public class ScanActivity extends AppCompatActivity {
     private boolean defaultOrientationApplied;
     private int orientation;
 
+    @Deprecated
     private InstructionConfig instructionConfig = null;
+    @Deprecated
     private ImageTextConfig imageCutoutConfig = null;
+    @Deprecated
     private FeedbackConfig feedbackConfig = null;
 
+    @Deprecated
     private long cleanUIFeedbackIntervalMills = 2000L;
+    @Deprecated
     private Timer cleanUIFeedbackTimer = null;
 
+    @Deprecated
     private static final String FEEDBACK_SCANINFO_LIGHTINGCONDITION = "$lightingCondition";
+    @Deprecated
     private static final String FEEDBACK_SCANINFO_LIGHTINGCONDITION_TOODARK = "TOODARK";
+    @Deprecated
     private static final String FEEDBACK_SCANINFO_LIGHTINGCONDITION_TOOBRIGHT = "TOOBRIGHT";
+    @Deprecated
     private static final int FEEDBACK_RUNSKIPPED_WRONGFORMAT = 5006;
+    @Deprecated
     private static final int FEEDBACK_RUNSKIPPED_WRONGDATE = 5027;
+    @Deprecated
     private static final int FEEDBACK_RUNSKIPPED_TOOCLOSE = 5023;
+    @Deprecated
     private static final int FEEDBACK_RUNSKIPPED_TOOFAR = 5024;
 
     @Override
@@ -90,40 +102,7 @@ public class ScanActivity extends AppCompatActivity {
 
                 ViewPluginBase viewPluginBase = scanView.getScanViewPlugin();
 
-                viewPluginBase.scanInfoReceived = jsonObject -> {
-                    if (jsonObject.optString("name", "").equals(FEEDBACK_SCANINFO_LIGHTINGCONDITION)) {
-                        String lightingConditionValue = jsonObject.optString("value", "");
-                        if (feedbackConfig != null) {
-                            if (lightingConditionValue.equalsIgnoreCase(FEEDBACK_SCANINFO_LIGHTINGCONDITION_TOODARK)) {
-                                if (feedbackConfig.brightnessTooLow != null) {
-                                    updateUIFeedback(feedbackConfig.brightnessTooLow);
-                                }
-                            }
-                            else if (lightingConditionValue.equalsIgnoreCase(FEEDBACK_SCANINFO_LIGHTINGCONDITION_TOOBRIGHT)) {
-                                if (feedbackConfig.brightnessTooHigh != null) {
-                                    updateUIFeedback(feedbackConfig.brightnessTooHigh);
-                                }
-                            }
-                        }
-                    }
-                };
-
-                viewPluginBase.runSkippedReceived = jsonObject -> {
-                    if (feedbackConfig != null) {
-                        if (jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_WRONGFORMAT
-                                || jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_WRONGDATE) {
-                            if (feedbackConfig.wrongFormat != null) {
-                                updateUIFeedback(feedbackConfig.wrongFormat);
-                            }
-                        }
-                        if (jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_TOOCLOSE
-                                || jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_TOOFAR) {
-                            if (feedbackConfig.distance != null) {
-                                updateUIFeedback(feedbackConfig.distance);
-                            }
-                        }
-                    }
-                };
+                observeUIFeedbackEvents(viewPluginBase);
 
                 viewPluginBase.resultReceived = scanResult -> {
                     setResult(AnylineSDKPlugin.RESULT_OK);
@@ -218,6 +197,45 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
+    @Deprecated
+    private void observeUIFeedbackEvents(ViewPluginBase viewPluginBase) {
+        viewPluginBase.scanInfoReceived = jsonObject -> {
+            if (jsonObject.optString("name", "").equals(FEEDBACK_SCANINFO_LIGHTINGCONDITION)) {
+                String lightingConditionValue = jsonObject.optString("value", "");
+                if (feedbackConfig != null) {
+                    if (lightingConditionValue.equalsIgnoreCase(FEEDBACK_SCANINFO_LIGHTINGCONDITION_TOODARK)) {
+                        if (feedbackConfig.brightnessTooLow != null) {
+                            updateUIFeedback(feedbackConfig.brightnessTooLow);
+                        }
+                    }
+                    else if (lightingConditionValue.equalsIgnoreCase(FEEDBACK_SCANINFO_LIGHTINGCONDITION_TOOBRIGHT)) {
+                        if (feedbackConfig.brightnessTooHigh != null) {
+                            updateUIFeedback(feedbackConfig.brightnessTooHigh);
+                        }
+                    }
+                }
+            }
+        };
+
+        viewPluginBase.runSkippedReceived = jsonObject -> {
+            if (feedbackConfig != null) {
+                if (jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_WRONGFORMAT
+                        || jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_WRONGDATE) {
+                    if (feedbackConfig.wrongFormat != null) {
+                        updateUIFeedback(feedbackConfig.wrongFormat);
+                    }
+                }
+                if (jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_TOOCLOSE
+                        || jsonObject.optInt("code", 0) == FEEDBACK_RUNSKIPPED_TOOFAR) {
+                    if (feedbackConfig.distance != null) {
+                        updateUIFeedback(feedbackConfig.distance);
+                    }
+                }
+            }
+        };
+    }
+
+    @Deprecated
     private void setupCustomUIFeedback(JSONObject configJSON) {
         JSONObject optionsJsonObject = configJSON.optJSONObject("options");
         if (optionsJsonObject != null) {
@@ -295,6 +313,7 @@ public class ScanActivity extends AppCompatActivity {
         };
     }
 
+    @Deprecated
     private void updateUIFeedback(ImageTextConfig imageTextFeedback) {
         if (imageTextFeedback.text != null) {
             if (binding.textviewBrightDistanceFeedback.getText().equals(imageTextFeedback.text)) {

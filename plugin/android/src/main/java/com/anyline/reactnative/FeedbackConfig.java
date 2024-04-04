@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import io.anyline2.util.SoundUtil;
 
+@Deprecated
 public class FeedbackConfig {
     private SoundUtil soundUtil;
     public ImageTextConfig wrongFormat = null;

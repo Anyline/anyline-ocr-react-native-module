@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Deprecated
 public class ImageTextConfig {
     public String text = null;
     public boolean hasImage = false;
