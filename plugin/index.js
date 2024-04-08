@@ -1,4 +1,6 @@
 import {NativeModules} from 'react-native';
+import AnylineOCR from 'anyline-ocr-react-native-module';
+import {version as pluginVersion} from './package.json';
 
 const Buffer = require('buffer/').Buffer;
 
@@ -15,3 +17,9 @@ export const getLicenseExpiryDate = (License) => {
   const licenseJson = JSON.parse(licenseJsonString);
   return licenseJson.valid;
 };
+
+AnylineOCR.setPluginVersion(pluginVersion);
+
+AnylineOCR.getPluginVersion = () => {
+  return pluginVersion;
+}

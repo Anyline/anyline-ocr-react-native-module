@@ -3,6 +3,7 @@
 #import "ALPluginScanViewController.h"
 #import "ALPluginHelper.h"
 #import "ALRoundedView.h"
+#import "AnylineSDKPlugin.h"
 
 @interface ALPluginScanViewController () <ALScanPluginDelegate, ALViewPluginCompositeDelegate, ALScanViewDelegate>
 
@@ -70,13 +71,11 @@
     // Otherwise, make a license key check here.
     BOOL isInitialized = [ALLicenseUtil sharedInstance].isLicenseValid;
     if (!isInitialized) {
-        [AnylineSDK setupWithLicenseKey:self.licenseKey error:&error];
+        [AnylineSDK setupWithLicenseKey:self.licenseKey cacheConfig:nil wrapperConfig:wrapperConfig error:&error];
         if ([self showErrorAlertIfNeeded:error]) {
             return;
         }
     }
-
-    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 
     self.scanView = [ALScanViewFactory withJSONDictionary:self.config
                                                  delegate:self

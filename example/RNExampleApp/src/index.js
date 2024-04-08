@@ -65,6 +65,7 @@ class Anyline extends Component {
     currentScanMode: '',
     buttonsDisabled: false,
     SDKVersion: '',
+    pluginVersion: '',
     hasMultipleResults: false,
     licenseMessage: '',
     titles: [],
@@ -89,8 +90,9 @@ class Anyline extends Component {
     }
 
     const SDKVersion = await AnylineOCR.getSDKVersion();
+    const pluginVersion = AnylineOCR.getPluginVersion();
 
-    this.setState({ SDKVersion: SDKVersion, licenseMessage: licenseMessage, buttonsDisabled: !licenseInitSuccess });
+    this.setState({ SDKVersion: SDKVersion, pluginVersion: pluginVersion, licenseMessage: licenseMessage, buttonsDisabled: !licenseInitSuccess });
   };
 
   componentDidUpdate() {
@@ -355,6 +357,7 @@ class Anyline extends Component {
       currentScanMode,
       buttonsDisabled,
       SDKVersion,
+      pluginVersion,
       licenseMessage,
       hasMultipleResults,
       titles,
@@ -416,6 +419,7 @@ class Anyline extends Component {
 
         <View style={styles.footer}>
           <Text style={styles.versions}>SDK: {SDKVersion}</Text>
+          <Text style={styles.versions}>Plugin: {pluginVersion}</Text>
           {
             (licenseMessage && licenseMessage.length > 0) ?
               <Text key='licenseMessage' style={styles.versions}>

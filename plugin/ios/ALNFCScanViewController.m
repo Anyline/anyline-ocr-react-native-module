@@ -1,6 +1,7 @@
 #import <Anyline/Anyline.h>
 #import "ALNFCScanViewController.h"
 #import "ALPluginHelper.h"
+#import "AnylineSDKPlugin.h"
 
 
 API_AVAILABLE(ios(13.0))
@@ -78,7 +79,7 @@ API_AVAILABLE(ios(13.0))
     NSError *error;
     BOOL isInitialized = [ALLicenseUtil sharedInstance].isLicenseValid;
     if (!isInitialized) {
-        [AnylineSDK setupWithLicenseKey:self.licenseKey error:&error];
+        [AnylineSDK setupWithLicenseKey:self.licenseKey cacheConfig:nil wrapperConfig:wrapperConfig error:&error];
         if ([self showErrorAlertIfNeeded:error]) {
             return;
         }

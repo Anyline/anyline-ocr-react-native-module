@@ -2,6 +2,7 @@ package com.anyline.reactnative;
 
 import org.json.JSONObject;
 
+@Deprecated
 public class InstructionConfig {
     public String text = null;
     public String textColor = null;
