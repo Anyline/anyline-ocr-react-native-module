@@ -43,6 +43,19 @@ export default {
             "beepOnResult": true,
             "vibrateOnResult": false,
             "strokeWidth": 2
+        },
+        "uiFeedbackConfig": {
+          "presets": [
+            {
+              "presetName": "simple_instruction_label",
+              "presetAttributes": [
+                {
+                  "attributeName": "instruction_text",
+                  "attributeValue": "Look for a standardized number sequence, like 205/55 R16"
+                }
+              ]
+            }
+          ]
         }
     }
 }

@@ -56,6 +56,19 @@ export default {
             "beepOnResult": false,
             "vibrateOnResult": false,
             "blinkAnimationOnResult": true
+          },
+          "uiFeedbackConfig": {
+            "presets": [
+              {
+                "presetName": "simple_instruction_label",
+                "presetAttributes": [
+                  {
+                    "attributeName": "instruction_text",
+                    "attributeValue": "Position the VIN within the cutout. The barcode can be anywhere inside the camera frame."
+                  }
+                ]
+              }
+            ]
           }
         }
       }
