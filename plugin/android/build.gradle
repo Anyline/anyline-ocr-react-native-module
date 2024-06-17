@@ -61,7 +61,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'io.anyline:anylinesdk:51.6.0'
+    implementation 'io.anyline:anylinesdk:52.0.1'
     implementation "com.facebook.react:react-native:+"
     implementation("com.google.android.material:material:1.9.0")
     implementation 'androidx.multidex:multidex:2.0.1'
