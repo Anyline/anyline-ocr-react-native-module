@@ -109,7 +109,7 @@ API_AVAILABLE(ios(13.0))
         return;
     }
     
-    self.mrzScanViewPlugin = (ALScanViewPlugin *)self.scanView.scanViewPlugin;
+    self.mrzScanViewPlugin = (ALScanViewPlugin *)self.scanView.viewPlugin;
     
     self.scanView.supportedNativeBarcodeFormats = self.uiConfig.nativeBarcodeFormats;
     self.scanView.delegate = self;
@@ -155,7 +155,7 @@ API_AVAILABLE(ios(13.0))
 
 - (void)configureMRZPlugin {
     
-    ALScanViewPlugin *scanViewPlugin = (ALScanViewPlugin *)self.scanView.scanViewPlugin;
+    ALScanViewPlugin *scanViewPlugin = (ALScanViewPlugin *)self.scanView.viewPlugin;
     if (![scanViewPlugin isKindOfClass:ALScanViewPlugin.class]) {
         return;
     }
@@ -183,14 +183,12 @@ API_AVAILABLE(ios(13.0))
     mrzConfig.mrzMinFieldConfidences.dateOfExpiry = @(90);
     
     NSError *error;
-    ALScanViewPluginConfig *scanViewPluginConfig = [ALScanViewPluginConfig withPluginConfig:pluginConfig
-                                                                               cutoutConfig:cutoutConfig
-                                                                         scanFeedbackConfig:scanFeedbackConfig];
-    ALScanViewPlugin *updatedScanViewPlugin = [[ALScanViewPlugin alloc] initWithConfig:scanViewPluginConfig error:&error];
-    [self.scanView setScanViewPlugin:updatedScanViewPlugin error:&error];
+
+    ALViewPluginConfig *scanViewPluginConfig = scanViewPlugin.scanViewPluginConfig;
+    [self.scanView setViewPluginConfig:scanViewPluginConfig error:&error];
     
     // the delegate binding was lost when you recreated the ScanPlugin it so you have to bring it back here
-    scanViewPlugin = (ALScanViewPlugin *)self.scanView.scanViewPlugin;
+    scanViewPlugin = (ALScanViewPlugin *)self.scanView.viewPlugin;
     scanViewPlugin.scanPlugin.delegate = self;
 }
 
@@ -243,7 +241,7 @@ API_AVAILABLE(ios(13.0))
         resultDictionary[@"nativeBarcodesDetected"] = self.detectedBarcodes;
     }
     
-    NSObject<ALScanViewPluginBase> *scanViewPluginBase = self.scanView.scanViewPlugin;
+    NSObject<ALViewPluginBase> *scanViewPluginBase = self.scanView.viewPlugin;
     if ([scanViewPluginBase isKindOfClass:ALScanViewPlugin.class]) {
         ALScanViewPlugin *scanViewPlugin = (ALScanViewPlugin *)scanViewPluginBase;
         BOOL cancelOnResult = scanViewPlugin.scanPlugin.pluginConfig.cancelOnResult;

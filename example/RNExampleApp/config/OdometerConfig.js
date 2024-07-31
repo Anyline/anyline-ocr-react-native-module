@@ -38,10 +38,10 @@ export default {
       }
     },
     "scanFeedbackConfig" : {
-      "style" : "CONTOUR_RECT",
+      "style" : "contour_rect",
       "strokeColor" : "0099FF",
       "fillColor" : "220099FF",
-      "blinkOnResult": true,
+      "blinkAnimationOnResult": true,
       "beepOnResult": true,
       "vibrateOnResult": true
     }

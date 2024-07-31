@@ -35,6 +35,8 @@
 /// Applicable to non-composites (otherwise null)
 @property (nonatomic, readonly, nullable) ALPluginConfig *pluginConfig;
 
+@property (nonatomic, strong) NSError *scanViewError;
+
 @end
 
 
@@ -82,8 +84,9 @@
                                                     error:&error];
 
     if ([self showErrorAlertIfNeeded:error]) {
-        return;
-    }
+          self.scanViewError = error;
+          return;
+      }
 
     [self.view addSubview:self.scanView];
 
@@ -118,8 +121,15 @@
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 
     NSError *error;
-    [self.scanView.scanViewPlugin startWithError:&error];
-    [self showErrorAlertIfNeeded:error];
+    if(!self.scanViewError){
+        [self.scanView.viewPlugin startWithError:&error];
+          [self showErrorAlertIfNeeded:error];
+      }
+      else{
+          [self dismissViewControllerAnimated:YES completion:^{
+              self.callback(nil, self.scanViewError);
+          }];
+      }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -200,7 +210,7 @@
     }
 
     // dismiss the view controller, if cancelOnResult for the config is true
-    NSObject<ALScanViewPluginBase> *scanViewPluginBase = self.scanView.scanViewPlugin;
+    NSObject<ALViewPluginBase> *scanViewPluginBase = self.scanView.viewPlugin;
     if ([scanViewPluginBase isKindOfClass:ALScanViewPlugin.class]) {
         ALScanViewPlugin *scanViewPlugin = (ALScanViewPlugin *)scanViewPluginBase;
         BOOL cancelOnResult = scanViewPlugin.scanPlugin.pluginConfig.cancelOnResult;
@@ -289,7 +299,7 @@
 
 - (ALPluginConfig * _Nullable)pluginConfig {
     // applic. only to non-composites
-    NSObject<ALScanViewPluginBase> *scanVwPluginBase = self.scanView.scanViewPlugin;
+    NSObject<ALViewPluginBase> *scanVwPluginBase = self.scanView.viewPlugin;
     if ([scanVwPluginBase isKindOfClass:ALScanViewPlugin.class]) {
         return ((ALScanViewPlugin *)scanVwPluginBase).scanPlugin.pluginConfig;
     }
@@ -299,11 +309,11 @@
 // MARK: - Selector Actions
 
 - (void)doneButtonPressed:(id)sender {
-    [self.scanView.scanViewPlugin stop];
+    [self.scanView.viewPlugin stop];
 
     __weak __block typeof(self) weakSelf = self;
     [self dismissViewControllerAnimated:YES completion:^{
-        weakSelf.callback(nil, @"Canceled");
+        weakSelf.callback(nil, [NSError errorWithDomain:@"ALReactDomain" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"Canceled"}]);
     }];
 }
 
@@ -356,25 +366,23 @@
 
 // assume that pluginConfig carries the updated scanMode or whatever value that you wish to refresh.
 - (BOOL)updatePluginConfig:(ALPluginConfig *)pluginConfig error:(NSError * _Nullable * _Nullable)error {
-    ALScanViewPluginConfig *origSVPConfig = ((ALScanViewPlugin *)self.scanView.scanViewPlugin).scanViewPluginConfig;
-    ALScanViewPluginConfig *scanViewPluginConfig = [ALScanViewPluginConfig withPluginConfig:pluginConfig
-                                                                               cutoutConfig:origSVPConfig.cutoutConfig
-                                                                         scanFeedbackConfig:origSVPConfig.scanFeedbackConfig];
-    ALScanViewPlugin *newScanViewPlugin = [[ALScanViewPlugin alloc] initWithConfig:scanViewPluginConfig error:error];
-    if (!newScanViewPlugin) {
-        return NO;
-    }
+    ALViewPluginConfig *origSVPConfig = ((ALScanViewPlugin *)self.scanView.viewPlugin).scanViewPluginConfig;
 
-    newScanViewPlugin.scanPlugin.delegate = self;
-
-    BOOL success = [self.scanView setScanViewPlugin:newScanViewPlugin error:error];
+    origSVPConfig.pluginConfig = pluginConfig;
+    BOOL success = [self.scanView setViewPluginConfig:origSVPConfig error:error];
     if (!success) {
+        if([self showErrorAlertIfNeeded:*error]){
+                   [self dismissOnError:*error];
+               }
         return NO;
     }
 
-    success = [[self.scanView scanViewPlugin] startWithError:error];
+    success = [self.scanView.viewPlugin startWithError:error];
     if (!success) {
         // check error
+        if([self showErrorAlertIfNeeded:*error]){
+                    [self dismissOnError:*error];
+                }
         return NO;
     }
     return YES;
@@ -429,7 +437,18 @@
 // MARK: - Miscellaneous
 
 - (BOOL)showErrorAlertIfNeeded:(NSError *)error {
-    return [ALPluginHelper showErrorAlertIfNeeded:error pluginCallback:self.callback];
+    if (!error) {
+        return NO;
+    }
+    
+    return YES;
 }
+
+-(void)dismissOnError:(NSError *)error{
+    [self dismissViewControllerAnimated:YES completion:^{
+        self.callback(nil, error);
+    }];
+}
+
 
 @end
