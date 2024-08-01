@@ -10,7 +10,7 @@ ALWrapperConfig *wrapperConfig = nil;
 
 @interface AnylineSDKPlugin()
 
-@property (nonatomic, strong) ALScanViewPluginConfig *conf;
+@property (nonatomic, strong) ALViewPluginConfig *conf;
 
 @property (nonatomic, copy) NSString *callbackId;
 @property (nonatomic, copy) NSString *appKey;
@@ -83,7 +83,7 @@ RCT_EXPORT_METHOD(setupAnylineSDKWithCacheConfig:(NSString *)licenseKey
     if (!success) {
         NSLog(@"error: %@", error.localizedDescription);
         errorString = @"Unable to initialize the Anyline SDK. Please check your license key.";
-        [self returnError:errorString];
+        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{@"Error reason": errorString}]];
         return;
     }
 
@@ -127,7 +127,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 
     if (!exportPath) {
         NSString *errorString = @"Event cache is empty.";
-        [self returnError:errorString];
+        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{@"Error reason": errorString}]];
     } else {
         [self returnSuccess:exportPath];
     }
@@ -158,7 +158,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
     self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
 
     self.jsonUIConf = [[ALJSONUIConfiguration alloc] initWithDictionary:optionsDictionary];
-    self.conf = [[ALScanViewPluginConfig alloc] initWithJSONDictionary:optionsDictionary error:&error];
+    self.conf = [[ALViewPluginConfig alloc] initWithJSONDictionary:optionsDictionary error:&error];
     self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -172,8 +172,8 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
                         ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:self.appKey
                                                                                                                configuration:dictionary
                                                                                                                     uiConfig:self.jsonUIConf
-                                                                                                                    finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
-                            [self returnCallback:callbackObj andErrorString:errorString];
+                                                                                                                    finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
+                            [self returnCallback:callbackObj andError:error];
                         }];
 
                         if (nfcScanViewController != nil){
@@ -181,17 +181,18 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
                             [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:nfcScanViewController animated:YES completion:nil];
                         }
                     } else {
-                        [self returnError:@"NFC passport reading is not supported on this device or app."];
+                        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{@"Error reason": @"NFC passport reading is not supported on this device or app."}]];
                     }
                 } else {
-                    [self returnError:@"NFC passport reading is only supported on iOS 13 and later."];
+                    [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{@"Error reason": @"NFC passport reading is only supported on iOS 13 and later."}]];
+
                 }
             } else {
                 ALPluginScanViewController *pluginScanViewController =
                 [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
                                                          configuration:dictionary
-                                                       uiConfiguration:self.jsonUIConf finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
-                    [self returnCallback:callbackObj andErrorString:errorString];
+                                                       uiConfiguration:self.jsonUIConf finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
+                    [self returnCallback:callbackObj andError:error];
                 }];
                 
                 if (pluginScanViewController != nil){
@@ -203,8 +204,8 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
             ALPluginScanViewController *pluginScanViewController =
             [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
                                                      configuration:dictionary
-                                                   uiConfiguration:self.jsonUIConf finished:^(id  _Nullable callbackObj, NSString * _Nullable errorString) {
-                [self returnCallback:callbackObj andErrorString:errorString];
+                                                   uiConfiguration:self.jsonUIConf finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
+                [self returnCallback:callbackObj andError:error];
             }];
             
             if (pluginScanViewController != nil){
@@ -235,11 +236,11 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 }
 
 - (void)pluginScanViewController:(nonnull ALPluginScanViewController *)pluginScanViewController didStopScanning:(nonnull id)sender {
-    [self returnError:(@"Canceled")];
+    [self returnError: [NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{@"Error reason": @"Canceled"}]];
 }
 
 - (void)pluginScanViewController:(ALPluginScanViewController *)pluginScanViewController didStopScanning:(id)sender error:(NSError *)error {
-    [self returnError:error.debugDescription];
+    [self returnError:error];
 }
 
 - (BOOL)scanModeIndex:(NSString *)scanMode{
@@ -251,20 +252,20 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 
 }
 
-- (void)returnCallback:(id _Nullable)callbackObj andErrorString:(NSString * _Nullable)errorString {
+- (void)returnCallback:(id _Nullable)callbackObj andError:(NSError * _Nullable)error {
     NSString *resultStr;
-    NSError *error;
-    if (errorString) {
-        [self returnError:errorString];
+    NSError *errorObj;
+    if (error) {
+            [self returnError:error];
     } else if ([NSJSONSerialization isValidJSONObject:callbackObj]) {
-        resultStr = [(NSDictionary *)callbackObj toJSONStringPretty:YES error:&error];
-        if (error) {
-            [self returnError:error.debugDescription];
+        resultStr = [(NSDictionary *)callbackObj toJSONStringPretty:YES error:&errorObj];
+        if (errorObj) {
+            [self returnError:errorObj];
         }
         [self returnSuccess:resultStr];
     } else {
         resultStr = @"callback object should be of JSON type";
-        [self returnError:resultStr];
+        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: resultStr}]];
     }
 }
 
@@ -276,11 +277,11 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
     }
 }
 
-- (void)returnError:(NSString *)error {
+- (void)returnError:(NSError *)error {
     if ([self.returnMethod isEqualToString:@"callback"]) {
         self.onErrorCallback(@[error]);
     } else if ([self.returnMethod isEqualToString:@"promise"]) {
-        _rejectBlock(@"ANYLINE_ERROR", error, nil);
+        _rejectBlock(@"ANYLINE_ERROR", error.localizedDescription, error);
     }
 }
 

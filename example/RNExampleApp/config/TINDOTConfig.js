@@ -1,5 +1,4 @@
 export default {
-    license: '', //INSERT YOUR LICENSE KEY HERE
     "options": {
         "doneButtonConfig": {
             "offset.y": -88
