@@ -83,7 +83,7 @@ RCT_EXPORT_METHOD(setupAnylineSDKWithCacheConfig:(NSString *)licenseKey
     if (!success) {
         NSLog(@"error: %@", error.localizedDescription);
         errorString = @"Unable to initialize the Anyline SDK. Please check your license key.";
-        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{@"Error reason": errorString}]];
+        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: errorString}]];
         return;
     }
 
@@ -127,7 +127,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 
     if (!exportPath) {
         NSString *errorString = @"Event cache is empty.";
-        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{@"Error reason": errorString}]];
+        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: errorString}]];
     } else {
         [self returnSuccess:exportPath];
     }
@@ -181,10 +181,10 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
                             [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:nfcScanViewController animated:YES completion:nil];
                         }
                     } else {
-                        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{@"Error reason": @"NFC passport reading is not supported on this device or app."}]];
+                        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: @"NFC passport reading is not supported on this device or app."}]];
                     }
                 } else {
-                    [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{@"Error reason": @"NFC passport reading is only supported on iOS 13 and later."}]];
+                    [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: @"NFC passport reading is only supported on iOS 13 and later."}]];
 
                 }
             } else {
@@ -236,7 +236,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 }
 
 - (void)pluginScanViewController:(nonnull ALPluginScanViewController *)pluginScanViewController didStopScanning:(nonnull id)sender {
-    [self returnError: [NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{@"Error reason": @"Canceled"}]];
+    [self returnError: [NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: @"Canceled"}]];
 }
 
 - (void)pluginScanViewController:(ALPluginScanViewController *)pluginScanViewController didStopScanning:(id)sender error:(NSError *)error {
