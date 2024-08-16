@@ -10,7 +10,7 @@ NSErrorDomain const ALDefaultDomain = @"ALDefaultErrorDomain";
 
 #pragma mark - Launch Anyline
 
-+ (void)startScan:(NSDictionary *)config finished:(ALPluginCallback)callback {
++ (void)startScan:(NSDictionary *)config initializationParamsStr:(NSString *)initializationParamsStr finished:(ALPluginCallback)callback {
     
     NSDictionary *pluginConf = config;
     
@@ -35,7 +35,8 @@ NSErrorDomain const ALDefaultDomain = @"ALDefaultErrorDomain";
             ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:licenseKey
                                                                                                    configuration:pluginConf
                                                                                                         uiConfig:jsonUIConf
-                                                                                                        finished:callback];            
+                                                                                         initializationParamsStr:initializationParamsStr
+                                                                                                        finished:callback];
             if (nfcScanViewController != nil) {
                 [nfcScanViewController setModalPresentationStyle:UIModalPresentationFullScreen];
                 [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:nfcScanViewController
@@ -50,6 +51,7 @@ NSErrorDomain const ALDefaultDomain = @"ALDefaultErrorDomain";
         ALPluginScanViewController *pluginScanViewController = [[ALPluginScanViewController alloc] initWithLicensekey:licenseKey
                                                                                                         configuration:pluginConf
                                                                                                       uiConfiguration:jsonUIConf
+                                                                                              initializationParamsStr:initializationParamsStr
                                                                                                              finished:callback];
         
         if ([pluginConf valueForKey:@"quality"]){

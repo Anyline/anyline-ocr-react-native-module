@@ -10,7 +10,7 @@ typedef void (^ALPluginCallback)(NSDictionary * _Nullable callbackObj, NSError *
 
 @interface ALPluginHelper : NSObject
 
-+ (void)startScan:(NSDictionary *)config finished:(ALPluginCallback)callback;
++ (void)startScan:(NSDictionary *)config initializationParamsStr:(NSString *)initializationParamsStr finished:(ALPluginCallback)callback;
 
 + (NSString *)saveImageToFileSystem:(UIImage *)image;
 
