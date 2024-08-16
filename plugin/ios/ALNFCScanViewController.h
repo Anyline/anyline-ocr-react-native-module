@@ -8,6 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithLicensekey:(NSString *)licensekey
                      configuration:(NSDictionary *)anylineConfig
                           uiConfig:(ALJSONUIConfiguration *)uiConfig
+           initializationParamsStr:(NSString *)initializationParamsStr
                           finished:(ALPluginCallback)callback;
 @end
 

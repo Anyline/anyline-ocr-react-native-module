@@ -37,6 +37,8 @@
 
 @property (nonatomic, strong) NSError *scanViewError;
 
+@property (nonatomic, nullable) NSString *initializationParamsStr;
+
 @end
 
 
@@ -49,6 +51,7 @@
 - (instancetype)initWithLicensekey:(NSString *)licenseKey
                      configuration:(NSDictionary *)config
                    uiConfiguration:(ALJSONUIConfiguration *)JSONUIConfig
+           initializationParamsStr:(NSString *)initializationParamsStr
                           finished:(ALPluginCallback)callback {
 
     if (self = [super init]) {
@@ -56,7 +59,8 @@
         _callback = callback;
         _config = config;
         _uiConfig = JSONUIConfig;
-        
+        _initializationParamsStr = initializationParamsStr;
+
         self.quality = 100;
     }
     return self;
@@ -79,7 +83,18 @@
         }
     }
 
+    ALScanViewInitializationParameters *initializationParams = nil;
+    if(![self isStringEmpty:_initializationParamsStr]){
+        initializationParams =  [ALScanViewInitializationParameters withJSONString: _initializationParamsStr error:&error];
+    }
+    
+    if ([self showErrorAlertIfNeeded:error]) {
+        self.scanViewError = error;
+        return;
+    }
+        
     self.scanView = [ALScanViewFactory withJSONDictionary:self.config
+                                     initializationParams:initializationParams
                                                  delegate:self
                                                     error:&error];
 
@@ -432,6 +447,13 @@
     }
 
     return YES;
+}
+
+-(BOOL)isStringEmpty:(NSString *)str {
+    if(str == nil || [str isKindOfClass:[NSNull class]] || str.length==0) {
+        return YES;
+    }
+    return NO;
 }
 
 // MARK: - Miscellaneous

@@ -35,6 +35,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     public static final String REACT_CLASS = "AnylineSDKPlugin";
     public static final String EXTRA_LICENSE_KEY = "EXTRA_LICENSE_KEY";
     public static final String EXTRA_CONFIG_JSON = "EXTRA_CONFIG_JSON";
+    public static final String EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS = "EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS";
     public static final String EXTRA_SCAN_MODE = "EXTRA_SCAN_MODE";
     public static final String EXTRA_ERROR_MESSAGE = "EXTRA_ERROR_MESSAGE";
     public static final String EXTRA_OCR_CONFIG_JSON = "EXTRA_OCR_CONFIG_JSON";
@@ -53,6 +54,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private Promise promise;
     private String returnMethod;
     private String config;
+    private String scanViewInitializationParameters;
     private AssetContextJsonParser assetContextJsonParser;
 
     private static WrapperConfig wrapperConfig;
@@ -175,10 +177,16 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     @ReactMethod
     public void setup(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
+        setupWithInitializationParameters(null, config, scanMode, onResultReact, onErrorReact);
+    }
+
+    @ReactMethod
+    public void setupWithInitializationParameters(String initializationParameters, String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
         onResultCallback = onResultReact;
         onErrorCallback = onErrorReact;
         this.returnMethod = "callback";
         this.config = config;
+        this.scanViewInitializationParameters = initializationParameters;
 
         routeScanMode(scanMode);
     }
@@ -226,9 +234,14 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     @ReactMethod
     public void setupPromise(String config, String scanMode, final Promise promise) {
+        setupPromiseWithInitializationParameters(null, config, scanMode, promise);
+    }
+    @ReactMethod
+    public void setupPromiseWithInitializationParameters(String initializationParameters, String config, String scanMode, final Promise promise) {
         this.promise = promise;
         this.returnMethod = "promise";
         this.config = config;
+        this.scanViewInitializationParameters = initializationParameters;
 
         routeScanMode(scanMode);
     }
@@ -281,13 +294,14 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
         if (optionsJSONObject != null) {
             intent.putExtra(
-                    EXTRA_ENABLE_BARCODE_SCANNING,
-                    optionsJSONObject.optBoolean("nativeBarcodeEnabled", false)
+                EXTRA_ENABLE_BARCODE_SCANNING,
+                optionsJSONObject.optBoolean("nativeBarcodeEnabled", false)
             );
         }
 
         intent.putExtra(EXTRA_LICENSE_KEY, license);
         intent.putExtra(EXTRA_CONFIG_JSON, configObject.toString());
+        intent.putExtra(EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS, scanViewInitializationParameters);
 
         ResultReporter.setListener(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

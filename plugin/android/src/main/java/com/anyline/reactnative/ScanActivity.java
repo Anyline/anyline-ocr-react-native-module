@@ -1,8 +1,10 @@
 package com.anyline.reactnative;
 
 import static com.anyline.reactnative.AnylineSDKPlugin.EXTRA_CONFIG_JSON;
+import static com.anyline.reactnative.AnylineSDKPlugin.EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS;
 import static com.anyline.reactnative.AnylineSDKPlugin.EXTRA_ERROR_MESSAGE;
 import static com.anyline.reactnative.AnylineSDKPlugin.RESULT_ERROR;
+import static io.anyline2.sdk.extension.ScanViewInitializationParametersExtensionKt.getScanViewInitializationParametersFromJsonObject;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -29,6 +31,7 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.anyline.plugin.config.ScanViewInitializationParameters;
 import io.anyline2.ScanResult;
 import io.anyline2.view.ScanView;
 import io.anyline2.viewplugin.ScanViewPlugin;
@@ -98,7 +101,17 @@ public class ScanActivity extends AppCompatActivity {
                 setupChangeOrientationButton(configJSON);
                 setupCustomUIFeedback(configJSON);
 
-                scanView.init(configJSON);
+                String initializationParametersString = getIntent().getStringExtra(EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS);
+                if (initializationParametersString != null) {
+                    ScanViewInitializationParameters scanViewInitializationParameters =
+                            getScanViewInitializationParametersFromJsonObject(
+                                    this,
+                                    new JSONObject(initializationParametersString));
+                    scanView.init(configJSON, scanViewInitializationParameters);
+                }
+                else {
+                    scanView.init(configJSON);
+                }
 
                 ViewPluginBase viewPluginBase = scanView.getScanViewPlugin();
 

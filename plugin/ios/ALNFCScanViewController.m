@@ -47,6 +47,7 @@ API_AVAILABLE(ios(13.0))
 // JPEG compression quality 0-100
 @property (nonatomic, assign) NSUInteger quality;
 
+@property (nonatomic, nullable) NSString *initializationParamsStr;
 
 @end
 
@@ -56,13 +57,14 @@ API_AVAILABLE(ios(13.0))
 - (instancetype)initWithLicensekey:(NSString *)licensekey
                      configuration:(NSDictionary *)anylineConfig
                           uiConfig:(ALJSONUIConfiguration *)uiConfig
+           initializationParamsStr:(NSString *)initializationParamsStr
                           finished:(ALPluginCallback)callback {
     if (self = [super init]) {
         _licenseKey = licensekey;
         _callback = callback;
         _config = anylineConfig;
         _uiConfig = uiConfig;
-        
+        _initializationParamsStr = initializationParamsStr;
         self.quality = 90;
     }
     return self;
@@ -95,12 +97,20 @@ API_AVAILABLE(ios(13.0))
         return;
     }
     
+    ALScanViewInitializationParameters *initializationParams = nil;
+    if(_initializationParamsStr){
+        initializationParams=  [ALScanViewInitializationParameters withJSONString:_initializationParamsStr error:&error];
+    }
+    
     [self.view addSubview:self.scanView];
     
     self.resultDict = [[NSMutableDictionary alloc] init];
     self.detectedBarcodes = [NSMutableArray array];
     
-    self.scanView = [ALScanViewFactory withJSONDictionary:self.config delegate:self error:&error];
+    self.scanView = [ALScanViewFactory withJSONDictionary:self.config
+                                     initializationParams:initializationParams
+                                                 delegate:self
+                                                    error:&error];
     self.scanView.delegate = self;
     
     [self configureMRZPlugin];

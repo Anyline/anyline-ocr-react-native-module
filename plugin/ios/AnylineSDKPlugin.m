@@ -27,6 +27,8 @@ ALWrapperConfig *wrapperConfig = nil;
 
 @property (nonatomic, copy) NSString *returnMethod;
 
+@property (nonatomic, copy) NSString *initializationParamsStr;
+
 @end
 
 
@@ -46,15 +48,19 @@ RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSStr
     self.onErrorCallback = onError;
     self.returnMethod = @"callback";
     self.config = config;
-    [self initView:scanMode];
+    [self initView:scanMode initializationParamsStr:nil];
 }
 
 RCT_EXPORT_METHOD(setup:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
+    [self setupWithInitializationParameters:nil config:config scanMode:scanMode onResultCallback:onResult onErrorCallback:onError];
+}
+
+RCT_EXPORT_METHOD(setupWithInitializationParameters:(NSString * _Nullable)initializationParametersStr config:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
     self.onResultCallback = onResult;
     self.onErrorCallback = onError;
     self.returnMethod = @"callback";
     self.config = config;
-    [self initView:scanMode];
+    [self initView:scanMode initializationParamsStr:initializationParametersStr];
 }
 
 RCT_EXPORT_METHOD(setupAnylineSDK:(NSString *)licenseKey
@@ -92,11 +98,16 @@ RCT_EXPORT_METHOD(setupAnylineSDKWithCacheConfig:(NSString *)licenseKey
 }
 
 RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    [self setupPromiseWithInitializationParameters:nil config:config scanMode:scanMode resolver:resolve rejecter:reject];
+}
+
+RCT_EXPORT_METHOD(setupPromiseWithInitializationParameters:(NSString * _Nullable)initializationParametersStr config:(NSString *)configStr scanMode:(NSString *)scanMode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     _resolveBlock = resolve;
     _rejectBlock = reject;
     self.returnMethod = @"promise";
-    self.config = config;
-    [self initView:scanMode];
+    self.config = configStr;
+    self.initializationParamsStr = initializationParametersStr;
+    [self initView:scanMode initializationParamsStr:self.initializationParamsStr];
 }
 
 RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
@@ -134,7 +145,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 }
 
 
-- (void)initView:(NSString *)scanMode {
+- (void)initView:(NSString *)scanMode initializationParamsStr:(NSString * _Nullable)initializationParamsStr {
     NSData *data = [self.config dataUsingEncoding:NSUTF8StringEncoding];
     if (!data) {
         [NSException raise:@"Config could not be loaded from disk" format:@"Config could not be loaded from disk"];
@@ -172,6 +183,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
                         ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:self.appKey
                                                                                                                configuration:dictionary
                                                                                                                     uiConfig:self.jsonUIConf
+                                                                                                     initializationParamsStr:initializationParamsStr
                                                                                                                     finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
                             [self returnCallback:callbackObj andError:error];
                         }];
@@ -191,7 +203,9 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
                 ALPluginScanViewController *pluginScanViewController =
                 [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
                                                          configuration:dictionary
-                                                       uiConfiguration:self.jsonUIConf finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
+                                                       uiConfiguration:self.jsonUIConf
+                                               initializationParamsStr:initializationParamsStr
+                                                              finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
                     [self returnCallback:callbackObj andError:error];
                 }];
                 
@@ -204,7 +218,9 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
             ALPluginScanViewController *pluginScanViewController =
             [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
                                                      configuration:dictionary
-                                                   uiConfiguration:self.jsonUIConf finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
+                                                   uiConfiguration:self.jsonUIConf
+                                           initializationParamsStr:initializationParamsStr
+                                                          finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
                 [self returnCallback:callbackObj andError:error];
             }];
             
