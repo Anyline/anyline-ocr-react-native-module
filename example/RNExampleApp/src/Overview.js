@@ -2,9 +2,16 @@
  * Created by jonas on 14.03.17.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Platform, StyleSheet, Text, View, ScrollView } from 'react-native';
 
 export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, disabled }) {
+
+  Overview.propTypes = {
+    updateAnyline: PropTypes.func.isRequired,
+    checkCameraPermissionAndOpen: PropTypes.func.isRequired,
+    disabled: PropTypes.bool.isRequired
+  };
 
   const platformPermissionCheck = (Platform.OS === 'android') ? checkCameraPermissionAndOpen : updateAnyline;
 
@@ -82,16 +89,6 @@ export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, 
             platformPermissionCheck('MRZ')
           }} />
       </View>
-
-      {iOS &&
-        <View style={styles.buttons}>
-          <Button style={styles.buttons} title={'NFC+MRZ'} color="#0099FF"
-            disabled={disabled}
-            onPress={() => {
-              platformPermissionCheck('NFC+MRZ')
-            }} />
-        </View>
-      }
 
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'PDF 417 (AAMVA)'} color="#0099FF"

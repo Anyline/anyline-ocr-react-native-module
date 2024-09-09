@@ -377,7 +377,7 @@ public class ScanActivity extends AppCompatActivity {
             resultObject.put("fullImagePath", fullImagePath);
             resultObject.put("imagePath", cutoutImagePath);
         } catch (Exception e) {
-            e.printStackTrace();
+            finishWithError("Error save scan image: " + e.getMessage());
         }
         return resultObject;
     }

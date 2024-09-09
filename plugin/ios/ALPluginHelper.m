@@ -1,5 +1,5 @@
 #import "ALPluginHelper.h"
-#import "ALNFCScanViewController.h" // because NFC-specific code is there
+#import "ALPluginScanViewController.h"
 #import <Anyline/Anyline.h>
 #import <objc/runtime.h>
 
@@ -11,60 +11,33 @@ NSErrorDomain const ALDefaultDomain = @"ALDefaultErrorDomain";
 #pragma mark - Launch Anyline
 
 + (void)startScan:(NSDictionary *)config initializationParamsStr:(NSString *)initializationParamsStr finished:(ALPluginCallback)callback {
-    
+
     NSDictionary *pluginConf = config;
-    
+
     NSString *licenseKey = [config objectForKey:@"licenseKey"];
-    
+
     [[UIApplication sharedApplication] keyWindow].rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-    
+
     NSDictionary *optionsDict = [config objectForKey:@"options"];
     ALJSONUIConfiguration *jsonUIConf = [[ALJSONUIConfiguration alloc] initWithDictionary:optionsDict];
-    
-    BOOL isNFC = [optionsDict[@"enableNFCWithMRZ"] boolValue];
-    
-    if (isNFC) {
-        if (@available(iOS 13.0, *)) {
-            
-            if (![ALNFCDetector readingAvailable]) {
-                callback(nil, [NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: @"NFC passport reading is not supported on this device or app."}]);
-                
-                return;
-            }
-            
-            ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:licenseKey
-                                                                                                   configuration:pluginConf
-                                                                                                        uiConfig:jsonUIConf
-                                                                                         initializationParamsStr:initializationParamsStr
-                                                                                                        finished:callback];
-            if (nfcScanViewController != nil) {
-                [nfcScanViewController setModalPresentationStyle:UIModalPresentationFullScreen];
-                [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:nfcScanViewController
-                                                                                               animated:YES
-                                                                                             completion:nil];
-            }
-        } else {
-            callback(nil,[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: @"NFC passport reading is only supported on iOS 13 and later."}]);
-            return;
-        }
-    } else {
-        ALPluginScanViewController *pluginScanViewController = [[ALPluginScanViewController alloc] initWithLicensekey:licenseKey
-                                                                                                        configuration:pluginConf
-                                                                                                      uiConfiguration:jsonUIConf
-                                                                                              initializationParamsStr:initializationParamsStr
-                                                                                                             finished:callback];
-        
-        if ([pluginConf valueForKey:@"quality"]){
-            pluginScanViewController.quality = [[pluginConf valueForKey:@"quality"] integerValue];
-        }
-        
-        if (pluginScanViewController) {
-            [pluginScanViewController setModalPresentationStyle:UIModalPresentationFullScreen];
-            [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController
-                                                                                           animated:YES
-                                                                                         completion:nil];
-        }
+
+    ALPluginScanViewController *pluginScanViewController = [[ALPluginScanViewController alloc] initWithLicensekey:licenseKey
+                                                                                                    configuration:pluginConf
+                                                                                                  uiConfiguration:jsonUIConf
+                                                                                          initializationParamsStr:initializationParamsStr
+                                                                                                         finished:callback];
+
+    if ([pluginConf valueForKey:@"quality"]){
+        pluginScanViewController.quality = [[pluginConf valueForKey:@"quality"] integerValue];
     }
+
+    if (pluginScanViewController) {
+        [pluginScanViewController setModalPresentationStyle:UIModalPresentationFullScreen];
+        [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController
+                                                                                       animated:YES
+                                                                                     completion:nil];
+    }
+
 }
 
 #pragma mark - Filesystem handling
@@ -307,16 +280,6 @@ NSErrorDomain const ALDefaultDomain = @"ALDefaultErrorDomain";
 }
 
 // MARK: - Date Utils
-
-+ (NSDate *)formattedStringToDate:(NSString *)formattedStr {
-    // From this: "Sun Apr 12 00:00:00 UTC 1977" to this: "04/12/1977"
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT+0:00"]];
-    dateFormatter.dateFormat = @"E MMM d HH:mm:ss zzz yyyy";
-    NSDate *d = [dateFormatter dateFromString:formattedStr];
-    return d;
-}
-
 + (NSString *)stringForDate:(NSDate *)date {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT+0:00"]];
@@ -331,8 +294,11 @@ NSErrorDomain const ALDefaultDomain = @"ALDefaultErrorDomain";
 + (NSString * _Nullable)confPropKeyWithScanModeForPluginConfig:(ALPluginConfig *)pluginConfig {
     unsigned int count;
     Ivar *ivars = class_copyIvarList(ALPluginConfig.class, &count);
+    if (!ivars) {
+        return nil;
+    }
     for (int i = 0; i < count; i++) {
-        const char *ivarName = ivar_getName(((Ivar * _Nonnull)ivars)[i]);
+        const char *ivarName = ivar_getName(ivars[i]);
         NSString *key = [NSString stringWithCString:(const char * _Nonnull)ivarName encoding:NSUTF8StringEncoding];
         key = [key stringByTrimmingCharactersInSet:NSCharacterSet.punctuationCharacterSet];
 

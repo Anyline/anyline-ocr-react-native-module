@@ -208,6 +208,9 @@ NSString * const ENABLE_NATIVE_BARCODE = @"nativeBarcodeScanningFormats";
 }
 
 + (UIColor *)colorFromHexString:(NSString *)hexString {
+    if (!hexString) {
+        return nil;
+    }
     unsigned rgbValue = 0;
     NSScanner *scanner = [NSScanner scannerWithString:hexString];
     // [scanner setScanLocation:1]; // bypass '#' character
