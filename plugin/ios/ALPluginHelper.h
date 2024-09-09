@@ -39,8 +39,6 @@ typedef void (^ALPluginCallback)(NSDictionary * _Nullable callbackObj, NSError *
 
 + (NSError *)errorWithMessage:(NSString *)message;
 
-+ (NSDate *)formattedStringToDate:(NSString *)formattedStr;
-
 + (NSString *)stringForDate:(NSDate *)date;
 
 + (NSString * _Nullable)confPropKeyWithScanModeForPluginConfig:(ALPluginConfig *)pluginConfig;

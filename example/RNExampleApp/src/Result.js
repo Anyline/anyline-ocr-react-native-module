@@ -12,6 +12,7 @@ import {
   Platform,
   TextInput,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import AnylineOCR from 'anyline-ocr-react-native-module';
 
 const withoutImagePaths = value =>
@@ -25,6 +26,15 @@ export default function Result({
   hasBackButton,
   title = false,
 }) {
+
+  Result.propTypes = {
+    result: PropTypes.object.isRequired,
+    imagePath: PropTypes.string.isRequired,
+    fullImagePath: PropTypes.string.isRequired,
+    emptyResult: PropTypes.func.isRequired,
+    hasBackButton: PropTypes.bool.isRequired,
+    title: PropTypes.any.isRequired
+  };
 
   const [correctedResult, setCorrectedResult] = useState('');
   const [responseText, setResponseText] = useState('');

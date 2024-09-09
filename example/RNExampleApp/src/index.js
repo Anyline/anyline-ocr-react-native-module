@@ -19,7 +19,6 @@ import Overview from './Overview';
 import BarcodeConfig from '../config/BarcodeConfig';
 import BarcodePDF417Config from '../config/Barcode_PDF417Config';
 import MRZConfig from '../config/MRZConfig';
-import NFCMRZConfig from '../config/NFCMRZConfig';
 import UniversalIdConfig from '../config/UniversalIdConfig';
 import ArabicIdConfig from '../config/ArabicIdConfig';
 import CyrillicIdConfig from '../config/CyrillicIdConfig';
@@ -197,9 +196,6 @@ class Anyline extends Component {
         break;
       case 'CYRILLIC_ID':
         config = CyrillicIdConfig;
-        break;
-      case 'NFC+MRZ':
-        config = NFCMRZConfig;
         break;
       case 'VRC':
         config = VRCConfig;

@@ -4,8 +4,6 @@
 #import "ALPluginScanViewController.h"
 #import "ALPluginHelper.h"
 
-#import "ALNFCScanViewController.h"
-
 ALWrapperConfig *wrapperConfig = nil;
 
 @interface AnylineSDKPlugin()
@@ -176,43 +174,18 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
         [[UIApplication sharedApplication] keyWindow].rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         
         if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
-            BOOL isNFC = [optionsDictionary objectForKey:@"enableNFCWithMRZ"];
-            if (isNFC) {
-                if (@available(iOS 13.0, *)) {
-                    if ([ALNFCDetector readingAvailable]) {
-                        ALNFCScanViewController *nfcScanViewController = [[ALNFCScanViewController alloc] initWithLicensekey:self.appKey
-                                                                                                               configuration:dictionary
-                                                                                                                    uiConfig:self.jsonUIConf
-                                                                                                     initializationParamsStr:initializationParamsStr
-                                                                                                                    finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
-                            [self returnCallback:callbackObj andError:error];
-                        }];
-
-                        if (nfcScanViewController != nil){
-                            [nfcScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
-                            [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:nfcScanViewController animated:YES completion:nil];
-                        }
-                    } else {
-                        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: @"NFC passport reading is not supported on this device or app."}]];
-                    }
-                } else {
-                    [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: @"NFC passport reading is only supported on iOS 13 and later."}]];
-
-                }
-            } else {
-                ALPluginScanViewController *pluginScanViewController =
-                [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
-                                                         configuration:dictionary
-                                                       uiConfiguration:self.jsonUIConf
-                                               initializationParamsStr:initializationParamsStr
-                                                              finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
-                    [self returnCallback:callbackObj andError:error];
-                }];
-                
-                if (pluginScanViewController != nil){
-                    [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
-                    [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
-                }
+            ALPluginScanViewController *pluginScanViewController =
+            [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
+                                                     configuration:dictionary
+                                                   uiConfiguration:self.jsonUIConf
+                                           initializationParamsStr:initializationParamsStr
+                                                          finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
+                [self returnCallback:callbackObj andError:error];
+            }];
+            
+            if (pluginScanViewController != nil){
+                [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
+                [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
             }
         } else {
             ALPluginScanViewController *pluginScanViewController =
