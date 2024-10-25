@@ -17,6 +17,7 @@ import com.facebook.react.bridge.ReactMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -224,12 +225,42 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         }
     }
 
+    /**
+     * This function removes all previous scan result images from disk, either from external
+     * or external files dir, e.g.:
+     * /sdcard/Android/[applicationId]/files/results/image1729849635965
+     */
+    private void deleteAllPreviousScanResultImages() {
+        String imagePath = "";
+        if (reactContext.getExternalFilesDir(null) != null) {
+            imagePath = reactContext
+                    .getExternalFilesDir(null)
+                    .toString() + "/results/";
+
+        } else if (reactContext.getFilesDir() != null) {
+            imagePath = reactContext
+                    .getFilesDir()
+                    .toString() + "/results/";
+        }
+
+        File resultFolder = new File(imagePath);
+        File[] files = resultFolder.listFiles();
+        if (files != null) {
+            for (int fileIndex = 0; fileIndex < files.length; fileIndex++) {
+                if (files[fileIndex].getName().startsWith("image")) {
+                    files[fileIndex].delete();
+                }
+            }
+        }
+    }
+
     @ReactMethod
     public void setupPromise(String config, String scanMode, final Promise promise) {
         this.promise = promise;
         this.returnMethod = "promise";
         this.config = config;
 
+        deleteAllPreviousScanResultImages();
         routeScanMode(scanMode);
     }
 
