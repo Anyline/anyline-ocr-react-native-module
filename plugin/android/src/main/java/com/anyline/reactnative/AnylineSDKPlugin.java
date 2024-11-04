@@ -17,12 +17,14 @@ import com.facebook.react.bridge.ReactMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
 import io.anyline2.WrapperConfig;
 import io.anyline2.WrapperInfo;
 import io.anyline2.core.ScanController;
+import io.anyline2.di.context.ContextProvider;
 import io.anyline2.legacy.products.AnylineUpdater;
 import io.anyline2.legacy.trainer.AssetContext;
 import io.anyline2.AnylineSdk;
@@ -31,6 +33,11 @@ import io.anyline2.CorrectedResultReporting;
 import io.anyline2.core.LicenseException;
 
 class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
+
+    static {
+        System.loadLibrary("opencv_java3_al");
+        System.loadLibrary("anylineCore");
+    }
 
     public static final String REACT_CLASS = "AnylineSDKPlugin";
     public static final String EXTRA_LICENSE_KEY = "EXTRA_LICENSE_KEY";
@@ -63,6 +70,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         super(context);
         this.reactContext = context;
         this.assetContextJsonParser = new AssetContextJsonParser();
+        ContextProvider.setInstance(context);
     }
 
     @Override
@@ -232,6 +240,35 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         }
     }
 
+    /**
+     * This function removes all previous scan result images from disk, either from external
+     * or internal files dir, e.g.:
+     * /sdcard/Android/[applicationId]/files/results/image1729849635965
+     */
+    private void deleteAllPreviousScanResultImages() {
+        String imagePath = "";
+        if (reactContext.getExternalFilesDir(null) != null) {
+            imagePath = reactContext
+                    .getExternalFilesDir(null)
+                    .toString() + "/results/";
+
+        } else if (reactContext.getFilesDir() != null) {
+            imagePath = reactContext
+                    .getFilesDir()
+                    .toString() + "/results/";
+        }
+
+        File resultFolder = new File(imagePath);
+        File[] files = resultFolder.listFiles();
+        if (files != null) {
+            for (int fileIndex = 0; fileIndex < files.length; fileIndex++) {
+                if (files[fileIndex].getName().startsWith("image")) {
+                    files[fileIndex].delete();
+                }
+            }
+        }
+    }
+
     @ReactMethod
     public void setupPromise(String config, String scanMode, final Promise promise) {
         setupPromiseWithInitializationParameters(null, config, scanMode, promise);
@@ -243,6 +280,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         this.config = config;
         this.scanViewInitializationParameters = initializationParameters;
 
+        deleteAllPreviousScanResultImages();
         routeScanMode(scanMode);
     }
 
