@@ -40,7 +40,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     }
 
     public static final String REACT_CLASS = "AnylineSDKPlugin";
-    public static final String EXTRA_LICENSE_KEY = "EXTRA_LICENSE_KEY";
     public static final String EXTRA_CONFIG_JSON = "EXTRA_CONFIG_JSON";
     public static final String EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS = "EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS";
     public static final String EXTRA_SCAN_MODE = "EXTRA_SCAN_MODE";
@@ -98,6 +97,11 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             e.printStackTrace();
             promise.reject(E_ERROR, e.getMessage());
         }
+    }
+
+    @ReactMethod
+    public void isInitialized(final Promise promise) {
+        promise.resolve(AnylineSdk.isInitialized());
     }
 
     @ReactMethod
@@ -315,18 +319,16 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
         Intent intent = new Intent(getCurrentActivity(), ScanActivity.class);
 
-        configObject = new JSONObject(this.config);
-
-        if (this.license == null || this.license.isEmpty()) {
-            if (configObject.has("license")) {
-                //if there is a license on JSON config then this license will be
-                //used to init or re-init the SDK
-                AnylineSdk.init(configObject.getString("license"), reactContext, "", CacheConfig.Preset.Default.INSTANCE, wrapperConfig);
-                license = configObject.get("license").toString();
-            } else {
-                throw new JSONException("No License in config. Please check your configuration.");
+        if (!AnylineSdk.isInitialized()) {
+            if (this.license != null) {
+                AnylineSdk.init(this.license, reactContext, "", CacheConfig.Preset.Default.INSTANCE, wrapperConfig);
+            }
+            else {
+                throw new JSONException("SDK is not initialized. Please initialize SDK before scanning.");
             }
         }
+
+        configObject = new JSONObject(this.config);
 
         JSONObject optionsJSONObject = configObject.optJSONObject("options");
 
@@ -337,7 +339,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             );
         }
 
-        intent.putExtra(EXTRA_LICENSE_KEY, license);
         intent.putExtra(EXTRA_CONFIG_JSON, configObject.toString());
         intent.putExtra(EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS, scanViewInitializationParameters);
 
