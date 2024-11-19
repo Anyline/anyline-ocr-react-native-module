@@ -241,6 +241,12 @@ class Anyline extends Component {
     }
     this.setState({ titles });
     try {
+      const isInitialized = await AnylineOCR.isInitialized();
+      console.log(`AnylineOCR.initialized: ` + isInitialized);
+      if (!isInitialized) {
+        await AnylineOCR.setupAnylineSDK(demoAppLicenseKey);
+      }
+
       console.log(`AnylineOCR.setupPromise`);
       const result = await AnylineOCR.setupPromise(
         JSON.stringify(config),

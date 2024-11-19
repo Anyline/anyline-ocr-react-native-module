@@ -126,6 +126,11 @@ RCT_EXPORT_METHOD(licenseKeyExpiryDate:(RCTPromiseResolveBlock)resolve rejecter:
     resolve([AnylineSDK licenseExpirationDate]);
 }
 
+RCT_EXPORT_METHOD(isInitialized:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    BOOL isInitialized = [AnylineSDK isInitialized];
+    resolve(@(isInitialized));
+}
+
 RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     _resolveBlock = resolve;
     _rejectBlock = reject;
@@ -148,7 +153,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
     if (!data) {
         [NSException raise:@"Config could not be loaded from disk" format:@"Config could not be loaded from disk"];
     }
-    
+
     NSError *error = nil;
     id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 
@@ -172,7 +177,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication] keyWindow].rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-        
+
         if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
             ALPluginScanViewController *pluginScanViewController =
             [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
@@ -182,7 +187,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
                                                           finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
                 [self returnCallback:callbackObj andError:error];
             }];
-            
+
             if (pluginScanViewController != nil){
                 [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
                 [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
@@ -196,7 +201,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
                                                           finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
                 [self returnCallback:callbackObj andError:error];
             }];
-            
+
             if (pluginScanViewController != nil){
                 [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
                 [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
@@ -210,12 +215,12 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 
 - (void)pluginScanViewController:(nonnull ALPluginScanViewController *)pluginScanViewController didScan:(nonnull id)scanResult continueScanning:(BOOL)continueScanning {
     NSString *resultJson = @"";
-    
+
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject: scanResult
                                                        options:0
                                                          error:&error];
-    
+
     if (! jsonData) {
         NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
     } else {
