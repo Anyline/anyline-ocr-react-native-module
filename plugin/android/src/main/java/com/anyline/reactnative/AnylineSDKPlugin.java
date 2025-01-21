@@ -165,11 +165,11 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     @ReactMethod
     public void initSdk(String license) {
-        initSdk(license, false);
+        initSdkWithCacheConfig(license, false);
     }
 
     @ReactMethod
-    public void initSdk(String license, boolean enableOfflineCache) {
+    public void initSdkWithCacheConfig(String license, boolean enableOfflineCache) {
         CacheConfig.Preset cacheConfig = CacheConfig.Preset.Default.INSTANCE;
         if (enableOfflineCache) {
             cacheConfig = CacheConfig.Preset.OfflineLicenseEventCachingEnabled.INSTANCE;
