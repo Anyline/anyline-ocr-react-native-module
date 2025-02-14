@@ -4,7 +4,6 @@ import {
   BackHandler,
   LayoutAnimation,
   LogBox,
-  PermissionsAndroid,
   ScrollView,
   StyleSheet,
   Text,
@@ -298,48 +297,6 @@ class Anyline extends Component {
     this._openAnyline = value;
   }
 
-  requestCameraPermission = async type => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: 'Anyline Camera Permissions',
-          message: 'Allow Anyline to access your camera?',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('Camera permission allowed');
-        this.updateAnyline(type);
-      } else {
-        console.log('Camera permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
-
-  hasCameraPermission = async () => {
-    try {
-      return await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      );
-    } catch (err) {
-      console.warn(err, 'PERMISSION CHECK');
-    }
-  };
-
-  checkCameraPermissionAndOpen = type => {
-    this.hasCameraPermission().then(hasCameraPermission => {
-      console.log('hasCameraPermission result is ' + hasCameraPermission);
-      if (hasCameraPermission) {
-        console.log('Opening OCR directly');
-        this.updateAnyline(type);
-      } else {
-        this.requestCameraPermission(type);
-      }
-    });
-  };
-
   emptyResult = () => {
     this.setState({
       hasScanned: false,
@@ -414,7 +371,6 @@ class Anyline extends Component {
           <Overview
             key="OverView"
             updateAnyline={this.updateAnyline}
-            checkCameraPermissionAndOpen={this.checkCameraPermissionAndOpen}
             disabled={buttonsDisabled}
           />
         )}

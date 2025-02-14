@@ -1,4 +1,4 @@
-#import "ALJSONUIConfiguration.h"
+#import "ALJsonUIConfiguration.h"
 #import <Anyline/Anyline.h>
 
 NSString * const DONE_BUTTON = @"doneButtonConfig";

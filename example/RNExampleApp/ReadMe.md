@@ -8,12 +8,10 @@
 
 ## Getting Started
 
-- clone Repo
 - `cd example/RNExampleApp`
-- `npm/yarn install`
-- `npm/yarn run reinstall`
-- `cd ios`
-- `pod update`
+- `npm install` or `yarn install`
+- `npm run reinstall` or `yarn reinstall`
+- `npm run <PLATFORM>` or `yarn <PLATFORM>`, where PLATFORM is one of 'ios' or 'android'
 
 ### Set the License Key
 
@@ -53,16 +51,37 @@ npx react-native bundle --platform android --dev false --entry-file index.js --b
 
 #### Troubleshooting
 
-* Make sure you have the latest/correct version of node installed
+* Make sure you have the latest/correct version of node installed.
 * If you get stuck completely on Android, go into the "android" directory and do a gradle clean: `cd example/RNExampleApp/android/`, then `./gradlew clean`.
-* Examples app won't build or run correctly on iOS? Execute these commands from `example/RNExampleApp`:
-  * `rm -rf node_modules package-lock.json ios/Pods ios/Podfile.lock ios/RNExampleApp.xcworkspace`
-  * `yarn cache clean`
-  * `yarn reinstall`
-  * `yarn ios` (this does `expo run:ios --device`)
-
-TIP: when debugging issues, try and build and run the examples app with the xcworkspace on Xcode. If there are issues, they will have more actionable steps.
 
 ### iOS
 
-Open `example/RNExampleApp/iOS/RNExampleApp.xcworkspace` with XCode and build/deploy to device.
+Run `yarn ios` from `example/RNExampleApp` to build and deploy the developer examples app to a device.
+
+Alternatively, you can open `example/RNExampleApp/iOS/RNExampleApp.xcworkspace` with Xcode.
+
+TIP: when debugging certain issues, when possible, try to build and run the examples app from Xcode by opening the `ios/*.xcworkspace file`. Xcode can usually present the issues more clearly and provide better actionable steps.
+
+
+#### Troubleshooting
+
+To do a fresh build and install of the developer examples app on iOS, execute the following commands from `example/RNExampleApp`:
+
+```
+rm -rf node_modules package-lock.json
+rm -rf ios/Pods ios/Podfile.lock ios/RNExampleApp.xcworkspace
+npm cache clean --force
+npm install
+npm run reinstall
+```
+
+Doing this may help resolve up some issues with NPM dependencies.
+
+
+NOTE: If you're running on iOS, recent versions of the developer examples app may require [patch-package](https://github.com/ds300/patch-package) to be installed beforehand:
+
+```
+npm install --save-dev patch-package postinstall-postinstall
+```
+
+For additional information, read on for more details: [Verification checksum was incorrect](https://github.com/boostorg/boost/issues/843)

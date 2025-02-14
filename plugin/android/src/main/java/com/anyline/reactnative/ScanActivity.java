@@ -34,6 +34,7 @@ import java.util.TimerTask;
 import io.anyline.plugin.config.ScanViewInitializationParameters;
 import io.anyline2.ScanResult;
 import io.anyline2.view.ScanView;
+import io.anyline2.view.ScanViewLoadResult;
 import io.anyline2.viewplugin.ScanViewPlugin;
 import io.anyline2.viewplugin.ViewPluginBase;
 
@@ -87,62 +88,68 @@ public class ScanActivity extends AppCompatActivity {
         orientation = this.getResources().getConfiguration().orientation;
 
         scanView = binding.scanView;
+        scanView.setOnScanViewLoaded(scanViewLoadResult -> {
+            if (scanViewLoadResult instanceof ScanViewLoadResult.Succeeded) {
+                if (getIntent().hasExtra(EXTRA_CONFIG_JSON)) {
+                    // TODO check for throws clauses
+                    try {
+                        JSONObject configJSON = new JSONObject(getIntent().getStringExtra(EXTRA_CONFIG_JSON));
+
+                        applyDefaultOrientation(configJSON);
+                        setupChangeOrientationButton(configJSON);
+                        setupCustomUIFeedback(configJSON);
+
+                        String initializationParametersString = getIntent().getStringExtra(EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS);
+                        if (initializationParametersString != null) {
+                            ScanViewInitializationParameters scanViewInitializationParameters =
+                                    getScanViewInitializationParametersFromJsonObject(
+                                            this,
+                                            new JSONObject(initializationParametersString));
+                            scanView.init(configJSON, scanViewInitializationParameters);
+                        } else {
+                            scanView.init(configJSON);
+                        }
+                        scanView.start();
+
+                        ViewPluginBase viewPluginBase = scanView.getScanViewPlugin();
+
+                        observeUIFeedbackEvents(viewPluginBase);
+
+                        viewPluginBase.resultReceived = scanResult -> {
+                            setResult(AnylineSDKPlugin.RESULT_OK);
+                            JSONObject resultObject = getResultWithImagePath(scanResult);
+                            ResultReporter.onResult(resultObject.toString(), true);
+                            finish();
+                        };
+
+                        viewPluginBase.resultsReceived = scanResults -> {
+                            JSONArray resultJSONArray = new JSONArray();
+
+                            for (ScanResult scanResult : scanResults) {
+                                JSONObject resultObject = getResultWithImagePath(scanResult);
+                                resultJSONArray.put(resultObject);
+                            }
+                            setResult(AnylineSDKPlugin.RESULT_OK);
+                            ResultReporter.onResult(resultJSONArray.toString(), true);
+                            finish();
+                        };
+                    } catch (JSONException e) {
+                        finishWithError("Error parsing view config: " + e.getMessage());
+                    } catch (Exception e) {
+                        finishWithError(getString(getResources().getIdentifier("error_invalid_json_data", "string", getPackageName()))
+                                + "\n" + e.getLocalizedMessage());
+                    }
+                } else {
+                    finishWithError("View config not found");
+                }
+            } else {
+                ScanViewLoadResult.Failed scanViewLoadFailed = (ScanViewLoadResult.Failed) scanViewLoadResult;
+                finishWithError(scanViewLoadFailed.getErrorMessage());
+            }
+        });
 
         if (savedInstanceState != null) {
             defaultOrientationApplied = savedInstanceState.getBoolean(KEY_DEFAULT_ORIENTATION_APPLIED);
-        }
-
-        if (getIntent().hasExtra(EXTRA_CONFIG_JSON)) {
-            // TODO check for throws clauses
-            try {
-                JSONObject configJSON = new JSONObject(getIntent().getStringExtra(EXTRA_CONFIG_JSON));
-
-                applyDefaultOrientation(configJSON);
-                setupChangeOrientationButton(configJSON);
-                setupCustomUIFeedback(configJSON);
-
-                String initializationParametersString = getIntent().getStringExtra(EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS);
-                if (initializationParametersString != null) {
-                    ScanViewInitializationParameters scanViewInitializationParameters =
-                            getScanViewInitializationParametersFromJsonObject(
-                                    this,
-                                    new JSONObject(initializationParametersString));
-                    scanView.init(configJSON, scanViewInitializationParameters);
-                }
-                else {
-                    scanView.init(configJSON);
-                }
-
-                ViewPluginBase viewPluginBase = scanView.getScanViewPlugin();
-
-                observeUIFeedbackEvents(viewPluginBase);
-
-                viewPluginBase.resultReceived = scanResult -> {
-                    setResult(AnylineSDKPlugin.RESULT_OK);
-                    JSONObject resultObject = getResultWithImagePath(scanResult);
-                    ResultReporter.onResult(resultObject.toString(), true);
-                    finish();
-                };
-
-                viewPluginBase.resultsReceived = scanResults -> {
-                    JSONArray resultJSONArray = new JSONArray();
-
-                    for (ScanResult scanResult : scanResults) {
-                        JSONObject resultObject = getResultWithImagePath(scanResult);
-                        resultJSONArray.put(resultObject);
-                    }
-                    setResult(AnylineSDKPlugin.RESULT_OK);
-                    ResultReporter.onResult(resultJSONArray.toString(), true);
-                    finish();
-                };
-            } catch (JSONException e) {
-                finishWithError("Error parsing view config: " + e.getMessage());
-            } catch (Exception e) {
-                finishWithError(getString(getResources().getIdentifier("error_invalid_json_data", "string", getPackageName()))
-                        + "\n" + e.getLocalizedMessage());
-            }
-        } else {
-            finishWithError("View config not found");
         }
     }
 
@@ -408,7 +415,6 @@ public class ScanActivity extends AppCompatActivity {
     protected void onPause() {
         if (scanView.isInitialized()) {
             scanView.stop();
-            scanView.getCameraView().releaseCameraInBackground();
         }
         super.onPause();
     }
