@@ -91,7 +91,6 @@ public class ScanActivity extends AppCompatActivity {
         scanView.setOnScanViewLoaded(scanViewLoadResult -> {
             if (scanViewLoadResult instanceof ScanViewLoadResult.Succeeded) {
                 if (getIntent().hasExtra(EXTRA_CONFIG_JSON)) {
-                    // TODO check for throws clauses
                     try {
                         JSONObject configJSON = new JSONObject(getIntent().getStringExtra(EXTRA_CONFIG_JSON));
 
