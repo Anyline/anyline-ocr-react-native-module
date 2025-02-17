@@ -1,4 +1,4 @@
-#import "ALJSONUIConfiguration.h"
+#import "ALJsonUIConfiguration.h"
 #import "ALRoundedView.h"
 
 NS_ASSUME_NONNULL_BEGIN

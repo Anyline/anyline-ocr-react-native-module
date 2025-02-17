@@ -5,15 +5,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Platform, StyleSheet, Text, View, ScrollView } from 'react-native';
 
-export default function Overview({ updateAnyline, checkCameraPermissionAndOpen, disabled }) {
+export default function Overview({ updateAnyline, disabled }) {
 
   Overview.propTypes = {
     updateAnyline: PropTypes.func.isRequired,
-    checkCameraPermissionAndOpen: PropTypes.func.isRequired,
     disabled: PropTypes.bool.isRequired
   };
 
-  const platformPermissionCheck = (Platform.OS === 'android') ? checkCameraPermissionAndOpen : updateAnyline;
+  const platformPermissionCheck = updateAnyline;
 
   const iOS = Platform.OS === 'ios';
 
