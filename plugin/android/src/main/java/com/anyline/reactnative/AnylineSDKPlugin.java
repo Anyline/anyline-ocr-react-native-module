@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 import io.anyline2.WrapperConfig;
 import io.anyline2.WrapperInfo;
-import io.anyline2.core.ScanController;
+import io.anyline2.core.PluginType;
 import io.anyline2.di.context.ContextProvider;
 import io.anyline2.legacy.products.AnylineUpdater;
 import io.anyline2.legacy.trainer.AssetContext;
@@ -129,7 +129,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
                     reactContext,
                     assetContext,
                     new AnylineUpdateDelegateImpl(reactContext, onUpdateError, onUpdateFinished),
-                    ScanController.PluginType.OCR
+                    PluginType.OCR
                 );
             }
         } catch (JSONException e) {
