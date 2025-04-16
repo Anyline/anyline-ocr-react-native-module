@@ -19,7 +19,20 @@ IMPORTANT: Before running the example app, replace the string defined in `demoAp
 
 ### Android
 
-To run the Anyline React Native Developer Examples App on Android:
+The recommended (proven) way to run these Developer Examples, as of April 2025:
+- Use node v18.18.0: `nvm alias default v18.18.0`
+- Use Java 17: `sdk default java 17.0.12-tem`
+- Use yarn (as opposed to npm), version 1.22.22 (other versions might work too)
+
+To launch the Developer Examples on Android with expo-cli run the following commands:
+```shell
+cd example/RNExampleApp/
+yarn install
+yarn run reinstall
+npx expo run:android
+```
+
+Alternatively, run the Developer Examples App via react-native cli:
 
 * `cd example/RNExampleApp`
 * `npx react-native run-android` or `npx react-native@latest run-android`
