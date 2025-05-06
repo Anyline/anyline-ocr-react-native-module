@@ -77,3 +77,4 @@ example/RNExampleApp/ios/main.jsbundle
 example/RNExampleApp/ios/main.jsbundle.meta
 example/RNExampleApp/third-party
 example/RNExampleApp/yarn.lock
+example/RNExampleApp/src/license.js

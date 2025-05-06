@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "initProject": "yarn add expo && yarn add ../../plugin",
-    "reinstall": "yarn remove anyline-ocr-react-native-module && yarn add ../../plugin",
+    "reinstall": "yarn remove anyline-ocr-react-native-module && yarn add ../../plugin && node add_license_key.js",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios --device",
