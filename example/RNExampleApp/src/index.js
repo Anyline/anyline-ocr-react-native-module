@@ -44,13 +44,14 @@ import LicensePlateConfigUS from '../config/LicensePlateConfigUS';
 import LicensePlateConfigAF from '../config/LicensePlateConfigAF';
 import TINUniversalConfig from '../config/TINUniversalConfig';
 import TINDOTConfig from '../config/TINDOTConfig';
+const { license } = require('./license.js');
 
 // Disable Warnings
 LogBox.ignoreAllLogs(true);
 
 const scrollRef = React.createRef();
 
-const demoAppLicenseKey = 'REPLACE WITH VALID LICENSE KEY';
+const demoAppLicenseKey = license; //replace license key in  license.js
 
 class Anyline extends Component {
   overTheAirUpdateIsEnabled = false;
