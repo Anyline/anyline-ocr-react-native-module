@@ -51,7 +51,7 @@ LogBox.ignoreAllLogs(true);
 
 const scrollRef = React.createRef();
 
-const demoAppLicenseKey = license; //replace license key in  license.js
+const demoAppLicenseKey = license;
 
 class Anyline extends Component {
   overTheAirUpdateIsEnabled = false;

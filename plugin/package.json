@@ -1,51 +1,28 @@
 {
-  "_from": "anyline-ocr-react-native-module@^54.8.0",
-  "_id": "anyline-ocr-react-native-module@^54.8.0",
-  "_inBundle": false,
-  "_integrity": "sha512-BGi9zNkSsoxXywDBIqzgBRvKUBniQOJHDKBrozZubKthZNRBAj8Ry5tW0Me0yLXt/fauME//hbC0wsenfPJZqw==",
-  "_location": "/anyline-ocr-react-native-module",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "range",
-    "registry": true,
-    "raw": "anyline-ocr-react-native-module@^54.8.0",
-    "name": "anyline-ocr-react-native-module",
-    "escapedName": "anyline-ocr-react-native-module",
-    "rawSpec": "^54.8.0",
-    "saveSpec": null,
-    "fetchSpec": "^54.8.0"
-  },
-  "_requiredBy": [
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/anyline-ocr-react-native-module/-/anyline-ocr-react-native-module-54.8.0.tgz",
-  "_shasum": "bacbcd260cc662244f59393ed81a6edba009b52c",
-  "_spec": "anyline-ocr-react-native-module@^54.8.0",
-  "_where": "/Users/amiransari/Projects/anyline-ocr-react-native-module1/example/RNExampleApp",
-  "bugs": {
-    "url": "https://github.com/Anyline/anyline-ocr-react-native-module/issues"
-  },
-  "bundleDependencies": false,
-  "dependencies": {
-    "buffer": "^5.1.0"
-  },
-  "deprecated": false,
+  "name": "anyline-ocr-react-native-module",
+  "version": "55.0.3",
   "description": "A Plugin for connecting Anyline with React-Native",
-  "directories": {
-    "example": "examples"
-  },
-  "homepage": "https://github.com/Anyline/anyline-ocr-react-native-module#readme",
   "keywords": [
     "reactnative",
     "anyline",
     "ocr"
   ],
+  "homepage": "https://github.com/Anyline/anyline-ocr-react-native-module#readme",
+  "bugs": {
+    "url": "https://github.com/Anyline/anyline-ocr-react-native-module/issues"
+  },
   "license": "SEE LICENSE IN LICENSE",
-  "main": "index.js",
-  "name": "anyline-ocr-react-native-module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Anyline/anyline-ocr-react-native-module.git"
   },
-  "version": "54.8.0"
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "buffer": "^5.1.0"
+  },
+  "bundleDependencies": false,
+  "deprecated": false
 }
