@@ -3,6 +3,7 @@ export default {
     "pluginConfig": {
       "id": "barcode",
       "barcodeConfig": {
+        "fastProcessMode": true,
         "parseAAMVA": false,
         "barcodeFormats": [
           "ALL"
