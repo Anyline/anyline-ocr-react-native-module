@@ -40,18 +40,11 @@ export default function Result({
   const [responseText, setResponseText] = useState('');
 
   let onReportCorrectedResultResponseHandler = function (response) {
-    /* 
-        The response is a string with the following style if it's an error:
-        "Error: Full error message"
+    setResponseText("UCR report succeed with message: " + response);
+  }
 
-        If the response is successful it looks like this:
-        "Success"
-    */
-    if (response.startsWith("Success")) {
-        setResponseText("Sending corrected result was successful.");
-    } else {
-        setResponseText(response);
-    }
+  let onReportCorrectedResultErrorHandler = function (error) {
+    setResponseText("UCR report failed with message: " + error);
   }
 
   let onReportCorrectedResultPressed = function () {
@@ -61,7 +54,7 @@ export default function Result({
       setResponseText("Only licenses with 'debugReporting' set to 'on' allow user corrected results.");
     } else if (correctedResult !== "") {
       setResponseText("Waiting for response...");
-      AnylineOCR.reportCorrectedResult(result["blobKey"], correctedResult, onReportCorrectedResultResponseHandler);
+      AnylineOCR.reportCorrectedResult(result["blobKey"], correctedResult, onReportCorrectedResultResponseHandler, onReportCorrectedResultErrorHandler);
     }
   };
 
@@ -76,7 +69,9 @@ export default function Result({
         onChangeText={newCorrectedResult => setCorrectedResult(newCorrectedResult)}
       />
       <Button title={'Report corrected result'} onPress={onReportCorrectedResultPressed} />
-      <Text style={styles.text}>{responseText}</Text>
+      <View style={styles.container}>
+        <Text style={styles.text}>{responseText}</Text>
+      </View>
     </View>
   );
 
@@ -135,7 +130,7 @@ export default function Result({
         source={{ uri: `file://${imagePath}` }}
       />
 
-      {Platform.OS === 'android' && reportCorrectedResultButton}
+      {reportCorrectedResultButton}
       {BackButton}
     </View>
   );
