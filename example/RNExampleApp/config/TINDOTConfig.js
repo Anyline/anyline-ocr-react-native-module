@@ -71,19 +71,19 @@ export default {
                         },
                         {
                             "attributeName": "lighting_toodark_image",
-                            "attributeValue": "uifeedback_tin_toodark"
+                            "attributeValue": "uifeedback_default_toodark"
                         },
                         {
                             "attributeName": "lighting_toobright_image",
-                            "attributeValue": "uifeedback_tin_toobright"
+                            "attributeValue": "uifeedback_default_toobright"
                         },
                         {
                             "attributeName": "distance_moveback_image",
-                            "attributeValue": "uifeedback_tin_moveback"
+                            "attributeValue": "uifeedback_default_moveback"
                         },
                         {
                             "attributeName": "distance_movecloser_image",
-                            "attributeValue": "uifeedback_tin_movecloser"
+                            "attributeValue": "uifeedback_default_movecloser"
                         },
                         {
                             "attributeName": "format_wrong_image",
@@ -119,27 +119,27 @@ export default {
                         },
                         {
                             "attributeName": "lighting_toodark_sound",
-                            "attributeValue": "info_sound_TIN.wav"
+                            "attributeValue": "info_sound_default.wav"
                         },
                         {
                             "attributeName": "lighting_toobright_sound",
-                            "attributeValue": "info_sound_TIN.wav"
+                            "attributeValue": "info_sound_default.wav"
                         },
                         {
                             "attributeName": "distance_moveback_sound",
-                            "attributeValue": "info_sound_TIN.wav"
+                            "attributeValue": "info_sound_default.wav"
                         },
                         {
                             "attributeName": "distance_movecloser_sound",
-                            "attributeValue": "info_sound_TIN.wav"
+                            "attributeValue": "info_sound_default.wav"
                         },
                         {
                             "attributeName": "format_wrong_sound",
-                            "attributeValue": "info_sound_TIN.wav"
+                            "attributeValue": "info_sound_default.wav"
                         },
                         {
                             "attributeName": "date_wrong_sound",
-                            "attributeValue": "info_sound_TIN.wav"
+                            "attributeValue": "info_sound_default.wav"
                         }
                     ]
                 }

@@ -16,7 +16,9 @@ export default {
     "pluginConfig": {
       "id": "vin",
       "cancelOnResult": true,
-      "vinConfig": {}
+      "vinConfig": {
+        "validateCheckDigit": true
+      }
     },
     "cutoutConfig": {
       "maxWidthPercent": "70%",
@@ -43,6 +45,79 @@ export default {
       "beepOnResult": true,
       "vibrateOnResult": true,
       "blinkAnimationOnResult": true
+    },
+    "uiFeedbackConfig": {
+      "presets": [
+        {
+          "presetName": "vin_with_instruction_image_text_sound_feedback",
+          "presetAttributes": [
+            {
+              "attributeName": "instruction_text",
+              "attributeValue": "Please make sure the entire VIN number is inside the cutout."
+            },
+            {
+              "attributeName": "lighting_toodark_image",
+              "attributeValue": "uifeedback_default_toodark"
+            },
+            {
+              "attributeName": "lighting_toobright_image",
+              "attributeValue": "uifeedback_default_toobright"
+            },
+            {
+              "attributeName": "distance_moveback_image",
+              "attributeValue": "uifeedback_default_moveback"
+            },
+            {
+              "attributeName": "distance_movecloser_image",
+              "attributeValue": "uifeedback_default_movecloser"
+            },
+            {
+              "attributeName": "format_invalid_image",
+              "attributeValue": "uifeedback_vin_invalid"
+            },
+            {
+              "attributeName": "lighting_toodark_text",
+              "attributeValue": ""
+            },
+            {
+              "attributeName": "lighting_toobright_text",
+              "attributeValue": ""
+            },
+            {
+              "attributeName": "distance_moveback_text",
+              "attributeValue": ""
+            },
+            {
+              "attributeName": "distance_movecloser_text",
+              "attributeValue": ""
+            },
+            {
+              "attributeName": "format_invalid_text",
+              "attributeValue": ""
+            },
+            {
+              "attributeName": "lighting_toodark_sound",
+              "attributeValue": "info_sound_default.wav"
+            },
+            {
+              "attributeName": "lighting_toobright_sound",
+              "attributeValue": "info_sound_default.wav"
+            },
+            {
+              "attributeName": "distance_moveback_sound",
+              "attributeValue": "info_sound_default.wav"
+            },
+            {
+              "attributeName": "distance_movecloser_sound",
+              "attributeValue": "info_sound_default.wav"
+            },
+            {
+              "attributeName": "format_invalid_sound",
+              "attributeValue": "info_sound_default.wav"
+            }
+          ]
+        }
+      ]
     }
   }
 }

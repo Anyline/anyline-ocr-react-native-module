@@ -15,7 +15,7 @@
 
 ### Set the License Key
 
-IMPORTANT: Before running the example app, replace the string defined in `demoAppLicenseKey` (in RNExampleApp/src/index.js) with a valid license key. To claim a free developer / trial license, go to: [Anyline SDK Register Form](https://anyline.com/free-demos/)
+IMPORTANT: Before running the example app, replace the string defined in `license` (in RNExampleApp/src/license.js) with a valid license key. To claim a free developer / trial license, go to: [Anyline SDK Register Form](https://anyline.com/free-demos/)
 
 ### Android
 

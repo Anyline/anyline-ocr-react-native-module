@@ -131,6 +131,53 @@ RCT_EXPORT_METHOD(isInitialized:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
     resolve(@(isInitialized));
 }
 
+RCT_EXPORT_METHOD(reportCorrectedResult:(NSString *)blobKey
+                        correctedResult:(NSString *)correctedResult
+                       onResultCallback:(RCTResponseSenderBlock)onResult
+                        onErrorCallback:(RCTResponseSenderBlock)onError) {
+
+    NSError *error = nil;
+
+    NSString *response = [ALScanResult reportCorrectedResultFromBlobKey:blobKey
+                                                        correctedResult:correctedResult
+                                                                 apiKey:nil      // apiKey should be nil
+                                                                  error:&error];
+    if (response) {
+        NSError *jsonError = nil;
+        NSData *jsonData = [response dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *correctedResultJson = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                                          options:0
+                                                                            error:&jsonError];
+        if (jsonError) {
+            onError(@[jsonError.localizedDescription]);
+            return;
+        }
+        
+        NSNumber *correctedResultCode = [correctedResultJson objectForKey:@"code"];
+        NSString *correctedResultMessage = [correctedResultJson objectForKey:@"message"];
+        
+        if ([correctedResultCode intValue] == 200) {
+            NSString *correctedResultInternalMessage = @"";
+            if (correctedResultMessage) {
+                NSError *messageJsonError = nil;
+                NSData *messageJsonData = [correctedResultMessage dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *messageJson = [NSJSONSerialization JSONObjectWithData:messageJsonData
+                                                                          options:0
+                                                                            error:&messageJsonError];
+                if (!messageJsonError) {
+                    correctedResultInternalMessage = [messageJson objectForKey:@"message"];
+                }
+            }
+            onResult(@[correctedResultInternalMessage]);
+        } else {
+            onError(@[correctedResultMessage]);
+        }
+    } else {
+        onError(@[error.localizedDescription]);
+    }
+}
+
+
 RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     _resolveBlock = resolve;
     _rejectBlock = reject;

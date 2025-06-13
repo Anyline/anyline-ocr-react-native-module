@@ -29,7 +29,7 @@ import io.anyline2.legacy.products.AnylineUpdater;
 import io.anyline2.legacy.trainer.AssetContext;
 import io.anyline2.AnylineSdk;
 import io.anyline2.CacheConfig;
-import io.anyline2.CorrectedResultReporting;
+import io.anyline2.ScanResult;
 import io.anyline2.core.LicenseException;
 
 class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
@@ -204,22 +204,28 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     }
 
     @ReactMethod
-    public void reportCorrectedResult(String blobKey, String correctedResult, Callback onResponseCallback) {
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("result", correctedResult);
-
+    public void reportCorrectedResult(String blobKey, String correctedResult, Callback onResponseCallback, Callback onErrorCallback) {
         try {
-            CorrectedResultReporting
-                    .Factory
-                    .getInstance()
-                    .reportCorrectedResult(
-                            blobKey,
-                            hashMap
-                    );
-            onResponseCallback.invoke("Success");
+            String correctedResultReturn = ScanResult.reportCorrectedResultFromBlobKey(blobKey, correctedResult);
+            try {
+                JSONObject correctedResultJson = new JSONObject(correctedResultReturn);
+                int correctedResultCode = correctedResultJson.optInt("code", 0);
+                String correctedResultMessage = correctedResultJson.optString("message");
+                if (correctedResultCode == 200) {
+                    String correctedResultInternalMessage = "";
+                    if (correctedResultMessage != null) {
+                        correctedResultInternalMessage = new JSONObject(correctedResultMessage).optString("message");
+                    }
+                    onResponseCallback.invoke(correctedResultInternalMessage);
+                } else {
+                    onErrorCallback.invoke(correctedResultMessage);
+                }
+            } catch (JSONException e) {
+                onErrorCallback.invoke(e.getMessage());
+            }
         }
         catch (IllegalArgumentException e) {
-            onResponseCallback.invoke("Error: " + e.getMessage());
+            onErrorCallback.invoke(e.getMessage());
         }
     }
 

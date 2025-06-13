@@ -32,7 +32,9 @@ export default {
         "viewPluginConfig": {
           "pluginConfig": {
             "id": "vin",
-            "vinConfig": {}
+            "vinConfig": {
+              "validateCheckDigit": true
+            }
           },
           "cutoutConfig": {
             "maxWidthPercent": "85%",
@@ -60,11 +62,71 @@ export default {
           "uiFeedbackConfig": {
             "presets": [
               {
-                "presetName": "simple_instruction_label",
+                "presetName": "vin_with_instruction_image_text_sound_feedback",
                 "presetAttributes": [
                   {
                     "attributeName": "instruction_text",
                     "attributeValue": "Position the VIN within the cutout. The barcode can be anywhere inside the camera frame."
+                  },
+                  {
+                    "attributeName": "lighting_toodark_image",
+                    "attributeValue": "uifeedback_default_toodark"
+                  },
+                  {
+                    "attributeName": "lighting_toobright_image",
+                    "attributeValue": "uifeedback_default_toobright"
+                  },
+                  {
+                    "attributeName": "distance_moveback_image",
+                    "attributeValue": "uifeedback_default_moveback"
+                  },
+                  {
+                    "attributeName": "distance_movecloser_image",
+                    "attributeValue": "uifeedback_default_movecloser"
+                  },
+                  {
+                    "attributeName": "format_invalid_image",
+                    "attributeValue": "uifeedback_vin_invalid"
+                  },
+                  {
+                    "attributeName": "lighting_toodark_text",
+                    "attributeValue": ""
+                  },
+                  {
+                    "attributeName": "lighting_toobright_text",
+                    "attributeValue": ""
+                  },
+                  {
+                    "attributeName": "distance_moveback_text",
+                    "attributeValue": ""
+                  },
+                  {
+                    "attributeName": "distance_movecloser_text",
+                    "attributeValue": ""
+                  },
+                  {
+                    "attributeName": "format_invalid_text",
+                    "attributeValue": ""
+                  },
+                  {
+                    "attributeName": "lighting_toodark_sound",
+                    "attributeValue": "info_sound_default.wav"
+                  },
+                  {
+                    "attributeName": "lighting_toobright_sound",
+                    "attributeValue": "info_sound_default.wav"
+                  },
+                  {
+                    "attributeName": "distance_moveback_sound",
+                    "attributeValue": "info_sound_default.wav"
+                  },
+                  {
+                    "attributeName": "distance_movecloser_sound",
+                    "attributeValue": "info_sound_default.wav"
+                  },
+                  {
+                    "attributeName": "format_invalid_sound",
+                    "attributeValue": "info_sound_default.wav"
                   }
                 ]
               }
