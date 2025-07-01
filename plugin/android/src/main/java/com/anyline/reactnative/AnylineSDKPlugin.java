@@ -39,6 +39,15 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         System.loadLibrary("anylineCore");
     }
 
+    // We're creating a static variable to retain the SDK instance in order to prevent crashes due to garbage collection cleaning up the SDK.
+    protected static final AnylineSdk anylineSdk = AnylineSdk.INSTANCE;
+    // We're creating a static variable to store the last license used to initialize the SDK
+    private static String license;
+
+    private static boolean isInitializedWithLicenseKey(String requestedLicense) {
+        return (license != null && AnylineSdk.isInitialized() && license.equals(requestedLicense));
+    }
+
     public static final String REACT_CLASS = "AnylineSDKPlugin";
     public static final String EXTRA_CONFIG_JSON = "EXTRA_CONFIG_JSON";
     public static final String EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS = "EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS";
@@ -53,7 +62,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private static final String E_ERROR = "E_ERROR";
     private JSONObject configObject;
     private ReactApplicationContext reactContext;
-    private String license;
     private JSONObject options;
     private Callback onResultCallback;
     private Callback onErrorCallback;
@@ -94,7 +102,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         try {
             promise.resolve(String.valueOf(AnylineSdk.getExpiryDate()));
         } catch (LicenseException e) {
-            e.printStackTrace();
             promise.reject(E_ERROR, e.getMessage());
         }
     }
@@ -133,7 +140,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
                 );
             }
         } catch (JSONException e) {
-            e.printStackTrace();
             returnError(e.getMessage());
         }
     }
@@ -145,6 +151,11 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     @ReactMethod
     public void setupAnylineSDKWithCacheConfig(String license, boolean enableOfflineCache, final Promise promise) {
+        if (isInitializedWithLicenseKey(license)) {
+            promise.resolve(true);
+            return;
+        }
+
         CacheConfig.Preset cacheConfig = CacheConfig.Preset.Default.INSTANCE;
         if (enableOfflineCache) {
             cacheConfig = CacheConfig.Preset.OfflineLicenseEventCachingEnabled.INSTANCE;
@@ -156,7 +167,6 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
                 promise.resolve(true);
             }
         } catch (LicenseException e) {
-            e.printStackTrace();
             if (promise != null) {
                 promise.reject(E_ERROR, e.getMessage());
             }
@@ -170,14 +180,18 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
 
     @ReactMethod
     public void initSdkWithCacheConfig(String license, boolean enableOfflineCache) {
+        if (isInitializedWithLicenseKey(license)) {
+            return;
+        }
+
         CacheConfig.Preset cacheConfig = CacheConfig.Preset.Default.INSTANCE;
         if (enableOfflineCache) {
             cacheConfig = CacheConfig.Preset.OfflineLicenseEventCachingEnabled.INSTANCE;
         }
         try {
             AnylineSdk.init(license, reactContext, "", cacheConfig, wrapperConfig);
+            this.license = license;
         } catch (LicenseException e) {
-            e.printStackTrace();
             returnError(e.getMessage());
         }
     }
@@ -313,10 +327,8 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
                 returnError("No ViewPlugin in config. Please check your configuration.");
             }
         } catch (LicenseException e) {
-            e.printStackTrace();
             returnError("LICENSE ERROR: " + e.getMessage());
         } catch (JSONException e) {
-            e.printStackTrace();
             returnError("JSON ERROR: " + e.getMessage());
         }
     }

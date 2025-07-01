@@ -1,6 +1,6 @@
 {
   "name": "anyline-ocr-react-native-module",
-  "version": "55.2.0",
+  "version": "55.2.1",
   "description": "A Plugin for connecting Anyline with React-Native",
   "keywords": [
     "reactnative",
@@ -24,5 +24,15 @@
     "buffer": "^5.1.0"
   },
   "bundleDependencies": false,
-  "deprecated": false
+  "deprecated": false,
+  "react-native": {
+    "ios": {
+      "podspecPath": "./AnylineReact.podspec"
+    },
+    "android": {
+      "sourceDir": "./android",
+      "packageImportPath": "import com.anyline.reactnative.AnylinePackage;",
+      "packageInstance": "new AnylinePackage()"
+    }
+  }
 }

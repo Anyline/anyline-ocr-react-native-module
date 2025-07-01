@@ -1,10 +1,68 @@
 {
-  "name": "RNExampleApp",
-  "displayName": "RNExampleApp",
-  "android": {
-    "package": "com.anyline.examples.reactnative"
-  },
-  "ios": {
-    "bundleIdentifier": "com.anyline.examples.reactnative"
+  "expo": {
+    "name": "RNExampleApp",
+    "description": "Anyline RN Dev Examples",
+    "slug": "RNExampleApp",
+    "version": "55.2.1",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anyline.examples.reactnative",
+      "appleTeamId": "35RHL53WRE",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow Anyline to access your camera?",
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true,
+          "NSExceptionDomains": {
+            "localhost": {
+              "NSIncludesSubdomains": true,
+              "NSExceptionAllowsInsecureHTTPLoads": true
+            }
+          }
+        }
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.anyline.examples.reactnative"
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "35.0.0",
+            "kotlinVersion": "1.9.25",
+            "extraMavenRepos": [
+              "https://mobile-sdk-android.anyline.io/release/"
+            ]
+          },
+          "ios": {
+            "deploymentTarget": "15.1",
+            "flipper": true
+          }
+        }
+      ],
+      "expo-dev-client",
+      "./plugins/withCustomAppBuildGradle.js"
+    ]
   }
 }

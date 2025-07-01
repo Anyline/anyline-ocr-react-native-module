@@ -4,14 +4,16 @@
 #import "ALPluginScanViewController.h"
 #import "ALPluginHelper.h"
 
+// We're creating a static variable to retain the SDK instance in order to prevent crashes due to memory clean up.
+static AnylineSDK *anylineSDK;
+// We're creating a static variable to store the last license used to initialize the SDK
+static NSString *license;
+
 ALWrapperConfig *wrapperConfig = nil;
 
 @interface AnylineSDKPlugin()
 
-@property (nonatomic, strong) ALViewPluginConfig *conf;
-
 @property (nonatomic, copy) NSString *callbackId;
-@property (nonatomic, copy) NSString *appKey;
 @property (nonatomic, assign) BOOL nativeBarcodeScanning;
 @property (nonatomic, strong) NSDictionary *jsonConfigDictionary;
 @property (nonatomic, strong) NSDictionary *ocrConfigDict;
@@ -21,7 +23,6 @@ ALWrapperConfig *wrapperConfig = nil;
 @property (nonatomic, strong) RCTResponseSenderBlock onErrorCallback;
 
 @property (nonatomic, copy) NSString *config;
-@property (nonatomic, copy) NSString *licenseKey;
 
 @property (nonatomic, copy) NSString *returnMethod;
 
@@ -33,6 +34,21 @@ ALWrapperConfig *wrapperConfig = nil;
 @implementation AnylineSDKPlugin {
     RCTPromiseResolveBlock _resolveBlock;
     RCTPromiseRejectBlock _rejectBlock;
+}
+
++ (BOOL)isInitializedWithLicenseKey:(NSString *)requestedLicense {
+    return (license && [AnylineSDK isInitialized] && [license isEqualToString:requestedLicense]);
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        if (!anylineSDK) {
+            // Initialize the anylineSDK static variable
+            anylineSDK = [[AnylineSDK alloc] init];
+        }
+    }
+    return self;
 }
 
 RCT_EXPORT_MODULE();
@@ -75,10 +91,17 @@ RCT_EXPORT_METHOD(setupAnylineSDKWithCacheConfig:(NSString *)licenseKey
     _resolveBlock = resolve;
     _rejectBlock = reject;
     self.returnMethod = @"promise";
-    self.licenseKey = licenseKey;
 
     ALCacheConfig *cacheConfig = enableOfflineCache ? [ALCacheConfig offlineLicenseCachingEnabled] : nil;
     NSError *error;
+
+    if ([AnylineSDKPlugin isInitializedWithLicenseKey:licenseKey]) {
+        [self returnSuccess:@"success"];
+        return;
+    }
+
+    license = licenseKey;
+
     BOOL success = [AnylineSDK setupWithLicenseKey:licenseKey cacheConfig:cacheConfig wrapperConfig:wrapperConfig error:&error];
 
     NSString *errorString = nil;
@@ -210,16 +233,10 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
     NSDictionary *optionsDictionary = [dictionary objectForKey:@"options"];
     self.jsonConfigDictionary = dictionary;
 
-    self.appKey = [dictionary objectForKey:@"license"];
-    if (!self.appKey) {
-        self.appKey = [dictionary objectForKey:@"licenseKey"];
-    }
-
     BOOL nativeBarcodeScanning = [[optionsDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
     self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
 
     self.jsonUIConf = [[ALJSONUIConfiguration alloc] initWithDictionary:optionsDictionary];
-    self.conf = [[ALViewPluginConfig alloc] initWithJSONDictionary:optionsDictionary error:&error];
     self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -227,7 +244,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 
         if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
             ALPluginScanViewController *pluginScanViewController =
-            [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
+            [[ALPluginScanViewController alloc] initWithLicensekey:license
                                                      configuration:dictionary
                                                    uiConfiguration:self.jsonUIConf
                                            initializationParamsStr:initializationParamsStr
@@ -241,7 +258,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
             }
         } else {
             ALPluginScanViewController *pluginScanViewController =
-            [[ALPluginScanViewController alloc] initWithLicensekey:self.appKey
+            [[ALPluginScanViewController alloc] initWithLicensekey:license
                                                      configuration:dictionary
                                                    uiConfiguration:self.jsonUIConf
                                            initializationParamsStr:initializationParamsStr
