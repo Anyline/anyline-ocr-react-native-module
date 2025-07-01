@@ -11,6 +11,7 @@
 - `cd example/RNExampleApp`
 - `npm install` or `yarn install`
 - `npm run reinstall` or `yarn reinstall`
+- `npm run prebuild` or `yarn prebuild`
 - `npm run <PLATFORM>` or `yarn <PLATFORM>`, where PLATFORM is one of 'ios' or 'android'
 
 ### Set the License Key

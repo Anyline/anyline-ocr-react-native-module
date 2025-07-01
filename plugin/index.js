@@ -1,10 +1,11 @@
 import {NativeModules} from 'react-native';
-import AnylineOCR from 'anyline-ocr-react-native-module';
 import {version as pluginVersion} from './package.json';
 
 const Buffer = require('buffer/').Buffer;
 
-export default NativeModules.AnylineSDKPlugin;
+const AnylineOCR = NativeModules.AnylineSDKPlugin;
+
+export default AnylineOCR;
 
 /**
  * Decrypts the License and returns the date till it's valid
