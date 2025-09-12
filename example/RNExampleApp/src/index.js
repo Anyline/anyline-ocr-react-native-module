@@ -8,6 +8,10 @@ import {
   StyleSheet,
   Text,
   View,
+  NativeModules,
+  Platform,
+  NativeEventEmitter,
+  DeviceEventEmitter,
 } from 'react-native';
 
 import AnylineOCR from 'anyline-ocr-react-native-module';
@@ -34,9 +38,6 @@ import TireMakeConfig from '../config/TireMakeConfig';
 import TireSizeConfig from '../config/TireSizeConfig';
 import CommercialTireIdConfig from '../config/CommercialTireIdConfig';
 import OdometerConfig from '../config/OdometerConfig';
-import OtaConfig from '../config/OtaConfig';
-import { DeviceEventEmitter } from 'react-native';
-import { Platform } from 'react-native';
 import VRCConfig from '../config/VRCConfig';
 import DialMeterConfig from '../config/DialMeterConfig';
 import LicensePlateConfigEU from '../config/LicensePlateConfigEU';
@@ -44,6 +45,7 @@ import LicensePlateConfigUS from '../config/LicensePlateConfigUS';
 import LicensePlateConfigAF from '../config/LicensePlateConfigAF';
 import TINUniversalConfig from '../config/TINUniversalConfig';
 import TINDOTConfig from '../config/TINDOTConfig';
+import BarcodeContinuousConfig from "../config/BarcodeContinuousConfig";
 const { license } = require('./license.js');
 
 // Disable Warnings
@@ -53,8 +55,14 @@ const scrollRef = React.createRef();
 
 const demoAppLicenseKey = license;
 
+function getPlatformEventEmitter() {
+  return Platform.select({
+    ios: new NativeEventEmitter(NativeModules),
+    android: DeviceEventEmitter,
+  });
+}
+
 class Anyline extends Component {
-  overTheAirUpdateIsEnabled = false;
 
   state = {
     hasScanned: false,
@@ -66,6 +74,7 @@ class Anyline extends Component {
     SDKVersion: '',
     pluginVersion: '',
     hasMultipleResults: false,
+    hasContinuousResults: false,
     licenseMessage: '',
     titles: [],
   };
@@ -99,27 +108,7 @@ class Anyline extends Component {
   }
 
   updateAnyline = async type => {
-    if (Platform.OS === 'android' && this.overTheAirUpdateIsEnabled == true) {
-      let otaConfig = OtaConfig;
-
-      AnylineOCR.initSdk(otaConfig.license);
-      const onSessionConnect = (event) => {
-        console.log(event.progress);
-      };
-      DeviceEventEmitter.addListener('ota_progress_update_event', onSessionConnect);
-      AnylineOCR.update(
-        JSON.stringify(otaConfig),
-        (message) => {
-          console.log(`Error: ${message}`);
-        },
-        () => {
-          console.log(`DONE`);
-          this.openAnyline(type)
-        }
-      )
-    } else {
-      this.openAnyline(type);
-    }
+    this.openAnyline(type);
   };
 
   _openAnyline = async (type) => {
@@ -131,6 +120,7 @@ class Anyline extends Component {
     this.setState({
       currentScanMode: type,
       hasMultipleResults: false,
+      hasContinuousResults: false,
     });
 
     switch (type) {
@@ -145,6 +135,10 @@ class Anyline extends Component {
         break;
       case 'BARCODE':
         config = BarcodeConfig;
+        break;
+      case 'BARCODE_CONTINUOUS':
+        this.setState({ hasContinuousResults: true });
+        config = BarcodeContinuousConfig;
         break;
       case 'BARCODE_PDF417':
         config = BarcodePDF417Config;
@@ -241,6 +235,23 @@ class Anyline extends Component {
     }
     this.setState({ titles });
     try {
+      const anylineOCRResultEventName = 'onResultCallback';
+      const maxContinuousResultCount = 10;
+      const continuousResultListener = (response) => {
+        console.log(`AnylineOCR.onResult: ` + response);
+        if (continuousResults !== "") {
+          continuousResults = continuousResults + ", ";
+        }
+        continuousResults = continuousResults + response;
+        continuousCount++;
+        if (continuousCount > maxContinuousResultCount) {
+          AnylineOCR.tryStopScan(null);
+        }
+    }
+
+      let continuousResults = "";
+      let continuousCount = 0;
+
       const isInitialized = await AnylineOCR.isInitialized();
       console.log(`AnylineOCR.initialized: ` + isInitialized);
       if (!isInitialized) {
@@ -248,10 +259,24 @@ class Anyline extends Component {
       }
 
       console.log(`AnylineOCR.setupPromise`);
-      const result = await AnylineOCR.setupPromise(
-        JSON.stringify(config),
-        'scan'
-      );
+      let result = "";
+      if (!this.state.hasContinuousResults) {
+        result = await AnylineOCR.setupPromise(
+          JSON.stringify(config),
+          'scan'
+        );
+      } else {
+        continuousResults = "";
+        continuousCount = 0;
+        getPlatformEventEmitter().addListener(anylineOCRResultEventName, continuousResultListener);
+        result = await AnylineOCR.setupPromiseWithScanCallbackConfig(
+            JSON.stringify(config),
+            'scan',
+            '{ "onResultEventName": "' + anylineOCRResultEventName + '" }'
+        );
+        result = "[" + continuousResults + "]";
+        getPlatformEventEmitter().removeAllListeners(anylineOCRResultEventName)
+      }
 
       console.log('scan result: ' + result);
 
@@ -320,6 +345,7 @@ class Anyline extends Component {
       pluginVersion,
       licenseMessage,
       hasMultipleResults,
+      hasContinuousResults,
       titles,
     } = this.state;
 
@@ -338,7 +364,7 @@ class Anyline extends Component {
         contentContainerStyle={styles.ContainerContent}>
         <Text style={styles.headline}>Anyline React-Native Example</Text>
         {hasScanned ? (
-          hasMultipleResults ? (
+          hasMultipleResults || hasContinuousResults ? (
             Object.keys(result).map((key, index) => {
               return (
                 <Result

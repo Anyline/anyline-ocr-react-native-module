@@ -1,80 +1,75 @@
-#import <Anyline/Anyline.h>
-#import "AnylineSDKPlugin.h"
-#import "ALJsonUIConfiguration.h"
-#import "ALPluginScanViewController.h"
-#import "ALPluginHelper.h"
 
-// We're creating a static variable to retain the SDK instance in order to prevent crashes due to memory clean up.
-static AnylineSDK *anylineSDK;
+#import <React/RCTEventEmitter.h>
+#import <React/RCTBridge.h>
+#import "AnylineSDKPlugin.h"
+#import "RCTUtils.h"
+
+// Static instance to retain the ALWrapperSessionProvider instance
+static ALWrapperSessionProvider *_wrapperSessionProvider;
 // We're creating a static variable to store the last license used to initialize the SDK
 static NSString *license;
-
-ALWrapperConfig *wrapperConfig = nil;
 
 @interface AnylineSDKPlugin()
 
 @property (nonatomic, copy) NSString *callbackId;
-@property (nonatomic, assign) BOOL nativeBarcodeScanning;
-@property (nonatomic, strong) NSDictionary *jsonConfigDictionary;
-@property (nonatomic, strong) NSDictionary *ocrConfigDict;
-@property (nonatomic, strong) ALJSONUIConfiguration *jsonUIConf;
-
-@property (nonatomic, strong) RCTResponseSenderBlock onResultCallback;
-@property (nonatomic, strong) RCTResponseSenderBlock onErrorCallback;
 
 @property (nonatomic, copy) NSString *config;
 
 @property (nonatomic, copy) NSString *returnMethod;
 
-@property (nonatomic, copy) NSString *initializationParamsStr;
+@property (nonatomic, strong) RCTPromiseResolveBlock wrapperSessionSdkInitializationResponsePromiseResolve;
+@property (nonatomic, strong) RCTPromiseRejectBlock wrapperSessionSdkInitializationResponsePromiseReject;
+
+@property (nonatomic, strong) RCTPromiseResolveBlock wrapperSessionScanResponsePromiseResolve;
+@property (nonatomic, strong) RCTPromiseRejectBlock wrapperSessionScanResponsePromiseReject;
+
+@property (nonatomic, strong) RCTResponseSenderBlock scanResponseResultCallback;
+@property (nonatomic, strong) RCTResponseSenderBlock scanResponseErrorCallback;
+
+@property (nonatomic, strong) RCTPromiseResolveBlock wrapperSessionExportCachedEventsPromiseResolve;
+@property (nonatomic, strong) RCTPromiseRejectBlock wrapperSessionExportCachedEventsPromiseReject;
+
+@property (nonatomic, strong) RCTResponseSenderBlock reportCorrectedResultResponseCallback;
+@property (nonatomic, strong) RCTResponseSenderBlock reportCorrectedResultErrorCallback;
 
 @end
 
 
 @implementation AnylineSDKPlugin {
-    RCTPromiseResolveBlock _resolveBlock;
-    RCTPromiseRejectBlock _rejectBlock;
-}
-
-+ (BOOL)isInitializedWithLicenseKey:(NSString *)requestedLicense {
-    return (license && [AnylineSDK isInitialized] && [license isEqualToString:requestedLicense]);
+    NSMutableArray<NSString *> *supportedRTCEventsArray;
 }
 
 - (instancetype)init {
-    self = [super init];
+    self = [super initWithDisabledObservation];
     if (self) {
-        if (!anylineSDK) {
-            // Initialize the anylineSDK static variable
-            anylineSDK = [[AnylineSDK alloc] init];
+        if (!_wrapperSessionProvider) {
+            // Initialize the wrapperSessionProvider static variable
+            _wrapperSessionProvider = [[ALWrapperSessionProvider alloc] init];
         }
+        supportedRTCEventsArray = [NSMutableArray array];
     }
     return self;
 }
 
++ (BOOL)isInitializedWithLicenseKey:(NSString *)requestedLicense {
+    ALWrapperSessionSDKInitializationResponse *currentSdkInitializationResponse = [ALWrapperSessionProvider getCurrentSdkInitializationResponse];
+    return (license
+            && currentSdkInitializationResponse.initialized != 0
+            && [license isEqualToString:requestedLicense]);
+}
+
 RCT_EXPORT_MODULE();
+
 - (UIView *)view {
     return [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
 }
 
-// Deprecated
-RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
-    self.onResultCallback = onResult;
-    self.onErrorCallback = onError;
-    self.returnMethod = @"callback";
-    self.config = config;
-    [self initView:scanMode initializationParamsStr:nil];
+RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    resolve(AnylineSDK.versionNumber);
 }
 
-RCT_EXPORT_METHOD(setup:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
-    [self setupWithInitializationParameters:nil config:config scanMode:scanMode onResultCallback:onResult onErrorCallback:onError];
-}
-
-RCT_EXPORT_METHOD(setupWithInitializationParameters:(NSString * _Nullable)initializationParametersStr config:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
-    self.onResultCallback = onResult;
-    self.onErrorCallback = onError;
-    self.returnMethod = @"callback";
-    self.config = config;
-    [self initView:scanMode initializationParamsStr:initializationParametersStr];
+RCT_EXPORT_METHOD(setupWrapperSession:(NSString *)pluginVersion) {
+    [self setupWrapperSessionWithPluginVersion:pluginVersion];
 }
 
 RCT_EXPORT_METHOD(setupAnylineSDK:(NSString *)licenseKey
@@ -88,226 +83,201 @@ RCT_EXPORT_METHOD(setupAnylineSDKWithCacheConfig:(NSString *)licenseKey
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
 
-    _resolveBlock = resolve;
-    _rejectBlock = reject;
+    self.wrapperSessionSdkInitializationResponsePromiseResolve = resolve;
+    self.wrapperSessionSdkInitializationResponsePromiseReject = reject;
     self.returnMethod = @"promise";
 
-    ALCacheConfig *cacheConfig = enableOfflineCache ? [ALCacheConfig offlineLicenseCachingEnabled] : nil;
-    NSError *error;
+    [self initSdkWithLicenseKey:licenseKey sdkAssetsFolder:nil enableOfflineCache:enableOfflineCache];
+}
 
-    if ([AnylineSDKPlugin isInitializedWithLicenseKey:licenseKey]) {
-        [self returnSuccess:@"success"];
-        return;
+RCT_EXPORT_METHOD(isInitialized:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    ALWrapperSessionSDKInitializationResponse *currentSdkInitializationResponse = [ALWrapperSessionProvider getCurrentSdkInitializationResponse];
+    BOOL isInitialized = (currentSdkInitializationResponse.initialized != 0);
+    resolve(@(isInitialized));
+}
+
+RCT_EXPORT_METHOD(licenseKeyExpiryDate:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    ALWrapperSessionSDKInitializationResponse *currentSdkInitializationResponse = [ALWrapperSessionProvider getCurrentSdkInitializationResponse];
+    if (currentSdkInitializationResponse.initialized != 0) {
+        ALWrapperSessionSDKInitializationResponseInitialized *sdkInitializationResponseInitialized = currentSdkInitializationResponse.succeedInfo;
+        if (sdkInitializationResponseInitialized) {
+            resolve(sdkInitializationResponseInitialized.expiryDate);
+            return;
+        }
     }
+    // not `reject`, as this will require the method to be used in a try-catch
+    resolve(nil);
+    return;
+}
 
-    license = licenseKey;
+// Deprecated
+RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
+    [self setupWithInitializationParameters:nil config:config scanMode:scanMode onResultCallback:onResult onErrorCallback:onError];
+}
 
-    BOOL success = [AnylineSDK setupWithLicenseKey:licenseKey cacheConfig:cacheConfig wrapperConfig:wrapperConfig error:&error];
+RCT_EXPORT_METHOD(setup:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
+    [self setupWithInitializationParameters:nil config:config scanMode:scanMode onResultCallback:onResult onErrorCallback:onError];
+}
 
-    NSString *errorString = nil;
-    NSDictionary *successObj = nil;
+RCT_EXPORT_METHOD(setupWithInitializationParameters:(NSString * _Nullable)initializationParametersStr config:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
+    self.scanResponseResultCallback = onResult;
+    self.scanResponseErrorCallback = onError;
+    self.returnMethod = @"callback";
 
-    if (!success) {
-        NSLog(@"error: %@", error.localizedDescription);
-        errorString = @"Unable to initialize the Anyline SDK. Please check your license key.";
-        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: errorString}]];
-        return;
-    }
-
-    successObj = @{ @"success": @(true) };
-    [self returnSuccess:@"success"];
+    [self requestScanStartWithScanViewConfigContent:config
+             scanViewInitializationParametersString:initializationParametersStr
+                                 scanViewConfigPath:nil
+                           scanCallbackConfigString:nil];
 }
 
 RCT_EXPORT_METHOD(setupPromise:(NSString *)config scanMode:(NSString *)scanMode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     [self setupPromiseWithInitializationParameters:nil config:config scanMode:scanMode resolver:resolve rejecter:reject];
 }
 
-RCT_EXPORT_METHOD(setupPromiseWithInitializationParameters:(NSString * _Nullable)initializationParametersStr config:(NSString *)configStr scanMode:(NSString *)scanMode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    _resolveBlock = resolve;
-    _rejectBlock = reject;
+RCT_EXPORT_METHOD(setupPromiseWithInitializationParameters:(NSString * _Nullable)initializationParametersStr
+                  config:(NSString *)configStr
+                  scanMode:(NSString *)scanMode
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    [self setupPromiseWithInitializationParametersAndScanCallbackConfig:initializationParametersStr
+                                                                 config:configStr
+                                                               scanMode:scanMode
+                                               scanCallbackConfigString:nil
+                                                               resolver:resolve
+                                                               rejecter:reject];
+}
+
+RCT_EXPORT_METHOD(setupPromiseWithScanCallbackConfig:(NSString *)configStr
+                  scanMode:(NSString *)scanMode
+                  scanCallbackConfigString:(NSString *)scanCallbackConfigString
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    [self setupPromiseWithInitializationParametersAndScanCallbackConfig:nil
+                                                                 config:configStr
+                                                               scanMode:scanMode
+                                               scanCallbackConfigString:scanCallbackConfigString
+                                                               resolver:resolve
+                                                               rejecter:reject];
+}
+
+RCT_EXPORT_METHOD(setupPromiseWithInitializationParametersAndScanCallbackConfig:(NSString * _Nullable)initializationParametersStr
+                  config:(NSString *)configStr
+                  scanMode:(NSString *)scanMode
+                  scanCallbackConfigString:(NSString * _Nullable)scanCallbackConfigString
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    self.wrapperSessionScanResponsePromiseResolve = resolve;
+    self.wrapperSessionScanResponsePromiseReject = reject;
     self.returnMethod = @"promise";
-    self.config = configStr;
-    self.initializationParamsStr = initializationParametersStr;
-    [self initView:scanMode initializationParamsStr:self.initializationParamsStr];
+    [self requestScanStartWithScanViewConfigContent:configStr
+             scanViewInitializationParametersString:initializationParametersStr
+                                 scanViewConfigPath:nil
+                           scanCallbackConfigString:scanCallbackConfigString];
 }
 
-RCT_EXPORT_METHOD(getSDKVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve(AnylineSDK.versionNumber);
-}
-
-RCT_EXPORT_METHOD(setPluginVersion:(NSString *)pluginVersion) {
-    wrapperConfig = [ALWrapperConfig reactNative:pluginVersion];
-}
-
-RCT_EXPORT_METHOD(licenseKeyExpiryDate:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    BOOL isInitialized = [[ALLicenseUtil sharedInstance] isLicenseValid];
-    if (!isInitialized) {
-        // not `reject`, as this will require the method to be used in a try-catch
-        resolve(nil);
-        return;
-    }
-    resolve([AnylineSDK licenseExpirationDate]);
-}
-
-RCT_EXPORT_METHOD(isInitialized:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    BOOL isInitialized = [AnylineSDK isInitialized];
-    resolve(@(isInitialized));
+RCT_EXPORT_METHOD(tryStopScan:(NSString * _Nullable)scanStopRequestParams) {
+    [ALWrapperSessionProvider requestScanStopWithScanStopRequestParamsString:scanStopRequestParams];
 }
 
 RCT_EXPORT_METHOD(reportCorrectedResult:(NSString *)blobKey
                         correctedResult:(NSString *)correctedResult
                        onResultCallback:(RCTResponseSenderBlock)onResult
                         onErrorCallback:(RCTResponseSenderBlock)onError) {
+    self.reportCorrectedResultResponseCallback = onResult;
+    self.reportCorrectedResultErrorCallback = onError;
 
-    NSError *error = nil;
-
-    NSString *response = [ALScanResult reportCorrectedResultFromBlobKey:blobKey
-                                                        correctedResult:correctedResult
-                                                                 apiKey:nil      // apiKey should be nil
-                                                                  error:&error];
-    if (response) {
-        NSError *jsonError = nil;
-        NSData *jsonData = [response dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *correctedResultJson = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                                          options:0
-                                                                            error:&jsonError];
-        if (jsonError) {
-            onError(@[jsonError.localizedDescription]);
-            return;
-        }
-        
-        NSNumber *correctedResultCode = [correctedResultJson objectForKey:@"code"];
-        NSString *correctedResultMessage = [correctedResultJson objectForKey:@"message"];
-        
-        if ([correctedResultCode intValue] == 200) {
-            NSString *correctedResultInternalMessage = @"";
-            if (correctedResultMessage) {
-                NSError *messageJsonError = nil;
-                NSData *messageJsonData = [correctedResultMessage dataUsingEncoding:NSUTF8StringEncoding];
-                NSDictionary *messageJson = [NSJSONSerialization JSONObjectWithData:messageJsonData
-                                                                          options:0
-                                                                            error:&messageJsonError];
-                if (!messageJsonError) {
-                    correctedResultInternalMessage = [messageJson objectForKey:@"message"];
-                }
-            }
-            onResult(@[correctedResultInternalMessage]);
-        } else {
-            onError(@[correctedResultMessage]);
-        }
-    } else {
-        onError(@[error.localizedDescription]);
-    }
+    [self requestUCRReportWithBlobKey:blobKey correctedResult:correctedResult];
 }
 
 
 RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    _resolveBlock = resolve;
-    _rejectBlock = reject;
-    self.returnMethod = @"promise";
-
-    NSError *error;
-    NSString *exportPath = [AnylineSDK exportCachedEvents:&error];
-
-    if (!exportPath) {
-        NSString *errorString = @"Event cache is empty.";
-        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: errorString}]];
-    } else {
-        [self returnSuccess:exportPath];
-    }
+    self.wrapperSessionExportCachedEventsPromiseResolve = resolve;
+    self.wrapperSessionExportCachedEventsPromiseReject = reject;
+    [self exportCachedEvents];
 }
 
 
-- (void)initView:(NSString *)scanMode initializationParamsStr:(NSString * _Nullable)initializationParamsStr {
-    NSData *data = [self.config dataUsingEncoding:NSUTF8StringEncoding];
-    if (!data) {
-        [NSException raise:@"Config could not be loaded from disk" format:@"Config could not be loaded from disk"];
+- (NSArray<NSString *> *)supportedEvents {
+  return supportedRTCEventsArray;
+}
+
+- (void)sendEvent:(NSString *)eventName
+           params:(id _Nullable) params {
+
+    if (![supportedRTCEventsArray containsObject:eventName]) {
+        [supportedRTCEventsArray addObject:eventName];
     }
 
-    NSError *error = nil;
-    id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    [self sendEventWithName:eventName body:params];
+}
 
+-(NSString *)bundleRootPath {
+    NSString *rootPath = [[NSBundle mainBundle] bundlePath];
+    return rootPath;
+}
+
+-(NSString *)bundlePathFromScanViewConfigPath:(NSString * _Nullable)scanViewConfigPath {
+    //get root folder (ends with ...Runner.app)
+    NSString *absoluteScanViewConfigPath = [self bundleRootPath];
+
+    if (scanViewConfigPath) {
+        //append scanViewConfigPath
+        absoluteScanViewConfigPath = [absoluteScanViewConfigPath stringByAppendingPathComponent:scanViewConfigPath];
+    }
+    return absoluteScanViewConfigPath;
+}
+
+- (void)setupWrapperSessionWithPluginVersion:(NSString *)pluginVersion {
+    // Setup wrapper session with this view controller as delegate
+    ALWrapperConfig *wrapperConfig = [ALWrapperConfig reactNative:pluginVersion];
+    [ALWrapperSessionProvider setupWrapperSessionWithWrapperInfo:wrapperConfig
+                                            wrapperSessionClient:self];
+}
+
+- (void)initSdkWithLicenseKey:(NSString *)sdkLicenseKey
+              sdkAssetsFolder: (NSString *)sdkAssetsFolder
+           enableOfflineCache: (BOOL)enableOfflineCache {
+    NSDictionary *wrapperSessionSdkInitializationRequestJson = [ALLegacyPluginHelper
+            sdkInitializationRequestJsonWithLicenseKey:sdkLicenseKey
+                                    enableOfflineCache:enableOfflineCache
+                                       assetPathPrefix:sdkAssetsFolder];
+
+    [ALWrapperSessionProvider
+            requestSdkInitializationWithInitializationRequestParamsString:[wrapperSessionSdkInitializationRequestJson asJSONString]];
+}
+
+- (void)requestScanStartWithScanViewConfigContent:(NSString *)scanViewConfigContent
+           scanViewInitializationParametersString:(NSString * _Nullable)scanViewInitializationParametersString
+                               scanViewConfigPath:(NSString * _Nullable)scanViewConfigPath
+                         scanCallbackConfigString:(NSString * _Nullable)scanCallbackConfigString {
+    NSError *error;
+    BOOL shouldReturnImages = true;
+
+    ALWrapperSessionScanStartRequest *wrapperSessionScanStartRequest = [ALLegacyPluginHelper
+                                        scanStartRequestWithScanViewConfigContentString:scanViewConfigContent
+                                                 scanViewInitializationParametersString:scanViewInitializationParametersString
+                                                                     scanViewConfigPath:[self bundlePathFromScanViewConfigPath:scanViewConfigPath]
+                                                         scanResultCallbackConfigString:scanCallbackConfigString
+                                                                     shouldReturnImages:shouldReturnImages
+                                                                                  error:&error];
     if (error) {
-        [NSException raise:@"Config could not be parsed to JSON" format:@"Config could not be parsed to JSON: %@", error.localizedDescription];
-    }
-    NSDictionary *optionsDictionary = [dictionary objectForKey:@"options"];
-    self.jsonConfigDictionary = dictionary;
-
-    BOOL nativeBarcodeScanning = [[optionsDictionary objectForKey:@"nativeBarcodeEnabled"] boolValue];
-    self.nativeBarcodeScanning = nativeBarcodeScanning ? nativeBarcodeScanning : NO;
-
-    self.jsonUIConf = [[ALJSONUIConfiguration alloc] initWithDictionary:optionsDictionary];
-    self.ocrConfigDict = [dictionary objectForKey:@"ocr"];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication] keyWindow].rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-
-        if ([[scanMode uppercaseString] isEqualToString:[@"scan" uppercaseString]]) {
-            ALPluginScanViewController *pluginScanViewController =
-            [[ALPluginScanViewController alloc] initWithLicensekey:license
-                                                     configuration:dictionary
-                                                   uiConfiguration:self.jsonUIConf
-                                           initializationParamsStr:initializationParamsStr
-                                                          finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
-                [self returnCallback:callbackObj andError:error];
-            }];
-
-            if (pluginScanViewController != nil){
-                [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
-                [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
-            }
-        } else {
-            ALPluginScanViewController *pluginScanViewController =
-            [[ALPluginScanViewController alloc] initWithLicensekey:license
-                                                     configuration:dictionary
-                                                   uiConfiguration:self.jsonUIConf
-                                           initializationParamsStr:initializationParamsStr
-                                                          finished:^(NSDictionary *  _Nullable callbackObj, NSError * _Nullable error) {
-                [self returnCallback:callbackObj andError:error];
-            }];
-
-            if (pluginScanViewController != nil){
-                [pluginScanViewController setModalPresentationStyle: UIModalPresentationFullScreen];
-                [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:pluginScanViewController animated:YES completion:nil];
-            }
-        }
-    });
-
-}
-
-#pragma mark - ALPluginScanViewControllerDelegate
-
-- (void)pluginScanViewController:(nonnull ALPluginScanViewController *)pluginScanViewController didScan:(nonnull id)scanResult continueScanning:(BOOL)continueScanning {
-    NSString *resultJson = @"";
-
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject: scanResult
-                                                       options:0
-                                                         error:&error];
-
-    if (! jsonData) {
-        NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
+        [self returnError:error];
     } else {
-        resultJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        NSDictionary *wrapperSessionScanStartRequestDict = [wrapperSessionScanStartRequest toJSONDictionary];
+        [ALWrapperSessionProvider requestScanStartWithScanStartRequestParamsString:[wrapperSessionScanStartRequestDict asJSONString]];
     }
-    [self returnSuccess:resultJson];
 }
 
-- (void)pluginScanViewController:(nonnull ALPluginScanViewController *)pluginScanViewController didStopScanning:(nonnull id)sender {
-    [self returnError: [NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: @"Canceled"}]];
+- (void)requestUCRReportWithBlobKey:(NSString *)blobKey
+                    correctedResult:(NSString *)correctedResult {
+
+    ALWrapperSessionUCRReportRequest *wrapperSessionSdkInitializationRequest = [ALLegacyPluginHelper ucrReportRequestWithBlobKey:blobKey
+                                                                                  correctedResult:correctedResult];
+    [ALWrapperSessionProvider requestUCRReport:wrapperSessionSdkInitializationRequest];
 }
 
-- (void)pluginScanViewController:(ALPluginScanViewController *)pluginScanViewController didStopScanning:(id)sender error:(NSError *)error {
-    [self returnError:error];
-}
-
-- (BOOL)scanModeIndex:(NSString *)scanMode{
-
-    NSArray *possibleScanModes = @[@"DOCUMENT", @"MRZ", @"BARCODE", @"LICENSE_PLATE", @"LICENSE_PLATE_US", @"ANYLINE_OCR", @"TIRE", @"ANALOG_METER", @"DIGITAL_METER", @"AUTO_ANALOG_DIGITAL_METER",
-                                   @"DIAL_METER", @"SERIAL_NUMBER", @"HEAT_METER_4", @"HEAT_METER_5", @"HEAT_METER_6", @"DOT_MATRIX_METER"];
-
-    return [possibleScanModes containsObject: [scanMode uppercaseString]];
-
+-(void)exportCachedEvents {
+    [ALWrapperSessionProvider requestExportCachedEvents];
 }
 
 - (void)returnCallback:(id _Nullable)callbackObj andError:(NSError * _Nullable)error {
@@ -329,17 +299,108 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 
 - (void)returnSuccess:(NSString *)result {
     if ([self.returnMethod isEqualToString:@"callback"]) {
-        self.onResultCallback(@[result]);
+        self.scanResponseResultCallback(@[result]);
     } else if ([self.returnMethod isEqualToString:@"promise"]) {
-        _resolveBlock(result);
+        if (self.wrapperSessionScanResponsePromiseResolve) {
+            self.wrapperSessionScanResponsePromiseResolve(result);
+        }
+        self.wrapperSessionScanResponsePromiseResolve = nil;
     }
 }
 
 - (void)returnError:(NSError *)error {
     if ([self.returnMethod isEqualToString:@"callback"]) {
-        self.onErrorCallback(@[error]);
+        self.scanResponseErrorCallback(@[error]);
     } else if ([self.returnMethod isEqualToString:@"promise"]) {
-        _rejectBlock(@"ANYLINE_ERROR", error.localizedDescription, error);
+        if (self.wrapperSessionScanResponsePromiseReject) {
+            self.wrapperSessionScanResponsePromiseReject(@"ANYLINE_ERROR", error.localizedDescription, error);
+        }
+        self.wrapperSessionScanResponsePromiseReject = nil;
+    }
+}
+
+#pragma mark - ALWrapperSessionClientDelegate
+
+- (nullable UIViewController *)getTopViewController {
+    UIViewController *topViewController = RCTPresentedViewController();
+    if (!topViewController) {
+        topViewController = [[UIApplication sharedApplication] keyWindow].rootViewController;
+        return topViewController;
+    }
+    return nil;
+}
+
+- (void)onSdkInitializationResponse:(nonnull ALWrapperSessionSDKInitializationResponse *)initializationResponse {
+    if (initializationResponse.initialized) {
+        self.wrapperSessionSdkInitializationResponsePromiseResolve(@"success");
+    } else {
+        self.wrapperSessionSdkInitializationResponsePromiseReject(@"ANYLINE_ERROR", [[initializationResponse toJSONDictionary] asJSONString], nil);
+    }
+}
+
+- (void)onScanResults:(nonnull ALWrapperSessionScanResultsResponse *)scanResultsResponse {
+    ALWrapperSessionScanResultConfig *scanResultConfig = scanResultsResponse.scanResultConfig;
+    NSArray<ALExportedScanResult *> *exportedScanResultsArray =  (NSArray<ALExportedScanResult *> *) scanResultsResponse.exportedScanResults;
+    ALWrapperSessionScanResultExtraInfo *scanResultExtraInfo = scanResultsResponse.scanResultExtraInfo;
+
+    NSError *error;
+    NSString *resultsWithImagePathString = [ALLegacyPluginHelper scanResultsWithImagePathFromExportedScanResults:exportedScanResultsArray
+                                                                                                          viewPluginType:scanResultExtraInfo.viewPluginType
+                                                                                                                   error:&error];
+
+    if (scanResultConfig.callbackConfig && scanResultConfig.callbackConfig.onResultEventName) {
+        [self sendEvent:scanResultConfig.callbackConfig.onResultEventName params:resultsWithImagePathString];
+    } else {
+        [self returnSuccess:resultsWithImagePathString];
+    }
+}
+
+- (void)onScanResponse:(nonnull ALWrapperSessionScanResponse *)scanResponse {
+    if (scanResponse.status == ALWrapperSessionScanResponseStatus.scanSucceeded) {
+        ALWrapperSessionScanResultConfig *scanResultConfig = scanResponse.scanResultConfig;
+        if (scanResultConfig.callbackConfig && scanResultConfig.callbackConfig.onResultEventName) {
+            [self returnSuccess:@""];
+        }
+    } else if (scanResponse.status == ALWrapperSessionScanResponseStatus.scanFailed) {
+        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: scanResponse.failInfo.lastError}]];
+    } else if (scanResponse.status == ALWrapperSessionScanResponseStatus.scanAborted) {
+        [self returnError:[NSError errorWithDomain:@"ALReactDomain" code:100 userInfo:@{NSLocalizedDescriptionKey: @"Canceled"}]];
+    }
+}
+
+- (void)onUIElementClicked:(nonnull ALWrapperSessionScanResultConfig *)scanResultConfig
+        uiFeedbackElementConfig:(nonnull ALUIFeedbackElementConfig *)uiFeedbackElementConfig {
+    if (scanResultConfig.callbackConfig && scanResultConfig.callbackConfig.onUIElementClickedEventName) {
+        [self sendEvent:scanResultConfig.callbackConfig.onUIElementClickedEventName
+                 params:uiFeedbackElementConfig];
+    }
+}
+
+- (void)onUCRReportResponse:(nonnull ALWrapperSessionUCRReportResponse *)ucrReportResponse {
+    if (ucrReportResponse.status == ALWrapperSessionUCRReportResponseStatus.ucrReportSucceeded) {
+        ALWrapperSessionUCRReportResponseSucceed *ucrReportSucceed = ucrReportResponse.succeedInfo;
+        if (self.reportCorrectedResultResponseCallback) {
+            self.reportCorrectedResultResponseCallback(@[ucrReportSucceed.message]);
+        }
+    } else {
+        ALWrapperSessionUCRReportResponseFail *ucrReportFail = ucrReportResponse.failInfo;
+        if (self.reportCorrectedResultErrorCallback) {
+            self.reportCorrectedResultErrorCallback(@[ucrReportFail.lastError]);
+        }
+    }
+}
+
+- (void)onExportCachedEventsResponse:(nonnull ALWrapperSessionExportCachedEventsResponse *)exportCachedEventsResponse {
+    if (exportCachedEventsResponse.status == ALWrapperSessionExportCachedEventsResponseStatus.exportSucceeded) {
+        ALWrapperSessionExportCachedEventsResponseSucceed *exportCachedEventsSucceed = exportCachedEventsResponse.succeedInfo;
+        if (self.wrapperSessionExportCachedEventsPromiseResolve) {
+            self.wrapperSessionExportCachedEventsPromiseResolve(@[exportCachedEventsSucceed.exportedFile]);
+        }
+    } else {
+        ALWrapperSessionExportCachedEventsResponseFail *exportCachedEventsFail = exportCachedEventsResponse.failInfo;
+        if (self.wrapperSessionExportCachedEventsPromiseReject) {
+            self.wrapperSessionExportCachedEventsPromiseReject(@"ANYLINE_ERROR", exportCachedEventsFail.lastError, nil);
+        }
     }
 }
 
