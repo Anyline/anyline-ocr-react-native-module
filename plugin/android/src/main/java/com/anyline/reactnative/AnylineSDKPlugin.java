@@ -4,79 +4,82 @@ package com.anyline.reactnative;
  * Created by jonesBoi on 02.12.16.
  */
 
-import android.content.Intent;
+import android.content.Context;
 
-import com.anyline.reactnative.updateAsset.AnylineUpdateDelegateImpl;
-import com.anyline.reactnative.updateAsset.AssetContextJsonParser;
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import org.json.JSONException;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
 
-import io.anyline2.WrapperConfig;
+import io.anyline.plugin.config.UIFeedbackElementConfig;
+import io.anyline.plugin.result.ExportedScanResult;
+import io.anyline.wrapper.config.WrapperSessionExportCachedEventsResponse;
+import io.anyline.wrapper.config.WrapperSessionExportCachedEventsResponseSucceed;
+import io.anyline.wrapper.config.WrapperSessionExportCachedEventsResponseFail;
+import io.anyline.wrapper.config.WrapperSessionScanResultExtraInfo;
+import io.anyline.wrapper.config.WrapperSessionScanResultsResponse;
+import io.anyline.wrapper.config.WrapperSessionScanStartRequest;
+import io.anyline.wrapper.config.WrapperSessionScanResponse;
+import io.anyline.wrapper.config.WrapperSessionScanResultConfig;
+import io.anyline.wrapper.config.WrapperSessionSdkInitializationResponse;
+import io.anyline.wrapper.config.WrapperSessionSdkInitializationResponseInitialized;
+import io.anyline.wrapper.config.WrapperSessionUCRReportRequest;
+import io.anyline.wrapper.config.WrapperSessionUCRReportResponse;
 import io.anyline2.WrapperInfo;
-import io.anyline2.core.PluginType;
 import io.anyline2.di.context.ContextProvider;
-import io.anyline2.legacy.products.AnylineUpdater;
-import io.anyline2.legacy.trainer.AssetContext;
-import io.anyline2.AnylineSdk;
-import io.anyline2.CacheConfig;
-import io.anyline2.ScanResult;
-import io.anyline2.core.LicenseException;
+import io.anyline2.sdk.extension.UIFeedbackElementConfigExtensionKt;
+import io.anyline2.wrapper.WrapperSessionClientInterface;
+import io.anyline2.wrapper.WrapperSessionProvider;
+import io.anyline2.wrapper.extensions.WrapperSessionScanStartRequestExtensionKt;
+import io.anyline2.wrapper.extensions.WrapperSessionSdkInitializationResponseExtensionKt;
+import io.anyline2.wrapper.extensions.WrapperSessionUCRReportRequestExtensionKt;
+import io.anyline2.wrapper.legacy.LegacyPluginHelper;
 
-class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultReporter.OnResultListener {
+class AnylineSDKPlugin extends ReactContextBaseJavaModule
+        implements WrapperSessionClientInterface, ResultReporter.OnResultListener {
 
-    static {
-        System.loadLibrary("opencv_java3_al");
-        System.loadLibrary("anylineCore");
-    }
-
-    // We're creating a static variable to retain the SDK instance in order to prevent crashes due to garbage collection cleaning up the SDK.
-    protected static final AnylineSdk anylineSdk = AnylineSdk.INSTANCE;
+    // We're creating a static variable to retain the WrapperSessionProvider instance in order to prevent crashes due to garbage collection cleaning up the SDK.
+    protected static final WrapperSessionProvider wrapperSessionProvider = WrapperSessionProvider.INSTANCE;
     // We're creating a static variable to store the last license used to initialize the SDK
     private static String license;
 
     private static boolean isInitializedWithLicenseKey(String requestedLicense) {
-        return (license != null && AnylineSdk.isInitialized() && license.equals(requestedLicense));
+        return (license != null
+                && WrapperSessionProvider.getCurrentSdkInitializationResponse().getInitialized() == Boolean.TRUE
+                && license.equals(requestedLicense));
     }
 
     public static final String REACT_CLASS = "AnylineSDKPlugin";
-    public static final String EXTRA_CONFIG_JSON = "EXTRA_CONFIG_JSON";
-    public static final String EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS = "EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS";
-    public static final String EXTRA_SCAN_MODE = "EXTRA_SCAN_MODE";
-    public static final String EXTRA_ERROR_MESSAGE = "EXTRA_ERROR_MESSAGE";
-    public static final String EXTRA_OCR_CONFIG_JSON = "EXTRA_OCR_CONFIG_JSON";
-    public static final String EXTRA_ENABLE_BARCODE_SCANNING = "EXTRA_ENABLE_BARCODE_SCANNING";
-
-    public static final int RESULT_CANCELED = 0;
-    public static final int RESULT_OK = 1;
-    public static final int RESULT_ERROR = 2;
     private static final String E_ERROR = "E_ERROR";
-    private JSONObject configObject;
-    private ReactApplicationContext reactContext;
-    private JSONObject options;
-    private Callback onResultCallback;
-    private Callback onErrorCallback;
-    private Promise promise;
-    private String returnMethod;
-    private String config;
-    private String scanViewInitializationParameters;
-    private AssetContextJsonParser assetContextJsonParser;
 
-    private static WrapperConfig wrapperConfig;
+    private final ReactApplicationContext reactContext;
+
+    private String returnMethod;
+
+    private Promise wrapperSessionSdkInitializationResponsePromise = null;
+
+    private Promise wrapperSessionScanResponsePromise = null;
+    private Callback scanResponseResultCallback = null;
+    private Callback scanResponseErrorCallback = null;
+
+    private Promise wrapperSessionExportCachedEventsPromise = null;
+
+    private Callback reportCorrectedResultResponseCallback = null;
+    private Callback reportCorrectedResultErrorCallback = null;
 
     AnylineSDKPlugin(ReactApplicationContext context) {
         super(context);
         this.reactContext = context;
-        this.assetContextJsonParser = new AssetContextJsonParser();
         ContextProvider.setInstance(context);
     }
 
@@ -91,57 +94,37 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     }
 
     @ReactMethod
-    protected void setPluginVersion(final String pluginVersion) {
-        wrapperConfig = new WrapperConfig.Wrapper(
-            new WrapperInfo(WrapperInfo.WrapperType.ReactNative, pluginVersion)
-        );
+    protected void setupWrapperSession(final String pluginVersion) {
+        WrapperInfo wrapperInfo = new WrapperInfo(WrapperInfo.WrapperType.ReactNative, pluginVersion);
+        WrapperSessionProvider.setupWrapperSession(wrapperInfo,this);
     }
 
     @ReactMethod
     public void licenseKeyExpiryDate(final Promise promise) {
-        try {
-            promise.resolve(String.valueOf(AnylineSdk.getExpiryDate()));
-        } catch (LicenseException e) {
-            promise.reject(E_ERROR, e.getMessage());
+        if (WrapperSessionProvider.getCurrentSdkInitializationResponse().getInitialized() == Boolean.TRUE) {
+            WrapperSessionSdkInitializationResponseInitialized sdkInitializationResponseInitialized
+                    = WrapperSessionProvider.getCurrentSdkInitializationResponse().getSucceedInfo();
+            if (sdkInitializationResponseInitialized != null) {
+                promise.resolve(sdkInitializationResponseInitialized.getExpiryDate());
+                return;
+            }
         }
+        promise.reject(E_ERROR, "Anyline SDK was not initialized");
     }
 
     @ReactMethod
     public void isInitialized(final Promise promise) {
-        promise.resolve(AnylineSdk.isInitialized());
+        promise.resolve(WrapperSessionProvider.getCurrentSdkInitializationResponse().getInitialized());
     }
 
     @ReactMethod
     @Deprecated
     public void setupScanViewWithConfigJson(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
-        onResultCallback = onResultReact;
-        onErrorCallback = onErrorReact;
+        scanResponseResultCallback = onResultReact;
+        scanResponseErrorCallback = onErrorReact;
         this.returnMethod = "callback";
-        this.config = config;
 
-        routeScanMode(scanMode);
-    }
-
-    @ReactMethod
-    public void update(
-            String assetContextJson,
-            Callback onUpdateError,
-            Callback onUpdateFinished
-    ) {
-        try {
-            AssetContext assetContext = assetContextJsonParser.parseJson(reactContext, assetContextJson);
-
-            if (assetContext != null) {
-                AnylineUpdater.update(
-                    reactContext,
-                    assetContext,
-                    new AnylineUpdateDelegateImpl(reactContext, onUpdateError, onUpdateFinished),
-                    PluginType.OCR
-                );
-            }
-        } catch (JSONException e) {
-            returnError(e.getMessage());
-        }
+        routeScanMode(config, null, null, null);
     }
 
     @ReactMethod
@@ -155,22 +138,8 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
             promise.resolve(true);
             return;
         }
-
-        CacheConfig.Preset cacheConfig = CacheConfig.Preset.Default.INSTANCE;
-        if (enableOfflineCache) {
-            cacheConfig = CacheConfig.Preset.OfflineLicenseEventCachingEnabled.INSTANCE;
-        }
-        try {
-            AnylineSdk.init(license, reactContext, "", cacheConfig, wrapperConfig);
-            this.license = license;
-            if (promise != null) {
-                promise.resolve(true);
-            }
-        } catch (LicenseException e) {
-            if (promise != null) {
-                promise.reject(E_ERROR, e.getMessage());
-            }
-        }
+        wrapperSessionSdkInitializationResponsePromise = promise;
+        initSdkWithCacheConfig(license, enableOfflineCache);
     }
 
     @ReactMethod
@@ -183,187 +152,98 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
         if (isInitializedWithLicenseKey(license)) {
             return;
         }
+        AnylineSDKPlugin.license = license;
 
-        CacheConfig.Preset cacheConfig = CacheConfig.Preset.Default.INSTANCE;
-        if (enableOfflineCache) {
-            cacheConfig = CacheConfig.Preset.OfflineLicenseEventCachingEnabled.INSTANCE;
-        }
-        try {
-            AnylineSdk.init(license, reactContext, "", cacheConfig, wrapperConfig);
-            this.license = license;
-        } catch (LicenseException e) {
-            returnError(e.getMessage());
-        }
-    }
+        JSONObject wrapperSessionSdkInitializationRequestJson =
+                LegacyPluginHelper.getWrapperSessionSdkInitializationRequestJson(license, enableOfflineCache, null);
 
-    @ReactMethod
-    public void resetUpdate() {
-        // TODO
+        WrapperSessionProvider.requestSdkInitialization(
+                wrapperSessionSdkInitializationRequestJson.toString());
     }
 
     @ReactMethod
     public void setup(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
         setupWithInitializationParameters(null, config, scanMode, onResultReact, onErrorReact);
     }
-
     @ReactMethod
-    public void setupWithInitializationParameters(String initializationParameters, String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
-        onResultCallback = onResultReact;
-        onErrorCallback = onErrorReact;
+    public void setupWithInitializationParameters(String scanViewInitializationParametersString, String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
+        scanResponseResultCallback = onResultReact;
+        scanResponseErrorCallback = onErrorReact;
         this.returnMethod = "callback";
-        this.config = config;
-        this.scanViewInitializationParameters = initializationParameters;
 
-        routeScanMode(scanMode);
+        routeScanMode(config, scanViewInitializationParametersString, null, null);
     }
-
-    @ReactMethod
-    public void reportCorrectedResult(String blobKey, String correctedResult, Callback onResponseCallback, Callback onErrorCallback) {
-        try {
-            String correctedResultReturn = ScanResult.reportCorrectedResultFromBlobKey(blobKey, correctedResult);
-            try {
-                JSONObject correctedResultJson = new JSONObject(correctedResultReturn);
-                int correctedResultCode = correctedResultJson.optInt("code", 0);
-                String correctedResultMessage = correctedResultJson.optString("message");
-                if (correctedResultCode == 200) {
-                    String correctedResultInternalMessage = "";
-                    if (correctedResultMessage != null) {
-                        correctedResultInternalMessage = new JSONObject(correctedResultMessage).optString("message");
-                    }
-                    onResponseCallback.invoke(correctedResultInternalMessage);
-                } else {
-                    onErrorCallback.invoke(correctedResultMessage);
-                }
-            } catch (JSONException e) {
-                onErrorCallback.invoke(e.getMessage());
-            }
-        }
-        catch (IllegalArgumentException e) {
-            onErrorCallback.invoke(e.getMessage());
-        }
-    }
-
-    @ReactMethod
-    public void exportCachedEvents(final Promise promise) {
-        try {
-            String exportedFile = AnylineSdk.exportCachedEvents();
-            if (exportedFile != null) {
-                if (promise != null) {
-                    promise.resolve(String.valueOf(exportedFile));
-                }
-            }
-            else {
-                if (promise != null) {
-                    promise.reject(E_ERROR, "Event cache is empty.");
-                }
-            }
-        } catch (IOException e) {
-            if (promise != null) {
-                promise.reject(E_ERROR, e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * This function removes all previous scan result images from disk, either from external
-     * or internal files dir, e.g.:
-     * /sdcard/Android/[applicationId]/files/results/image1729849635965
-     */
-    private void deleteAllPreviousScanResultImages() {
-        String imagePath = "";
-        if (reactContext.getExternalFilesDir(null) != null) {
-            imagePath = reactContext
-                    .getExternalFilesDir(null)
-                    .toString() + "/results/";
-
-        } else if (reactContext.getFilesDir() != null) {
-            imagePath = reactContext
-                    .getFilesDir()
-                    .toString() + "/results/";
-        }
-
-        File resultFolder = new File(imagePath);
-        File[] files = resultFolder.listFiles();
-        if (files != null) {
-            for (int fileIndex = 0; fileIndex < files.length; fileIndex++) {
-                if (files[fileIndex].getName().startsWith("image")) {
-                    files[fileIndex].delete();
-                }
-            }
-        }
-    }
-
     @ReactMethod
     public void setupPromise(String config, String scanMode, final Promise promise) {
         setupPromiseWithInitializationParameters(null, config, scanMode, promise);
     }
     @ReactMethod
-    public void setupPromiseWithInitializationParameters(String initializationParameters, String config, String scanMode, final Promise promise) {
-        this.promise = promise;
+    public void setupPromiseWithScanCallbackConfig(String config, String scanMode, String scanCallbackConfigString, final Promise promise) {
+        setupPromiseWithInitializationParametersAndScanCallbackConfig(null, config, scanMode, scanCallbackConfigString, promise);
+    }
+    @ReactMethod
+    public void setupPromiseWithInitializationParameters(String initializationParametersString, String config, String scanMode, final Promise promise) {
+        setupPromiseWithInitializationParametersAndScanCallbackConfig(initializationParametersString, config, scanMode, null, promise);
+    }
+    @ReactMethod
+    public void setupPromiseWithInitializationParametersAndScanCallbackConfig(String initializationParametersString, String config, String scanMode, String scanCallbackConfigString, final Promise promise) {
+        this.wrapperSessionScanResponsePromise = promise;
         this.returnMethod = "promise";
-        this.config = config;
-        this.scanViewInitializationParameters = initializationParameters;
 
-        deleteAllPreviousScanResultImages();
-        routeScanMode(scanMode);
+        routeScanMode(config, initializationParametersString, null, scanCallbackConfigString);
     }
 
-    private void routeScanMode(String scanMode) {
-        switch (scanMode) {
-            case "scan": // > Anyline 4
-                scanAnyline4();
-                break;
-            default:
-                returnError("Wrong ScanMode");
-        }
-    }
+    private void routeScanMode(
+            String scanViewConfigContent,
+            String scanViewInitializationParametersString,
+            String scanViewConfigPath,
+            String scanCallbackConfigString) {
+        boolean shouldReturnImages = true;
 
-    private void scanAnyline4() {
+        WrapperSessionScanStartRequest wrapperSessionScanRequest;
         try {
-            configObject = new JSONObject(this.config);
-            if (configObject != null) {
-                scan();
-            } else {
-                returnError("No ViewPlugin in config. Please check your configuration.");
-            }
-        } catch (LicenseException e) {
-            returnError("LICENSE ERROR: " + e.getMessage());
-        } catch (JSONException e) {
-            returnError("JSON ERROR: " + e.getMessage());
-        }
-    }
-
-    private void scan() throws LicenseException, JSONException {
-
-        Intent intent = new Intent(getCurrentActivity(), ScanActivity.class);
-
-        if (!AnylineSdk.isInitialized()) {
-            if (this.license != null) {
-                AnylineSdk.init(this.license, reactContext, "", CacheConfig.Preset.Default.INSTANCE, wrapperConfig);
-            }
-            else {
-                throw new JSONException("SDK is not initialized. Please initialize SDK before scanning.");
-            }
+            wrapperSessionScanRequest = LegacyPluginHelper.getWrapperSessionScanStartRequest(
+                    this.reactContext,
+                    scanViewConfigContent,
+                    scanViewInitializationParametersString,
+                    scanViewConfigPath,
+                    scanCallbackConfigString,
+                    shouldReturnImages);
+        } catch (Exception e) {
+            returnError("Could not parse parameters: " + e.getMessage());
+            return;
         }
 
-        configObject = new JSONObject(this.config);
+        JSONObject wrapperSessionScanStartRequestJson
+                = WrapperSessionScanStartRequestExtensionKt.toJsonObject(wrapperSessionScanRequest);
 
-        JSONObject optionsJSONObject = configObject.optJSONObject("options");
-
-        if (optionsJSONObject != null) {
-            intent.putExtra(
-                EXTRA_ENABLE_BARCODE_SCANNING,
-                optionsJSONObject.optBoolean("nativeBarcodeEnabled", false)
-            );
-        }
-
-        intent.putExtra(EXTRA_CONFIG_JSON, configObject.toString());
-        intent.putExtra(EXTRA_SCANVIEW_INITIALIZATION_PARAMETERS, scanViewInitializationParameters);
+        WrapperSessionProvider.requestScanStart(wrapperSessionScanStartRequestJson.toString());
 
         ResultReporter.setListener(this);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
 
-        reactContext.startActivityForResult(intent, 1111, intent.getExtras());
+    @ReactMethod
+    public void reportCorrectedResult(String blobKey, String correctedResult, Callback onResponseCallback, Callback onErrorCallback) {
+        reportCorrectedResultResponseCallback = onResponseCallback;
+        reportCorrectedResultErrorCallback = onErrorCallback;
+        WrapperSessionUCRReportRequest wrapperSessionUCRReportRequest = LegacyPluginHelper
+                .getWrapperSessionUCRReportRequest(blobKey, correctedResult);
+
+        JSONObject wrapperSessionUCRReportRequestJson = WrapperSessionUCRReportRequestExtensionKt
+                .toJsonObject(wrapperSessionUCRReportRequest);
+
+        WrapperSessionProvider.requestUCRReport(wrapperSessionUCRReportRequestJson.toString());
+    }
+
+    @ReactMethod
+    public void exportCachedEvents(final Promise promise) {
+        wrapperSessionExportCachedEventsPromise = promise;
+        WrapperSessionProvider.requestExportCachedEvents();
+    }
+
+    @ReactMethod
+    public void tryStopScan(String scanStopRequestParams) {
+        WrapperSessionProvider.requestScanStop(scanStopRequestParams);
     }
 
     @Override
@@ -384,13 +264,15 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private void returnError(String error) {
         switch (this.returnMethod) {
             case "callback":
-                if (onErrorCallback != null) {
-                    onErrorCallback.invoke(error);
-                    onErrorCallback = null;
+                if (scanResponseErrorCallback != null) {
+                    scanResponseErrorCallback.invoke(error);
+                    scanResponseErrorCallback = null;
                 }
                 break;
             case "promise":
-                promise.reject(E_ERROR, error);
+                if (wrapperSessionScanResponsePromise != null) {
+                    wrapperSessionScanResponsePromise.reject(E_ERROR, error);
+                }
                 break;
             default:
                 break;
@@ -400,16 +282,121 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule implements ResultRepor
     private void returnSuccess(String result) {
         switch (this.returnMethod) {
             case "callback":
-                if (onResultCallback != null) {
-                    onResultCallback.invoke(result);
-                    onResultCallback = null;
+                if (scanResponseResultCallback != null) {
+                    scanResponseResultCallback.invoke(result);
+                    scanResponseResultCallback = null;
                 }
                 break;
             case "promise":
-                promise.resolve(result);
+                if (wrapperSessionScanResponsePromise != null) {
+                    wrapperSessionScanResponsePromise.resolve(result);
+                }
                 break;
             default:
                 break;
         }
+    }
+
+    private void sendEvent(String eventName, Object params) {
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
+    }
+
+    @Override
+    public @NotNull Context getContext() {
+        return this.reactContext;
+    }
+
+    @Override
+    public void onSdkInitializationResponse(@NotNull WrapperSessionSdkInitializationResponse initializationResponse) {
+        JSONObject json =
+                WrapperSessionSdkInitializationResponseExtensionKt.toJsonObject(initializationResponse);
+
+        if (wrapperSessionSdkInitializationResponsePromise != null) {
+            if (initializationResponse.getInitialized() == Boolean.TRUE) {
+                wrapperSessionSdkInitializationResponsePromise.resolve(true);
+            } else {
+                wrapperSessionSdkInitializationResponsePromise.reject(E_ERROR, json.toString());
+            }
+        }
+    }
+
+    @Override
+    public void onScanResults(@NotNull WrapperSessionScanResultsResponse scanResultsResponse) {
+        WrapperSessionScanResultConfig scanResultConfig = scanResultsResponse.getScanResultConfig();
+        List<ExportedScanResult> scanResultList = scanResultsResponse.getExportedScanResults();
+        WrapperSessionScanResultExtraInfo scanResultExtraInfo = scanResultsResponse.getScanResultExtraInfo();
+        try {
+            String resultsWithImagePathString = LegacyPluginHelper
+                    .getScanResultsWithImagePath(scanResultList, scanResultExtraInfo.getViewPluginType());
+
+            if (scanResultConfig.getCallbackConfig() != null
+                    &&  scanResultConfig.getCallbackConfig().getOnResultEventName() != null) {
+                sendEvent(
+                        scanResultConfig.getCallbackConfig().getOnResultEventName(),
+                        resultsWithImagePathString);
+            } else {
+                ResultReporter.onResult(resultsWithImagePathString, true);
+            }
+        } catch (Exception e) {
+            //exception will not be handled here
+        }
+    }
+
+    @Override
+    public void onUIElementClicked(@NonNull WrapperSessionScanResultConfig scanResultConfig,
+                                   @NonNull UIFeedbackElementConfig uiFeedbackElementConfig) {
+        if (scanResultConfig.getCallbackConfig() != null
+                &&  scanResultConfig.getCallbackConfig().getOnUIElementClickedEventName() != null) {
+            sendEvent(
+                    scanResultConfig.getCallbackConfig().getOnUIElementClickedEventName(),
+                    UIFeedbackElementConfigExtensionKt.toJsonObject(uiFeedbackElementConfig).toString());
+        }
+    }
+
+    @Override
+    public void onScanResponse(@NotNull WrapperSessionScanResponse scanResponse) {
+        if (scanResponse.getStatus() != null) {
+            switch (scanResponse.getStatus()) {
+                case SCAN_SUCCEEDED:
+                    WrapperSessionScanResultConfig scanResultConfig = scanResponse.getScanResultConfig();
+                    if (scanResultConfig.getCallbackConfig() != null
+                            &&  scanResultConfig.getCallbackConfig().getOnResultEventName() != null) {
+                        ResultReporter.onResult("", true);
+                    }
+                    break;
+                case SCAN_FAILED:
+                    ResultReporter.onError(scanResponse.getFailInfo().getLastError());
+                    break;
+                case SCAN_ABORTED:
+                    ResultReporter.onCancel();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onUCRReportResponse(@NotNull WrapperSessionUCRReportResponse ucrReportResponse) {
+        if (ucrReportResponse.getStatus() == WrapperSessionUCRReportResponse.WrapperSessionUCRReportResponseStatus.UCR_REPORT_SUCCEEDED) {
+            reportCorrectedResultResponseCallback.invoke(ucrReportResponse.getSucceedInfo().getMessage());
+        } else {
+            reportCorrectedResultErrorCallback.invoke(LegacyPluginHelper
+                    .getWrapperSessionUCRReportResponseFailMessage(ucrReportResponse.getFailInfo()));
+        }
+        reportCorrectedResultResponseCallback = null;
+        reportCorrectedResultErrorCallback = null;
+    }
+
+    @Override
+    public void onExportCachedEventsResponse(@NotNull WrapperSessionExportCachedEventsResponse exportCachedEventsResponse) {
+        if (exportCachedEventsResponse.getStatus() == WrapperSessionExportCachedEventsResponse.WrapperSessionExportCachedEventsResponseStatus.EXPORT_SUCCEEDED) {
+            WrapperSessionExportCachedEventsResponseSucceed exportCachedEventsSucceed = exportCachedEventsResponse.getSucceedInfo();
+            wrapperSessionExportCachedEventsPromise.resolve(exportCachedEventsSucceed.getExportedFile());
+        } else {
+            WrapperSessionExportCachedEventsResponseFail exportCachedEventsFail = exportCachedEventsResponse.getFailInfo();
+            wrapperSessionExportCachedEventsPromise.reject(E_ERROR, exportCachedEventsFail.getLastError());
+        }
+        wrapperSessionExportCachedEventsPromise = null;
     }
 }

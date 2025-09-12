@@ -28,6 +28,14 @@ export default function Overview({ updateAnyline, disabled }) {
           }} />
       </View>
 
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'Barcode Continuous'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => {
+            platformPermissionCheck('BARCODE_CONTINUOUS')
+          }} />
+      </View>
+
       <Text style={styles.text}>METER READING</Text>
 
       <View style={styles.buttons}>
