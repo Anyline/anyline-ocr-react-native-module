@@ -59,6 +59,8 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule
                 && license.equals(requestedLicense));
     }
 
+    private static String scanViewConfigPathString = null;
+
     public static final String REACT_CLASS = "AnylineSDKPlugin";
     private static final String E_ERROR = "E_ERROR";
 
@@ -100,6 +102,11 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void setViewConfigsPath(final String path) {
+        scanViewConfigPathString = path;
+    }
+
+    @ReactMethod
     public void licenseKeyExpiryDate(final Promise promise) {
         if (WrapperSessionProvider.getCurrentSdkInitializationResponse().getInitialized() == Boolean.TRUE) {
             WrapperSessionSdkInitializationResponseInitialized sdkInitializationResponseInitialized
@@ -124,7 +131,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule
         scanResponseErrorCallback = onErrorReact;
         this.returnMethod = "callback";
 
-        routeScanMode(config, null, null, null);
+        routeScanMode(config, null, scanViewConfigPathString, null);
     }
 
     @ReactMethod
@@ -171,7 +178,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule
         scanResponseErrorCallback = onErrorReact;
         this.returnMethod = "callback";
 
-        routeScanMode(config, scanViewInitializationParametersString, null, null);
+        routeScanMode(config, scanViewInitializationParametersString, scanViewConfigPathString, null);
     }
     @ReactMethod
     public void setupPromise(String config, String scanMode, final Promise promise) {
@@ -190,7 +197,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule
         this.wrapperSessionScanResponsePromise = promise;
         this.returnMethod = "promise";
 
-        routeScanMode(config, initializationParametersString, null, scanCallbackConfigString);
+        routeScanMode(config, initializationParametersString, scanViewConfigPathString, scanCallbackConfigString);
     }
 
     private void routeScanMode(

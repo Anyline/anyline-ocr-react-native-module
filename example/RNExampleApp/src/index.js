@@ -19,33 +19,33 @@ import AnylineOCR from 'anyline-ocr-react-native-module';
 import Result from './Result';
 import Overview from './Overview';
 
-import BarcodeConfig from '../config/BarcodeConfig';
-import BarcodePDF417Config from '../config/Barcode_PDF417Config';
-import MRZConfig from '../config/MRZConfig';
-import UniversalIdConfig from '../config/UniversalIdConfig';
-import ArabicIdConfig from '../config/ArabicIdConfig';
-import CyrillicIdConfig from '../config/CyrillicIdConfig';
-import AnalogDigitalMeterConfig from '../config/AnalogDigitalMeterConfig';
-import SerialNumberConfig from '../config/SerialNumber';
-import VinConfig from '../config/VINConfig';
-import USNRConfig from '../config/USNRConfig';
-import ShipConConfig from '../config/ContainerShipConfig';
-import VerticalContainerConfig from '../config/VerticalContainerConfig';
-import SerialScanningConfig from '../config/SerialScanningConfig';
-import ParallelScanningConfig from '../config/ParallelScanningConfig';
-import ParallelFirstScanningConfig from '../config/ParallelFirstScanningConfig';
-import TireMakeConfig from '../config/TireMakeConfig';
-import TireSizeConfig from '../config/TireSizeConfig';
-import CommercialTireIdConfig from '../config/CommercialTireIdConfig';
-import OdometerConfig from '../config/OdometerConfig';
-import VRCConfig from '../config/VRCConfig';
-import DialMeterConfig from '../config/DialMeterConfig';
-import LicensePlateConfigEU from '../config/LicensePlateConfigEU';
-import LicensePlateConfigUS from '../config/LicensePlateConfigUS';
-import LicensePlateConfigAF from '../config/LicensePlateConfigAF';
-import TINUniversalConfig from '../config/TINUniversalConfig';
-import TINDOTConfig from '../config/TINDOTConfig';
-import BarcodeContinuousConfig from "../config/BarcodeContinuousConfig";
+import BarcodeConfig from '../assets/config/BarcodeConfig.json';
+import BarcodePDF417Config from '../assets/config/Barcode_PDF417Config.json';
+import MRZConfig from '../assets/config/MRZConfig.json';
+import UniversalIdConfig from '../assets/config/UniversalIdConfig.json';
+import ArabicIdConfig from '../assets/config/ArabicIdConfig.json';
+import CyrillicIdConfig from '../assets/config/CyrillicIdConfig.json';
+import AnalogDigitalMeterConfig from '../assets/config/AnalogDigitalMeterConfig.json';
+import SerialNumberConfig from '../assets/config/SerialNumber.json';
+import VinConfig from '../assets/config/VINConfig.json';
+import USNRConfig from '../assets/config/USNRConfig.json';
+import ShipConConfig from '../assets/config/ContainerShipConfig.json';
+import VerticalContainerConfig from '../assets/config/VerticalContainerConfig.json';
+import SerialScanningConfig from '../assets/config/SerialScanningConfig.json';
+import ParallelScanningConfig from '../assets/config/ParallelScanningConfig.json';
+import ParallelFirstScanningConfig from '../assets/config/ParallelFirstScanningConfig.json';
+import TireMakeConfig from '../assets/config/TireMakeConfig.json';
+import TireSizeConfig from '../assets/config/TireSizeConfig.json';
+import CommercialTireIdConfig from '../assets/config/CommercialTireIdConfig.json';
+import OdometerConfig from '../assets/config/OdometerConfig.json';
+import VRCConfig from '../assets/config/VRCConfig.json';
+import DialMeterConfig from '../assets/config/DialMeterConfig.json';
+import LicensePlateConfigEU from '../assets/config/LicensePlateConfigEU.json';
+import LicensePlateConfigUS from '../assets/config/LicensePlateConfigUS.json';
+import LicensePlateConfigAF from '../assets/config/LicensePlateConfigAF.json';
+import TINUniversalConfig from '../assets/config/TINUniversalConfig.json';
+import TINDOTConfig from '../assets/config/TINDOTConfig.json';
+import BarcodeContinuousConfig from "../assets/config/BarcodeContinuousConfig.json";
 const { license } = require('./license.js');
 
 // Disable Warnings
@@ -257,6 +257,9 @@ class Anyline extends Component {
       if (!isInitialized) {
         await AnylineOCR.setupAnylineSDK(demoAppLicenseKey);
       }
+
+      // Set the path to the config folder (relative to the assets' folder)
+      AnylineOCR.setViewConfigsPath('config');
 
       console.log(`AnylineOCR.setupPromise`);
       let result = "";

@@ -3,7 +3,7 @@
     "name": "RNExampleApp",
     "description": "Anyline RN Dev Examples",
     "slug": "RNExampleApp",
-    "version": "55.5.0",
+    "version": "55.6.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -64,7 +64,12 @@
             "kotlinVersion": "1.9.25",
             "extraMavenRepos": [
               "https://mobile-sdk-android.anyline.io/release/"
-            ]
+            ],
+            "enableProguardInReleaseBuilds": true,
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "extraProguardRules": "-keep public class io.anyline.plugin.config.** { public protected *; } -keep public class io.anyline.plugin.result.** { public protected *; } -keep class io.anyline.wrapper.config.** { public protected *; } -keep public class io.anyline2.core.** { public protected *; } -keep class at.nineyards.anyline.** { *; } -dontwarn at.nineyards.anyline.** -dontwarn com.squareup.moshi.** -keep class com.squareup.moshi.** { *; } -keepclassmembers class * { @com.squareup.moshi.* <fields>; } -keep @com.squareup.moshi.JsonClass class * { *; } -keepclassmembers class kotlin.Metadata { *; } -dontwarn org.jetbrains.annotations.** "
+
           },
           "ios": {
             "deploymentTarget": "15.1",
@@ -73,7 +78,8 @@
         }
       ],
       "expo-dev-client",
-      "./plugins/withCustomAppBuildGradle.js"
+      "./plugins/withCustomAppBuildGradle.js",
+      "./plugins/withAssetCopy.js"
     ]
   }
 }

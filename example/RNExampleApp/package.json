@@ -1,6 +1,6 @@
 {
   "name": "react-native-example-app",
-  "version": "55.5.0",
+  "version": "55.6.0",
   "private": true,
   "scripts": {
     "initProject": "yarn add expo && yarn add ../../plugin",
@@ -15,7 +15,7 @@
     "@expo/vector-icons": "~14.0.4",
     "anyline-ocr-react-native-module": "../../plugin",
     "expo": "~52.0.46",
-    "expo-build-properties": "~0.13.2",
+    "expo-build-properties": "~0.13.3",
     "expo-dev-client": "~5.0.14",
     "expo-font": "~13.0.4",
     "expo-splash-screen": "~0.29.24",
