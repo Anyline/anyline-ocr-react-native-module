@@ -61,6 +61,6 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'io.anyline:anylinesdk:55.5.0'
+    implementation 'io.anyline:anylinesdk:55.6.0'
     implementation "com.facebook.react:react-native:+"
 }

@@ -9,6 +9,8 @@ static ALWrapperSessionProvider *_wrapperSessionProvider;
 // We're creating a static variable to store the last license used to initialize the SDK
 static NSString *license;
 
+static NSString *scanViewConfigPathString;
+
 @interface AnylineSDKPlugin()
 
 @property (nonatomic, copy) NSString *callbackId;
@@ -72,6 +74,10 @@ RCT_EXPORT_METHOD(setupWrapperSession:(NSString *)pluginVersion) {
     [self setupWrapperSessionWithPluginVersion:pluginVersion];
 }
 
+RCT_EXPORT_METHOD(setViewConfigsPath:(NSString *)path) {
+    scanViewConfigPathString = path;
+}
+
 RCT_EXPORT_METHOD(setupAnylineSDK:(NSString *)licenseKey
         resolver:(RCTPromiseResolveBlock)resolve
         rejecter:(RCTPromiseRejectBlock)reject) {
@@ -126,7 +132,7 @@ RCT_EXPORT_METHOD(setupWithInitializationParameters:(NSString * _Nullable)initia
 
     [self requestScanStartWithScanViewConfigContent:config
              scanViewInitializationParametersString:initializationParametersStr
-                                 scanViewConfigPath:nil
+                                 scanViewConfigPath:scanViewConfigPathString
                            scanCallbackConfigString:nil];
 }
 
@@ -171,7 +177,7 @@ RCT_EXPORT_METHOD(setupPromiseWithInitializationParametersAndScanCallbackConfig:
     self.returnMethod = @"promise";
     [self requestScanStartWithScanViewConfigContent:configStr
              scanViewInitializationParametersString:initializationParametersStr
-                                 scanViewConfigPath:nil
+                                 scanViewConfigPath:scanViewConfigPathString
                            scanCallbackConfigString:scanCallbackConfigString];
 }
 
