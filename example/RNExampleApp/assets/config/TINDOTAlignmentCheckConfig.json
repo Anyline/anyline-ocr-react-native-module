@@ -1,7 +1,11 @@
-export default {
+{
     "options": {
         "doneButtonConfig": {
-            "offset.y": -88
+            "fontSize": 20,
+            "title": "< Back",
+            "positionXAlignment": "left",
+            "positionYAlignment": "top",
+            "fillType": "rect"
         },
         "rotateButton": {
             "alignment": "top_right",
@@ -9,7 +13,8 @@ export default {
                 "x": 0,
                 "y": 0
             }
-        }
+        },
+        "defaultOrientation": "landscape"
     },
     "cameraConfig": {
         "captureResolution": "1080p",
@@ -24,11 +29,13 @@ export default {
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "tin",
+            "id": "TIRE",
             "cancelOnResult": true,
             "tinConfig": {
-                "scanMode": "UNIVERSAL",
-                "upsideDownMode": "AUTO"
+                "scanMode": "DOT",
+                "upsideDownMode": "AUTO",
+                "horizontalAlignmentRatio": 0.11,
+                "detectionMinHeightRatio": 0.36
             }
         },
         "cutoutConfig": {
@@ -58,15 +65,27 @@ export default {
         "uiFeedbackConfig": {
             "presets": [
                 {
-                    "presetName": "tin_with_instruction_overlay_image_text_sound_feedback",
+                    "presetName": "tin_with_instruction_oriented_overlay_image_text_sound_feedback",
                     "presetAttributes": [
                         {
                           "attributeName": "instruction_text",
-                          "attributeValue": "Please make sure the entire TIN number is inside the cutout."
+                          "attributeValue": "Please make sure the entire DOT number is inside the cutout."
                         },
                         {
-                          "attributeName": "left_overlay_image",
-                          "attributeValue": ""
+                          "attributeName": "cutout_overlay_normal_image",
+                          "attributeValue": "uifeedback_tin_dot_cutout_normal"
+                        },
+                        {
+                          "attributeName": "cutout_overlay_upsidedown_image",
+                          "attributeValue": "uifeedback_tin_dot_cutout_upsidedown"
+                        },
+                        {
+                          "attributeName": "alignment_alignleft_image",
+                          "attributeValue": "uifeedback_tin_dot_alignleft"
+                        },
+                        {
+                          "attributeName": "alignment_alignright_image",
+                          "attributeValue": "uifeedback_tin_dot_alignright"
                         },
                         {
                             "attributeName": "lighting_toodark_image",
@@ -93,6 +112,14 @@ export default {
                             "attributeValue": "uifeedback_tin_wrongformat"
                         },
                         {
+                          "attributeName": "alignment_alignleft_text",
+                          "attributeValue": ""
+                        },
+                        {
+                          "attributeName": "alignment_alignright_text",
+                          "attributeValue": ""
+                        },
+                        {
                             "attributeName": "lighting_toodark_text",
                             "attributeValue": ""
                         },
@@ -115,6 +142,14 @@ export default {
                         {
                             "attributeName": "date_wrong_text",
                             "attributeValue": ""
+                        },
+                        {
+                          "attributeName": "alignment_alignleft_sound",
+                          "attributeValue": "info_sound_default.wav"
+                        },
+                        {
+                          "attributeName": "alignment_alignright_sound",
+                          "attributeValue": "info_sound_default.wav"
                         },
                         {
                             "attributeName": "lighting_toodark_sound",

@@ -56,7 +56,7 @@ static NSString *scanViewConfigPathString;
 + (BOOL)isInitializedWithLicenseKey:(NSString *)requestedLicense {
     ALWrapperSessionSDKInitializationResponse *currentSdkInitializationResponse = [ALWrapperSessionProvider getCurrentSdkInitializationResponse];
     return (license
-            && currentSdkInitializationResponse.initialized != 0
+            && [currentSdkInitializationResponse.initialized isEqualToNumber:@YES]
             && [license isEqualToString:requestedLicense]);
 }
 
@@ -98,13 +98,13 @@ RCT_EXPORT_METHOD(setupAnylineSDKWithCacheConfig:(NSString *)licenseKey
 
 RCT_EXPORT_METHOD(isInitialized:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     ALWrapperSessionSDKInitializationResponse *currentSdkInitializationResponse = [ALWrapperSessionProvider getCurrentSdkInitializationResponse];
-    BOOL isInitialized = (currentSdkInitializationResponse.initialized != 0);
+    BOOL isInitialized = ([currentSdkInitializationResponse.initialized isEqualToNumber:@YES]);
     resolve(@(isInitialized));
 }
 
 RCT_EXPORT_METHOD(licenseKeyExpiryDate:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     ALWrapperSessionSDKInitializationResponse *currentSdkInitializationResponse = [ALWrapperSessionProvider getCurrentSdkInitializationResponse];
-    if (currentSdkInitializationResponse.initialized != 0) {
+    if ([currentSdkInitializationResponse.initialized isEqualToNumber:@YES]) {
         ALWrapperSessionSDKInitializationResponseInitialized *sdkInitializationResponseInitialized = currentSdkInitializationResponse.succeedInfo;
         if (sdkInitializationResponseInitialized) {
             resolve(sdkInitializationResponseInitialized.expiryDate);
@@ -337,7 +337,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 }
 
 - (void)onSdkInitializationResponse:(nonnull ALWrapperSessionSDKInitializationResponse *)initializationResponse {
-    if (initializationResponse.initialized) {
+    if ([initializationResponse.initialized isEqualToNumber:@YES]) {
         self.wrapperSessionSdkInitializationResponsePromiseResolve(@"success");
     } else {
         self.wrapperSessionSdkInitializationResponsePromiseReject(@"ANYLINE_ERROR", [[initializationResponse toJSONDictionary] asJSONString], nil);

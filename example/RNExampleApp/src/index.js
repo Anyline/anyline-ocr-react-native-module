@@ -45,6 +45,7 @@ import LicensePlateConfigUS from '../assets/config/LicensePlateConfigUS.json';
 import LicensePlateConfigAF from '../assets/config/LicensePlateConfigAF.json';
 import TINUniversalConfig from '../assets/config/TINUniversalConfig.json';
 import TINDOTConfig from '../assets/config/TINDOTConfig.json';
+import TINDOTAlignmentCheckConfig from '../assets/config/TINDOTAlignmentCheckConfig.json';
 import BarcodeContinuousConfig from "../assets/config/BarcodeContinuousConfig.json";
 const { license } = require('./license.js');
 
@@ -154,6 +155,10 @@ class Anyline extends Component {
       case 'TIN_DOT':
         type = 'TIRE';
         config = TINDOTConfig;
+        break;
+      case 'TIN_DOT_ALIGNMENT_CHECK':
+        type = 'TIRE';
+        config = TINDOTAlignmentCheckConfig;
         break;
       case 'TIRE_MAKE':
         type = 'TIRE';
