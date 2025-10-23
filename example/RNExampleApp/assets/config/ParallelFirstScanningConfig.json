@@ -42,7 +42,7 @@
             "ratioFromSize": { "width": 62, "height": 9 },
             "offset": { "x": 0, "y": 0 },
             "outerColor": "000000",
-            "outerAlpha": 0,
+            "outerAlpha": 0.3,
             "strokeWidth": 2,
             "strokeColor": "0099FF",
             "cornerRadius": 4,

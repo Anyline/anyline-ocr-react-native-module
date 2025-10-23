@@ -157,6 +157,14 @@ export default function Overview({ updateAnyline, disabled }) {
           }} />
       </View>
 
+        <View style={styles.buttons}>
+          <Button style={styles.buttons} title={'TIN/DOT (Alignment Check)'} color="#0099FF"
+            disabled={disabled}
+            onPress={() => {
+              platformPermissionCheck('TIN_DOT_ALIGNMENT_CHECK')
+            }} />
+        </View>
+
       <View style={styles.buttons}>
         <Button style={styles.buttons} title={'Tire Make'} color="#0099FF"
           disabled={disabled}
