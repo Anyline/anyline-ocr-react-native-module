@@ -1,6 +1,6 @@
 const { withDangerousMod, withXcodeProject } = require('expo/config-plugins');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 /**
  * Expo config plugin to copy assets folder to both iOS and Android builds

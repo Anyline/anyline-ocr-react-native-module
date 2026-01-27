@@ -1,30 +1,29 @@
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 // Step 1: Read the environment variable
-const envValue = process.env.MOBILE_SDK_DEVEX_LICENSE_KEY;
+const envValue = process.env.ANYLINE_MOBILE_SDK_LICENSE_KEY;
 
-// Step 2: Define the file path
-const filePath = path.join(__dirname, 'src/license.js');
-
-// Step 3: Check if the file exists
-if (!fs.existsSync(filePath)) {
-// If the file doesn't exist, create it with an initial placeholder content
-fs.writeFileSync(filePath, `
-const license = '{REPLACE_YOUR_LICENSE_KEY}';
-
-module.exports = { license };
-`);
+// Step 2: Validate environment variable
+if (!envValue || envValue === 'undefined') {
+  console.error('ERROR: ANYLINE_MOBILE_SDK_LICENSE_KEY environment variable is not set or is undefined');
+  console.error('Please set it with: export ANYLINE_MOBILE_SDK_LICENSE_KEY="your-license-key"');
+  process.exit(1);
 }
 
-// Step 4: Read the file content
-let fileContent = fs.readFileSync(filePath, 'utf8');
+// Step 3: Define the file path
+const filePath = path.join(__dirname, 'src/license.js');
 
-// Step 5: Replace the placeholder with the environment variable value
-const updatedContent = fileContent.replace(/{REPLACE_YOUR_LICENSE_KEY}/g, envValue);
+// Step 4: Create the license file content
+const licenseContent = `
+const license = '${envValue}';
 
-// Step 6: Write the updated content back to the file
-fs.writeFileSync(filePath, updatedContent);
+module.exports = { license };
+`;
+
+// Step 5: Write the file (overwrites existing content)
+fs.writeFileSync(filePath, licenseContent);
 
 console.log('File content updated successfully!');
+console.log('License key has been set in src/license.js');

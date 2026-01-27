@@ -1,20 +1,21 @@
 {
   "name": "react-native-example-app",
-  "version": "55.7.1",
+  "version": "55.8.1",
   "private": true,
   "scripts": {
-    "initProject": "yarn add expo && yarn add ../../plugin",
-    "reinstall": "yarn remove anyline-ocr-react-native-module && yarn add ../../plugin && node add_license_key.js",
+    "initProject": "npm install expo && npm install ../../plugin",
+    "reinstall": "npm uninstall anyline-ocr-react-native-module && npm install ../../plugin && node add_license_key.js",
     "prebuild": "EXPO_NO_GIT_STATUS=1 npx expo prebuild --clean",
-    "start": "expo start --dev-client",
-    "android": "expo run:android",
-    "ios": "expo run:ios --device",
+    "start": "npx expo start --dev-client",
+    "android": "npx expo run:android",
+    "ios": "npx expo run:ios --device",
     "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "~14.0.4",
-    "anyline-ocr-react-native-module": "../../plugin",
+    "anyline-ocr-react-native-module": "file:../../plugin",
     "expo": "~52.0.46",
+    "expo-asset": "~11.0.0",
     "expo-build-properties": "~0.13.3",
     "expo-dev-client": "~5.0.14",
     "expo-font": "~13.0.4",

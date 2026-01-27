@@ -3,7 +3,7 @@
     "name": "RNExampleApp",
     "description": "Anyline RN Dev Examples",
     "slug": "RNExampleApp",
-    "version": "55.7.1",
+    "version": "55.8.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {

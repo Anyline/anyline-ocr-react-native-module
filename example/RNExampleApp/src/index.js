@@ -116,7 +116,7 @@ class Anyline extends Component {
     this.setState({ buttonsDisabled: true });
     this.setState({ titles: [] });
     let config;
-    let { titles } = this.state;
+    let titles = [];
 
     this.setState({
       currentScanMode: type,
