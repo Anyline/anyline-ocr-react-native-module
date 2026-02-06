@@ -56,12 +56,10 @@ const scrollRef = React.createRef();
 
 const demoAppLicenseKey = license;
 
-function getPlatformEventEmitter() {
-  return Platform.select({
+const platformEventEmitter = Platform.select({
     ios: new NativeEventEmitter(NativeModules),
     android: DeviceEventEmitter,
-  });
-}
+});
 
 class Anyline extends Component {
 
@@ -92,6 +90,9 @@ class Anyline extends Component {
       console.log('expiry: ' + expiry);
       licenseMessage = 'License expires on: ' + expiry;
       licenseInitSuccess = true;
+
+      // Set the path to the config folder (relative to the assets' folder)
+      AnylineOCR.setViewConfigsPath('config');
     } catch (error) {
       licenseMessage = 'Error: ' + error.message;
       console.log('error initializing Anyline SDK: ' + error);
@@ -263,9 +264,6 @@ class Anyline extends Component {
         await AnylineOCR.setupAnylineSDK(demoAppLicenseKey);
       }
 
-      // Set the path to the config folder (relative to the assets' folder)
-      AnylineOCR.setViewConfigsPath('config');
-
       console.log(`AnylineOCR.setupPromise`);
       let result = "";
       if (!this.state.hasContinuousResults) {
@@ -276,14 +274,14 @@ class Anyline extends Component {
       } else {
         continuousResults = "";
         continuousCount = 0;
-        getPlatformEventEmitter().addListener(anylineOCRResultEventName, continuousResultListener);
+        platformEventEmitter.addListener(anylineOCRResultEventName, continuousResultListener);
         result = await AnylineOCR.setupPromiseWithScanCallbackConfig(
             JSON.stringify(config),
             'scan',
             '{ "onResultEventName": "' + anylineOCRResultEventName + '" }'
         );
         result = "[" + continuousResults + "]";
-        getPlatformEventEmitter().removeAllListeners(anylineOCRResultEventName)
+        platformEventEmitter.removeAllListeners(anylineOCRResultEventName)
       }
 
       console.log('scan result: ' + result);

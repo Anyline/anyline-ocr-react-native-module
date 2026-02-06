@@ -5,8 +5,12 @@ package com.anyline.reactnative;
  */
 
 import android.content.Context;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.anyline.reactnative.nativeview.NativeViewRegistry;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
@@ -14,6 +18,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import org.jetbrains.annotations.NotNull;
@@ -169,6 +174,16 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void setDefaultScanStartPlatformOptions(String scanStartPlatformOptionsString, final Promise promise) {
+        try {
+            WrapperSessionProvider.setDefaultScanStartPlatformOptions(scanStartPlatformOptionsString);
+            promise.resolve("");
+        } catch (Exception e) {
+            promise.reject(E_ERROR, e.getMessage());
+        }
+    }
+
+    @ReactMethod
     public void setup(String config, String scanMode, Callback onResultReact, Callback onErrorReact) {
         setupWithInitializationParameters(null, config, scanMode, onResultReact, onErrorReact);
     }
@@ -224,7 +239,13 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule
         JSONObject wrapperSessionScanStartRequestJson
                 = WrapperSessionScanStartRequestExtensionKt.toJsonObject(wrapperSessionScanRequest);
 
-        WrapperSessionProvider.requestScanStart(wrapperSessionScanStartRequestJson.toString());
+        UiThreadUtil.runOnUiThread(() -> {
+            try {
+                WrapperSessionProvider.requestScanStart(wrapperSessionScanStartRequestJson.toString());
+            } catch (Exception e) {
+                returnError("Unable to request ScanStart: " + e.getMessage());
+            }
+        });
 
         ResultReporter.setListener(this);
     }
@@ -246,6 +267,11 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule
     public void exportCachedEvents(final Promise promise) {
         wrapperSessionExportCachedEventsPromise = promise;
         WrapperSessionProvider.requestExportCachedEvents();
+    }
+
+    @ReactMethod
+    public void trySwitchScan(String scanViewConfigContent) {
+        WrapperSessionProvider.requestScanSwitchWithScanViewConfigContentString(scanViewConfigContent);
     }
 
     @ReactMethod
@@ -313,6 +339,11 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule
     @Override
     public @NotNull Context getContext() {
         return this.reactContext;
+    }
+
+    @Override
+    public @Nullable ViewGroup getContainerView() {
+        return (ViewGroup) NativeViewRegistry.getLastOrNull();
     }
 
     @Override

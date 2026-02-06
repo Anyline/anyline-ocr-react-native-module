@@ -1,0 +1,76 @@
+{
+    "options": {
+        "segmentConfig": {
+            "titles": ["Back Camera", "Front Camera"],
+            "viewConfigs": ["NativeViewDrivingLicenseConfig.json", "NativeViewDrivingLicenseFrontConfig.json"],
+            "titleIndex": 0,
+            "offset.y": -24,
+            "tintColor": "0099ff"
+        }
+    },
+    "cameraConfig": {
+        "captureResolution": "1080p",
+        "defaultCamera": "BACK"
+    },
+    "flashConfig": {
+        "mode": "manual",
+        "alignment": "top_left"
+    },
+    "viewPluginConfig": {
+        "pluginConfig": {
+            "id": "driver_license_eu",
+            "universalIdConfig": {
+                "allowedLayouts": {
+                    "drivingLicense": []
+                },
+                "alphabet": "latin"
+            },
+            "cancelOnResult": true
+        },
+        "cutoutConfig" : {
+            "maxWidthPercent": "90%",
+            "maxHeightPercent": "90%",
+            "alignment": "center",
+            "strokeWidth": 2,
+            "cornerRadius": 4,
+            "strokeColor": "0099FF",
+            "outerColor": "000000",
+            "outerAlpha": 0.3,
+            "ratioFromSize" : {
+                "width": 50,
+                "height": 31
+            },
+            "cropPadding": {
+                "x": 25,
+                "y": 25
+            },
+            "cropOffset": {
+                "x": 0,
+                "y": 0
+            },
+            "feedbackStrokeColor": "0099FF"
+        },
+        "scanFeedbackConfig" : {
+            "style": "contour_rect",
+            "redrawTimeout": 100,
+            "strokeColor": "0099FF",
+            "fillColor" : "220099FF",
+            "beepOnResult": true,
+            "vibrateOnResult": true,
+            "strokeWidth": 2
+        },
+        "uiFeedbackConfig": {
+            "presets": [
+                {
+                    "presetName": "simple_instruction_label",
+                    "presetAttributes": [
+                        {
+                            "attributeName": "instruction_text",
+                            "attributeValue": "Position the entire Driving License within the cutout"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

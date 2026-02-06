@@ -2,6 +2,7 @@
 #import <React/RCTEventEmitter.h>
 #import <React/RCTBridge.h>
 #import "AnylineSDKPlugin.h"
+#import "NativeView/NativeViewRegistry.h"
 #import "RCTUtils.h"
 
 // Static instance to retain the ALWrapperSessionProvider instance
@@ -116,6 +117,18 @@ RCT_EXPORT_METHOD(licenseKeyExpiryDate:(RCTPromiseResolveBlock)resolve rejecter:
     return;
 }
 
+RCT_EXPORT_METHOD(setDefaultScanStartPlatformOptions:(nullable NSString *)scanStartPlatformOptionsString
+                                            resolver:(RCTPromiseResolveBlock)resolve
+                                            rejecter:(RCTPromiseRejectBlock)reject) {
+    @try {
+        [ALWrapperSessionProvider setDefaultScanStartPlatformOptionsWithString:scanStartPlatformOptionsString];
+        resolve(@"");
+    }
+    @catch (NSException *exception) {
+        reject(@"ANYLINE_ERROR", exception.reason, nil);
+    }
+}
+
 // Deprecated
 RCT_EXPORT_METHOD(setupScanViewWithConfigJson:(NSString *)config scanMode:(NSString *)scanMode onResultCallback:(RCTResponseSenderBlock)onResult onErrorCallback:(RCTResponseSenderBlock)onError) {
     [self setupWithInitializationParameters:nil config:config scanMode:scanMode onResultCallback:onResult onErrorCallback:onError];
@@ -179,6 +192,10 @@ RCT_EXPORT_METHOD(setupPromiseWithInitializationParametersAndScanCallbackConfig:
              scanViewInitializationParametersString:initializationParametersStr
                                  scanViewConfigPath:scanViewConfigPathString
                            scanCallbackConfigString:scanCallbackConfigString];
+}
+
+RCT_EXPORT_METHOD(trySwitchScan:(NSString *)scanViewConfigContent) {
+    [ALWrapperSessionProvider requestScanSwitchWithScanViewConfigContentString:scanViewConfigContent];
 }
 
 RCT_EXPORT_METHOD(tryStopScan:(NSString * _Nullable)scanStopRequestParams) {
@@ -334,6 +351,10 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
         return topViewController;
     }
     return nil;
+}
+
+- (nullable UIView *)getContainerView {
+    return [[NativeViewRegistry shared] getLastOrNull];
 }
 
 - (void)onSdkInitializationResponse:(nonnull ALWrapperSessionSDKInitializationResponse *)initializationResponse {
