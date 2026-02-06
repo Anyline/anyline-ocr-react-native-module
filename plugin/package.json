@@ -1,6 +1,6 @@
 {
   "name": "anyline-ocr-react-native-module",
-  "version": "55.8.1",
+  "version": "55.9.0",
   "description": "A Plugin for connecting Anyline with React-Native",
   "keywords": [
     "reactnative",

@@ -1,9 +1,10 @@
 /**
  * Created by jonas on 14.03.17.
  */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Platform, StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Button, Platform, StyleSheet, Text, View, ScrollView, Modal } from 'react-native';
+import NativeViewScan from './NativeViewScan';
 
 export default function Overview({ updateAnyline, disabled }) {
 
@@ -15,6 +16,8 @@ export default function Overview({ updateAnyline, disabled }) {
   const platformPermissionCheck = updateAnyline;
 
   const iOS = Platform.OS === 'ios';
+
+  const [showNativeViewScanner, setShowNativeViewScanner] = useState(false);
 
   return (
     <ScrollView style={styles.container}>
@@ -253,6 +256,29 @@ export default function Overview({ updateAnyline, disabled }) {
             platformPermissionCheck('PARALLEL_FIRST_SCANNING')
           }} />
       </View>
+
+      <Text style={styles.text}>NATIVE VIEW</Text>
+
+      <View style={styles.buttons}>
+        <Button style={styles.buttons} title={'NativeView Scan'} color="#0099FF"
+          disabled={disabled}
+          onPress={() => setShowNativeViewScanner(true)}
+        />
+
+        {showNativeViewScanner && (
+          <Modal
+            visible={showNativeViewScanner}
+            animationType="slide"
+            onRequestClose={() => setShowNativeViewScanner(false)}
+          >
+            <NativeViewScan
+              onClose={() => setShowNativeViewScanner(false)}
+            />
+        </Modal>
+      )}
+
+      </View>
+
     </ScrollView>
   );
 }
