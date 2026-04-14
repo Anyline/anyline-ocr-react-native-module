@@ -4,6 +4,7 @@ package com.anyline.reactnative;
  * Created by jonesBoi on 02.12.16.
  */
 
+@Deprecated
 public class ResultReporter {
 
     private static OnResultListener listener;

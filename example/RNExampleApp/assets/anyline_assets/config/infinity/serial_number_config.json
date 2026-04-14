@@ -1,0 +1,53 @@
+{
+    "options": {
+        "toolbarTitle": "Serial Number"
+    },
+    "cameraConfig": {
+        "captureResolution": "1080p",
+        "pictureResolution": "1080p",
+        "zoomGesture": true
+    },
+    "flashConfig": {
+        "mode": "manual",
+        "alignment": "top_right"
+    },
+    "viewPluginConfig": {
+        "pluginConfig": {
+            "id": "Serial Number",
+            "ocrConfig": {
+                "scanMode": "auto"
+            },
+            "cancelOnResult": true
+        },
+        "cutoutConfig": {
+            "animation": "none",
+            "maxWidthPercent": "80%",
+            "width": 720,
+            "alignment": "top_half",
+            "ratioFromSize": {
+                "width": 2,
+                "height": 1
+            },
+            "offset": {
+                "x": 0,
+                "y": -15
+            },
+            "cornerRadius": 4,
+            "strokeColor": "0099ff",
+            "strokeWidth": 2,
+            "outerColor": "000000",
+            "feedbackStrokeColor": "0099FF",
+            "outerAlpha": 0.3
+        },
+        "scanFeedbackConfig": {
+            "style": "rect",
+            "strokeWidth": 2,
+            "cornerRadius": 2,
+            "strokeColor": "0099FF",
+            "fillColor": "330099FF",
+            "beepOnResult": true,
+            "vibrateOnResult": true,
+            "blinkAnimationOnResult": false
+        }
+    }
+}

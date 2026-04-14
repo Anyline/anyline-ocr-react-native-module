@@ -1,0 +1,50 @@
+﻿{
+  "options": {
+    "toolbarTitle": "Japanese Landing Permission"
+  },
+  "cameraConfig": {
+    "captureResolution": "1080p",
+    "zoomGesture": true
+  },
+  "flashConfig": {
+    "mode": "manual",
+    "alignment": "bottom_left",
+    "offset": {
+      "x": 0,
+      "y": -40
+    }
+  },
+  "viewPluginConfig": {
+    "pluginConfig": {
+      "id": "Japanese Landing Permission",
+      "cancelOnResult": true,
+      "japaneseLandingPermissionConfig": {
+
+      }
+    },
+    "cutoutConfig": {
+      "maxWidthPercent": "70%",
+      "maxHeightPercent": "70%",
+      "alignment": "center",
+      "strokeWidth": 2,
+      "cornerRadius": 8,
+      "strokeColor": "FFFFFF",
+      "outerColor": "000000",
+      "outerAlpha": 0.3,
+      "ratioFromSize": {
+        "width": 70,
+        "height": 100
+      },
+      "feedbackStrokeColor": "0099FF"
+    },
+    "scanFeedbackConfig": {
+      "style": "rect",
+      "redrawTimeout": 100,
+      "strokeColor": "0099FF",
+      "fillColor": "220099FF",
+      "beepOnResult": true,
+      "vibrateOnResult": true,
+      "strokeWidth": 2
+    }
+  }
+}

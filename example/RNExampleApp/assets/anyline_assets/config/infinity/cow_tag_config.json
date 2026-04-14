@@ -1,0 +1,49 @@
+﻿{
+  "cameraConfig": {
+    "captureResolution": "1080"
+  },
+  "flashConfig": {
+    "mode": "manual",
+    "alignment": "top_right"
+  },
+  "viewPluginConfig": {
+    "pluginConfig": {
+      "id": "Cattle Tags",
+      "ocrConfig": {
+        "scanMode": "auto",
+        "customCmdFile": "cow.ale"
+      },
+      "cancelOnResult": true
+    },
+    "cutoutConfig": {
+      "maxWidthPercent": "80%",
+      "maxHeightPercent": "80%",
+      "alignment": "center",
+      "width": 600,
+      "ratioFromSize": {
+        "width": 1,
+        "height": 1
+      },
+      "strokeWidth": 2,
+      "cornerRadius": 10,
+      "strokeColor": "FFFFFF",
+      "outerColor": "000000",
+      "outerAlpha": 0.3,
+      "feedbackStrokeColor": "0099FF",
+      "cropPadding": {
+        "x": 60,
+        "y": 60
+      }
+    },
+    "scanFeedbackConfig": {
+      "style": "rect",
+      "strokeWidth": 2,
+      "strokeColor": "0099FF",
+      "fillColor": "330099FF",
+      "cornerRadius": 0,
+      "beepOnResult": true,
+      "vibrateOnResult": true,
+      "blinkAnimationOnResult": true
+    }
+  }
+}

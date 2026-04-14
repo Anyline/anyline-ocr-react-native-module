@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JSON Editor</title>
+
+  <link rel="stylesheet" href="spectre.min.css">
+  <link rel="stylesheet" href="spectre-exp.min.css">
+  <link rel="stylesheet" href="spectre-icons.min.css">
+
+  <script src="jsoneditor.js"></script>
+
+</head>
+<body>
+  <div class="container">
+    <div id="editor_holder"></div>
+  </div>
+
+  <script>
+    let _editor = null;
+
+    // ─── Platform-agnostic bridge ─────────────────────────────────────────────
+    //
+    // Supports three host environments:
+    //   Flutter      — named JS channels injected by WebViewController.addJavaScriptChannel
+    //                  (ReadyChannel, AnylineChannel)
+    //   React Native — window.ReactNativeWebView.postMessage  (react-native-webview)
+    //   Cordova / iframe — window.parent.postMessage
+    //
+    // In non-Flutter cases a { type, payload } envelope is used so the host can
+    // distinguish ready notifications from value updates in a single handler.
+
+    function _postReady(height) {
+      if (typeof ReadyChannel === 'undefined') {
+        _postEnvelope('ready', String(height));
+      } else {
+        ReadyChannel.postMessage(String(height));
+      }
+    }
+
+    function _postValue(valueJson) {
+      if (typeof AnylineChannel === 'undefined') {
+        _postEnvelope('value', valueJson);
+      } else {
+        AnylineChannel.postMessage(valueJson);
+      }
+    }
+
+    function _postError(message) {
+      if (typeof ErrorChannel === 'undefined') {
+        _postEnvelope('error', message);
+      } else {
+        ErrorChannel.postMessage(message);
+      }
+    }
+
+    function _postEnvelope(type, payload) {
+      var msg = JSON.stringify({ type: type, payload: payload });
+      if (globalThis.ReactNativeWebView) {
+        globalThis.ReactNativeWebView.postMessage(msg);
+      } else {
+        globalThis.parent.postMessage(msg, '*'); // NOSONAR
+      }
+    }
+
+    // ─── AJAX error interceptor ───────────────────────────────────────────────
+    //
+    // When useAjax is enabled, json-editor resolves $ref URIs via XMLHttpRequest.
+    // If a request fails (network error or non-2xx status), the editor silently
+    // produces an empty/broken form. This interceptor catches those failures and
+    // posts an error to the host so it can alert the user.
+
+    var _ajaxErrorFired = false;
+    (function() {
+      var origSend = XMLHttpRequest.prototype.send;
+      XMLHttpRequest.prototype.send = function() {
+        this.addEventListener('load', function() {
+          if (!_ajaxErrorFired && (this.status < 200 || this.status >= 300)) {
+            _ajaxErrorFired = true;
+            _postError('Failed to load schema (HTTP ' + this.status + '). A network connection is required to edit configurations.');
+          }
+        });
+        this.addEventListener('error', function() {
+          if (!_ajaxErrorFired) {
+            _ajaxErrorFired = true;
+            _postError('Network error while loading schema. Please check your internet connection and try again.');
+          }
+        });
+        return origSend.apply(this, arguments);
+      };
+    })();
+
+    // ─── Editor ───────────────────────────────────────────────────────────────
+
+    // Called from the host after the page loads.
+    // schemaJson        : JSON schema as a string
+    // valueJson         : current value as a string
+    // useAjax           : true to enable AJAX for remote schema fetching (remote sources)
+    // requiredByDefault : true to treat all schema fields as required (needed when schemas
+    //                     have no "required" arrays, e.g. Anyline wrapper session schemas)
+    function loadData(schemaJson, valueJson, useAjax, requiredByDefault) {
+      _ajaxErrorFired = false;
+      if (_editor) { _editor.destroy(); _editor = null; }
+      _editor = new JSONEditor(document.getElementById('editor_holder'), {
+        theme:                    'spectre',
+        iconlib:                  'spectre',
+        schema:                   JSON.parse(schemaJson),
+        startval:                 JSON.parse(valueJson),
+        ajax:                     useAjax === true || useAjax === 'true',
+        ajax_cache_responses:     true,
+        disable_edit_json:        true,
+        disable_properties:       false,
+        disable_collapse:         false,
+        no_additional_properties: false,
+        show_opt_in:              false,
+        required_by_default:      requiredByDefault === true || requiredByDefault === 'true',
+      });
+      _editor.on('ready', function() {
+        _postReady(document.body.scrollHeight);
+      });
+      _editor.on('change', function() {
+        if (_editor.ready && _editor.validate().length === 0) {
+          _postValue(JSON.stringify(_editor.getValue()));
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "name": "react-native-example-app",
-  "version": "55.9.0",
+  "version": "56.0.0",
   "private": true,
   "scripts": {
     "initProject": "npm install expo && npm install ../../plugin",
@@ -18,19 +18,24 @@
     "expo-asset": "~11.0.0",
     "expo-build-properties": "~0.13.3",
     "expo-dev-client": "~5.0.14",
+    "expo-file-system": "~18.0.12",
     "expo-font": "~13.0.4",
     "expo-splash-screen": "~0.29.24",
     "prop-types": "^15.8.1",
     "react": "18.3.1",
-    "react-native": "0.76.9"
+    "react-native": "0.76.9",
+    "react-native-exit-app": "^2.0.0",
+    "react-native-webview": "~13.12.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.2",
     "@react-native-community/cli": "latest",
+    "@types/react": "~18.3.12",
     "metro-react-native-babel-preset": "^0.77.0",
     "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0"
+    "postinstall-postinstall": "^2.1.0",
+    "typescript": "^5.3.3"
   },
   "description": "React Native example app",
   "main": "index.js",
