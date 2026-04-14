@@ -251,8 +251,7 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
 }
 
 - (void)setupWrapperSessionWithPluginVersion:(NSString *)pluginVersion {
-    // Setup wrapper session with this view controller as delegate
-    ALWrapperConfig *wrapperConfig = [ALWrapperConfig reactNative:pluginVersion];
+    ALWrapperConfig *wrapperConfig = [ALWrapperConfig reactNative:pluginVersion codename:ALWrapperCodenameLegacy];
     [ALWrapperSessionProvider setupWrapperSessionWithWrapperInfo:wrapperConfig
                                             wrapperSessionClient:self];
 }

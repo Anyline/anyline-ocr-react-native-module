@@ -1,0 +1,44 @@
+{
+    "viewPluginConfig": {
+        "pluginConfig": {
+            "id": "Barcode (PDF 417)",
+            "barcodeConfig": {
+                "fastProcessMode": true,
+                "barcodeFormats": [
+                    "PDF_417"
+                ],
+                "parseAAMVA": true
+            },
+            "cancelOnResult": true
+        },
+        "cutoutConfig": {
+            "animation": "none",
+            "maxWidthPercent": "75%",
+            "maxHeightPercent": "50%",
+            "width": 0,
+            "alignment": "center",
+            "ratioFromSize": {
+                "width": 4,
+                "height": 1
+            },
+            "cornerRadius": 4,
+            "strokeColor": "0099ff",
+            "strokeWidth": 2,
+            "outerColor": "000000",
+            "feedbackStrokeColor": "0099FF",
+            "outerAlpha": 0.3
+        },
+        "scanFeedbackConfig": {
+            "style": "animated_rect",
+            "strokeWidth": 2,
+            "strokeColor": "000000",
+            "fillColor": "330099FF",
+            "beepOnResult": false,
+            "vibrateOnResult": false,
+            "blinkAnimationOnResult": false
+        }
+    },
+    "options": {
+        "toolbarTitle": "Barcode PDF417"
+    }
+}

@@ -1,0 +1,15 @@
+/*!
+ * /**
+ * * @name JSON Editor
+ * * @description JSON Schema Based Editor
+ * * This library is the continuation of jdorn's great work (see also https://github.com/jdorn/json-editor/issues/800)
+ * * @version "2.16.0"
+ * * @author Jeremy Dorn
+ * * @see https://github.com/jdorn/json-editor/
+ * * @see https://github.com/json-editor/json-editor
+ * * @license MIT
+ * * @example see README.md and docs/ for requirements, examples and usage info
+ * * /
+ */
+
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */

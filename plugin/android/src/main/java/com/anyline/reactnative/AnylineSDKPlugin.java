@@ -50,6 +50,10 @@ import io.anyline2.wrapper.extensions.WrapperSessionSdkInitializationResponseExt
 import io.anyline2.wrapper.extensions.WrapperSessionUCRReportRequestExtensionKt;
 import io.anyline2.wrapper.legacy.LegacyPluginHelper;
 
+/**
+ * @deprecated Use {@link AnylineInfinityPlugin} instead.
+ */
+@Deprecated
 class AnylineSDKPlugin extends ReactContextBaseJavaModule
         implements WrapperSessionClientInterface, ResultReporter.OnResultListener {
 
@@ -102,7 +106,7 @@ class AnylineSDKPlugin extends ReactContextBaseJavaModule
 
     @ReactMethod
     protected void setupWrapperSession(final String pluginVersion) {
-        WrapperInfo wrapperInfo = new WrapperInfo(WrapperInfo.WrapperType.ReactNative, pluginVersion);
+        WrapperInfo wrapperInfo = new WrapperInfo(WrapperInfo.WrapperType.ReactNative, pluginVersion, WrapperInfo.WrapperCodename.Legacy);
         WrapperSessionProvider.setupWrapperSession(wrapperInfo,this);
     }
 

@@ -35,6 +35,7 @@ public class AnylinePackage implements ReactPackage {
     public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
         modules.add(new AnylineSDKPlugin(reactContext));
+        modules.add(new AnylineInfinityPlugin(reactContext));
         return modules;
     }
 }

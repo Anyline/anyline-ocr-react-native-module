@@ -1,0 +1,59 @@
+{
+    "options": {
+        "toolbarTitle": "License Plate Canada",
+        "segmentConfig": {
+            "titles": ["EU", "US", "Canada", "Africa"],
+            "titleIndex": 2,
+            "viewConfigs": ["license_plate_config.json", "license_plate_us_config.json", "license_plate_canada_config.json", "license_plate_africa_config.json"],
+            "offset.y": -24,
+            "tintColor": "0099ff"
+        }
+    },
+    "cameraConfig": {
+        "captureResolution": "1080p"
+    },
+    "flashConfig": {
+        "mode": "manual",
+        "alignment": "top_left"
+    },
+    "viewPluginConfig": {
+        "pluginConfig": {
+            "id": "License Plate (Canada)",
+            "licensePlateConfig": {
+                "scanMode": "canada"
+            },
+            "cancelOnResult": true
+        },
+        "cutoutConfig": {
+            "animation": "none",
+            "maxWidthPercent": "80%",
+            "maxHeightPercent": "80%",
+            "alignment": "top_half",
+            "ratioFromSize": {
+                "width": 2,
+                "height": 1
+            },
+            "cropPadding": {
+                "x": 100,
+                "y": 50
+            },
+            "cornerRadius": 4,
+            "strokeColor": "0099ff",
+            "strokeWidth": 2,
+            "feedbackStrokeColor": "0099ff",
+            "outerColor": "000000",
+            "outerAlpha": 0.3
+        },
+        "scanFeedbackConfig": {
+            "style": "rect",
+            "strokeWidth": 2,
+            "animationDuration": 0,
+            "strokeColor": "0099ff",
+            "cornerRadius": 0,
+            "fillColor": "330099ff",
+            "beepOnResult": true,
+            "vibrateOnResult": true,
+            "blinkAnimationOnResult": true
+        }
+    }
+}
