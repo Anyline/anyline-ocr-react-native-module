@@ -1,0 +1,61 @@
+{
+    "options": {
+        "toolbarTitle": "License Plate EU continuous"
+    },
+    "cameraConfig": {
+        "captureResolution": "1080p"
+    },
+    "flashConfig": {
+        "mode": "manual",
+        "alignment": "top_left"
+    },
+    "viewPluginConfig": {
+        "pluginConfig": {
+            "id": "License Plate (EU continuous)",
+            "licensePlateConfig": {
+                "scanMode": "auto"
+            },
+            "cancelOnResult": false
+        },
+        "cutoutConfig": {
+            "animation": "none",
+            "maxWidthPercent": "80%",
+            "maxHeightPercent": "80%",
+            "alignment": "top_half",
+            "ratioFromSize": {
+                "width": 2,
+                "height": 1
+            },
+            "cornerRadius": 4,
+            "strokeColor": "0099ff",
+            "strokeWidth": 2,
+            "feedbackStrokeColor": "0099ff",
+            "outerColor": "000000",
+            "outerAlpha": 0.3
+        },
+        "scanFeedbackConfig": {
+            "style": "rect",
+            "strokeWidth": 2,
+            "animationDuration": 0,
+            "strokeColor": "0099ff",
+            "cornerRadius": 0,
+            "fillColor": "330099ff",
+            "beepOnResult": true,
+            "vibrateOnResult": true,
+            "blinkAnimationOnResult": true
+        },
+        "uiFeedbackConfig": {
+            "presets": [
+                {
+                    "presetName": "simple_instruction_label",
+                    "presetAttributes": [
+                        {
+                            "attributeName": "instruction_text",
+                            "attributeValue": "Place the whole plate inside the cutout"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
