@@ -31,16 +31,16 @@ export interface CameraConfig {
      */
     defaultCamera?: string;
     /**
-     * (EXPERIMENTAL; Android-only) Mirrors the frame sideways (left-right) before it is
-     * processed, equivalent to a horizontal flip along the vertical axis. The camera preview on
-     * the screen is not affected. Disabled by default. NOTE: This has no effect when
+     * (EXPERIMENTAL) Mirrors the frame sideways (left-right) before it is processed, equivalent
+     * to a horizontal flip along the vertical axis. The camera preview on the screen is not
+     * affected. Disabled by default. NOTE: This has no effect when
      * pluginConfig.barcodeConfig.fastProcessMode is true.
      */
     enableFlipFramesLeftRight?: boolean;
     /**
-     * (EXPERIMENTAL; Android-only) Turns the frame upside down (top-bottom) before it is
-     * processed, equivalent to a vertical flip along the horizontal axis. The camera preview on
-     * the screen is not affected. Disabled by default. NOTE: This has no effect when
+     * (EXPERIMENTAL) Turns the frame upside down (top-bottom) before it is processed,
+     * equivalent to a vertical flip along the horizontal axis. The camera preview on the screen
+     * is not affected. Disabled by default. NOTE: This has no effect when
      * pluginConfig.barcodeConfig.fastProcessMode is true.
      */
     enableFlipFramesTopBottom?: boolean;

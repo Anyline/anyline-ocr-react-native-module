@@ -8,6 +8,7 @@ import {
   Alert,
   StyleSheet,
   Platform,
+  StatusBar,
 } from 'react-native';
 
 import {
@@ -366,7 +367,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1e1e1e',
     paddingHorizontal: 8,
     paddingVertical: 8,
-    paddingTop: Platform.OS === 'ios' ? 52 : 8,
+    paddingTop: Platform.OS === 'ios' ? 52 : (StatusBar.currentHeight || 0) + 8,
   },
   backButton: {
     padding: 8,

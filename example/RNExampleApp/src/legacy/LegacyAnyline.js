@@ -38,7 +38,6 @@ import ParallelFirstScanningConfig from '../../assets/anyline_assets/config/lega
 import TireMakeConfig from '../../assets/anyline_assets/config/legacy/TireMakeConfig.json';
 import TireSizeConfig from '../../assets/anyline_assets/config/legacy/TireSizeConfig.json';
 import CommercialTireIdConfig from '../../assets/anyline_assets/config/legacy/CommercialTireIdConfig.json';
-import OdometerConfig from '../../assets/anyline_assets/config/legacy/OdometerConfig.json';
 import VRCConfig from '../../assets/anyline_assets/config/legacy/VRCConfig.json';
 import DialMeterConfig from '../../assets/anyline_assets/config/legacy/DialMeterConfig.json';
 import LicensePlateConfigEU from '../../assets/anyline_assets/config/legacy/LicensePlateConfigEU.json';
@@ -174,10 +173,6 @@ class Anyline extends Component {
       case 'COMMERCIAL_TIRE_ID':
         type = 'TIRE';
         config = CommercialTireIdConfig;
-        break;
-      case 'ODOMETER':
-        type = 'ODOMETER';
-        config = OdometerConfig;
         break;
       case 'USNR':
         type = 'ANYLINE_OCR';

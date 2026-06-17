@@ -3,8 +3,8 @@
     "name": "RNExampleApp",
     "description": "Anyline RN Dev Examples",
     "slug": "RNExampleApp",
-    "version": "56.0.2",
-    "orientation": "portrait",
+    "version": "56.1.0",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/splash-icon.png",
@@ -59,7 +59,7 @@
         {
           "android": {
             "compileSdkVersion": 35,
-            "targetSdkVersion": 34,
+            "targetSdkVersion": 35,
             "buildToolsVersion": "35.0.0",
             "kotlinVersion": "1.9.25",
             "extraMavenRepos": [

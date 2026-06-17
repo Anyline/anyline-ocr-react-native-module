@@ -17,6 +17,7 @@ import {
   ScrollView,
   Alert,
   Platform,
+  StatusBar,
   StyleSheet,
 } from 'react-native';
 
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1e1e1e',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    paddingTop: Platform.OS === 'ios' ? 52 : 12,
+    paddingTop: Platform.OS === 'ios' ? 52 : (StatusBar.currentHeight || 0) + 12,
     borderBottomWidth: 1,
     borderBottomColor: '#333',
   },

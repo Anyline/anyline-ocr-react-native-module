@@ -1,6 +1,6 @@
 {
   "name": "react-native-example-app",
-  "version": "56.0.2",
+  "version": "56.1.0",
   "private": true,
   "scripts": {
     "initProject": "npm install expo && npm install ../../plugin",
