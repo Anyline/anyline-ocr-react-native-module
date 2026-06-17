@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.6.0'
     }
 }
 
@@ -19,10 +19,10 @@ allprojects {
 
 
 android {
+    namespace "com.anyline.reactnative"
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        namespace "com.anyline.reactnative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -61,6 +61,6 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'io.anyline:anylinesdk:56.0.2'
+    implementation 'io.anyline:anylinesdk:56.1.0'
     implementation "com.facebook.react:react-native:+"
 }

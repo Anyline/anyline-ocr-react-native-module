@@ -17,7 +17,6 @@ import LicensePlateConfig from '../../assets/anyline_assets/config/infinity/lice
 import LicensePlateContinuousConfig from '../../assets/anyline_assets/config/infinity/license_plate_continuous_config.json';
 import LicensePlateUsConfig from '../../assets/anyline_assets/config/infinity/license_plate_us_config.json';
 import MrzConfig from '../../assets/anyline_assets/config/infinity/mrz_config.json';
-import OdometerConfig from '../../assets/anyline_assets/config/infinity/odometer_config.json';
 import ParallelFirstScanningConfig from '../../assets/anyline_assets/config/infinity/parallel_first_scanning_config.json';
 import ParallelScanningConfig from '../../assets/anyline_assets/config/infinity/parallel_scanning_config.json';
 import SerialNumberConfig from '../../assets/anyline_assets/config/infinity/serial_number_config.json';
@@ -49,7 +48,6 @@ const RAW_CONFIGS = [
   { filename: 'license_plate_continuous_config.json', content: LicensePlateContinuousConfig },
   { filename: 'license_plate_us_config.json', content: LicensePlateUsConfig },
   { filename: 'mrz_config.json', content: MrzConfig },
-  { filename: 'odometer_config.json', content: OdometerConfig },
   { filename: 'parallel_first_scanning_config.json', content: ParallelFirstScanningConfig },
   { filename: 'parallel_scanning_config.json', content: ParallelScanningConfig },
   { filename: 'serial_number_config.json', content: SerialNumberConfig },
