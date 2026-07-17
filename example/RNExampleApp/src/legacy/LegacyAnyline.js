@@ -1,6 +1,5 @@
 import React, { Component, useRef } from 'react';
 
-import RNExitApp from 'react-native-exit-app';
 import {
   BackHandler,
   LayoutAnimation,
@@ -357,7 +356,7 @@ class Anyline extends Component {
         this.emptyResult();
         return true;
       } else {
-        RNExitApp.exitApp();
+        BackHandler.exitApp();
       }
     });
     return (

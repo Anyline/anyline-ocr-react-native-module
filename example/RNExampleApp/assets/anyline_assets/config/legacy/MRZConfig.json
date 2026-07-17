@@ -10,7 +10,8 @@
       "mrzConfig": {
         "strictMode": false,
         "cropAndTransformID": false
-      }
+      },
+      "cancelOnResult": true
     },
     "cutoutConfig": {
       "animation": "none",

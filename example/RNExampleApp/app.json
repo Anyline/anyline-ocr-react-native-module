@@ -3,7 +3,8 @@
     "name": "RNExampleApp",
     "description": "Anyline RN Dev Examples",
     "slug": "RNExampleApp",
-    "version": "56.1.0",
+    "version": "56.2.0",
+    "newArchEnabled": true,
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -58,10 +59,10 @@
         "expo-build-properties",
         {
           "android": {
-            "compileSdkVersion": 35,
-            "targetSdkVersion": 35,
-            "buildToolsVersion": "35.0.0",
-            "kotlinVersion": "1.9.25",
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "buildToolsVersion": "36.0.0",
+            "kotlinVersion": "2.1.20",
             "extraMavenRepos": [
               "https://mobile-sdk-android.anyline.io/release/"
             ],
@@ -71,15 +72,14 @@
             "extraProguardRules": "-keep public class io.anyline.plugin.config.** { public protected *; } -keep public class io.anyline.plugin.result.** { public protected *; } -keep class io.anyline.wrapper.config.** { public protected *; } -keep public class io.anyline2.core.** { public protected *; } -keep class at.nineyards.anyline.** { *; } -dontwarn at.nineyards.anyline.** -dontwarn com.squareup.moshi.** -keep class com.squareup.moshi.** { *; } -keepclassmembers class * { @com.squareup.moshi.* <fields>; } -keep @com.squareup.moshi.JsonClass class * { *; } -keepclassmembers class kotlin.Metadata { *; } -dontwarn org.jetbrains.annotations.** "
           },
           "ios": {
-            "deploymentTarget": "15.1",
-            "flipper": true
+            "deploymentTarget": "15.1"
           }
         }
       ],
       "expo-dev-client",
       "./plugins/withCustomAppBuildGradle.js",
       "./plugins/withAssetCopy.js",
-      "./plugins/withFmtCompilerFix.js"
+      "./plugins/withAndroidKeepResources.js"
     ]
   }
 }
