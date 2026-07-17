@@ -26,14 +26,14 @@ import ALL_CONFIGS from './configRegistry';
 import { GROUP_ORDER } from './pluginTypeHelper';
 import { defaultScanOptions, buildScanStartRequest, resolveImageSavePath } from './scanOptions';
 import { UserConfigStorage } from './userConfigStorage';
-import RNExitApp from 'react-native-exit-app';
 
 // Asset path prefix for custom ML scripts (passed to requestSdkInitialization).
 const ASSET_PATH_PREFIX = 'anyline_assets';
 
-// Exits the app on both platforms via react-native-exit-app.
+// Exits the app using React Native core. BackHandler.exitApp() quits the app on
+// Android; on iOS it is a no-op (iOS has no sanctioned programmatic-exit API).
 function _exitApp() {
-  RNExitApp.exitApp();
+  BackHandler.exitApp();
 }
 
 // ─── MainScanScreen ───────────────────────────────────────────────────────────

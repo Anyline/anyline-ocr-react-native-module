@@ -3,7 +3,7 @@
 // and survive app restarts. Each entry is stored as a raw ScanView config JSON file.
 // Label and group are derived on read via pluginTypeHelper.
 
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { groupFromConfig, labelFromConfig } from './pluginTypeHelper';
 
 const _DIR = FileSystem.documentDirectory + 'user_viewconfigs/';
