@@ -1,4 +1,5 @@
 {
+  "scanViewConfigDescription": "ParallelFirst (VIN/Barcode)",
   "options": {
     "toolbarTitle": "ParallelFirst VIN/Barcode"
   },

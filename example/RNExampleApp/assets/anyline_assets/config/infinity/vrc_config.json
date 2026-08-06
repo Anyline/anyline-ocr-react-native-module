@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "Vehicle Registration Certificate",
     "options": {
         "toolbarTitle": "VRC"
     },
@@ -8,7 +9,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "Vehicle Registration Certificate",
+            "id": "vrc",
             "vehicleRegistrationCertificateConfig": {
                 "vehicleRegistrationCertificate": {
                     "documentNumber": {

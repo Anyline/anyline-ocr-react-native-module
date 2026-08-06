@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "Commercial Tire ID",
     "options": {
         "toolbarTitle": "Commercial Tire",
         "rotateButton": {
@@ -20,7 +21,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "Commercial Tire ID",
+            "id": "commercial_tire_id",
             "cancelOnResult": true,
             "commercialTireIdConfig": {}
         },

@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "ID (Cyrillic)",
     "options": {
         "toolbarTitle": "Cyrillic ID"
     },
@@ -15,7 +16,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "ID (Cyrillic)",
+            "id": "cyrillic_id",
             "universalIdConfig": {
                 "allowedLayouts": {
                     "mrz": [],

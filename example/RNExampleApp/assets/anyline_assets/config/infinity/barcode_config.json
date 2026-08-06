@@ -1,7 +1,8 @@
 {
+    "scanViewConfigDescription": "Barcode (Multi)",
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "Barcode (Multi)",
+            "id": "barcode_multi",
             "barcodeConfig": {
                 "fastProcessMode": true,
                 "parseAAMVA": false,

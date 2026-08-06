@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "VIN with UIFeedback",
     "options": {
         "toolbarTitle": "VIN"
     },
@@ -12,7 +13,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "VIN with UIFeedback",
+            "id": "vin",
             "cancelOnResult": true,
             "vinConfig": {
                 "validateCheckDigit": true

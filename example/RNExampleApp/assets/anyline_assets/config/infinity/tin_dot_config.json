@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "TIN (DOT)",
     "options": {
         "toolbarTitle": "Universal TIN DOT",
         "rotateButton": {
@@ -27,7 +28,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "TIN (DOT)",
+            "id": "tin_dot",
             "cancelOnResult": true,
             "tinConfig": {
                 "scanMode": "DOT"

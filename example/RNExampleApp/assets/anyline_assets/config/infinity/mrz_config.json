@@ -1,10 +1,11 @@
 {
+    "scanViewConfigDescription": "MRZ",
     "options": {
         "toolbarTitle": "MRZ"
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "MRZ",
+            "id": "mrz",
             "mrzConfig": {
                 "strictMode": false,
                 "cropAndTransformID": false

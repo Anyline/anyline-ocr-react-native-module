@@ -1,4 +1,5 @@
 ﻿{
+  "scanViewConfigDescription": "Japanese Landing Permission",
   "options": {
     "toolbarTitle": "Japanese Landing Permission"
   },
@@ -16,7 +17,7 @@
   },
   "viewPluginConfig": {
     "pluginConfig": {
-      "id": "Japanese Landing Permission",
+      "id": "japanese_landing_permission",
       "cancelOnResult": true,
       "japaneseLandingPermissionConfig": {
 

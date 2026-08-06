@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "Tire Size",
     "options": {
         "toolbarTitle": "Tire Size",
         "rotateButton": {
@@ -20,7 +21,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "Tire Size",
+            "id": "tire_size",
             "cancelOnResult": true,
             "tireSizeConfig": {
                 "upsideDownMode": "AUTO"

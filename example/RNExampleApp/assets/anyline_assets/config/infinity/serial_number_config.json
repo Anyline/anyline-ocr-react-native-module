@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "Serial Number",
     "options": {
         "toolbarTitle": "Serial Number"
     },
@@ -13,7 +14,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "Serial Number",
+            "id": "serial_number",
             "ocrConfig": {
                 "scanMode": "auto"
             },

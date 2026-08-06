@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "License Plate (Africa)",
     "options": {
         "toolbarTitle": "License Plate Africa",
         "segmentConfig": {
@@ -18,7 +19,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "License Plate (Africa)",
+            "id": "license_plate_africa",
             "licensePlateConfig": {
                 "scanMode": "africa"
             },

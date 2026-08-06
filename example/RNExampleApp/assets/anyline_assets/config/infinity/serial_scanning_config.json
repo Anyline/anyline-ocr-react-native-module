@@ -1,6 +1,7 @@
 {
+    "scanViewConfigDescription": "Seq. LicensePlate/Driving License/VIN",
     "options": {
-        "toolbarTitle": "Seq. LicensePlate/Driving License/Barcode"
+        "toolbarTitle": "Seq. LicensePlate/Driving License/VIN"
     },
     "cameraConfig": {
         "captureResolution": "1080p"
@@ -10,7 +11,7 @@
         "alignment": "top_left"
     },
     "viewPluginCompositeConfig": {
-        "id": "Seq. (LicensePlate/Driving License/Barcode)",
+        "id": "Seq. (LicensePlate/Driving License/VIN)",
         "processingMode": "sequential",
         "viewPlugins": [
             {
@@ -70,7 +71,7 @@
             {
                 "viewPluginConfig": {
                     "pluginConfig": {
-                        "id": "driver_license_eu",
+                        "id": "driver_license",
                         "universalIdConfig": {
                             "allowedLayouts": {
                                 "drivingLicense": []
