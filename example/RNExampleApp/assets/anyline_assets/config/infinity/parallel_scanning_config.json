@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "Parallel Meter/Serial",
     "options": {
         "toolbarTitle": "Parallel Meter/Serial"
     },

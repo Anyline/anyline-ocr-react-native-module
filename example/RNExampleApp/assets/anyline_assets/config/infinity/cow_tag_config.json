@@ -1,4 +1,5 @@
 ﻿{
+  "scanViewConfigDescription": "Cattle Tags",
   "cameraConfig": {
     "captureResolution": "1080"
   },
@@ -8,7 +9,7 @@
   },
   "viewPluginConfig": {
     "pluginConfig": {
-      "id": "Cattle Tags",
+      "id": "cattle_tag",
       "ocrConfig": {
         "scanMode": "auto",
         "customCmdFile": "cow.ale"

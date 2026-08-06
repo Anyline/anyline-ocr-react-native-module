@@ -1,0 +1,4 @@
+# Anyline iOS SDK xcframework — downloaded at `pod install` time by the podspec's
+# prepare_command from the CDN. Never commit the binary.
+Anyline.xcframework/
+Anyline.xcframework.zip

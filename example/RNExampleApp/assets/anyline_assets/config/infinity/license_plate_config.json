@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "License Plate (EU)",
     "options": {
         "toolbarTitle": "License Plate EU",
         "segmentConfig": {
@@ -18,7 +19,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "License Plate (EU)",
+            "id": "license_plate_eu",
             "licensePlateConfig": {
                 "scanMode": "auto"
             },

@@ -1,7 +1,8 @@
 {
+    "scanViewConfigDescription": "Barcode (Continuous and ConsecutiveFilter)",
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "Barcode (Continuous and ConsecutiveFilter)",
+            "id": "barcode",
             "barcodeConfig": {
                 "fastProcessMode": true,
                 "parseAAMVA": false,

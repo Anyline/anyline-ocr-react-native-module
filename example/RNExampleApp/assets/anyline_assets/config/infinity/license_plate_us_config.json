@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "License Plate (US)",
     "options": {
         "toolbarTitle": "License Plate US",
         "segmentConfig": {
@@ -18,7 +19,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "License Plate (US)",
+            "id": "license_plate_us",
             "licensePlateConfig": {
                 "scanMode": "unitedstates"
             },

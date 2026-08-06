@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "Meter (Auto)",
     "options": {
         "toolbarTitle": "Analog/Digital Meter",
         "segmentConfig": {
@@ -7,13 +8,7 @@
             "viewConfigs": ["analog_digital_meter_config.json", "dial_meter_config.json"],
             "offset.y": -24,
             "tintColor": "0099ff"
-        },
-        "nativeBarcodeScanningFormats": [
-            "CODE_128",
-            "CODE_39",
-            "QR_CODE",
-            "PDF_417"
-        ]
+        }
     },
     "cameraConfig": {
         "captureResolution": "1080p",
@@ -25,7 +20,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "Meter (Auto)",
+            "id": "meter",
             "meterConfig": {
                 "scanMode": "auto_analog_digital_meter"
             },

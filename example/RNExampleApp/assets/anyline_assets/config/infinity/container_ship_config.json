@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "Container (Horizontal)",
     "options": {
         "toolbarTitle": "Horizontal Container"
     },
@@ -13,7 +14,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "Container (Horizontal)",
+            "id": "container_horizontal",
             "containerConfig": {
                 "scanMode": "HORIZONTAL"
             },

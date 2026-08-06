@@ -41,8 +41,11 @@ export function groupFromConfig(config) {
   return GROUPS.OTHERS;
 }
 
+// Prefers scanViewConfigDescription, then viewPluginCompositeConfig.id,
+// then viewPluginConfig.pluginConfig.id, then falls back to the filename.
 export function labelFromConfig(config, fallbackFilename) {
   return (
+    config.scanViewConfigDescription ??
     config.viewPluginCompositeConfig?.id ??
     config.viewPluginConfig?.pluginConfig?.id ??
     fallbackFilename

@@ -1,7 +1,8 @@
 {
+    "scanViewConfigDescription": "Barcode (PDF 417)",
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "Barcode (PDF 417)",
+            "id": "barcode_pdf417",
             "barcodeConfig": {
                 "fastProcessMode": true,
                 "barcodeFormats": [

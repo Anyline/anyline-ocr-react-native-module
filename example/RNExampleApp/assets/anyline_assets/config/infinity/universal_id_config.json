@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "ID (Universal)",
     "options": {
         "toolbarTitle": "Universal ID"
     },
@@ -16,7 +17,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "ID (Universal)",
+            "id": "universal_id",
             "universalIdConfig": {
                 "allowedLayouts": {
                     "mrz": [],

@@ -1,4 +1,5 @@
 {
+    "scanViewConfigDescription": "TIN (DOT) with UIFeedback",
     "options": {
         "toolbarTitle": "TIN DOT with UIFeedback",
         "rotateButton": {
@@ -20,7 +21,7 @@
     },
     "viewPluginConfig": {
         "pluginConfig": {
-            "id": "TIN (DOT) with UIFeedback",
+            "id": "tin_dot",
             "cancelOnResult": true,
             "tinConfig": {
                 "scanMode": "DOT",
