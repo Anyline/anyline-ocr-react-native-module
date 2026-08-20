@@ -1,7 +1,11 @@
 {
     "scanViewConfigDescription": "VIN with UIFeedback",
     "options": {
-        "toolbarTitle": "VIN"
+        "toolbarTitle": "VIN",
+        "rotateButton": {
+            "alignment": "top_right"
+        },
+        "defaultOrientation": "landscape"
     },
     "cameraConfig": {
         "captureResolution": "1080p",
@@ -29,9 +33,9 @@
             },
             "outerColor": "000000",
             "outerAlpha": 0.3,
-            "strokeWidth": 2,
+            "strokeWidth": 1,
             "strokeColor": "0099FF",
-            "cornerRadius": 4,
+            "cornerRadius": 2,
             "feedbackStrokeColor": "0099FF"
         },
         "scanFeedbackConfig": {
@@ -41,7 +45,7 @@
             "strokeWidth": 2,
             "strokeColor": "0099FF",
             "fillColor": "220099FF",
-            "beepOnResult": true,
+            "beepOnResult": false,
             "vibrateOnResult": true,
             "blinkAnimationOnResult": true
         },

@@ -8,7 +8,7 @@
     },
     "flashConfig": {
         "mode": "manual",
-        "alignment": "top_left"
+        "alignment": "bottom_right"
     },
     "viewPluginCompositeConfig": {
         "id": "Seq. (LicensePlate/Driving License/VIN)",
@@ -20,38 +20,32 @@
                         "id": "license_plate_eu",
                         "licensePlateConfig": {
                             "scanMode": "auto"
-                        },
-                        "cancelOnResult": true
+                        }
                     },
                     "cutoutConfig": {
-                        "animation": "none",
                         "maxWidthPercent": "80%",
                         "maxHeightPercent": "80%",
                         "alignment": "top_half",
                         "ratioFromSize": {
-                            "width": 4,
+                            "width": 2,
                             "height": 1
                         },
-                        "offset": {
-                            "x": 0,
-                            "y": 40
-                        },
-                        "cornerRadius": 4,
-                        "strokeColor": "0099ff",
                         "strokeWidth": 2,
-                        "feedbackStrokeColor": "0099ff",
+                        "cornerRadius": 10,
+                        "strokeColor": "FFFFFF",
                         "outerColor": "000000",
-                        "outerAlpha": 0.3
+                        "outerAlpha": 0.3,
+                        "feedbackStrokeColor": "0099FF"
                     },
                     "scanFeedbackConfig": {
                         "style": "rect",
                         "strokeWidth": 2,
-                        "animationDuration": 0,
-                        "strokeColor": "0099ff",
+                        "strokeColor": "0099FF",
+                        "fillColor": "330099FF",
                         "cornerRadius": 0,
-                        "fillColor": "330099ff",
                         "beepOnResult": true,
-                        "vibrateOnResult": true
+                        "vibrateOnResult": true,
+                        "blinkAnimationOnResult": true
                     },
                     "uiFeedbackConfig": {
                         "presets": [
@@ -75,38 +69,32 @@
                         "universalIdConfig": {
                             "allowedLayouts": {
                                 "drivingLicense": []
-                            },
-                            "alphabet": "latin"
-                        },
-                        "cancelOnResult": true
+                            }
+                        }
                     },
-                    "cutoutConfig" : {
+                    "cutoutConfig": {
                         "maxWidthPercent": "90%",
                         "maxHeightPercent": "90%",
                         "alignment": "center",
+                        "ratioFromSize": {
+                            "width": 161,
+                            "height": 100
+                        },
                         "strokeWidth": 2,
                         "cornerRadius": 4,
-                        "strokeColor": "0099FF",
+                        "strokeColor": "FFFFFF",
                         "outerColor": "000000",
                         "outerAlpha": 0.3,
-                        "ratioFromSize" : {
-                            "width": 50,
-                            "height": 31
-                        },
-                        "cropPadding": {
-                            "x": 25,
-                            "y": 25
-                        },
                         "feedbackStrokeColor": "0099FF"
                     },
-                    "scanFeedbackConfig" : {
-                        "style": "contour_rect",
-                        "redrawTimeout": 100,
+                    "scanFeedbackConfig": {
+                        "fillColor": "220099FF",
+                        "style": "contour_point",
                         "strokeColor": "0099FF",
-                        "fillColor" : "220099FF",
+                        "strokeWidth": 2,
+                        "blinkAnimationOnResult": true,
                         "beepOnResult": true,
-                        "vibrateOnResult": true,
-                        "strokeWidth": 2
+                        "vibrateOnResult": true
                     },
                     "uiFeedbackConfig": {
                         "presets": [
@@ -129,37 +117,32 @@
                         "id": "vin",
                         "vinConfig": {
                             "validateCheckDigit": true
-                        },
-                        "cancelOnResult": true
+                        }
                     },
                     "cutoutConfig": {
-                        "animation": "none",
-                        "maxWidthPercent": "90%",
-                        "maxHeightPercent": "100%",
-                        "width": 0,
+                        "maxWidthPercent": "70%",
                         "alignment": "top_half",
                         "ratioFromSize": {
-                            "width": 11,
-                            "height": 2
+                            "width": 689,
+                            "height": 100
                         },
-                        "offset": { "x": 0, "y": 0 },
-                        "cropOffset": { "x": 0, "y": 0 },
-                        "cropPadding": { "x": 0, "y": 0 },
-                        "cornerRadius": 2,
-                        "strokeColor": "0099ff",
-                        "strokeWidth": 2,
                         "outerColor": "000000",
-                        "feedbackStrokeColor": "0099FF",
-                        "outerAlpha": 0.3
+                        "outerAlpha": 0.3,
+                        "strokeWidth": 1,
+                        "strokeColor": "FFFFFF",
+                        "cornerRadius": 2,
+                        "feedbackStrokeColor": "0099FF"
                     },
                     "scanFeedbackConfig": {
+                        "animation": "traverse_multi",
+                        "animationDuration": 250,
                         "style": "contour_rect",
                         "strokeWidth": 2,
-                        "cornerRadius": 2,
                         "strokeColor": "0099FF",
-                        "fillColor": "330099FF",
+                        "fillColor": "220099FF",
                         "beepOnResult": true,
-                        "vibrateOnResult": true
+                        "vibrateOnResult": true,
+                        "blinkAnimationOnResult": true
                     },
                     "uiFeedbackConfig": {
                         "presets": [

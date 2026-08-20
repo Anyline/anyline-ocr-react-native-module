@@ -3,43 +3,66 @@
     "options": {
         "toolbarTitle": "MRZ"
     },
+    "cameraConfig": {
+        "captureResolution": "1080p"
+    },
+    "flashConfig": {
+        "mode": "manual",
+        "alignment": "bottom_right"
+    },
     "viewPluginConfig": {
         "pluginConfig": {
             "id": "mrz",
+            "cancelOnResult": true,
             "mrzConfig": {
-                "strictMode": false,
-                "cropAndTransformID": false
-            },
-            "cancelOnResult": true
+                "mrzFieldScanOptions": {
+                    "vizAddress": "optional",
+                    "vizDateOfIssue": "optional"
+                },
+                "cropAndTransformID": false,
+                "strictMode": false
+            }
         },
         "cutoutConfig": {
-            "animation": "none",
             "maxWidthPercent": "90%",
             "maxHeightPercent": "90%",
             "alignment": "center",
-            "ratioFromSize": {
-                "width": 161,
-                "height": 100
-            },
+            "strokeWidth": 2,
+            "cornerRadius": 4,
+            "strokeColor": "FFFFFF",
+            "outerColor": "000000",
+            "outerAlpha": 0.3,
             "cropPadding": {
                 "x": 30,
                 "y": 90
             },
-            "outerColor": "000000",
-            "outerAlpha": 0.3,
-            "strokeWidth": 2,
-            "strokeColor": "0099FF",
-            "cornerRadius": 2,
+            "cropOffset": {
+                "x": 0,
+                "y": 90
+            },
+            "ratioFromSize": {
+                "width": 50,
+                "height": 31
+            },
             "feedbackStrokeColor": "0099FF"
         },
         "scanFeedbackConfig": {
             "style": "rect",
-            "strokeWidth": 2,
+            "redrawTimeout": 100,
             "strokeColor": "0099FF",
             "fillColor": "220099FF",
-            "beepOnResult": false,
-            "vibrateOnResult": false,
-            "blinkAnimationOnResult": false
+            "beepOnResult": true,
+            "vibrateOnResult": true,
+            "strokeWidth": 2
+        },
+        "uiFeedbackConfig": {
+            "presets": [{
+                "presetName": "simple_instruction_label",
+                "presetAttributes": [{
+                    "attributeName": "instruction_text",
+                    "attributeValue": "Hold your passport inside the frame until the scan is complete"
+                }]
+            }]
         }
     }
 }
