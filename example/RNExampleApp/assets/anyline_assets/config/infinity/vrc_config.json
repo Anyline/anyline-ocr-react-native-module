@@ -1,7 +1,14 @@
 {
     "scanViewConfigDescription": "Vehicle Registration Certificate",
+    "cameraConfig" : {
+        "captureResolution" : "1080p"
+    },
     "options": {
-        "toolbarTitle": "VRC"
+        "toolbarTitle": "VRC",
+        "rotateButton": {
+            "alignment": "top_right"
+        },
+        "defaultOrientation": "landscape"
     },
     "flashConfig": {
         "mode": "manual",
@@ -12,64 +19,24 @@
             "id": "vrc",
             "vehicleRegistrationCertificateConfig": {
                 "vehicleRegistrationCertificate": {
-                    "documentNumber": {
-                        "scanOption": "optional",
-                        "minConfidence": 40
-                    },
-                    "licensePlate": {
-                        "scanOption": "mandatory",
-                        "minConfidence": 40
-                    },
-                    "lastName": {
-                        "scanOption": "mandatory",
-                        "minConfidence": 60
-                    },
-                    "firstName": {
-                        "scanOption": "optional",
-                        "minConfidence": 40
-                    },
-                    "address": {
-                        "scanOption": "mandatory",
-                        "minConfidence": 50
-                    },
-                    "firstIssued": {
-                        "scanOption": "mandatory",
-                        "minConfidence": 60
-                    },
-                    "manufacturerCode": {
-                        "scanOption": "mandatory",
-                        "minConfidence": 50
-                    },
-                    "vehicleTypeCode": {
-                        "scanOption": "mandatory",
-                        "minConfidence": 50
-                    },
-                    "vehicleIdentificationNumber": {
-                        "scanOption": "mandatory",
-                        "minConfidence": 60
-                    },
-                    "brand": {
-                        "scanOption": "optional",
-                        "minConfidence": 40
-                    },
-                    "vehicleType": {
-                        "scanOption": "optional",
-                        "minConfidence": 40
-                    },
-                    "displacement": {
-                        "scanOption": "optional",
-                        "minConfidence": 40
-                    },
-                    "tire": {
-                        "scanOption": "optional",
-                        "minConfidence": 50
-                    }
+                    "documentNumber": {"scanOption": "optional", "minConfidence": 40},
+                    "licensePlate": {"scanOption": "mandatory", "minConfidence": 40},
+                    "lastName": {"scanOption": "mandatory", "minConfidence": 60},
+                    "firstName": {"scanOption": "optional", "minConfidence": 40},
+                    "address": {"scanOption": "mandatory", "minConfidence": 50},
+                    "firstIssued": {"scanOption": "mandatory", "minConfidence": 60},
+                    "manufacturerCode": {"scanOption": "mandatory", "minConfidence": 50},
+                    "vehicleTypeCode": {"scanOption": "mandatory", "minConfidence": 50},
+                    "vehicleIdentificationNumber": {"scanOption": "mandatory", "minConfidence": 60},
+                    "brand": {"scanOption": "optional", "minConfidence": 40},
+                    "vehicleType": {"scanOption": "optional", "minConfidence": 40},
+                    "displacement": {"scanOption": "optional", "minConfidence": 40},
+                    "tire": {"scanOption": "optional", "minConfidence": 50}
                 }
             },
             "cancelOnResult": true
         },
         "cutoutConfig": {
-            "animation": "none",
             "maxWidthPercent": "90%",
             "maxHeightPercent": "90%",
             "alignment": "center",
@@ -81,16 +48,16 @@
                 "x": 50,
                 "y": 50
             },
-            "cornerRadius": 4,
+            "cornerRadius": 8,
             "strokeColor": "0099FF",
-            "strokeWidth": 2,
+            "strokeWidth": 3,
             "outerColor": "000000",
             "feedbackStrokeColor": "0099FF",
             "outerAlpha": 0.3
         },
         "scanFeedbackConfig": {
-            "style": "animated_rect",
-            "strokeWidth": 0,
+            "style": "contour_rect",
+            "strokeWidth": 2,
             "strokeColor": "0099ff",
             "fillColor": "000099ff",
             "beepOnResult": true,
