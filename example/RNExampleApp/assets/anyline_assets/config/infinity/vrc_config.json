@@ -4,7 +4,6 @@
         "captureResolution" : "1080p"
     },
     "options": {
-        "toolbarTitle": "VRC",
         "rotateButton": {
             "alignment": "top_right"
         },
