@@ -1,6 +1,6 @@
 {
   "name": "react-native-example-app",
-  "version": "56.5.0",
+  "version": "56.5.1",
   "private": true,
   "scripts": {
     "initProject": "npm install expo && npm install ../../plugin",
@@ -14,27 +14,27 @@
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
     "anyline-ocr-react-native-module": "file:../../plugin",
-    "expo": "~54.0.0",
-    "expo-asset": "~12.0.13",
-    "expo-build-properties": "~1.0.10",
-    "expo-dev-client": "~6.0.21",
-    "expo-file-system": "~19.0.23",
-    "expo-font": "~14.0.12",
-    "expo-splash-screen": "~31.0.13",
+    "expo": "~57.0.24",
+    "expo-asset": "~57.0.18",
+    "expo-build-properties": "~57.0.21",
+    "expo-dev-client": "~57.0.19",
+    "expo-file-system": "~57.0.7",
+    "expo-font": "~57.0.4",
+    "expo-splash-screen": "~57.0.9",
     "prop-types": "^15.8.1",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-native-webview": "13.15.0"
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-webview": "13.16.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.2",
     "@react-native-community/cli": "latest",
-    "@types/react": "~19.1.10",
-    "babel-preset-expo": "~54.0.10",
+    "@types/react": "~19.2.4",
+    "babel-preset-expo": "~57.0.0",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
-    "typescript": "^5.3.3"
+    "typescript": "~6.0.3"
   },
   "description": "React Native example app",
   "main": "index.js",
