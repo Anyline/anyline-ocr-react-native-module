@@ -6,8 +6,8 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 # The checksum is the SHA-256 of the xcframework archive and matches the one
 # published in the SDK's Package.swift. Both lines are bumped together — keep
 # adjacent. Keep the double quotes: prepare_release.sh's sed is quote-specific.
-anyline_sdk_version = "56.5.0"
-anyline_sdk_checksum = "eb47507f4f3af71277214dd3a055f7bf5305d830b5b56fba526e83412b99366b"
+anyline_sdk_version = "56.5.1"
+anyline_sdk_checksum = "4240919377aa7c432ae88648b506ca447e5aeb263a816b3c18e8c83c0e1e4acd"
 
 Pod::Spec.new do |s|
   s.name         = "AnylineReact"
