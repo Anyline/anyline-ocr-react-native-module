@@ -3,7 +3,7 @@
 #import <React/RCTBridge.h>
 #import "AnylineInfinityPlugin.h"
 #import "NativeView/NativeViewRegistry.h"
-#import "RCTUtils.h"
+#import <React/RCTUtils.h>
 
 // Static instance to retain the ALWrapperSessionProvider reference.
 static ALWrapperSessionProvider *_infinityWrapperSessionProvider;
