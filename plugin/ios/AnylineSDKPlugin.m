@@ -3,7 +3,7 @@
 #import <React/RCTBridge.h>
 #import "AnylineSDKPlugin.h"
 #import "NativeView/NativeViewRegistry.h"
-#import "RCTUtils.h"
+#import <React/RCTUtils.h>
 
 // Static instance to retain the ALWrapperSessionProvider instance
 static ALWrapperSessionProvider *_wrapperSessionProvider;
@@ -347,9 +347,8 @@ RCT_EXPORT_METHOD(exportCachedEvents:(RCTPromiseResolveBlock)resolve rejecter:(R
     UIViewController *topViewController = RCTPresentedViewController();
     if (!topViewController) {
         topViewController = [[UIApplication sharedApplication] keyWindow].rootViewController;
-        return topViewController;
     }
-    return nil;
+    return topViewController;
 }
 
 - (nullable UIView *)getContainerView {

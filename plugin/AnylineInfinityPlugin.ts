@@ -113,8 +113,8 @@ export class AnylineInfinityPlugin {
   onScanResults(
     callback: (scanResults: WrapperSessionScanResultsResponse) => void
   ): EmitterSubscription {
-    return emitter.addListener(EVENT_ON_SCAN_RESULTS, (json: string) => {
-      callback(JSON.parse(json) as WrapperSessionScanResultsResponse);
+    return emitter.addListener(EVENT_ON_SCAN_RESULTS, (json: unknown) => {
+      callback(JSON.parse(json as string) as WrapperSessionScanResultsResponse);
     });
   }
 
@@ -122,8 +122,8 @@ export class AnylineInfinityPlugin {
   onUIElementClicked(
     callback: (uiElementClicked: UiFeedbackElementConfig) => void
   ): EmitterSubscription {
-    return emitter.addListener(EVENT_ON_UI_ELEMENT_CLICKED, (json: string) => {
-      callback(JSON.parse(json) as UiFeedbackElementConfig);
+    return emitter.addListener(EVENT_ON_UI_ELEMENT_CLICKED, (json: unknown) => {
+      callback(JSON.parse(json as string) as UiFeedbackElementConfig);
     });
   }
 }
