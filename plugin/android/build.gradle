@@ -32,6 +32,6 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'io.anyline:anylinesdk:56.6.0'
+    implementation 'io.anyline:anylinesdk:56.7.0'
     implementation "com.facebook.react:react-android"
 }

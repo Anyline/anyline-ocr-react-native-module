@@ -660,7 +660,8 @@ export enum Area {
  */
 export interface MeterResult {
     /**
-     * The position. Only applicable for OBIS meters - see https://onemeter.com/docs/device/obis/
+     * The position (OBIS code) without dots, e.g. 181 for 1.8.1. Only applicable for
+     * multi-field digital meters.
      */
     position?: string;
     /**
